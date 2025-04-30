@@ -1,0 +1,55 @@
+name: umrati
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  cached_network_image: ^3.4.1
+  easy_localization: ^3.0.7+1
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.6.1
+  flutter_svg: ^2.1.0
+  fluttertoast: ^8.2.12
+  permission_handler: ^12.0.0+1
+  pinput: ^5.0.1
+  shared_preferences: ^2.5.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  build_runner: 
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/svg/
+    - assets/svg/gender/
+    - assets/png/
+    - assets/translations/
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/font/black.ttf
+          weight: 900
+        - asset: assets/font/extra_bold.ttf
+          weight: 800
+        - asset: assets/font/bold.ttf
+          weight: 700
+        - asset: assets/font/extra_light.ttf
+          weight: 600
+        - asset: assets/font/light.ttf
+          weight: 500
+        - asset: assets/font/medium.ttf
+          weight: 400
+        - asset: assets/font/regular.ttf
+          weight: 300
+        - asset: assets/font/semi_bold.ttf
+          weight: 200
+        - asset: assets/font/thin.ttf
+          weight: 100
+          
