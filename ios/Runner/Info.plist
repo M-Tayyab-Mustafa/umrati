@@ -28,6 +28,10 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need your location to calculate distance even when the app is in the background.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to calculate distance.</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

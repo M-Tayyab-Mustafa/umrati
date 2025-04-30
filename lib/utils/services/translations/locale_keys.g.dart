@@ -31,10 +31,23 @@ abstract class  LocaleKeys {
   static const tasks_done = 'tasks_done';
   static const cleanliness = 'cleanliness';
   static const your_meeqaat_location = 'your_meeqaat_location';
+  static const your_current_location = 'your_current_location';
+  static const dhul_huayfah = 'dhul_huayfah';
   static const turn_on_your_location_to_find_your_meeqaat = 'turn_on_your_location_to_find_your_meeqaat';
   static const ihram = 'ihram';
+  static const open_setting = 'open_setting';
+  static const permission_description = 'permission_description';
+  static const location_permission_needed = 'location_permission_needed';
   static const ihram_tutorial_pics = 'ihram_tutorial_pics';
   static const move_to_3_other_tasks = 'move_to_3_other_tasks';
+  static const continue_your_remaining_3_tasks = 'continue_your_remaining_3_tasks';
+  static const dua_during_2nd_round = 'dua_during_2nd_round';
+  static const profile = 'profile';
+  static const supplications = 'supplications';
+  static const prayer = 'prayer';
+  static const settings = 'settings';
+  static const more = 'more';
+  static const tawaf_tracker = 'tawaf_tracker';
   static const take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram = 'take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram';
   static const do_these_5_ihram_related_tasks = 'do_these_5_ihram_related_tasks';
 

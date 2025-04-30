@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:umrati/widgets/bottom_nav.dart';
 import '../utils/helper/constants.dart';
 import '../utils/services/translations/locale_keys.g.dart';
 import '../utils/theme/colors.dart';
@@ -14,18 +15,24 @@ class Background extends StatelessWidget {
     this.margin,
     this.title,
     this.titleAlignment = Alignment.centerLeft,
+    this.logoAlign = MainAxisAlignment.spaceBetween,
     this.onSkipTap,
     this.titleMargin,
     this.titleStyle,
+    this.showEmblem = true,
+    this.showBottomNav = false,
   });
   final Widget child;
   final BackgroundType backgroundType;
   final String? title;
   final Alignment titleAlignment;
+  final MainAxisAlignment logoAlign;
   final VoidCallback? onSkipTap;
   final EdgeInsets? margin;
   final EdgeInsets? titleMargin;
   final TextStyle? titleStyle;
+  final bool showEmblem;
+  final bool showBottomNav;
 
   @override
   Widget build(BuildContext context) {
@@ -51,18 +58,19 @@ class Background extends StatelessWidget {
             child: CustomImage(path: 'assets/svg/islamic_pattern.svg', imageType: ImageType.svg, fit: BoxFit.cover, height: screenSize.height * 2, width: screenSize.width * 2, color: Colors.white),
           ),
           Opacity(opacity: 0.4, child: CustomImage(path: 'assets/svg/modal.svg', imageType: ImageType.svg, fit: BoxFit.cover, height: screenSize.height * 2, width: screenSize.width * 2)),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Opacity(
-              opacity: 0.15,
-              child: CustomImage(path: 'assets/svg/emblem.svg', imageType: ImageType.svg, color: CColors.primary, height: screenSize.height * 0.22, width: screenSize.width * 0.8),
+          if (showEmblem)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Opacity(
+                opacity: 0.15,
+                child: CustomImage(path: 'assets/svg/emblem.svg', imageType: ImageType.svg, color: CColors.primary, height: screenSize.height * 0.22, width: screenSize.width * 0.8),
+              ),
             ),
-          ),
           SizedBox(
             height: screenSize.height,
             width: screenSize.width,
             child: Padding(
-              padding: margin ?? EdgeInsets.symmetric(vertical: screenSize.height * 0.13, horizontal: 30),
+              padding: margin ?? (showBottomNav ? EdgeInsets.only(top: screenSize.height * 0.13, left: 30, right: 30) : EdgeInsets.symmetric(vertical: screenSize.height * 0.13, horizontal: 30)),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -73,7 +81,7 @@ class Background extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: logoAlign,
                           children: [
                             CustomImage(path: DefaultImages.logoWithName, imageType: ImageType.svg, width: screenSize.width * 0.4),
                             if (backgroundType == BackgroundType.logoWithSkip)
@@ -84,7 +92,7 @@ class Background extends StatelessWidget {
                     ),
                   if (title != null)
                     Align(alignment: titleAlignment, child: Padding(padding: titleMargin ?? const EdgeInsets.only(top: 20), child: Text(title!, style: titleStyle ?? CTextStyle.w500(fontSize: 22)))),
-                  Expanded(child: child),
+                  Expanded(child: Column(children: [Expanded(child: child), if (showBottomNav) BottomNav()])),
                 ],
               ),
             ),
