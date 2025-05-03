@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../utils/services/translations/locale_keys.g.dart';
 import '../utils/theme/colors.dart';
 import '../utils/theme/text_style.dart';
+import '../view/safa_marwa/safa_marwa_home.dart';
 import 'button.dart';
 import 'custom_image.dart';
 
@@ -46,6 +47,7 @@ class BottomNav extends ConsumerWidget {
           ),
           Center(
             child: CButton(
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SafaMarwaHomePage())),
               padding: EdgeInsets.zero,
               margin: EdgeInsets.only(bottom: 15),
               height: 70,

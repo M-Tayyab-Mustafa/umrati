@@ -6,8 +6,8 @@ import 'card.dart';
 import 'check_box.dart';
 import 'custom_image.dart';
 
-class MeeqaatCard extends StatelessWidget {
-  const MeeqaatCard({super.key, required this.title, required this.isSelected, required this.onTap, this.child, this.margin});
+class CheckBoxCard extends StatelessWidget {
+  const CheckBoxCard({super.key, required this.title, required this.isSelected, required this.onTap, this.child, this.margin});
   final String title;
   final bool isSelected;
   final VoidCallback onTap;
@@ -21,6 +21,7 @@ class MeeqaatCard extends StatelessWidget {
       margin: margin ?? EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [

@@ -9,6 +9,7 @@ late Size screenSize;
 
 final primaryShadows = [BoxShadow(color: CColors.shadow, blurRadius: 10, blurStyle: BlurStyle.outer)];
 final innerPrimaryShadows = [BoxShadow(color: CColors.shadow, blurRadius: 10, blurStyle: BlurStyle.inner)];
+double roundToOneDecimal(double value) => (value * 1000).round() / 1000;
 
 enum Gender { male, female }
 

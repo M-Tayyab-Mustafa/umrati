@@ -9,7 +9,7 @@ import '../../utils/theme/colors.dart';
 import '../../utils/theme/text_style.dart';
 import '../../widgets/background.dart';
 import '../../widgets/button.dart';
-import '../../widgets/meeqaat_card.dart';
+import '../../widgets/check_box_card.dart';
 
 class MeeqaatThreeTasksPage extends ConsumerWidget {
   const MeeqaatThreeTasksPage({super.key});
@@ -27,9 +27,9 @@ class MeeqaatThreeTasksPage extends ConsumerWidget {
         children: [
           Center(child: Text(LocaleKeys.three_tasks_at_meeqaat.tr(), style: CTextStyle.w600(fontSize: 14, color: CColors.deepTeal))),
           Center(child: Text(LocaleKeys.these_3_tasks_can_be_done_even_before_meeqaat.tr(), style: CTextStyle.w400(fontSize: 14, color: CColors.primary))),
-          MeeqaatCard(margin: EdgeInsets.symmetric(vertical: 20), title: LocaleKeys.two_nafl_prayers.tr(), isSelected: false, onTap: () {}),
-          MeeqaatCard(title: LocaleKeys.intention_niyyah.tr(), isSelected: false, onTap: () {}),
-          MeeqaatCard(margin: EdgeInsets.symmetric(vertical: 20), title: LocaleKeys.talbiyah.tr(), isSelected: false, onTap: () {}),
+          CheckBoxCard(margin: EdgeInsets.symmetric(vertical: 20), title: LocaleKeys.two_nafl_prayers.tr(), isSelected: false, onTap: () {}),
+          CheckBoxCard(title: LocaleKeys.intention_niyyah.tr(), isSelected: false, onTap: () {}),
+          CheckBoxCard(margin: EdgeInsets.symmetric(vertical: 20), title: LocaleKeys.talbiyah.tr(), isSelected: false, onTap: () {}),
           CButton(isLoading: provider.isConfirmingMeeqaat, onTap: () => provider.tasksDone(context), margin: EdgeInsets.only(top: 30), title: LocaleKeys.tasks_done.tr(), titleWithIcon: true),
         ],
       ),

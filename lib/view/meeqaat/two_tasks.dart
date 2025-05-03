@@ -9,7 +9,7 @@ import '../../utils/theme/colors.dart';
 import '../../utils/theme/text_style.dart';
 import '../../widgets/background.dart';
 import '../../widgets/button.dart';
-import '../../widgets/meeqaat_card.dart';
+import '../../widgets/check_box_card.dart';
 
 class MeeqaatTwoTasksPage extends ConsumerWidget {
   const MeeqaatTwoTasksPage({super.key});
@@ -26,8 +26,8 @@ class MeeqaatTwoTasksPage extends ConsumerWidget {
       child: Column(
         children: [
           Center(child: Text(LocaleKeys.two_before_meeqaat.tr(), style: CTextStyle.w600(fontSize: 14, color: CColors.deepTeal))),
-          MeeqaatCard(margin: EdgeInsets.only(top: 20), title: LocaleKeys.cleanliness.tr(), isSelected: false, onTap: () {}),
-          MeeqaatCard(
+          CheckBoxCard(margin: EdgeInsets.only(top: 20), title: LocaleKeys.cleanliness.tr(), isSelected: false, onTap: () {}),
+          CheckBoxCard(
             margin: EdgeInsets.only(top: 20, bottom: 40),
             title: LocaleKeys.ihram.tr(),
             isSelected: false,

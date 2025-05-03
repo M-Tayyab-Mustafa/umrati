@@ -47,7 +47,26 @@ abstract class  LocaleKeys {
   static const prayer = 'prayer';
   static const settings = 'settings';
   static const more = 'more';
+  static const off_tracker = 'off_tracker';
   static const tawaf_tracker = 'tawaf_tracker';
+  static const istilaam_time = 'istilaam_time';
+  static const start_tawaf = 'start_tawaf';
+  static const starting_point = 'starting_point';
+  static const safa = 'safa';
+  static const marwa = 'marwa';
+  static const now_please_pray_while_facing_kibla = 'now_please_pray_while_facing_kibla';
+  static const your_sai_has_completed = 'your_sai_has_completed';
+  static const seven_rounds_completed = 'seven_rounds_completed';
+  static const round_second_dua = 'round_second_dua';
+  static const now_perform_2_rakats_salah = 'now_perform_2_rakats_salah';
+  static const please_check_makrooh_time_before = 'please_check_makrooh_time_before';
+  static const drink_zamzam = 'drink_zamzam';
+  static const shave_the_head = 'shave_the_head';
+  static const go_to_home_screen = 'go_to_home_screen';
+  static const congratulations = 'congratulations';
+  static const your_umra_has_been_completed = 'your_umra_has_been_completed';
+  static const may_allah_accept_your_umra_ameen = 'may_allah_accept_your_umra_ameen';
+  static const shave_the_head_description = 'shave_the_head_description';
   static const take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram = 'take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram';
   static const do_these_5_ihram_related_tasks = 'do_these_5_ihram_related_tasks';
 
