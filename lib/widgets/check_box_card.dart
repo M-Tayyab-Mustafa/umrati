@@ -25,7 +25,7 @@ class CheckBoxCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              CCheckBox(value: isSelected),
+              CCheckBox(value: isSelected, onTap: onTap),
               Expanded(
                 child: GestureDetector(
                   onTap: onTap,
