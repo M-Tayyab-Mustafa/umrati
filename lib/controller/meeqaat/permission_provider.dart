@@ -23,7 +23,7 @@ class MeeqaatPermissionNotifier extends ChangeNotifier {
   void continueTab(BuildContext context) async {
     if (await requestLocationPermission()) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => MeeqaatLocationFetchedPage()));
-    } else {
+    } else if (await requestLocationWhenInUse()) {
       showDialog(
         context: context,
         builder:

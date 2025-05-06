@@ -52,9 +52,9 @@ class LoginPage extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(padding: EdgeInsets.only(left: 15, bottom: 10), child: Text(LocaleKeys.or_continue_with.tr(), style: CTextStyle.w500())),
-                  const Row(
+                  Row(
                     children: [
-                      Expanded(child: CustomImage(path: 'assets/svg/google_with_border.svg', imageType: ImageType.svg)),
+                      Expanded(child: CustomImage(onTap: () => provider.googleLogin(context), path: 'assets/svg/google_with_border.svg', imageType: ImageType.svg)),
                       Expanded(child: CustomImage(path: 'assets/svg/facebook_with_border.svg', imageType: ImageType.svg)),
                       Expanded(child: CustomImage(path: 'assets/svg/apple_with_border.svg', imageType: ImageType.svg)),
                     ],

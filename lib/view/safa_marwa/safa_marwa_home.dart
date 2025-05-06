@@ -59,7 +59,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaHomePage> {
             shadows: [],
             height: 50,
             margin: EdgeInsets.symmetric(vertical: 30),
-            onTap: provider.tawafCompletionDialog,
+            onTap: provider.updateLocation,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

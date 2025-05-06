@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:umrati/utils/services/local_storage.dart';
 
 import '../../model/country.dart';
 import '../../utils/helper/constants.dart';
@@ -51,5 +52,9 @@ class LoginNotifier extends ChangeNotifier {
       selectedCountry = result;
       notifyListeners();
     }
+  }
+
+  void googleLogin(BuildContext context) async {
+    LocalStorageManager.saveFirstTime(true);
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../utils/helper/constants.dart';
 import '../../utils/theme/colors.dart';
-import '../../view/meeqaat/three_tasks.dart';
+import '../../view/meeqaat/permission.dart';
 import '../../widgets/check_box.dart';
 import '../../widgets/custom_image.dart';
 
@@ -14,7 +14,7 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   bool isIhramChecked = false;
 
   void skip(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MeeqaatThreeTasksPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MeeqaatPermissionPage()));
   }
 
   void moveToThreeOtherTasks(BuildContext context) {
@@ -22,7 +22,7 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
     notifyListeners();
     isConfirmingMeeqaat = false;
     notifyListeners();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MeeqaatThreeTasksPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MeeqaatPermissionPage()));
   }
 
   void showIhramTutorial(BuildContext context) async {

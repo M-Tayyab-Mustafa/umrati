@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:umrati/utils/helper/constants.dart';
 import 'package:umrati/widgets/button.dart';
 
+import '../controller/umra_completed/provider.dart';
 import '../utils/services/translations/locale_keys.g.dart';
 import '../utils/theme/colors.dart';
 import '../utils/theme/text_style.dart';
@@ -56,7 +58,15 @@ class _UmraCompletedState extends State<UmraCompleted> {
               ],
             ),
           ),
-          CButton(margin: const EdgeInsets.only(bottom: 60), title: LocaleKeys.go_to_home_screen.tr(), titleWithIcon: true),
+          Consumer(
+            builder:
+                (context, ref, child) => CButton(
+                  onTap: () => ref.read(umraCompletedProvider).goToHomePage(context),
+                  margin: const EdgeInsets.only(bottom: 60),
+                  title: LocaleKeys.go_to_home_screen.tr(),
+                  titleWithIcon: true,
+                ),
+          ),
         ],
       ),
     );

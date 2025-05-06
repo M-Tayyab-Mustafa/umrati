@@ -17,14 +17,18 @@ enum BackgroundType { empty, logo, logoWithSkip }
 
 FutureOr<bool> requestLocationPermission() async {
   var status = await Permission.locationAlways.status;
-  var locationStatus = await Permission.location.status;
-  var locationWhenInUseStatus = await Permission.locationWhenInUse.status;
-  if (!(status.isGranted && locationStatus.isGranted && locationWhenInUseStatus.isGranted)) {
+  if (!(status.isGranted)) {
     status = await Permission.locationAlways.request();
-    locationStatus = await Permission.location.request();
+  }
+  return status.isGranted;
+}
+
+FutureOr<bool> requestLocationWhenInUse() async {
+  var locationWhenInUseStatus = await Permission.locationWhenInUse.status;
+  if (!(locationWhenInUseStatus.isGranted)) {
     locationWhenInUseStatus = await Permission.locationWhenInUse.request();
   }
-  return status.isGranted && locationStatus.isGranted && locationWhenInUseStatus.isGranted;
+  return locationWhenInUseStatus.isGranted;
 }
 
 class DefaultImages {

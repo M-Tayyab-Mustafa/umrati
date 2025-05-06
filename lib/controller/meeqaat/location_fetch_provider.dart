@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../../view/tawaf/start.dart';
+import '../../view/meeqaat/three_tasks.dart';
 
 final locationFetchProvider = ChangeNotifierProvider<MeeqaatLocationFetchProviderNotifier>((ref) => MeeqaatLocationFetchProviderNotifier());
 
@@ -16,10 +16,10 @@ class MeeqaatLocationFetchProviderNotifier extends ChangeNotifier {
   }
 
   void skip(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => StartTawafPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MeeqaatThreeTasksPage()));
   }
 
   void continueTab(BuildContext context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => StartTawafPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MeeqaatThreeTasksPage()));
   }
 }
