@@ -9,7 +9,7 @@ import '../../utils/services/toast.dart';
 import '../../utils/services/translations/locale_keys.g.dart';
 import '../../utils/services/validation.dart';
 import '../../view/auth/otp.dart';
-import '../../view/auth/sign_up.dart';
+import '../../view/auth/gender.dart';
 import 'otp_provider.dart';
 
 final loginProvider = ChangeNotifierProvider<LoginNotifier>((ref) => LoginNotifier(ref: ref));
@@ -38,7 +38,7 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   Future<void> skip(BuildContext context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SelectGenderPage()));
   }
 
   void updateSelectedCountry(BuildContext context) async {

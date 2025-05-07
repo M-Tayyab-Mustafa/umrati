@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:umrati/widgets/bottom_nav.dart';
 import '../utils/helper/constants.dart';
 import '../utils/services/translations/locale_keys.g.dart';
 import '../utils/theme/colors.dart';
@@ -20,7 +19,6 @@ class Background extends StatelessWidget {
     this.titleMargin,
     this.titleStyle,
     this.showEmblem = true,
-    this.showBottomNav = false,
   });
   final Widget child;
   final BackgroundType backgroundType;
@@ -32,8 +30,6 @@ class Background extends StatelessWidget {
   final EdgeInsets? titleMargin;
   final TextStyle? titleStyle;
   final bool showEmblem;
-  final bool showBottomNav;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +66,7 @@ class Background extends StatelessWidget {
             height: screenSize.height,
             width: screenSize.width,
             child: Padding(
-              padding: margin ?? (showBottomNav ? EdgeInsets.only(top: screenSize.height * 0.13, left: 30, right: 30) : EdgeInsets.symmetric(vertical: screenSize.height * 0.13, horizontal: 30)),
+              padding: margin ?? EdgeInsets.symmetric(vertical: screenSize.height * 0.13, horizontal: 30),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -92,7 +88,7 @@ class Background extends StatelessWidget {
                     ),
                   if (title != null)
                     Align(alignment: titleAlignment, child: Padding(padding: titleMargin ?? const EdgeInsets.only(top: 20), child: Text(title!, style: titleStyle ?? CTextStyle.w500(fontSize: 22)))),
-                  Expanded(child: Column(children: [Expanded(child: child), if (showBottomNav) BottomNav()])),
+                  Expanded(child: child),
                 ],
               ),
             ),

@@ -3,8 +3,6 @@ import 'dart:async' show Timer;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../view/umera/safa_marwa_home.dart';
-
 final tawafProvider = ChangeNotifierProvider<TawafNotifier>((ref) => TawafNotifier());
 
 class TawafNotifier extends ChangeNotifier {
@@ -13,9 +11,15 @@ class TawafNotifier extends ChangeNotifier {
   bool isRoundCompleted = false;
   int circleCount = -1;
   Timer? timer;
+  bool isTawafCompleted = false;
+  bool isSafaMarwaCompleted = false;
+  bool isUmeraCompleted = false;
   startTawaf() {
     if (isInTawaf) {
-      resetTawaf();
+      isInTawaf = false;
+      isTawafCompleted = false;
+      isSafaMarwaCompleted = false;
+      _resetTawaf();
       return;
     }
     isInTawaf = true;
@@ -40,8 +44,7 @@ class TawafNotifier extends ChangeNotifier {
     updateLocation();
   }
 
-  resetTawaf() {
-    isInTawaf = false;
+  _resetTawaf() {
     circleCount = -1;
     tawafCircleCompletionPercent = 0;
     isRoundCompleted = false;
@@ -56,8 +59,27 @@ class TawafNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  moveToSafaMarwa({required BuildContext context}) {
-    resetTawaf();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => SafaMarwaHomePage()));
+  moveToSafaMarwa({required BuildContext context, required WidgetRef ref}) {
+    isTawafCompleted = true;
+    _resetTawaf();
+  }
+
+  void safaMarwaCompleted() {
+    isSafaMarwaCompleted = true;
+    notifyListeners();
+  }
+
+  void umeraCompleted() {
+    isUmeraCompleted = true;
+    notifyListeners();
+  }
+
+  void goToHome() {
+    isInTawaf = false;
+    isTawafCompleted = false;
+    isSafaMarwaCompleted = false;
+    isUmeraCompleted = false;
+    _resetTawaf();
+    notifyListeners();
   }
 }

@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../utils/helper/constants.dart';
-import '../../utils/services/translations/locale_keys.g.dart';
-import '../../widgets/background.dart';
-import '../../widgets/custom_image.dart';
-import '../controller/auth/gender_provider.dart';
-import '../widgets/button.dart';
+import '../../../utils/helper/constants.dart';
+import '../../../utils/services/translations/locale_keys.g.dart';
+import '../../../widgets/background.dart';
+import '../../../widgets/custom_image.dart';
+import '../../controller/auth/gender_provider.dart';
+import '../../widgets/button.dart';
 
 class SelectGenderPage extends ConsumerWidget {
   const SelectGenderPage({super.key});

@@ -8,7 +8,7 @@ import 'package:umrati/utils/services/translations/locale_keys.g.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/text_style.dart';
 import '../../view/meeqaat/location_fetched.dart';
-import '../../view/umera/start_tawaf.dart';
+import '../../view/nav/page.dart';
 import '../../widgets/button.dart';
 
 final meeqaatPermissionProvider = ChangeNotifierProvider<MeeqaatPermissionNotifier>((ref) => MeeqaatPermissionNotifier());
@@ -17,7 +17,7 @@ class MeeqaatPermissionNotifier extends ChangeNotifier {
   bool isConfirmingMeeqaat = false;
 
   void skip(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => StartTawafPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
   }
 
   void continueTab(BuildContext context) async {

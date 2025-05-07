@@ -4,16 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../theme/colors.dart';
+part 'enums.dart';
 
 late Size screenSize;
 
 final primaryShadows = [BoxShadow(color: CColors.shadow, blurRadius: 10, blurStyle: BlurStyle.outer)];
 final innerPrimaryShadows = [BoxShadow(color: CColors.shadow, blurRadius: 10, blurStyle: BlurStyle.inner)];
 double roundToOneDecimal(double value) => (value * 1000).round() / 1000;
-
-enum Gender { male, female }
-
-enum BackgroundType { empty, logo, logoWithSkip }
 
 FutureOr<bool> requestLocationPermission() async {
   var status = await Permission.locationAlways.status;

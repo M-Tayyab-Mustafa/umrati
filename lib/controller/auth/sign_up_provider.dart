@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../utils/services/local_storage.dart';
-import '../../view/gender.dart';
+import '../../view/auth/gender.dart';
 
 final signUpProvider = ChangeNotifierProvider<SignUpNotifier>((ref) => SignUpNotifier());
 

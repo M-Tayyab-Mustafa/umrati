@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId = "com.mightysofts.umrati"
-        minSdk = flutter.minSdkVersion
+        minSdk = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

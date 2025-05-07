@@ -1,0 +1,7 @@
+part of 'constants.dart';
+
+enum Gender { male, female }
+
+enum BackgroundType { empty, logo, logoWithSkip }
+
+enum BottomNavTabs { profile, umera, more, ziarat, settings }

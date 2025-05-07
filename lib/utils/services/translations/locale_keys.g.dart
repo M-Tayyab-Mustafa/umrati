@@ -43,8 +43,8 @@ abstract class  LocaleKeys {
   static const continue_your_remaining_3_tasks = 'continue_your_remaining_3_tasks';
   static const dua_during_2nd_round = 'dua_during_2nd_round';
   static const profile = 'profile';
-  static const supplications = 'supplications';
-  static const prayer = 'prayer';
+  static const umera = 'umera';
+  static const ziarat = 'ziarat';
   static const settings = 'settings';
   static const more = 'more';
   static const off_tracker = 'off_tracker';
