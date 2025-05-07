@@ -7,7 +7,7 @@ import '../../utils/helper/constants.dart';
 import '../../utils/services/translations/locale_keys.g.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/text_style.dart';
-import '../../view/complete_tawaf.dart';
+import '../../view/umera/complete_tawaf.dart';
 import '../../widgets/button.dart';
 import '../../widgets/custom_image.dart';
 

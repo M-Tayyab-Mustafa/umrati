@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../utils/services/local_storage.dart';
 import '../../view/auth/login.dart';
-import '../../view/language.dart';
+import '../../view/language/language.dart';
 
 final selectLanguageProvider = ChangeNotifierProvider<SelectLanguageNotifier>((ref) => SelectLanguageNotifier());
 

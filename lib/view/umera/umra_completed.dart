@@ -1,15 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:umrati/utils/helper/constants.dart';
-import 'package:umrati/widgets/button.dart';
-
-import '../controller/umra_completed/provider.dart';
-import '../utils/services/translations/locale_keys.g.dart';
-import '../utils/theme/colors.dart';
-import '../utils/theme/text_style.dart';
-import '../widgets/background.dart';
-import '../widgets/custom_image.dart';
+import '../../controller/umera/completed_provider.dart';
+import '../../utils/helper/constants.dart';
+import '../../utils/services/translations/locale_keys.g.dart';
+import '../../utils/theme/colors.dart';
+import '../../utils/theme/text_style.dart';
+import '../../widgets/background.dart';
+import '../../widgets/button.dart';
+import '../../widgets/custom_image.dart';
 
 class UmraCompleted extends StatefulWidget {
   const UmraCompleted({super.key});

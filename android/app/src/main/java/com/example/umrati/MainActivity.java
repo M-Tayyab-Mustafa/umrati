@@ -1,4 +1,4 @@
-package com.example.umrati;
+package com.mightysofts.umrati;
 
 import io.flutter.embedding.android.FlutterActivity;
 

@@ -5,7 +5,7 @@ import '../../utils/helper/constants.dart';
 import '../../utils/services/translations/locale_keys.g.dart';
 import '../../widgets/background.dart';
 import '../../widgets/custom_image.dart';
-import '../controller/gender/provider.dart';
+import '../controller/auth/gender_provider.dart';
 import '../widgets/button.dart';
 
 class SelectGenderPage extends ConsumerWidget {

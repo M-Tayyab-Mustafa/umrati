@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:umrati/widgets/check_box_card.dart';
-import '../../controller/tawaf/provider.dart';
+import '../../controller/umera/tawaf_provider.dart';
 import '../../utils/helper/constants.dart';
 import '../../utils/services/translations/locale_keys.g.dart';
 import '../../utils/theme/colors.dart';

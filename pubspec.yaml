@@ -9,6 +9,7 @@ environment:
 dependencies:
   cached_network_image: ^3.4.1
   easy_localization: ^3.0.7+1
+  firebase_core: ^3.13.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.6.1
@@ -16,6 +17,7 @@ dependencies:
   fluttertoast: ^8.2.12
   geocoding: ^3.0.0
   geolocator: ^14.0.0
+  google_sign_in: ^6.3.0
   permission_handler: ^12.0.0+1
   pinput: ^5.0.1
   shared_preferences: ^2.5.3

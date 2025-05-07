@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../controller/safa_marwa/provider.dart';
+import '../../controller/umera/safa_marwa_provider.dart';
 import '../../utils/helper/constants.dart';
 import '../../utils/services/translations/locale_keys.g.dart';
 import '../../utils/theme/colors.dart';

@@ -1,14 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../controller/language/select_language_provider.dart';
-import '../utils/helper/constants.dart';
-import '../utils/services/translations/locale_keys.g.dart';
-import '../utils/theme/colors.dart';
-import '../utils/theme/text_style.dart';
-import '../widgets/background.dart';
-import '../widgets/button.dart';
-import '../widgets/card.dart';
+import '../../controller/language/select_language_provider.dart';
+import '../../utils/helper/constants.dart';
+import '../../utils/services/translations/locale_keys.g.dart';
+import '../../utils/theme/colors.dart';
+import '../../utils/theme/text_style.dart';
+import '../../widgets/background.dart';
+import '../../widgets/button.dart';
+import '../../widgets/card.dart';
 
 class SelectLanguagePage extends ConsumerWidget {
   const SelectLanguagePage({super.key});

@@ -3,7 +3,7 @@ import 'dart:async' show Timer;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../view/safa_marwa/safa_marwa_home.dart';
+import '../../view/umera/safa_marwa_home.dart';
 
 final tawafProvider = ChangeNotifierProvider<TawafNotifier>((ref) => TawafNotifier());
 

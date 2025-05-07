@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "422094310480",
+    "project_id": "umrati-ec453",
+    "storage_bucket": "umrati-ec453.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422094310480:android:82a7c480abedba2b04d555",
+        "android_client_info": {
+          "package_name": "com.mightysofts.umrati"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhFG9V782qk9gWpsh4qqiDLxWE2I5QOqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

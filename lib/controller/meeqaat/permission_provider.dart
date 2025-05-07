@@ -8,7 +8,7 @@ import 'package:umrati/utils/services/translations/locale_keys.g.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/text_style.dart';
 import '../../view/meeqaat/location_fetched.dart';
-import '../../view/tawaf/start.dart';
+import '../../view/umera/start_tawaf.dart';
 import '../../widgets/button.dart';
 
 final meeqaatPermissionProvider = ChangeNotifierProvider<MeeqaatPermissionNotifier>((ref) => MeeqaatPermissionNotifier());

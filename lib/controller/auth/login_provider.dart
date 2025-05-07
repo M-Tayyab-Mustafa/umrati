@@ -57,4 +57,12 @@ class LoginNotifier extends ChangeNotifier {
   void googleLogin(BuildContext context) async {
     LocalStorageManager.saveFirstTime(true);
   }
+
+  void facebookLogin(BuildContext context) async {
+    LocalStorageManager.saveFirstTime(true);
+  }
+
+  void appleLogin(BuildContext context) async {
+    LocalStorageManager.saveFirstTime(true);
+  }
 }

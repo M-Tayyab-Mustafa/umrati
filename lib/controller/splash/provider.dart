@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../utils/helper/constants.dart';
 import '../../utils/services/local_storage.dart';
 import '../../view/auth/login.dart';
-import '../../view/select_language.dart';
+import '../../view/language/select_language.dart';
 
 final splashProvider = ChangeNotifierProvider<SplashNotifier>((ref) => SplashNotifier());
 
