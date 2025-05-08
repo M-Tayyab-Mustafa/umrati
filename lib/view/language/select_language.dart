@@ -28,7 +28,7 @@ class SelectLanguagePage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(LocaleKeys.english.tr(), style: CTextStyle.w600()),
-                GestureDetector(onTap: () => provider.changeLanguageTap(context), child: Text(LocaleKeys.change_the_language.tr(), style: CTextStyle.w600(color: CColors.primary))),
+                GestureDetector(onTap: () => provider.changeLanguageTap(context, ref), child: Text(LocaleKeys.change_the_language.tr(), style: CTextStyle.w600(color: CColors.primary))),
               ],
             ),
           ),

@@ -14,7 +14,7 @@ FutureOr<void> main() async {
   runApp(
     ProviderScope(
       child: EasyLocalization(
-        supportedLocales: const [Locale('en', 'US')],
+        supportedLocales: const [Locale('en', 'US'), Locale('ur', 'PK')],
         path: 'assets/translations',
         fallbackLocale: Locale('en', 'US'),
         saveLocale: true,
@@ -35,6 +35,7 @@ class MainApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
       debugShowCheckedModeBanner: false,
+
       home: SplashPage(),
       color: CColors.primary,
     );

@@ -23,14 +23,14 @@ class LanguagePage extends ConsumerWidget {
               shrinkWrap: true,
               itemCount: languageNotifier.languages.length,
               itemBuilder: (context, index) {
-                bool isSelected = languageNotifier.languages[index] == ref.watch(languageProvider);
+                bool isSelected = languageNotifier.languages[index] == ref.watch(languageProvider).selectedLanguage;
                 return GestureDetector(
-                  onTap: () => languageNotifier.updateLanguage(languageNotifier.languages[index]),
+                  onTap: () => languageNotifier.updateLanguage(context, languageNotifier.languages[index]),
                   child: BasicCard(
                     margin: EdgeInsets.only(top: index != 0 ? 30 : 20),
                     borderColor: isSelected ? CColors.primary : CColors.lightGrey,
                     boxShadow: isSelected ? null : [],
-                    child: Text(languageNotifier.languages[index], style: CTextStyle.w600()),
+                    child: Text(languageNotifier.languages[index].tr(), style: CTextStyle.w600()),
                   ),
                 );
               },

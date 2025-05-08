@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import '../utils/helper/constants.dart';
 import '../utils/services/translations/locale_keys.g.dart';
@@ -87,7 +87,10 @@ class Background extends StatelessWidget {
                       ],
                     ),
                   if (title != null)
-                    Align(alignment: titleAlignment, child: Padding(padding: titleMargin ?? const EdgeInsets.only(top: 20), child: Text(title!, style: titleStyle ?? CTextStyle.w500(fontSize: 22)))),
+                    Align(
+                      alignment: titleAlignment,
+                      child: Padding(padding: titleMargin ?? const EdgeInsets.only(top: 20), child: Text(title!, textDirection: TextDirection.rtl, style: titleStyle ?? CTextStyle.w500(fontSize: 22))),
+                    ),
                   Expanded(child: child),
                 ],
               ),

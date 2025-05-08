@@ -17,6 +17,7 @@ class BasicCard extends StatelessWidget {
     this.borderWidth,
     this.borderRadius,
     this.boxShadow,
+    this.onTap,
   });
   final EdgeInsets? margin;
   final EdgeInsets? padding;
@@ -29,22 +30,26 @@ class BasicCard extends StatelessWidget {
   final double? borderWidth;
   final double? borderRadius;
   final List<BoxShadow>? boxShadow;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: margin ?? EdgeInsets.zero,
-      height: height,
-      width: width,
-      padding: padding ?? EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.transparent,
-        gradient: backgroundGradient,
-        border: Border.all(color: borderColor ?? CColors.primary, width: borderWidth ?? 2),
-        borderRadius: BorderRadius.circular(borderRadius ?? 16),
-        boxShadow: boxShadow ?? primaryShadows,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: margin ?? EdgeInsets.zero,
+        height: height,
+        width: width,
+        padding: padding ?? EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: backgroundColor ?? Colors.transparent,
+          gradient: backgroundGradient,
+          border: Border.all(color: borderColor ?? CColors.primary, width: borderWidth ?? 2),
+          borderRadius: BorderRadius.circular(borderRadius ?? 16),
+          boxShadow: boxShadow ?? primaryShadows,
+        ),
+        child: child,
       ),
-      child: child,
     );
   }
 }

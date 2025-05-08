@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../view/nav/umera/tawaf.dart';
 import '../../utils/helper/constants.dart';
+import '../../view/nav/ziarat/page.dart';
 
 final bottomNavProvider = ChangeNotifierProvider<BottomNavNotifier>((ref) => BottomNavNotifier());
 
@@ -19,6 +20,8 @@ class BottomNavNotifier extends ChangeNotifier {
         break;
       case BottomNavTabs.more:
       case BottomNavTabs.ziarat:
+        child = const ZiaratPage();
+        break;
       default:
         child = Scaffold();
     }

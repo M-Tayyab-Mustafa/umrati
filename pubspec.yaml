@@ -33,6 +33,7 @@ flutter:
   assets:
     - assets/svg/
     - assets/svg/gender/
+    - assets/svg/ziarat/
     - assets/png/
     - assets/translations/
   fonts:
