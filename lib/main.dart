@@ -1,7 +1,9 @@
 import 'dart:async' show FutureOr;
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'firebase_options.dart';
 import 'utils/services/local_storage.dart';
 import 'utils/services/translations/codegen_loader.g.dart';
 import 'utils/theme/colors.dart';
@@ -11,6 +13,7 @@ FutureOr<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorageManager.initialization();
   await EasyLocalization.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     ProviderScope(
       child: EasyLocalization(
@@ -35,7 +38,6 @@ class MainApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
       debugShowCheckedModeBanner: false,
-
       home: SplashPage(),
       color: CColors.primary,
     );

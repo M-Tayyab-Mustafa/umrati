@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import '../utils/helper/constants.dart';
+import '../utils/helper/language_direction.dart';
 import '../utils/services/translations/locale_keys.g.dart';
 import '../utils/theme/colors.dart';
 import '../utils/theme/text_style.dart';
@@ -13,7 +14,7 @@ class Background extends StatelessWidget {
     this.backgroundType = BackgroundType.empty,
     this.margin,
     this.title,
-    this.titleAlignment = Alignment.centerLeft,
+    this.titleAlignment,
     this.logoAlign = MainAxisAlignment.spaceBetween,
     this.onSkipTap,
     this.titleMargin,
@@ -23,7 +24,7 @@ class Background extends StatelessWidget {
   final Widget child;
   final BackgroundType backgroundType;
   final String? title;
-  final Alignment titleAlignment;
+  final Alignment? titleAlignment;
   final MainAxisAlignment logoAlign;
   final VoidCallback? onSkipTap;
   final EdgeInsets? margin;
@@ -88,8 +89,11 @@ class Background extends StatelessWidget {
                     ),
                   if (title != null)
                     Align(
-                      alignment: titleAlignment,
-                      child: Padding(padding: titleMargin ?? const EdgeInsets.only(top: 20), child: Text(title!, textDirection: TextDirection.rtl, style: titleStyle ?? CTextStyle.w500(fontSize: 22))),
+                      alignment: titleAlignment ?? (languageDirection(context) == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight),
+                      child: Padding(
+                        padding: titleMargin ?? const EdgeInsets.only(top: 20),
+                        child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
+                      ),
                     ),
                   Expanded(child: child),
                 ],

@@ -9,7 +9,7 @@ import '../../view/auth/login.dart';
 import '../../view/language/language.dart';
 import 'language_provider.dart';
 
-final selectLanguageProvider = ChangeNotifierProvider<SelectLanguageNotifier>((ref) => SelectLanguageNotifier());
+final selectLanguageProvider = ChangeNotifierProvider.autoDispose<SelectLanguageNotifier>((ref) => SelectLanguageNotifier());
 
 class SelectLanguageNotifier extends ChangeNotifier {
   FutureOr<void> changeLanguageTap(BuildContext context, WidgetRef ref) async {
@@ -18,7 +18,7 @@ class SelectLanguageNotifier extends ChangeNotifier {
   }
 
   FutureOr<void> continueTap(BuildContext context) async {
-    LocalStorageManager.saveFirstTime(false);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+    LocalStorageManager.showSelectLanguagePage(false);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 }

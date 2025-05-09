@@ -8,7 +8,11 @@ environment:
 
 dependencies:
   cached_network_image: ^3.4.1
+  cloud_firestore: ^5.6.7
+  country_code_picker: ^3.3.0
+  dlibphonenumber: ^1.1.38
   easy_localization: ^3.0.7+1
+  firebase_auth: ^5.5.3
   firebase_core: ^3.13.0
   flutter:
     sdk: flutter
@@ -35,6 +39,7 @@ flutter:
     - assets/svg/gender/
     - assets/svg/ziarat/
     - assets/png/
+    - assets/png/flags/
     - assets/translations/
   fonts:
     - family: Roboto

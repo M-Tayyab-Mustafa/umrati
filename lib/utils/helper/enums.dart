@@ -9,3 +9,5 @@ enum BottomNavTabs { profile, umera, more, ziarat, settings }
 enum ZiaratCities { macca, medina, taif, other }
 
 enum ZiaratDestinationsCreationOptions { auto, manual }
+
+enum CollectionNames { users }

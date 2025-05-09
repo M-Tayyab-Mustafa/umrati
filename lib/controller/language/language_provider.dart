@@ -6,7 +6,7 @@ import '../../utils/services/local_storage.dart';
 import '../../utils/services/translations/locale_keys.g.dart';
 import '../../view/auth/login.dart';
 
-final languageProvider = ChangeNotifierProvider<LanguageNotifier>((ref) => LanguageNotifier());
+final languageProvider = ChangeNotifierProvider.autoDispose<LanguageNotifier>((ref) => LanguageNotifier());
 
 class LanguageNotifier extends ChangeNotifier {
   String selectedLanguage = LocaleKeys.english.tr();
@@ -23,7 +23,7 @@ class LanguageNotifier extends ChangeNotifier {
     } else {
       context.setLocale(Locale('ur', 'PK'));
     }
-    LocalStorageManager.saveFirstTime(false);
+    LocalStorageManager.showSelectLanguagePage(false);
     Navigator.popUntil(context, (route) => route.isFirst);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
   }

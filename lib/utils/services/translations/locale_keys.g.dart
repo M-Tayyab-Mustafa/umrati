@@ -16,6 +16,7 @@ abstract class  LocaleKeys {
   static const phone_number = 'phone_number';
   static const verify_the_otp = 'verify_the_otp';
   static const resend_the_otp = 'resend_the_otp';
+  static const resend_the_otp_in = 'resend_the_otp_in';
   static const select_your_gender = 'select_your_gender';
   static const enter_the_otp_you_received_to = 'enter_the_otp_you_received_to';
   static const or_continue_with = 'or_continue_with';

@@ -15,12 +15,16 @@ class PinInput extends StatelessWidget {
     return Padding(
       padding: margin ?? EdgeInsets.zero,
       child: Pinput(
-        length: 4,
+        length: 6,
         defaultPinTheme: PinTheme(
-          margin: EdgeInsets.only(right: 10),
-          height: 70,
-          width: 70,
-          decoration: BoxDecoration(border: Border.all(color: CColors.primary, width: 2), borderRadius: BorderRadius.circular(15), boxShadow: primaryShadows),
+          margin: EdgeInsets.only(right: 2),
+          height: 55,
+          width: 55,
+          decoration: BoxDecoration(
+            border: Border.all(color: CColors.primary, width: 2),
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: primaryShadows.map((e) => e.copyWith(color: e.color.withValues(alpha: 0.2))).toList(),
+          ),
           textStyle: CTextStyle.w500(),
         ),
         showCursor: true,

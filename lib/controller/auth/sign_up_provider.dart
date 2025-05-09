@@ -14,7 +14,7 @@ class SignUpNotifier extends ChangeNotifier {
   }
 
   Future<void> continueTap(BuildContext context) async {
-    LocalStorageManager.saveFirstTime(true);
+    LocalStorageManager.showSelectLanguagePage(true);
     registeringWithEmail = true;
     notifyListeners();
     await Future.delayed(const Duration(seconds: 2));

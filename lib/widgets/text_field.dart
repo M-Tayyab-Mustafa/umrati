@@ -47,7 +47,7 @@ class CTextField extends StatelessWidget {
   final int maxLines;
   final int? maxLength;
   final FormFieldValidator? validator;
-  final ValueChanged? onChanged;
+  final ValueChanged<String>? onChanged;
   final ValueChanged? onFieldSubmitted;
   final TextInputType? keyboardType;
   final bool obscureText;
