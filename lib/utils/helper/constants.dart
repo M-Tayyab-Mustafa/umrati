@@ -12,20 +12,12 @@ final primaryShadows = [BoxShadow(color: CColors.shadow, blurRadius: 10, blurSty
 final innerPrimaryShadows = [BoxShadow(color: CColors.shadow, blurRadius: 10, blurStyle: BlurStyle.inner)];
 double roundToOneDecimal(double value) => (value * 1000).round() / 1000;
 
-FutureOr<bool> requestLocationPermission() async {
+FutureOr<bool> requestLocationAlways() async {
   var status = await Permission.locationAlways.status;
   if (!(status.isGranted)) {
     status = await Permission.locationAlways.request();
   }
   return status.isGranted;
-}
-
-FutureOr<bool> requestLocationWhenInUse() async {
-  var locationWhenInUseStatus = await Permission.locationWhenInUse.status;
-  if (!(locationWhenInUseStatus.isGranted)) {
-    locationWhenInUseStatus = await Permission.locationWhenInUse.request();
-  }
-  return locationWhenInUseStatus.isGranted;
 }
 
 class DefaultImages {

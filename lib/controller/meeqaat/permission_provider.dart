@@ -5,6 +5,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:umrati/utils/helper/constants.dart';
 import 'package:umrati/utils/services/translations/locale_keys.g.dart';
 
+import '../../utils/services/local_storage.dart';
+import '../../utils/services/toast.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/text_style.dart';
 import '../../view/meeqaat/location_fetched.dart';
@@ -17,14 +19,14 @@ class MeeqaatPermissionNotifier extends ChangeNotifier {
   bool isConfirmingMeeqaat = false;
 
   void skip(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
+    LocalStorageManager.showGetLocationPermissionPage(false);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
   }
 
   void continueTab(BuildContext context) async {
-    if (await requestLocationPermission()) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => MeeqaatLocationFetchedPage()));
-    } else if (await requestLocationWhenInUse()) {
-      showDialog(
+    var locationPermissionAlways = await requestLocationAlways();
+    if (!(locationPermissionAlways)) {
+      await showDialog(
         context: context,
         builder:
             (dialogContext) => AlertDialog(
@@ -41,6 +43,17 @@ class MeeqaatPermissionNotifier extends ChangeNotifier {
               ],
             ),
       );
+      var locationPermissionAlways = await requestLocationAlways();
+      if (locationPermissionAlways) {
+        LocalStorageManager.showGetLocationPermissionPage(false);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatLocationFetchedPage()));
+      } else {
+        errorToast('Please allow location permission');
+        return;
+      }
+    } else {
+      LocalStorageManager.showGetLocationPermissionPage(false);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatLocationFetchedPage()));
     }
   }
 }

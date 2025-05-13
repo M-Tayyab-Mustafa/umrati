@@ -54,7 +54,7 @@ class MeeqaatTwoTasksPage extends ConsumerWidget {
               ),
             ),
           ),
-          CButton(isLoading: provider.isConfirmingMeeqaat, onTap: () => provider.moveToThreeOtherTasks(context), title: LocaleKeys.move_to_3_other_tasks.tr(), titleWithIcon: true),
+          CButton(onTap: () => provider.moveToThreeOtherTasks(context), title: LocaleKeys.move_to_3_other_tasks.tr(), titleWithIcon: true),
         ],
       ),
     );

@@ -1,6 +1,6 @@
 part of 'constants.dart';
 
-enum Gender { male, female }
+enum Gender { male, female, unknown }
 
 enum BackgroundType { empty, logo, logoWithSkip }
 

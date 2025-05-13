@@ -16,6 +16,7 @@ class SelectGenderPage extends ConsumerWidget {
     return Background(
       title: LocaleKeys.select_your_gender.tr(),
       backgroundType: BackgroundType.logoWithSkip,
+      isSkipLoading: provider.isUpdatingGender,
       onSkipTap: () => provider.skip(context),
       titleMargin: EdgeInsets.only(top: 60, bottom: 40),
       titleAlignment: Alignment.center,

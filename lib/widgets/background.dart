@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
+import 'package:umrati/widgets/loading.dart';
 import '../utils/helper/constants.dart';
 import '../utils/helper/language_direction.dart';
 import '../utils/services/translations/locale_keys.g.dart';
@@ -20,6 +21,7 @@ class Background extends StatelessWidget {
     this.titleMargin,
     this.titleStyle,
     this.showEmblem = true,
+    this.isSkipLoading = false,
   });
   final Widget child;
   final BackgroundType backgroundType;
@@ -31,6 +33,7 @@ class Background extends StatelessWidget {
   final EdgeInsets? titleMargin;
   final TextStyle? titleStyle;
   final bool showEmblem;
+  final bool isSkipLoading;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +85,13 @@ class Background extends StatelessWidget {
                           children: [
                             CustomImage(path: DefaultImages.logoWithName, imageType: ImageType.svg, width: screenSize.width * 0.4),
                             if (backgroundType == BackgroundType.logoWithSkip)
-                              GestureDetector(onTap: onSkipTap, child: Text(LocaleKeys.skip.tr(), style: CTextStyle.w400(fontSize: 22, color: CColors.primary, decoration: TextDecoration.underline))),
+                              if (isSkipLoading)
+                                Loading(height: 30, width: 30)
+                              else
+                                GestureDetector(
+                                  onTap: onSkipTap,
+                                  child: Text(LocaleKeys.skip.tr(), style: CTextStyle.w400(fontSize: 22, color: CColors.primary, decoration: TextDecoration.underline)),
+                                ),
                           ],
                         ),
                       ],

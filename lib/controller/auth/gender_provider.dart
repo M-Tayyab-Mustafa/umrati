@@ -9,7 +9,7 @@ import '../../view/meeqaat/two_tasks.dart';
 final genderProvider = ChangeNotifierProvider.autoDispose<GenderNotifier>((ref) => GenderNotifier());
 
 class GenderNotifier extends ChangeNotifier {
-  Gender selectedGender = Gender.male;
+  Gender selectedGender = Gender.unknown;
   bool isUpdatingGender = false;
   void updateGender(Gender gender) {
     if (selectedGender == gender) return;
@@ -17,8 +17,15 @@ class GenderNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void skip(BuildContext context) {
-    LocalStorageManager.showGenderPage(false);
+  void skip(BuildContext context) async {
+    isUpdatingGender = true;
+    notifyListeners();
+    await LocalStorageManager.showGenderPage(false);
+    var user = (await LocalStorageManager.getUser())!;
+    user = user.copyWith(gender: selectedGender.name.toLowerCase());
+    await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(user.uid).set(user.toMap(), SetOptions(merge: true));
+    isUpdatingGender = false;
+    notifyListeners();
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatTwoTasksPage()));
   }
 
@@ -28,10 +35,9 @@ class GenderNotifier extends ChangeNotifier {
     var user = (await LocalStorageManager.getUser())!;
     user = user.copyWith(gender: selectedGender.name.toLowerCase());
     await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(user.uid).set(user.toMap(), SetOptions(merge: true));
-    LocalStorageManager.showGenderPage(false);
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatTwoTasksPage()));
+    await LocalStorageManager.showGenderPage(false);
     isUpdatingGender = false;
     notifyListeners();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MeeqaatTwoTasksPage()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatTwoTasksPage()));
   }
 }

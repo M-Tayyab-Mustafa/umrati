@@ -27,10 +27,10 @@ class MeeqaatThreeTasksPage extends ConsumerWidget {
         children: [
           Center(child: Text(LocaleKeys.three_tasks_at_meeqaat.tr(), style: CTextStyle.w600(fontSize: 14, color: CColors.deepTeal))),
           Center(child: Text(LocaleKeys.these_3_tasks_can_be_done_even_before_meeqaat.tr(), style: CTextStyle.w400(fontSize: 14, color: CColors.primary))),
-          CheckBoxCard(margin: EdgeInsets.symmetric(vertical: 20), title: LocaleKeys.two_nafl_prayers.tr(), isSelected: false, onTap: () {}),
-          CheckBoxCard(title: LocaleKeys.intention_niyyah.tr(), isSelected: false, onTap: () {}),
-          CheckBoxCard(margin: EdgeInsets.symmetric(vertical: 20), title: LocaleKeys.talbiyah.tr(), isSelected: false, onTap: () {}),
-          CButton(isLoading: provider.isConfirmingMeeqaat, onTap: () => provider.tasksDone(context), margin: EdgeInsets.only(top: 30), title: LocaleKeys.tasks_done.tr(), titleWithIcon: true),
+          CheckBoxCard(margin: EdgeInsets.symmetric(vertical: 20), title: LocaleKeys.two_nafl_prayers.tr(), isSelected: provider.isTwoNafiPrayersChecked, onTap: provider.updateTwoNafiPrayersChecked),
+          CheckBoxCard(title: LocaleKeys.intention_niyyah.tr(), isSelected: provider.isIntentionChecked, onTap: provider.updateIntentionChecked),
+          CheckBoxCard(margin: EdgeInsets.symmetric(vertical: 20), title: LocaleKeys.talbiyah.tr(), isSelected: provider.isTalbiyahChecked, onTap: provider.updateTalbiyahChecked),
+          CButton(onTap: () => provider.tasksDone(context), margin: EdgeInsets.only(top: 30), title: LocaleKeys.tasks_done.tr(), titleWithIcon: true),
         ],
       ),
     );

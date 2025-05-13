@@ -9,7 +9,7 @@ import '../../view/auth/login.dart';
 final languageProvider = ChangeNotifierProvider.autoDispose<LanguageNotifier>((ref) => LanguageNotifier());
 
 class LanguageNotifier extends ChangeNotifier {
-  String selectedLanguage = LocaleKeys.english.tr();
+  String selectedLanguage = LocaleKeys.english;
   List<String> languages = [LocaleKeys.english, LocaleKeys.urdu];
 
   void updateLanguage(BuildContext context, String language) {

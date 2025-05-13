@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:umrati/utils/services/toast.dart';
 import '../../utils/helper/constants.dart';
+import '../../utils/services/local_storage.dart';
 import '../../utils/theme/colors.dart';
-import '../../view/meeqaat/permission.dart';
+import '../../view/permission.dart';
+import '../../view/nav/page.dart';
 import '../../widgets/check_box.dart';
 import '../../widgets/custom_image.dart';
 
 final meeqaatTwoTasksProvider = ChangeNotifierProvider<MeeqaatTwoTasksNotifier>((ref) => MeeqaatTwoTasksNotifier());
 
 class MeeqaatTwoTasksNotifier extends ChangeNotifier {
-  bool isConfirmingMeeqaat = false;
   bool isCleanlinessChecked = false;
   bool isIhramChecked = false;
 
   void skip(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MeeqaatPermissionPage()));
+    LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
   }
 
   void moveToThreeOtherTasks(BuildContext context) {
-    isConfirmingMeeqaat = true;
-    notifyListeners();
-    isConfirmingMeeqaat = false;
-    notifyListeners();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MeeqaatPermissionPage()));
+    if (!(isCleanlinessChecked && isIhramChecked)) {
+      errorToast('Please check cleanliness and ihram boxes');
+      return;
+    }
+    LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LocationPermissionPage()));
   }
 
   void showIhramTutorial(BuildContext context) async {

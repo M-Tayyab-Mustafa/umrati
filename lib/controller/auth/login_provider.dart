@@ -17,6 +17,7 @@ import '../../utils/services/translations/locale_keys.g.dart';
 import '../../utils/services/validation.dart';
 import '../../view/auth/otp.dart';
 import '../../view/auth/gender.dart';
+import '../../view/meeqaat/two_tasks.dart';
 import '../../view/nav/page.dart';
 
 final loginProvider = ChangeNotifierProvider.autoDispose<LoginNotifier>((ref) => LoginNotifier());
@@ -25,6 +26,7 @@ class LoginNotifier extends ChangeNotifier {
   //* Instances
   final FirebaseAuth _auth = FirebaseAuth.instance;
   var phoneNumberUtil = PhoneNumberUtil.instance;
+  bool isSkipping = false;
 
   //* Login Variables
   bool isSendingOTP = false;
@@ -60,8 +62,39 @@ class LoginNotifier extends ChangeNotifier {
 
   //* Skip Login
   Future<void> skip(BuildContext context) async {
-    LocalStorageManager.showLoginPage(false);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => SelectGenderPage()));
+    isSkipping = true;
+    notifyListeners();
+    var userCredential = await _auth.signInAnonymously();
+    if (userCredential.additionalUserInfo!.isNewUser) {
+      var timer = DateTime.now().toIso8601String();
+      UserModel user = UserModel(
+        uid: userCredential.user!.uid,
+        name: userCredential.user!.displayName ?? '',
+        email: userCredential.user!.email ?? '',
+        phone: userCredential.user!.phoneNumber ?? '',
+        photo: userCredential.user!.photoURL ?? '',
+        created_at: timer,
+        updated_at: timer,
+        gender: Gender.unknown.name.toLowerCase(),
+      );
+      await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(userCredential.user!.uid).set(user.toMap(), SetOptions(merge: true));
+      await LocalStorageManager.saveUser(user);
+      isSkipping = false;
+      notifyListeners();
+      LocalStorageManager.showLoginPage(false);
+      LocalStorageManager.showGenderPage(false);
+      Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MeeqaatTwoTasksPage()));
+    } else {
+      var user = UserModel.fromMap((await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(userCredential.user!.uid).get()).data()!);
+      await LocalStorageManager.saveUser(user);
+      LocalStorageManager.showLoginPage(false);
+      LocalStorageManager.showGenderPage(false);
+      isSkipping = false;
+      notifyListeners();
+      Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavigationPage()));
+    }
   }
 
   //* Send OTP To Phone Number
@@ -157,15 +190,16 @@ class LoginNotifier extends ChangeNotifier {
     var userCredential = await _auth.signInWithCredential(credential);
     if (userCredential.additionalUserInfo!.isNewUser) {
       var timer = DateTime.now().toIso8601String();
-      UserModel user = UserModel.fromMap({
-        'uid': userCredential.user!.uid,
-        'name': userCredential.user!.displayName,
-        'email': userCredential.user!.email,
-        'phone': userCredential.user!.phoneNumber,
-        'photo': userCredential.user!.photoURL,
-        'created_at': timer,
-        'updated_at': timer,
-      });
+      UserModel user = UserModel(
+        uid: userCredential.user!.uid,
+        name: userCredential.user!.displayName ?? '',
+        email: userCredential.user!.email ?? '',
+        phone: userCredential.user!.phoneNumber ?? '',
+        photo: userCredential.user!.photoURL ?? '',
+        created_at: timer,
+        updated_at: timer,
+        gender: Gender.unknown.name.toLowerCase(),
+      );
       await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(userCredential.user!.uid).set(user.toMap(), SetOptions(merge: true));
       await LocalStorageManager.saveUser(user);
       LocalStorageManager.showLoginPage(false);

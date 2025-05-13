@@ -25,6 +25,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     var provider = ref.watch(loginProvider);
     return Background(
       backgroundType: BackgroundType.logoWithSkip,
+      isSkipLoading: provider.isSkipping,
       onSkipTap: () => provider.skip(context),
       title: LocaleKeys.log_in_to_your_account.tr(),
       child: SingleChildScrollView(

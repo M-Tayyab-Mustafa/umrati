@@ -15,6 +15,10 @@ class LocalStorageManager {
   static final String _languagePage = 'language_page';
   static final String _loginPage = 'login_page';
   static final String _genderPage = 'gender_page';
+  static final String _twoTasksBeforeMeeqaatPage = 'two_tasks_before_meeqaat_page';
+  static final String _getLocationPermissionPage = 'get_location_permission_page';
+  static final String _locationFetchPage = 'location_fetch_page';
+  static final String _meeqaatThreeTasksPage = 'meeqaat_three_tasks_page';
   static final String _user = 'user';
 
   static FutureOr<void> initialization() async {
@@ -55,5 +59,37 @@ class LocalStorageManager {
 
   static FutureOr<bool> getGenderPage() async {
     return (_sharedPreferences!.getBool(_genderPage)) ?? true;
+  }
+
+  static FutureOr<bool?> showTwoTasksBeforeMeeqaatPage(bool show) {
+    return _sharedPreferences!.setBool(_twoTasksBeforeMeeqaatPage, show);
+  }
+
+  static FutureOr<bool> getTwoTasksBeforeMeeqaatPage() async {
+    return (_sharedPreferences!.getBool(_twoTasksBeforeMeeqaatPage)) ?? true;
+  }
+
+  static FutureOr<bool?> showGetLocationPermissionPage(bool show) {
+    return _sharedPreferences!.setBool(_getLocationPermissionPage, show);
+  }
+
+  static FutureOr<bool> getGetLocationPermissionPage() async {
+    return (_sharedPreferences!.getBool(_getLocationPermissionPage)) ?? true;
+  }
+
+  static FutureOr<bool?> showLocationFetchPage(bool show) {
+    return _sharedPreferences!.setBool(_locationFetchPage, show);
+  }
+
+  static FutureOr<bool> getLocationFetchPage() async {
+    return (_sharedPreferences!.getBool(_locationFetchPage)) ?? true;
+  }
+
+  static FutureOr<bool?> showMeeqaatThreeTasksPage(bool show) {
+    return _sharedPreferences!.setBool(_meeqaatThreeTasksPage, show);
+  }
+
+  static FutureOr<bool> getMeeqaatThreeTasksPage() async {
+    return (_sharedPreferences!.getBool(_meeqaatThreeTasksPage)) ?? true;
   }
 }

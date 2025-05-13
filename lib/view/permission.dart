@@ -2,14 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../controller/meeqaat/permission_provider.dart';
-import '../../utils/helper/constants.dart';
-import '../../utils/services/translations/locale_keys.g.dart';
-import '../../widgets/background.dart';
-import '../../widgets/button.dart';
+import '../controller/meeqaat/permission_provider.dart';
+import '../utils/helper/constants.dart';
+import '../utils/services/translations/locale_keys.g.dart';
+import '../widgets/background.dart';
+import '../widgets/button.dart';
 
-class MeeqaatPermissionPage extends ConsumerWidget {
-  const MeeqaatPermissionPage({super.key});
+class LocationPermissionPage extends ConsumerWidget {
+  const LocationPermissionPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var provider = ref.watch(meeqaatPermissionProvider);
