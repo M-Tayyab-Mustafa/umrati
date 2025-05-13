@@ -11,3 +11,5 @@ enum ZiaratCities { macca, medina, taif, other }
 enum ZiaratDestinationsCreationOptions { auto, manual }
 
 enum CollectionNames { users }
+
+enum CommonField { isInTawaf }

@@ -11,16 +11,32 @@ import '../../../widgets/button.dart';
 import '../../../widgets/card.dart';
 import '../../../widgets/check_box_card.dart';
 import '../../../widgets/custom_image.dart';
+import '../../../widgets/loading.dart';
 import 'safa_marwa.dart';
 import 'sai_completion.dart';
 import 'umra_completed.dart';
 
-class StartTawafPage extends ConsumerWidget {
+class StartTawafPage extends ConsumerStatefulWidget {
   const StartTawafPage({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _StartTawafPageState();
+}
+
+class _StartTawafPageState extends ConsumerState<StartTawafPage> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(tawafProvider.notifier).initialization();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var provider = ref.watch(tawafProvider);
-    return provider.isUmeraCompleted
+    return provider.isLoading
+        ? Loading()
+        : provider.isUmeraCompleted
         ? UmraCompleted()
         : provider.isSafaMarwaCompleted
         ? SaiCompletionPage()

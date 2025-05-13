@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/theme/colors.dart';
+
 class Loading extends StatelessWidget {
   const Loading({super.key, this.height, this.width, this.color});
   final double? height;
@@ -7,6 +9,6 @@ class Loading extends StatelessWidget {
   final Color? color;
   @override
   Widget build(BuildContext context) {
-    return Center(child: SizedBox(height: height ?? 15, width: width ?? 15, child: CircularProgressIndicator(color: color)));
+    return Center(child: SizedBox(height: height ?? 15, width: width ?? 15, child: CircularProgressIndicator(color: color ?? CColors.primary)));
   }
 }
