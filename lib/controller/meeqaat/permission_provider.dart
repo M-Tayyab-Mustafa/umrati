@@ -6,7 +6,6 @@ import 'package:umrati/utils/helper/constants.dart';
 import 'package:umrati/utils/services/translations/locale_keys.g.dart';
 
 import '../../utils/services/local_storage.dart';
-import '../../utils/services/toast.dart';
 import '../../utils/theme/colors.dart';
 import '../../utils/theme/text_style.dart';
 import '../../view/meeqaat/location_fetched.dart';
@@ -35,22 +34,14 @@ class MeeqaatPermissionNotifier extends ChangeNotifier {
               actions: [
                 CButton(
                   onTap: () async {
-                    Navigator.pop(dialogContext);
                     await openAppSettings();
+                    Navigator.pop(dialogContext);
                   },
                   title: LocaleKeys.open_setting.tr(),
                 ),
               ],
             ),
       );
-      var locationPermissionAlways = await requestLocationAlways();
-      if (locationPermissionAlways) {
-        LocalStorageManager.showGetLocationPermissionPage(false);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatLocationFetchedPage()));
-      } else {
-        errorToast('Please allow location permission');
-        return;
-      }
     } else {
       LocalStorageManager.showGetLocationPermissionPage(false);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatLocationFetchedPage()));

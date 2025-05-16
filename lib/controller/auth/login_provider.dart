@@ -215,6 +215,11 @@ class LoginNotifier extends ChangeNotifier {
       //* Disable Loading
       isVerifyingOTP = false;
       notifyListeners();
+      LocalStorageManager.showGenderPage(false);
+      LocalStorageManager.showGetLocationPermissionPage(false);
+      LocalStorageManager.showLocationFetchPage(false);
+      LocalStorageManager.showMeeqaatThreeTasksPage(false);
+      LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavigationPage()));
     }

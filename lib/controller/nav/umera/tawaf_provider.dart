@@ -1,84 +1,101 @@
-import 'dart:async' show Timer;
+import 'dart:developer' show log;
+import 'dart:math' hide log;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:umrati/utils/services/local_storage.dart';
-
+import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 import '../../../utils/helper/constants.dart';
+import '../../../utils/services/toast.dart';
+part '../../../utils/helper/tawaf.dart';
 
 final tawafProvider = ChangeNotifierProvider<TawafNotifier>((ref) => TawafNotifier());
 
 class TawafNotifier extends ChangeNotifier {
-  //* Is Loading Data
+  // Class-level variables
   bool isLoading = false;
-  var tawafCollection = FirebaseFirestore.instance.collection(CollectionNames.users.name);
-  DocumentReference? userDoc;
-
-  //
   bool isInTawaf = false;
+
+  //*
+  double totalAngleCovered = 0;
+  double? previousBearing;
+
+  //* Tawaf Rounds
   double tawafCircleCompletionPercent = 0;
   bool isRoundCompleted = false;
   int circleCount = -1;
-  Timer? timer;
+
+  //*
   bool isTawafCompleted = false;
   bool isSafaMarwaCompleted = false;
   bool isUmeraCompleted = false;
 
-  initialization() async {
-    isLoading = true;
-    notifyListeners();
-    userDoc = tawafCollection.doc((await LocalStorageManager.getUser())!.uid);
-    var data = (await userDoc!.get()).data() as Map<String, dynamic>;
-    data.containsKey(CommonField.isInTawaf.name) && data[CommonField.isInTawaf.name] == true ? isInTawaf = true : isInTawaf = false;
-    isLoading = false;
-    notifyListeners();
-  }
-
-  startTawaf() {
+  startTawaf() async {
     if (isInTawaf) {
       isInTawaf = false;
       isTawafCompleted = false;
       isSafaMarwaCompleted = false;
+      positionStreamSubscription?.cancel();
       _resetTawaf();
-      userDoc!.set({CommonField.isInTawaf.name: isInTawaf}, SetOptions(merge: true));
       return;
     }
     isInTawaf = true;
-    userDoc!.set({CommonField.isInTawaf.name: isInTawaf}, SetOptions(merge: true));
     notifyListeners();
-    updateLocation();
+    _getPermission();
   }
 
-  updateLocation() {
-    timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
-      if (tawafCircleCompletionPercent >= 0.9) {
-        _updateCircleCount();
-      } else {
-        tawafCircleCompletionPercent = tawafCircleCompletionPercent + 0.1;
-        notifyListeners();
-      }
-    });
+  Future<void> _getPermission() async {
+    totalAngleCovered = 0;
+    previousBearing = null;
+    tawafCircleCompletionPercent = 0;
+    var permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
+      var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.high));
+      var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
+      var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
+      positionStreamSubscription = Geolocator.getPositionStream(
+        locationSettings: LocationSettings(accuracy: LocationAccuracy.high),
+      ).listen((position) => _updateLocation(position, currentPosition, kabaLatLng));
+    } else {
+      errorToast('Please allow location permission');
+      isInTawaf = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> _updateLocation(Position currentPosition, Position startingPosition, LatLng kabaLatLng) async {
+    final currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
+    final startingLatLng = LatLng(startingPosition.latitude, startingPosition.longitude);
+    previousBearing ??= calculateBearing(kabaLatLng, startingLatLng);
+    double currentBearing = calculateBearing(kabaLatLng, currentLatLng);
+    double delta = angleDifference(previousBearing!, currentBearing);
+
+    if (delta > 10) {
+      totalAngleCovered += delta;
+      isRoundCompleted = (totalAngleCovered / 360).toInt() == 0;
+      tawafCircleCompletionPercent = ((totalAngleCovered % 360) / 100).clamp(0, 1);
+      notifyListeners();
+    } else if (delta < -10) {
+      totalAngleCovered -= delta;
+      tawafCircleCompletionPercent = ((totalAngleCovered % 360) / 100).clamp(0, 1);
+      notifyListeners();
+    }
+    previousBearing = currentBearing;
+    log('Current bearing: ${currentBearing.toStringAsFixed(2)}°');
+    log('Angle delta: ${delta.toStringAsFixed(2)}°');
+    log('Total angle covered: ${totalAngleCovered.toStringAsFixed(2)}°');
+    log('Current lap progress: ${(totalAngleCovered % 360).toStringAsFixed(2)}°');
   }
 
   startNextRound() {
     tawafCircleCompletionPercent = 0;
     isRoundCompleted = false;
-    updateLocation();
   }
 
   _resetTawaf() {
     circleCount = -1;
     tawafCircleCompletionPercent = 0;
     isRoundCompleted = false;
-    timer?.cancel();
-    notifyListeners();
-  }
-
-  _updateCircleCount() {
-    circleCount == -1 ? circleCount = 1 : circleCount++;
-    isRoundCompleted = true;
-    timer?.cancel();
     notifyListeners();
   }
 

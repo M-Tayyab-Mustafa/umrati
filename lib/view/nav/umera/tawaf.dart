@@ -26,9 +26,7 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(tawafProvider.notifier).initialization();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
 
   @override

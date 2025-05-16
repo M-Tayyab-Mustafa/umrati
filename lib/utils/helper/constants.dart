@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart' show Position;
 import 'package:permission_handler/permission_handler.dart';
 
 import '../theme/colors.dart';
@@ -24,3 +26,8 @@ class DefaultImages {
   static const String logoWithName = 'assets/svg/logo_with_text.svg';
   static const String longArrowForward = 'assets/svg/forward_arrow.svg';
 }
+
+StreamSubscription<Position>? positionStreamSubscription;
+
+var userCollection = FirebaseFirestore.instance.collection(CollectionNames.users.name);
+var settingsCollection = FirebaseFirestore.instance.collection(CollectionNames.settings.name);

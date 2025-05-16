@@ -10,6 +10,8 @@ enum ZiaratCities { macca, medina, taif, other }
 
 enum ZiaratDestinationsCreationOptions { auto, manual }
 
-enum CollectionNames { users }
+enum CollectionNames { users, settings }
 
-enum CommonField { isInTawaf }
+enum CommonDoc { alKaba }
+
+enum CommonField { isInTawaf, startingPoint }
