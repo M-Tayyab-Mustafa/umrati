@@ -12,6 +12,6 @@ enum ZiaratDestinationsCreationOptions { auto, manual }
 
 enum CollectionNames { users, settings }
 
-enum CommonDoc { alKaba }
+enum CommonDoc { alKaba, safa, marwa, safaMarwaThreshold }
 
 enum CommonField { isInTawaf, startingPoint }

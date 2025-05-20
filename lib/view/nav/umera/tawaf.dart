@@ -11,7 +11,6 @@ import '../../../widgets/button.dart';
 import '../../../widgets/card.dart';
 import '../../../widgets/check_box_card.dart';
 import '../../../widgets/custom_image.dart';
-import '../../../widgets/loading.dart';
 import 'safa_marwa.dart';
 import 'sai_completion.dart';
 import 'umra_completed.dart';
@@ -32,9 +31,7 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(tawafProvider);
-    return provider.isLoading
-        ? Loading()
-        : provider.isUmeraCompleted
+    return provider.isUmeraCompleted
         ? UmraCompleted()
         : provider.isSafaMarwaCompleted
         ? SaiCompletionPage()
@@ -84,7 +81,7 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                                     painter: DashedCirclePainter(primaryColor: CColors.primary, gradientRadiusFactor: provider.tawafCircleCompletionPercent),
                                   ),
                                 ),
-                                if ((provider.circleCount != -1 || provider.isInTawaf) && provider.circleCount < 7)
+                                if ((provider.circleCount != 0 || provider.isInTawaf) && provider.circleCount < 7)
                                   Positioned(
                                     left: (constraints.maxWidth - size) / 2 + trackerDX - 20,
                                     top: (constraints.maxHeight - size) / 2 + trackerDY - 20,
@@ -95,7 +92,7 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                                       child: Padding(padding: const EdgeInsets.only(left: 5), child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: 20)),
                                     ),
                                   ),
-                                if (provider.circleCount > -1 && provider.circleCount < 7)
+                                if (provider.circleCount > 0 && provider.circleCount < 7)
                                   Positioned(
                                     left: (constraints.maxWidth - size) / 2 + tawafCountDX - 42.5,
                                     top: (constraints.maxHeight - size) / 2 + tawafCountDY - 42.5,
@@ -220,11 +217,11 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                 children: [
                   CheckBoxCard(
                     title: LocaleKeys.now_perform_2_rakats_salah.tr(),
-                    isSelected: false,
-                    onTap: () {},
+                    isSelected: provider.isPerformed2RakatsSalah,
+                    onTap: provider.perform2RakatsSalah,
                     child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 14)),
                   ),
-                  CheckBoxCard(margin: EdgeInsets.only(top: 30), title: LocaleKeys.drink_zamzam.tr(), isSelected: false, onTap: () {}),
+                  CheckBoxCard(margin: EdgeInsets.only(top: 30), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
                   CButton(margin: EdgeInsets.symmetric(vertical: 30), onTap: () => provider.moveToSafaMarwa(context: context, ref: ref), titleWithIcon: true, title: LocaleKeys.continued.tr()),
                 ],
               ),

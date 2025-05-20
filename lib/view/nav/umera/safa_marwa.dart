@@ -25,6 +25,7 @@ class _SafaMarwaHomePageState extends ConsumerState<StartSafaMarwaPage> {
     notifier = ref.watch(safaMarwaProvider);
     notifier.scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      notifier.initialization();
       if (notifier.scrollController!.hasClients) {
         notifier.scrollController!.jumpTo(notifier.scrollController!.position.maxScrollExtent);
       }
@@ -70,7 +71,7 @@ class _SafaMarwaHomePageState extends ConsumerState<StartSafaMarwaPage> {
                       builder: (context, constraints) {
                         final centerX = constraints.maxWidth / 2;
                         final lineSpacing = screenSize.width * 0.45;
-                        final targetLineX = provider.isOnSideRunComplete ? centerX - lineSpacing / 2 : centerX + lineSpacing / 2;
+                        final targetLineX = provider.isRunComplete ? centerX - lineSpacing / 2 : centerX + lineSpacing / 2;
                         final usableHeight = constraints.maxHeight - 40;
                         return Stack(
                           children: [
@@ -100,10 +101,10 @@ class _SafaMarwaHomePageState extends ConsumerState<StartSafaMarwaPage> {
                                 height: 40,
                                 decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
                                 child: Padding(
-                                  padding: EdgeInsets.only(top: provider.isOnSideRunComplete ? 4 : 0, bottom: provider.isOnSideRunComplete ? 0 : 4),
+                                  padding: EdgeInsets.only(top: provider.isRunComplete ? 4 : 0, bottom: provider.isRunComplete ? 0 : 4),
                                   child: Transform.rotate(
-                                    angle: provider.isOnSideRunComplete ? (pi / 2) : (3 * pi / 2),
-                                    child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: 20, onTap: provider.updateLocation),
+                                    angle: provider.isRunComplete ? (pi / 2) : (3 * pi / 2),
+                                    child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: 20),
                                   ),
                                 ),
                               ),

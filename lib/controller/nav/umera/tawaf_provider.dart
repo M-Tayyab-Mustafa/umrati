@@ -1,4 +1,3 @@
-import 'dart:developer' show log;
 import 'dart:math' hide log;
 
 import 'package:flutter/material.dart';
@@ -9,29 +8,31 @@ import '../../../utils/helper/constants.dart';
 import '../../../utils/services/toast.dart';
 part '../../../utils/helper/tawaf.dart';
 
+// Provider for TawafNotifier using ChangeNotifier
 final tawafProvider = ChangeNotifierProvider<TawafNotifier>((ref) => TawafNotifier());
 
 class TawafNotifier extends ChangeNotifier {
-  // Class-level variables
-  bool isLoading = false;
+  // Flag to track if user is currently performing Tawaf
   bool isInTawaf = false;
 
-  //*
-  double totalAngleCovered = 0;
-  double? previousBearing;
+  // Flags for Tawaf requirements
+  bool isPerformed2RakatsSalah = false;
+  bool isDrinkZamzam = false;
 
-  //* Tawaf Rounds
+  // Tawaf round tracking
   double tawafCircleCompletionPercent = 0;
   bool isRoundCompleted = false;
-  int circleCount = -1;
+  int circleCount = 0; // Total rounds required for Tawaf
 
-  //*
+  // Completion flags for different stages
   bool isTawafCompleted = false;
   bool isSafaMarwaCompleted = false;
   bool isUmeraCompleted = false;
 
+  // Method to start or stop Tawaf
   startTawaf() async {
     if (isInTawaf) {
+      // If already in Tawaf, stop it
       isInTawaf = false;
       isTawafCompleted = false;
       isSafaMarwaCompleted = false;
@@ -39,87 +40,132 @@ class TawafNotifier extends ChangeNotifier {
       _resetTawaf();
       return;
     }
+    // Start Tawaf
     isInTawaf = true;
     notifyListeners();
     _getPermission();
   }
 
+  // Method to request location permissions and initialize Tawaf
   Future<void> _getPermission() async {
-    totalAngleCovered = 0;
-    previousBearing = null;
+    // Reset tracking variables
     tawafCircleCompletionPercent = 0;
+    notifyListeners();
+
     var permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
+      // Get current position and Kaaba coordinates
       var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.high));
       var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
       var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
+
+      // Start listening to position updates
       positionStreamSubscription = Geolocator.getPositionStream(
-        locationSettings: LocationSettings(accuracy: LocationAccuracy.high),
+        locationSettings: LocationSettings(accuracy: LocationAccuracy.best, distanceFilter: 1),
       ).listen((position) => _updateLocation(position, currentPosition, kabaLatLng));
     } else {
       errorToast('Please allow location permission');
-      isInTawaf = false;
+      _resetTawaf();
     }
-    notifyListeners();
   }
 
+  // Method to update location and track Tawaf progress
   Future<void> _updateLocation(Position currentPosition, Position startingPosition, LatLng kabaLatLng) async {
     final currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
     final startingLatLng = LatLng(startingPosition.latitude, startingPosition.longitude);
-    previousBearing ??= calculateBearing(kabaLatLng, startingLatLng);
-    double currentBearing = calculateBearing(kabaLatLng, currentLatLng);
-    double delta = angleDifference(previousBearing!, currentBearing);
 
-    if (delta > 10) {
-      totalAngleCovered += delta;
-      isRoundCompleted = (totalAngleCovered / 360).toInt() == 0;
-      tawafCircleCompletionPercent = ((totalAngleCovered % 360) / 100).clamp(0, 1);
-      notifyListeners();
-    } else if (delta < -10) {
-      totalAngleCovered -= delta;
-      tawafCircleCompletionPercent = ((totalAngleCovered % 360) / 100).clamp(0, 1);
-      notifyListeners();
+    // Calculate bearings from Kaaba to starting and current positions
+    double startBearing = calculateBearing(kabaLatLng, startingLatLng);
+    double currentBearing = calculateBearing(kabaLatLng, currentLatLng);
+
+    // Calculate progress angle in anti-clockwise direction
+    double progressAngle = antiClockwiseDelta(startBearing, currentBearing);
+
+    if (progressAngle > 0) {
+      // Update completion percentage (0.0 to 1.0)
+      tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
+
+      // Check if round is completed (360 degrees)
+      if (progressAngle >= 360) {
+        isRoundCompleted = true;
+        circleCount++;
+        positionStreamSubscription?.cancel();
+      }
     }
-    previousBearing = currentBearing;
-    log('Current bearing: ${currentBearing.toStringAsFixed(2)}°');
-    log('Angle delta: ${delta.toStringAsFixed(2)}°');
-    log('Total angle covered: ${totalAngleCovered.toStringAsFixed(2)}°');
-    log('Current lap progress: ${(totalAngleCovered % 360).toStringAsFixed(2)}°');
+    notifyListeners();
   }
 
+  // Method to start the next Tawaf round
   startNextRound() {
     tawafCircleCompletionPercent = 0;
     isRoundCompleted = false;
+    _getPermission();
+    notifyListeners();
   }
 
+  // Method to reset Tawaf tracking variables
   _resetTawaf() {
-    circleCount = -1;
+    circleCount = 0;
     tawafCircleCompletionPercent = 0;
     isRoundCompleted = false;
     notifyListeners();
   }
 
+  // Method to move to Safa-Marwa after completing Tawaf
   moveToSafaMarwa({required BuildContext context, required WidgetRef ref}) {
+    // Check if requirements are met
+    if (isPerformed2RakatsSalah == false || isDrinkZamzam == false) {
+      errorToast('Please perform 2 rakats salah, and drink Zamzam');
+      return;
+    }
     isTawafCompleted = true;
     _resetTawaf();
   }
 
+  // Method to toggle 2 Rakats Salah completion
+  void perform2RakatsSalah() {
+    isPerformed2RakatsSalah = !isPerformed2RakatsSalah;
+    notifyListeners();
+  }
+
+  // Method to toggle Zamzam drinking completion
+  void drinkZamzam() {
+    isDrinkZamzam = !isDrinkZamzam;
+    notifyListeners();
+  }
+
+  // Method to mark Safa-Marwa as completed
   void safaMarwaCompleted() {
     isSafaMarwaCompleted = true;
     notifyListeners();
   }
 
+  // Method to mark Umrah as completed
   void umeraCompleted() {
     isUmeraCompleted = true;
     notifyListeners();
   }
 
+  // Method to return to home state
   void goToHome() {
     isInTawaf = false;
     isTawafCompleted = false;
     isSafaMarwaCompleted = false;
     isUmeraCompleted = false;
     _resetTawaf();
-    notifyListeners();
+  }
+
+  // Helper method to calculate anti-clockwise angle difference
+  double antiClockwiseDelta(double from, double to) {
+    double delta = from - to;
+    if (delta < 0) delta += 360;
+    return delta;
+  }
+
+  @override
+  void dispose() {
+    // Cancel position updates when notifier is disposed
+    positionStreamSubscription?.cancel();
+    super.dispose();
   }
 }
