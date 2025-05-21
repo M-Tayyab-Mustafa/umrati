@@ -12,6 +12,13 @@ enum ZiaratDestinationsCreationOptions { auto, manual }
 
 enum CollectionNames { users, settings }
 
-enum CommonDoc { alKaba, safa, marwa, safaMarwaThreshold }
+enum CommonDoc {
+  alKaba('al_kaba'),
+  safaMarwa('safa_marwa');
+
+  final String name;
+
+  const CommonDoc(this.name);
+}
 
 enum CommonField { isInTawaf, startingPoint }

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:umrati/widgets/loading.dart';
 import '../../../controller/nav/umera/tawaf_provider.dart';
 import '../../../utils/helper/constants.dart';
 import '../../../utils/services/translations/locale_keys.g.dart';
@@ -14,6 +15,7 @@ import '../../../widgets/custom_image.dart';
 import 'safa_marwa.dart';
 import 'sai_completion.dart';
 import 'umra_completed.dart';
+part '../../../widgets/dashes_circle.dart';
 
 class StartTawafPage extends ConsumerStatefulWidget {
   const StartTawafPage({super.key});
@@ -25,15 +27,19 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(tawafProvider).initialization(context);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(tawafProvider);
-    return provider.isUmeraCompleted
+    return provider.isLoading
+        ? Loading()
+        : provider.isUmeraCompleted
         ? UmraCompleted()
-        : provider.isSafaMarwaCompleted
+        : provider.user?.is_safa_marwa_run_completed ?? false
         ? SaiCompletionPage()
         : Column(
           children: [
@@ -56,7 +62,7 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
               ),
             Expanded(
               child:
-                  provider.isTawafCompleted
+                  provider.showSafaMarwa
                       ? StartSafaMarwaPage()
                       : Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 50),
@@ -228,42 +234,4 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
           ],
         );
   }
-}
-
-class DashedCirclePainter extends CustomPainter {
-  DashedCirclePainter({required this.primaryColor, required this.gradientRadiusFactor});
-
-  final double gradientRadiusFactor;
-  final Color primaryColor;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = size.center(Offset.zero);
-    final radius = size.width / 2;
-    final rect = Rect.fromCircle(center: center, radius: radius);
-
-    final List<Color> colors = [primaryColor, primaryColor, CColors.tackingRadiusColor, CColors.tackingSecondaryRadiusColor];
-    final List<double> stops = [0.0, gradientRadiusFactor, gradientRadiusFactor, 1.0];
-    canvas.translate(center.dx, center.dy);
-    canvas.scale(-1, 1);
-    canvas.translate(-center.dx, -center.dy);
-
-    final paint =
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 12
-          ..shader = SweepGradient(colors: colors, stops: stops, startAngle: 0, endAngle: 2 * pi).createShader(rect);
-    const double dashAngle = pi / 120;
-    const double gapAngle = pi / 100;
-    double startAngle = 0;
-
-    while (startAngle < 2 * pi) {
-      final double sweep = min(dashAngle, 2 * pi - startAngle);
-      canvas.drawArc(rect, startAngle, sweep, false, paint);
-      startAngle += dashAngle + gapAngle;
-    }
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }

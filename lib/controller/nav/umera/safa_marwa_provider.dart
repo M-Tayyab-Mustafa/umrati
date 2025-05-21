@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:umrati/controller/nav/umera/tawaf_provider.dart';
 
+import '../../../model/safa_marwa.dart';
 import '../../../utils/helper/constants.dart';
 import '../../../utils/services/toast.dart';
 import '../../../widgets/tawaf_completed_dialog.dart';
@@ -23,10 +25,13 @@ class SafaMarwaNotifier extends ChangeNotifier {
   // Flag to track if one side of the run is complete
   bool isRunComplete = false;
   // Counter for completed rounds between Safa and Marwa
-  int circleCount = 0;
+  int circleCount = kDebugMode ? 6 : 0;
 
   // Initialization method to request location permissions
   initialization() async {
+    if (kDebugMode) {
+      _updateCircleCount();
+    }
     await _getPermission();
   }
 
@@ -34,20 +39,18 @@ class SafaMarwaNotifier extends ChangeNotifier {
   Future<void> _getPermission() async {
     var permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
-      // Get Safa coordinates from Firestore
-      var safaDoc = await settingsCollection.doc(CommonDoc.safa.name).get();
-      var safaLatLng = LatLng(safaDoc.data()!['lat'], safaDoc.data()!['lng']);
-      // Get Marwa coordinates from Firestore
-      var marwaDoc = await settingsCollection.doc(CommonDoc.marwa.name).get();
-      var marwaLatLng = LatLng(marwaDoc.data()!['lat'], marwaDoc.data()!['lng']);
       // Get threshold distance for considering arrival at Safa/Marwa
-      var safaMarwaThreshold = (await settingsCollection.doc(CommonDoc.safaMarwaThreshold.name).get()).data()!['value'];
-      // Calculate total distance between Safa and Marwa
-      var safaMarwaDistance = Geolocator.distanceBetween(safaLatLng.latitude, safaLatLng.longitude, marwaLatLng.latitude, marwaLatLng.longitude);
+      SafaMarwaModel safaMarwa = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
       // Start listening to position updates
-      positionStreamSubscription = Geolocator.getPositionStream(
-        locationSettings: LocationSettings(accuracy: LocationAccuracy.best),
-      ).listen((position) => _updateLocation(position, safaLatLng, marwaLatLng, safaMarwaDistance, safaMarwaThreshold));
+      positionStreamSubscription = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.best)).listen(
+        (position) => _updateLocation(
+          position,
+          LatLng(double.parse(safaMarwa.safaLat), double.parse(safaMarwa.safaLng)),
+          LatLng(double.parse(safaMarwa.marwaLat), double.parse(safaMarwa.marwaLng)),
+          num.parse(safaMarwa.distance),
+          num.parse(safaMarwa.threshold),
+        ),
+      );
     } else {
       // Show error if location permission is denied
       errorToast('Please allow location permission');
@@ -56,26 +59,20 @@ class SafaMarwaNotifier extends ChangeNotifier {
   }
 
   // Method to update location and track progress between Safa and Marwa
-  void _updateLocation(Position position, LatLng safaLatLng, LatLng marwaLatLng, double safaMarwaDistance, double threshold) {
+  void _updateLocation(Position position, LatLng safaLatLng, LatLng marwaLatLng, num safaMarwaDistance, num threshold) {
     if (isRunComplete) {
-      // If coming back from Marwa to Safa
-      var distance = Geolocator.distanceBetween(position.latitude, position.longitude, safaLatLng.latitude, safaLatLng.longitude);
-      if (distance < threshold) {
-        // Reached Safa - update circle count
+      var distance = (safaMarwaDistance - Geolocator.distanceBetween(position.latitude, position.longitude, safaLatLng.latitude, safaLatLng.longitude)).abs();
+      if (distance <= threshold) {
         _updateCircleCount();
       } else {
-        // Update completion percentage
-        oneSideRunCompletionPercent = roundToOneDecimal(distance / safaMarwaDistance);
+        oneSideRunCompletionPercent = (distance / safaMarwaDistance);
       }
     } else {
-      // If going from Safa to Marwa
-      var distance = Geolocator.distanceBetween(position.latitude, position.longitude, marwaLatLng.latitude, marwaLatLng.longitude);
-      if (distance < threshold) {
-        // Reached Marwa
+      var distance = (safaMarwaDistance - Geolocator.distanceBetween(position.latitude, position.longitude, marwaLatLng.latitude, marwaLatLng.longitude)).abs();
+      if (distance <= threshold) {
         isRunComplete = true;
       } else {
-        // Update completion percentage
-        oneSideRunCompletionPercent = roundToOneDecimal(distance / safaMarwaDistance);
+        oneSideRunCompletionPercent = (distance / safaMarwaDistance);
       }
     }
     notifyListeners();
@@ -91,7 +88,6 @@ class SafaMarwaNotifier extends ChangeNotifier {
     positionStreamSubscription?.cancel();
     circleCount++;
     if (circleCount == 7) {
-      // All 7 rounds completed - show completion dialog
       tawafCompletionDialog();
     }
     isRunComplete = false;
@@ -107,10 +103,9 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   // Method to show completion dialog and reset state
   tawafCompletionDialog() async {
+    ref?.read(tawafProvider).updateUserOnFirebase(ref!.read(tawafProvider).user!.copyWith(is_safa_marwa_run_completed: true));
     await showGeneralDialog(context: context!, pageBuilder: (context, animation, secondaryAnimation) => TawafCompletionDialog());
     _resetSafaMarwa();
-    // Notify tawaf provider about completion
-    ref?.watch(tawafProvider).safaMarwaCompleted();
   }
 
   @override

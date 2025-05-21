@@ -18,6 +18,7 @@ abstract class  LocaleKeys {
   static const resend_the_otp = 'resend_the_otp';
   static const resend_the_otp_in = 'resend_the_otp_in';
   static const select_your_gender = 'select_your_gender';
+  static const already_in_umera = 'already_in_umera';
   static const enter_the_otp_you_received_to = 'enter_the_otp_you_received_to';
   static const or_continue_with = 'or_continue_with';
   static const send_the_otp = 'send_the_otp';

@@ -9,11 +9,12 @@ import '../../../widgets/button.dart';
 import '../../../widgets/check_box_card.dart';
 import '../../../widgets/custom_image.dart';
 
-class SaiCompletionPage extends StatelessWidget {
+class SaiCompletionPage extends ConsumerWidget {
   const SaiCompletionPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    var provider = ref.watch(tawafProvider);
     return LayoutBuilder(
       builder: (context, constraints) {
         return Column(
@@ -51,11 +52,11 @@ class SaiCompletionPage extends StatelessWidget {
             ),
             CheckBoxCard(
               title: LocaleKeys.shave_the_head.tr(),
-              isSelected: false,
-              onTap: () {},
+              isSelected: provider.isShavedHead,
+              onTap: provider.toggleShaveTheHead,
               child: Text(LocaleKeys.shave_the_head_description.tr(), style: CTextStyle.w400(color: CColors.primary, height: 1.2)),
             ),
-            Consumer(builder: (context, ref, child) => CButton(title: LocaleKeys.continued.tr(), titleWithIcon: true, onTap: ref.read(tawafProvider).umeraCompleted)),
+            CButton(title: LocaleKeys.continued.tr(), titleWithIcon: true, onTap: ref.read(tawafProvider).umeraCompleted),
           ],
         );
       },

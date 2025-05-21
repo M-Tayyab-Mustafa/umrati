@@ -1,19 +1,28 @@
+import 'dart:async' show Timer;
 import 'dart:math' hide log;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:umrati/utils/services/local_storage.dart';
+import '../../../model/user.dart';
 import '../../../utils/helper/constants.dart';
 import '../../../utils/services/toast.dart';
+import '../../../widgets/already_in_umera.dart';
 part '../../../utils/helper/tawaf.dart';
 
 // Provider for TawafNotifier using ChangeNotifier
 final tawafProvider = ChangeNotifierProvider<TawafNotifier>((ref) => TawafNotifier());
 
 class TawafNotifier extends ChangeNotifier {
+  bool isLoading = false;
+
   // Flag to track if user is currently performing Tawaf
   bool isInTawaf = false;
+  UserModel? user;
 
   // Flags for Tawaf requirements
   bool isPerformed2RakatsSalah = false;
@@ -22,20 +31,45 @@ class TawafNotifier extends ChangeNotifier {
   // Tawaf round tracking
   double tawafCircleCompletionPercent = 0;
   bool isRoundCompleted = false;
-  int circleCount = 0; // Total rounds required for Tawaf
+  int circleCount = kDebugMode ? 6 : 0; // Total rounds required for Tawaf
 
   // Completion flags for different stages
-  bool isTawafCompleted = false;
-  bool isSafaMarwaCompleted = false;
+  bool showSafaMarwa = false;
   bool isUmeraCompleted = false;
+
+  bool isShavedHead = false;
+
+  // Initialize TawafNotifier
+  initialization(BuildContext context) async {
+    isLoading = true;
+    notifyListeners();
+    user = UserModel.fromMap((await userCollection.doc(((await LocalStorageManager.getUser())!.uid)).get()).data() as Map<String, dynamic>);
+    if (user?.is_tawaf_completed == true) {
+      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyInUmeraDialog());
+      if (result == true) {
+        isInTawaf = true;
+        showSafaMarwa = true;
+      } else {
+        updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false, is_safa_marwa_run_completed: false));
+      }
+    }
+    isLoading = false;
+    notifyListeners();
+  }
+
+  updateUserOnFirebase(UserModel user) async {
+    this.user = user;
+    notifyListeners();
+    await userCollection.doc(user.uid).set(user.toMap(), SetOptions(merge: true));
+  }
 
   // Method to start or stop Tawaf
   startTawaf() async {
     if (isInTawaf) {
       // If already in Tawaf, stop it
       isInTawaf = false;
-      isTawafCompleted = false;
-      isSafaMarwaCompleted = false;
+      showSafaMarwa = false;
+      updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false, is_safa_marwa_run_completed: false));
       positionStreamSubscription?.cancel();
       _resetTawaf();
       return;
@@ -43,7 +77,28 @@ class TawafNotifier extends ChangeNotifier {
     // Start Tawaf
     isInTawaf = true;
     notifyListeners();
-    _getPermission();
+    if (kDebugMode) {
+      _updateCircleTemp();
+    } else {
+      _getPermission();
+    }
+  }
+
+  _updateCircleTemp() async {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (circleCount >= 7) {
+        updateUserOnFirebase(user!.copyWith(is_tawaf_completed: true));
+      } else {
+        if (tawafCircleCompletionPercent >= 0.9) {
+          isRoundCompleted = true;
+          circleCount++;
+          timer.cancel();
+        } else {
+          tawafCircleCompletionPercent = tawafCircleCompletionPercent + 0.3;
+        }
+        notifyListeners();
+      }
+    });
   }
 
   // Method to request location permissions and initialize Tawaf
@@ -71,6 +126,10 @@ class TawafNotifier extends ChangeNotifier {
 
   // Method to update location and track Tawaf progress
   Future<void> _updateLocation(Position currentPosition, Position startingPosition, LatLng kabaLatLng) async {
+    if (circleCount >= 7) {
+      positionStreamSubscription?.cancel();
+      updateUserOnFirebase(user!.copyWith(is_tawaf_completed: true));
+    }
     final currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
     final startingLatLng = LatLng(startingPosition.latitude, startingPosition.longitude);
 
@@ -99,7 +158,11 @@ class TawafNotifier extends ChangeNotifier {
   startNextRound() {
     tawafCircleCompletionPercent = 0;
     isRoundCompleted = false;
-    _getPermission();
+    if (kDebugMode) {
+      _updateCircleTemp();
+    } else {
+      _getPermission();
+    }
     notifyListeners();
   }
 
@@ -118,7 +181,7 @@ class TawafNotifier extends ChangeNotifier {
       errorToast('Please perform 2 rakats salah, and drink Zamzam');
       return;
     }
-    isTawafCompleted = true;
+    showSafaMarwa = true;
     _resetTawaf();
   }
 
@@ -134,23 +197,17 @@ class TawafNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Method to mark Safa-Marwa as completed
-  void safaMarwaCompleted() {
-    isSafaMarwaCompleted = true;
-    notifyListeners();
-  }
-
   // Method to mark Umrah as completed
   void umeraCompleted() {
     isUmeraCompleted = true;
+    updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false, is_safa_marwa_run_completed: false));
     notifyListeners();
   }
 
   // Method to return to home state
   void goToHome() {
     isInTawaf = false;
-    isTawafCompleted = false;
-    isSafaMarwaCompleted = false;
+    showSafaMarwa = false;
     isUmeraCompleted = false;
     _resetTawaf();
   }
@@ -160,6 +217,11 @@ class TawafNotifier extends ChangeNotifier {
     double delta = from - to;
     if (delta < 0) delta += 360;
     return delta;
+  }
+
+  void toggleShaveTheHead() {
+    isShavedHead = !isShavedHead;
+    notifyListeners();
   }
 
   @override
