@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:umrati/controller/nav/umera/tawaf_provider.dart';
 
 import '../../../model/safa_marwa.dart';
 import '../../../utils/helper/constants.dart';
 import '../../../utils/services/toast.dart';
 import '../../../widgets/tawaf_completed_dialog.dart';
+import 'tawaf_provider.dart';
 
 // Provider for SafaMarwaNotifier using ChangeNotifier
 final safaMarwaProvider = ChangeNotifierProvider<SafaMarwaNotifier>((ref) => SafaMarwaNotifier());
@@ -29,6 +29,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   // Initialization method to request location permissions
   initialization() async {
+    notifyListeners();
     if (kDebugMode) {
       _updateCircleCount();
     }
@@ -103,9 +104,9 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   // Method to show completion dialog and reset state
   tawafCompletionDialog() async {
-    ref?.read(tawafProvider).updateUserOnFirebase(ref!.read(tawafProvider).user!.copyWith(is_safa_marwa_run_completed: true));
     await showGeneralDialog(context: context!, pageBuilder: (context, animation, secondaryAnimation) => TawafCompletionDialog());
     _resetSafaMarwa();
+    ref?.read(tawafProvider).isSafaMarwaCompleted();
   }
 
   @override

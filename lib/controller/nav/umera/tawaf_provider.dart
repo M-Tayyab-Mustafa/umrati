@@ -35,8 +35,10 @@ class TawafNotifier extends ChangeNotifier {
 
   // Completion flags for different stages
   bool showSafaMarwa = false;
-  bool isUmeraCompleted = false;
+  bool isSafaMarwaComplete = false;
 
+  //* Umera Complete
+  bool isUmeraCompleted = false;
   bool isShavedHead = false;
 
   // Initialize TawafNotifier
@@ -50,7 +52,7 @@ class TawafNotifier extends ChangeNotifier {
         isInTawaf = true;
         showSafaMarwa = true;
       } else {
-        updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false, is_safa_marwa_run_completed: false));
+        updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false));
       }
     }
     isLoading = false;
@@ -66,10 +68,10 @@ class TawafNotifier extends ChangeNotifier {
   // Method to start or stop Tawaf
   startTawaf() async {
     if (isInTawaf) {
-      // If already in Tawaf, stop it
       isInTawaf = false;
       showSafaMarwa = false;
-      updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false, is_safa_marwa_run_completed: false));
+      isSafaMarwaComplete = false;
+      updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false));
       positionStreamSubscription?.cancel();
       _resetTawaf();
       return;
@@ -181,6 +183,7 @@ class TawafNotifier extends ChangeNotifier {
       errorToast('Please perform 2 rakats salah, and drink Zamzam');
       return;
     }
+    isSafaMarwaComplete = false;
     showSafaMarwa = true;
     _resetTawaf();
   }
@@ -197,10 +200,9 @@ class TawafNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Method to mark Umrah as completed
+  // Method to mark Umra as completed
   void umeraCompleted() {
     isUmeraCompleted = true;
-    updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false, is_safa_marwa_run_completed: false));
     notifyListeners();
   }
 
@@ -209,7 +211,8 @@ class TawafNotifier extends ChangeNotifier {
     isInTawaf = false;
     showSafaMarwa = false;
     isUmeraCompleted = false;
-    _resetTawaf();
+    isSafaMarwaComplete = false;
+    notifyListeners();
   }
 
   // Helper method to calculate anti-clockwise angle difference
@@ -229,5 +232,11 @@ class TawafNotifier extends ChangeNotifier {
     // Cancel position updates when notifier is disposed
     positionStreamSubscription?.cancel();
     super.dispose();
+  }
+
+  void isSafaMarwaCompleted() {
+    isSafaMarwaComplete = true;
+    updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false));
+    notifyListeners();
   }
 }

@@ -27,9 +27,11 @@ class CButton extends StatelessWidget {
     this.shape,
     this.titleColor,
     this.shadows,
+    this.backgroundColor,
   }) : assert((title != null) ^ (child != null), 'Must contain either title or child, but not both.');
 
   final Color? borderColor;
+  final Color? backgroundColor;
   final double? width;
   final double? height;
   final double? fontSize;
@@ -62,7 +64,7 @@ class CButton extends StatelessWidget {
             shape: shape ?? BoxShape.rectangle,
             border: Border.all(color: borderColor ?? CColors.primary, width: 1),
             boxShadow: shadows ?? [...primaryShadows, BoxShadow(color: CColors.buttonShadow, offset: Offset(0, 6), blurRadius: 6)],
-            color: isEnabled ? null : Colors.grey,
+            color: isEnabled ? backgroundColor : Colors.grey,
             gradient: isEnabled ? gradient ?? CColors.buttonGradient : null,
             borderRadius: shape == BoxShape.circle ? null : borderRadius ?? BorderRadius.circular(16),
           ),

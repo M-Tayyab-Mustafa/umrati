@@ -15,7 +15,7 @@ class BottomNavigationPage extends ConsumerWidget {
       showEmblem: false,
       backgroundType: BackgroundType.logo,
       logoAlign: provider.logoAlign,
-      margin: EdgeInsets.only(top: kToolbarHeight),
+      margin: EdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
       child: BottomNav(selectedTab: provider.selectedTab, onBottomNavTap: provider.onBottomNavTap, child: provider.child),
     );
   }

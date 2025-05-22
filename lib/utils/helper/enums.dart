@@ -14,7 +14,8 @@ enum CollectionNames { users, settings }
 
 enum CommonDoc {
   alKaba('al_kaba'),
-  safaMarwa('safa_marwa');
+  safaMarwa('safa_marwa'),
+  ziarat('ziarat');
 
   final String name;
 

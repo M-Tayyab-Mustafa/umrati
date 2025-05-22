@@ -46,13 +46,13 @@ class AlreadyInUmeraDialog extends StatelessWidget {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(left: 16, right: 8),
-                          child: CButton(title: 'Start New', onTap: () => Navigator.pop(dialogContext, false), margin: EdgeInsets.only(bottom: 30)),
+                          child: CButton(title: LocaleKeys.start_new.tr(), onTap: () => Navigator.pop(dialogContext, false), margin: EdgeInsets.only(bottom: 30)),
                         ),
                       ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(left: 8, right: 16),
-                          child: CButton(title: 'Continue', onTap: () => Navigator.pop(dialogContext, true), margin: EdgeInsets.only(bottom: 30)),
+                          child: CButton(title: LocaleKeys.continued.tr(), onTap: () => Navigator.pop(dialogContext, true), margin: EdgeInsets.only(bottom: 30)),
                         ),
                       ),
                     ],

@@ -54,6 +54,7 @@ abstract class  LocaleKeys {
   static const istilaam_time = 'istilaam_time';
   static const start_tawaf = 'start_tawaf';
   static const starting_point = 'starting_point';
+  static const start_new = 'start_new';
   static const safa = 'safa';
   static const marwa = 'marwa';
   static const select_ziarat_cities = 'select_ziarat_cities';

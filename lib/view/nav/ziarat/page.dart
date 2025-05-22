@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:umrati/widgets/loading.dart';
 
 import '../../../controller/nav/ziarat/provider.dart';
 import '../../../utils/helper/constants.dart';
@@ -11,6 +12,7 @@ import '../../../widgets/background.dart';
 import '../../../widgets/button.dart';
 import '../../../widgets/card.dart';
 import '../../../widgets/custom_image.dart';
+import '../../../widgets/ziarat/auto_marker.dart';
 import '../../../widgets/ziarat/city_card.dart';
 part 'auto_selection.dart';
 part 'destinations.dart';
@@ -43,7 +45,7 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(ziaratProvider);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child:
           provider.showAutoSelectionPage
               ? AutoSelection()

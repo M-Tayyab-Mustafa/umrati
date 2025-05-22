@@ -66,6 +66,7 @@ class CodegenLoader extends AssetLoader{
   "istilaam_time": "Istilaam Time",
   "start_tawaf": "Start Tawaf",
   "starting_point": "Starting point",
+  "start_new": "Start New",
   "safa": "Safa",
   "marwa": "Marwa",
   "select_ziarat_cities": "Select Ziarat Cities",

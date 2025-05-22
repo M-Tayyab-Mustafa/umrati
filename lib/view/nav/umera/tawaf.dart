@@ -36,13 +36,13 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(tawafProvider);
     return Padding(
-      padding: ref.watch(tawafProvider).circleCount != 7 ? EdgeInsets.only(bottom: 16, left: 30, right: 30) : EdgeInsets.only(top: kToolbarHeight, left: 30, right: 30),
+      padding: ref.watch(tawafProvider).circleCount != 7 ? EdgeInsets.only(bottom: 16, left: 16, right: 16) : EdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
       child:
           provider.isLoading
               ? Loading()
               : provider.isUmeraCompleted
               ? UmraCompleted()
-              : provider.user?.is_safa_marwa_run_completed ?? false
+              : provider.isSafaMarwaComplete
               ? SaiCompletionPage()
               : Column(
                 children: [

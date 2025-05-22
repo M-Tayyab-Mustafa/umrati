@@ -20,10 +20,11 @@ class ManualSelection extends ConsumerWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: provider.ziarat.length,
+              itemCount: provider.ziarats.length,
               itemBuilder: (context, index) {
-                var ziarat = provider.ziarat[index];
+                var ziarat = provider.ziarats[index];
                 return BasicCard(
+                  margin: EdgeInsets.only(bottom: 16),
                   onTap: () => provider.updateSelectedZiarat(ziarat),
                   borderColor: provider.selectedZiarat.contains(ziarat) ? null : CColors.greyShade3,
                   boxShadow: provider.selectedZiarat.contains(ziarat) ? null : [],
