@@ -11,7 +11,10 @@ class BottomNavNotifier extends ChangeNotifier {
   BottomNavTabs selectedTab = BottomNavTabs.umera;
   Widget child = const StartTawafPage();
 
+  var logoAlign = MainAxisAlignment.center;
+
   void onBottomNavTap(BottomNavTabs selectedOption) {
+    logoAlign = MainAxisAlignment.center;
     selectedTab = selectedOption;
     switch (selectedOption) {
       case BottomNavTabs.profile:
@@ -30,6 +33,11 @@ class BottomNavNotifier extends ChangeNotifier {
 
   void updateChild(Widget child) {
     this.child = child;
+    notifyListeners();
+  }
+
+  void updateLogoAlign(MainAxisAlignment align) {
+    logoAlign = align;
     notifyListeners();
   }
 }

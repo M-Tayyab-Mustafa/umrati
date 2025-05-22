@@ -1,0 +1,53 @@
+part of 'page.dart';
+
+class ManualSelection extends ConsumerWidget {
+  const ManualSelection({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var provider = ref.watch(ziaratProvider);
+    return Background(
+      showEmblem: false,
+      margin: EdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              CustomImage(onTap: () => Navigator.pop(context), path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, height: 40, width: 30, margin: EdgeInsets.only(right: 20)),
+              Expanded(
+                child: Center(child: Text('${LocaleKeys.top_ziarat_destination_of.tr()} ${_cityName(provider.selectedCity!)}', textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24))),
+              ),
+            ],
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: provider.ziarat.length,
+              itemBuilder: (context, index) {
+                var ziarat = provider.ziarat[index];
+                return BasicCard(
+                  onTap: () => provider.updateSelectedZiarat(ziarat),
+                  borderColor: provider.selectedZiarat.contains(ziarat) ? null : CColors.greyShade3,
+                  boxShadow: provider.selectedZiarat.contains(ziarat) ? null : [],
+                  child: Text(ziarat.title, style: CTextStyle.w500(fontSize: 16)),
+                );
+              },
+            ),
+          ),
+          if (provider.selectedZiarat.isNotEmpty) CButton(onTap: provider.createZiaratRoute, margin: EdgeInsets.only(bottom: 48), title: LocaleKeys.start_your_ziarat.tr(), width: 200),
+        ],
+      ),
+    );
+  }
+
+  String _cityName(ZiaratCities city) {
+    switch (city) {
+      case ZiaratCities.macca:
+        return LocaleKeys.macca.tr();
+      case ZiaratCities.medina:
+        return LocaleKeys.medina.tr();
+      case ZiaratCities.taif:
+        return LocaleKeys.taif.tr();
+      default:
+        return LocaleKeys.others.tr();
+    }
+  }
+}

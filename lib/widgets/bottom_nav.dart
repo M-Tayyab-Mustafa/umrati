@@ -19,92 +19,95 @@ class BottomNav extends StatelessWidget {
     return Column(
       children: [
         Expanded(child: child),
-        SizedBox(
-          height: 85,
-          child: Stack(
-            children: [
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  height: 60,
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                    border: Border.all(color: CColors.primary),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            BottomNavItem(
-                              onTap: () => onBottomNavTap?.call(BottomNavTabs.profile),
-                              isSelected: BottomNavTabs.profile == selectedTab,
-                              icon: 'assets/svg/user.svg',
-                              title: LocaleKeys.profile.tr(),
-                            ),
-                            BottomNavItem(
-                              onTap: () => onBottomNavTap?.call(BottomNavTabs.umera),
-                              isSelected: BottomNavTabs.umera == selectedTab,
-                              icon: 'assets/svg/umera.svg',
-                              title: LocaleKeys.umera.tr(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Spacer(),
-                      Expanded(
-                        flex: 2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            BottomNavItem(
-                              onTap: () => onBottomNavTap?.call(BottomNavTabs.ziarat),
-                              isSelected: BottomNavTabs.ziarat == selectedTab,
-                              icon: 'assets/svg/ziarat.svg',
-                              title: LocaleKeys.ziarat.tr(),
-                            ),
-                            BottomNavItem(
-                              onTap: () => onBottomNavTap?.call(BottomNavTabs.settings),
-                              isSelected: BottomNavTabs.settings == selectedTab,
-                              icon: 'assets/svg/settings.svg',
-                              title: LocaleKeys.settings.tr(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Center(
-                child: CButton(
-                  onTap: () => onBottomNavTap?.call(BottomNavTabs.more),
-                  padding: EdgeInsets.zero,
-                  margin: EdgeInsets.only(bottom: 15),
-                  height: 70,
-                  width: 70,
-                  borderColor: Colors.transparent,
-                  shadows: [],
-                  gradient: CColors.solidButtonGradient,
-                  borderRadius: BorderRadius.circular(9999),
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: SizedBox(
+            height: 85,
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: 60,
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                      border: Border.all(color: CColors.primary),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        CustomImage(path: 'assets/svg/more.svg', imageType: ImageType.svg, height: 25, width: 25, fit: BoxFit.fill),
-                        Text(LocaleKeys.more.tr(), style: CTextStyle.w500(color: Colors.white, fontSize: 13)),
+                        Expanded(
+                          flex: 2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              BottomNavItem(
+                                onTap: () => onBottomNavTap?.call(BottomNavTabs.profile),
+                                isSelected: BottomNavTabs.profile == selectedTab,
+                                icon: 'assets/svg/user.svg',
+                                title: LocaleKeys.profile.tr(),
+                              ),
+                              BottomNavItem(
+                                onTap: () => onBottomNavTap?.call(BottomNavTabs.umera),
+                                isSelected: BottomNavTabs.umera == selectedTab,
+                                icon: 'assets/svg/umera.svg',
+                                title: LocaleKeys.umera.tr(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        Expanded(
+                          flex: 2,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              BottomNavItem(
+                                onTap: () => onBottomNavTap?.call(BottomNavTabs.ziarat),
+                                isSelected: BottomNavTabs.ziarat == selectedTab,
+                                icon: 'assets/svg/ziarat.svg',
+                                title: LocaleKeys.ziarat.tr(),
+                              ),
+                              BottomNavItem(
+                                onTap: () => onBottomNavTap?.call(BottomNavTabs.settings),
+                                isSelected: BottomNavTabs.settings == selectedTab,
+                                icon: 'assets/svg/settings.svg',
+                                title: LocaleKeys.settings.tr(),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
-              ),
-            ],
+                Center(
+                  child: CButton(
+                    onTap: () => onBottomNavTap?.call(BottomNavTabs.more),
+                    padding: EdgeInsets.zero,
+                    margin: EdgeInsets.only(bottom: 15),
+                    height: 70,
+                    width: 70,
+                    borderColor: Colors.transparent,
+                    shadows: [],
+                    gradient: CColors.solidButtonGradient,
+                    borderRadius: BorderRadius.circular(9999),
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CustomImage(path: 'assets/svg/more.svg', imageType: ImageType.svg, height: 25, width: 25, fit: BoxFit.fill),
+                          Text(LocaleKeys.more.tr(), style: CTextStyle.w500(color: Colors.white, fontSize: 13)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

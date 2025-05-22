@@ -5,9 +5,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../controller/nav/ziarat/provider.dart';
 import '../../../utils/helper/constants.dart';
 import '../../../utils/services/translations/locale_keys.g.dart';
+import '../../../utils/theme/colors.dart';
 import '../../../utils/theme/text_style.dart';
+import '../../../widgets/background.dart';
+import '../../../widgets/button.dart';
+import '../../../widgets/card.dart';
+import '../../../widgets/custom_image.dart';
 import '../../../widgets/ziarat/city_card.dart';
-import 'destinations.dart';
+part 'auto_selection.dart';
+part 'destinations.dart';
+part 'manual_selection.dart';
 
 class ZiaratPage extends ConsumerStatefulWidget {
   const ZiaratPage({super.key});
@@ -35,45 +42,52 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(ziaratProvider);
-    return provider.selectedCity != null
-        ? ZiaratDestinations()
-        : Column(
-          children: [
-            Padding(padding: const EdgeInsets.only(top: 30), child: Text(LocaleKeys.select_ziarat_cities.tr(), textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24))),
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              mainAxisSpacing: 30,
-              crossAxisSpacing: 30,
-              children: [
-                ZiaratCityCard(
-                  icon: 'assets/svg/ziarat/macca.svg',
-                  title: LocaleKeys.macca.tr(),
-                  isSelected: provider.selectedCity == ZiaratCities.macca,
-                  onTap: () => provider.updateSelectedCity(ZiaratCities.macca),
-                ),
-                ZiaratCityCard(
-                  icon: 'assets/svg/ziarat/medina.svg',
-                  title: LocaleKeys.medina.tr(),
-                  isSelected: provider.selectedCity == ZiaratCities.medina,
-                  onTap: () => provider.updateSelectedCity(ZiaratCities.medina),
-                ),
-                ZiaratCityCard(
-                  icon: 'assets/svg/ziarat/taif.svg',
-                  title: LocaleKeys.taif.tr(),
-                  isSelected: provider.selectedCity == ZiaratCities.taif,
-                  onTap: () => provider.updateSelectedCity(ZiaratCities.taif),
-                ),
-                ZiaratCityCard(
-                  icon: 'assets/svg/ziarat/other.svg',
-                  title: LocaleKeys.others.tr(),
-                  isSelected: provider.selectedCity == ZiaratCities.other,
-                  onTap: () => provider.updateSelectedCity(ZiaratCities.other),
-                ),
-              ],
-            ),
-          ],
-        );
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child:
+          provider.showAutoSelectionPage
+              ? AutoSelection()
+              : provider.showCreationOptionPage
+              ? ZiaratDestinations()
+              : Column(
+                children: [
+                  Padding(padding: const EdgeInsets.only(top: 30), child: Text(LocaleKeys.select_ziarat_cities.tr(), textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24))),
+                  GridView.count(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 30,
+                    crossAxisSpacing: 30,
+                    children: [
+                      ZiaratCityCard(
+                        icon: 'assets/svg/ziarat/macca.svg',
+                        title: LocaleKeys.macca.tr(),
+                        isSelected: provider.selectedCity == ZiaratCities.macca,
+                        onTap: () => provider.updateSelectedCity(ZiaratCities.macca),
+                      ),
+                      ZiaratCityCard(
+                        icon: 'assets/svg/ziarat/medina.svg',
+                        title: LocaleKeys.medina.tr(),
+                        isSelected: provider.selectedCity == ZiaratCities.medina,
+                        onTap: () => provider.updateSelectedCity(ZiaratCities.medina),
+                      ),
+                      ZiaratCityCard(
+                        icon: 'assets/svg/ziarat/taif.svg',
+                        title: LocaleKeys.taif.tr(),
+                        isSelected: provider.selectedCity == ZiaratCities.taif,
+                        onTap: () => provider.updateSelectedCity(ZiaratCities.taif),
+                      ),
+                      ZiaratCityCard(
+                        icon: 'assets/svg/ziarat/other.svg',
+                        title: LocaleKeys.others.tr(),
+                        isSelected: provider.selectedCity == ZiaratCities.other,
+                        onTap: () => provider.updateSelectedCity(ZiaratCities.other),
+                      ),
+                    ],
+                  ),
+                  if (provider.selectedCity != null) CButton(onTap: provider.goToDestinationGenerationPage, margin: EdgeInsets.only(top: 64), title: LocaleKeys.proceed_forward.tr(), width: 200),
+                ],
+              ),
+    );
   }
 }
