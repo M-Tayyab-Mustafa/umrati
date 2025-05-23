@@ -26,7 +26,7 @@ class AutoSelection extends ConsumerWidget {
                   itemCount: provider.ziarats.length,
                   itemBuilder: (context, index) {
                     var ziarat = provider.ziarats[index];
-                    return ZiaratMarker(title: ziarat.title, distance: ziarat.distance);
+                    return CMarker(title: ziarat.title, distance: ziarat.distance);
                   },
                 );
               },

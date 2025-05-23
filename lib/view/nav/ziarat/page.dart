@@ -4,7 +4,7 @@ import '../../../widgets/background.dart';
 import '../../../widgets/button.dart';
 import '../../../widgets/card.dart';
 import '../../../widgets/custom_image.dart';
-import '../../../widgets/ziarat/auto_marker.dart';
+import '../../../widgets/marker.dart';
 import '../../../widgets/ziarat/city_card.dart';
 part 'auto_selection.dart';
 part 'destinations.dart';

@@ -1,14 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../controller/meeqaat/location_fetch_provider.dart';
-import '../../utils/helper/constants.dart';
-import '../../utils/services/translations/locale_keys.g.dart';
-import '../../utils/theme/colors.dart';
-import '../../utils/theme/text_style.dart';
+import '../../export.dart';
 import '../../widgets/background.dart';
 import '../../widgets/button.dart';
+import '../../widgets/marker.dart';
 
 class MeeqaatLocationFetchedPage extends ConsumerWidget {
   const MeeqaatLocationFetchedPage({super.key});
@@ -47,26 +41,6 @@ class TimeLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children:
-          items
-              .map(
-                (item) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (items.indexOf(item) == 0) Container(height: 25, decoration: BoxDecoration(color: CColors.primary), width: 2, margin: EdgeInsets.only(left: 9)),
-                    Row(
-                      children: [
-                        Container(height: 20, decoration: BoxDecoration(color: CColors.primary, shape: BoxShape.circle), width: 20),
-                        Expanded(child: Padding(padding: const EdgeInsets.only(left: 8), child: Text(item, style: CTextStyle.w600(color: CColors.deepTeal, fontSize: 15)))),
-                      ],
-                    ),
-                    Container(height: 25, decoration: BoxDecoration(color: CColors.primary), width: 2, margin: EdgeInsets.only(left: 9)),
-                  ],
-                ),
-              )
-              .toList(),
-    );
+    return Column(children: items.map((item) => CMarker(title: item, color: Colors.transparent, titleColor: CColors.primary, textDirection: TextDirection.ltr)).toList());
   }
 }
