@@ -1,11 +1,5 @@
-import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart' show Position;
-import 'package:permission_handler/permission_handler.dart';
-
-import '../theme/colors.dart';
+import '../../export.dart';
 part 'enums.dart';
 
 late Size screenSize;
@@ -30,3 +24,5 @@ StreamSubscription<Position>? positionStreamSubscription;
 
 var userCollection = FirebaseFirestore.instance.collection(CollectionNames.users.name);
 var settingsCollection = FirebaseFirestore.instance.collection(CollectionNames.settings.name);
+
+isLTR(context) => languageDirection(context) == TextDirection.ltr;

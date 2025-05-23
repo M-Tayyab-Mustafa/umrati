@@ -14,8 +14,11 @@ final meeqaatTwoTasksProvider = ChangeNotifierProvider<MeeqaatTwoTasksNotifier>(
 class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   bool isCleanlinessChecked = false;
   bool isIhramChecked = false;
+  bool isSkipLoading = false;
 
   void skip(BuildContext context) {
+    isSkipLoading = true;
+    notifyListeners();
     LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
   }

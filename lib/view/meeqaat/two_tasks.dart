@@ -1,12 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import '../../export.dart';
 import '../../controller/meeqaat/two_tasks_provider.dart';
-import '../../utils/helper/constants.dart';
 import '../../utils/services/translations/locale_keys.g.dart';
-import '../../utils/theme/colors.dart';
-import '../../utils/theme/text_style.dart';
 import '../../widgets/background.dart';
 import '../../widgets/button.dart';
 import '../../widgets/check_box_card.dart';
@@ -20,8 +14,8 @@ class MeeqaatTwoTasksPage extends ConsumerWidget {
     return Background(
       title: LocaleKeys.do_these_5_ihram_related_tasks.tr(),
       backgroundType: BackgroundType.logoWithSkip,
-      titleAlignment: Alignment.center,
       titleMargin: EdgeInsets.only(top: 50, bottom: 40),
+      isSkipLoading: provider.isSkipLoading,
       onSkipTap: () => provider.skip(context),
       child: Column(
         children: [
@@ -54,7 +48,7 @@ class MeeqaatTwoTasksPage extends ConsumerWidget {
               ),
             ),
           ),
-          CButton(onTap: () => provider.moveToThreeOtherTasks(context), title: LocaleKeys.move_to_3_other_tasks.tr(), titleWithIcon: true),
+          CButton(isLoading: provider.isSkipLoading, onTap: () => provider.moveToThreeOtherTasks(context), title: LocaleKeys.move_to_3_other_tasks.tr(), titleWithIcon: true),
         ],
       ),
     );

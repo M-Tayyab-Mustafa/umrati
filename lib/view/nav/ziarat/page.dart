@@ -1,8 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:umrati/widgets/loading.dart';
-
 import '../../../controller/nav/ziarat/provider.dart';
 import '../../../utils/helper/constants.dart';
 import '../../../utils/services/translations/locale_keys.g.dart';

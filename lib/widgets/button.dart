@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:umrati/export.dart';
 import 'package:umrati/utils/helper/constants.dart';
 import 'package:umrati/widgets/custom_image.dart';
 
@@ -73,12 +74,15 @@ class CButton extends StatelessWidget {
                   ? LayoutBuilder(builder: (context, constraints) => Loading(height: constraints.maxHeight * 0.6, width: constraints.maxHeight * 0.6, color: Colors.white))
                   : title != null
                   ? titleWithIcon
-                      ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(title!, style: CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 17), maxLines: 1),
-                          CustomImage(margin: EdgeInsets.only(left: 16), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: 35),
-                        ],
+                      ? Directionality(
+                        textDirection: languageDirection(context),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(title!, style: CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 17), maxLines: 1),
+                            CustomImage(margin: EdgeInsets.only(left: 16), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: 35),
+                          ],
+                        ),
                       )
                       : Align(
                         alignment: Alignment.center,
