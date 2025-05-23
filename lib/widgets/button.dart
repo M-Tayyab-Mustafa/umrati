@@ -75,7 +75,7 @@ class CButton extends StatelessWidget {
                   : title != null
                   ? titleWithIcon
                       ? Directionality(
-                        textDirection: languageDirection(context),
+                        textDirection: TextDirection.ltr,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
