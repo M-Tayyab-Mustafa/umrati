@@ -1,11 +1,5 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../controller/nav/ziarat/provider.dart';
-import '../../../utils/helper/constants.dart';
-import '../../../utils/services/translations/locale_keys.g.dart';
-import '../../../utils/theme/colors.dart';
-import '../../../utils/theme/text_style.dart';
+import '../../../export.dart';
 import '../../../widgets/background.dart';
 import '../../../widgets/button.dart';
 import '../../../widgets/card.dart';

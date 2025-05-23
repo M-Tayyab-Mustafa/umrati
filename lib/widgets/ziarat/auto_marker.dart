@@ -29,7 +29,10 @@ class ZiaratMarker extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(color: CColors.primary, borderRadius: BorderRadius.circular(3)),
             child: Row(
-              children: [Expanded(child: Text(title, style: CTextStyle.w500(color: Colors.white), maxLines: 1)), Text('$distance Km', style: CTextStyle.w500(color: Colors.white), maxLines: 1)],
+              children: [
+                Expanded(child: Text(title, style: CTextStyle.w500(color: Colors.white), maxLines: 1)),
+                Directionality(textDirection: TextDirection.ltr, child: Text('$distance Km', style: CTextStyle.w500(color: Colors.white), maxLines: 1)),
+              ],
             ),
           ),
         ),

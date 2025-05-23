@@ -1,10 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:umrati/export.dart';
-import 'package:umrati/utils/helper/constants.dart';
-import 'package:umrati/widgets/custom_image.dart';
-
-import '../utils/theme/colors.dart';
-import '../utils/theme/text_style.dart';
+import '../export.dart';
+import 'custom_image.dart';
 import 'loading.dart';
 
 class CButton extends StatelessWidget {

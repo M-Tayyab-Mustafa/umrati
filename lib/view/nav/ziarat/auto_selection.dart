@@ -17,7 +17,7 @@ class AutoSelection extends ConsumerWidget {
               return Text('${snapshot.hasData ? snapshot.data : ''}', style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal));
             },
           ),
-          Padding(padding: const EdgeInsets.only(top: 16), child: Text('${LocaleKeys.your_ziarat_destinations.tr()}:', style: CTextStyle.w500(fontSize: 20))),
+          Padding(padding: const EdgeInsets.only(top: 16), child: Text(LocaleKeys.your_ziarat_destinations.tr(), style: CTextStyle.w500(fontSize: 20))),
           Expanded(
             child: FutureBuilder(
               future: provider.getDistance(),

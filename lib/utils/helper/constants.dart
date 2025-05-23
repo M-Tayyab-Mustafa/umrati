@@ -25,4 +25,4 @@ StreamSubscription<Position>? positionStreamSubscription;
 var userCollection = FirebaseFirestore.instance.collection(CollectionNames.users.name);
 var settingsCollection = FirebaseFirestore.instance.collection(CollectionNames.settings.name);
 
-isLTR(context) => languageDirection(context) == TextDirection.ltr;
+bool isLTR(context) => languageDirection(context) == TextDirection.ltr;

@@ -10,3 +10,6 @@ export 'utils/theme/text_style.dart';
 export 'package:permission_handler/permission_handler.dart';
 export 'dart:async' hide AsyncError;
 export 'package:cloud_firestore/cloud_firestore.dart';
+
+export 'utils/services/translations/codegen_loader.g.dart';
+export 'utils/services/translations/locale_keys.g.dart';

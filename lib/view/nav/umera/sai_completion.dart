@@ -33,6 +33,7 @@ class SaiCompletionPage extends ConsumerWidget {
                 child: Container(
                   height: constraints.maxHeight * 0.28,
                   width: constraints.maxHeight * 0.28,
+                  padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
                   child: Center(
                     child: Column(

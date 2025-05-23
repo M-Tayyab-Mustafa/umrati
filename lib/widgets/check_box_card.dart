@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../utils/theme/colors.dart';
-import '../utils/theme/text_style.dart';
+import '../export.dart';
 import 'card.dart';
 import 'check_box.dart';
 import 'custom_image.dart';
@@ -31,8 +28,13 @@ class CheckBoxCard extends StatelessWidget {
                   onTap: onTap,
                   child: Row(
                     children: [
-                      Expanded(child: Padding(padding: const EdgeInsets.only(left: 10), child: Text(title, style: CTextStyle.w600(fontSize: 16, color: CColors.primary)))),
-                      const CustomImage(path: 'assets/svg/arrow_forward.svg', height: 20, width: 8, imageType: ImageType.svg),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: isLTR(context) ? 10 : 0, right: isLTR(context) ? 0 : 10),
+                          child: Text(title, style: CTextStyle.w600(fontSize: 16, color: CColors.primary)),
+                        ),
+                      ),
+                      CustomImage(path: isLTR(context) ? 'assets/svg/go_forward.svg' : 'assets/svg/go_backward.svg', height: 20, width: 8, imageType: ImageType.svg),
                     ],
                   ),
                 ),

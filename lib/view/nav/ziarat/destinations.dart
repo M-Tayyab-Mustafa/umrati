@@ -11,11 +11,14 @@ class ZiaratDestinations extends ConsumerWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: Row(
-            children: [
-              CustomImage(onTap: provider.goBackToSelectCities, path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, height: 40, width: 30, margin: EdgeInsets.only(right: 20)),
-              Expanded(child: Center(child: Text(LocaleKeys.please_select_one_option_to_continue_your_ziarat.tr(), textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24)))),
-            ],
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Row(
+              children: [
+                CustomImage(onTap: provider.goBackToSelectCities, path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, height: 40, width: 30, margin: EdgeInsets.only(right: 20)),
+                Expanded(child: Center(child: Text(LocaleKeys.please_select_one_option_to_continue_your_ziarat.tr(), textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24)))),
+              ],
+            ),
           ),
         ),
         BasicCard(
