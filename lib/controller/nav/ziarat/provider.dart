@@ -11,6 +11,7 @@ import 'package:umrati/controller/nav/provider.dart';
 import '../../../model/ziarat.dart';
 import '../../../utils/helper/constants.dart';
 import '../../../utils/services/toast.dart';
+import '../../../view/nav/ziarat/map.dart';
 import '../../../view/nav/ziarat/page.dart';
 
 final ziaratProvider = ChangeNotifierProvider<ZiaratNotifier>((ref) => ZiaratNotifier());
@@ -129,7 +130,9 @@ class ZiaratNotifier extends ChangeNotifier {
     });
   }
 
-  void createZiaratRoute() {}
+  void createZiaratRoute(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratMapPage()));
+  }
 
   @override
   void dispose() {

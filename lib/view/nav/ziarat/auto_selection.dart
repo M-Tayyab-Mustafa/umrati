@@ -46,7 +46,7 @@ class AutoSelection extends ConsumerWidget {
                   shadows: [],
                 ),
                 Spacer(),
-                CButton(onTap: provider.createZiaratRoute, title: LocaleKeys.start_your_ziarat.tr()),
+                CButton(onTap: () => provider.createZiaratRoute(context), title: LocaleKeys.start_your_ziarat.tr()),
               ],
             ),
           ),

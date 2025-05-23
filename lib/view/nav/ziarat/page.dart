@@ -1,11 +1,4 @@
-import '../../../controller/nav/ziarat/provider.dart';
 import '../../../export.dart';
-import '../../../widgets/background.dart';
-import '../../../widgets/button.dart';
-import '../../../widgets/card.dart';
-import '../../../widgets/custom_image.dart';
-import '../../../widgets/marker.dart';
-import '../../../widgets/ziarat/city_card.dart';
 part 'auto_selection.dart';
 part 'destinations.dart';
 part 'manual_selection.dart';

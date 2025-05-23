@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../utils/theme/colors.dart';
-import '../../utils/theme/text_style.dart';
-import '../card.dart';
-import '../custom_image.dart';
+import '../export.dart';
 
 class ZiaratCityCard extends StatelessWidget {
   const ZiaratCityCard({super.key, required this.icon, required this.title, this.isSelected = false, required this.onTap});
