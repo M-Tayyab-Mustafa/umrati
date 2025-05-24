@@ -92,4 +92,8 @@ class LocalStorageManager {
   static FutureOr<bool> getMeeqaatThreeTasksPage() async {
     return (_sharedPreferences!.getBool(_meeqaatThreeTasksPage)) ?? true;
   }
+
+  static Future<bool> clearStorage() async {
+    return await _sharedPreferences!.clear();
+  }
 }

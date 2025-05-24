@@ -26,3 +26,5 @@ var userCollection = FirebaseFirestore.instance.collection(CollectionNames.users
 var settingsCollection = FirebaseFirestore.instance.collection(CollectionNames.settings.name);
 
 bool isLTR(context) => languageDirection(context) == TextDirection.ltr;
+
+var mapsApiKey = 'AIzaSyAndFtLiS-hr5mZJ4BlqYENlcX_FplebiE';

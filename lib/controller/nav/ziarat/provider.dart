@@ -1,16 +1,4 @@
-import 'dart:async' show StreamSubscription;
-import 'dart:developer';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:umrati/controller/nav/provider.dart';
-
-import '../../../model/ziarat.dart';
-import '../../../utils/helper/constants.dart';
-import '../../../utils/services/toast.dart';
+import '../../../export.dart';
 import '../../../view/nav/ziarat/map.dart';
 import '../../../view/nav/ziarat/page.dart';
 
@@ -20,6 +8,7 @@ class ZiaratNotifier extends ChangeNotifier {
   ZiaratCities? selectedCity;
   List<ZiaratModel> selectedZiarat = [];
   List<ZiaratModel> ziarats = [];
+  List<ZiaratModel> sortedZiarats = [];
 
   StreamSubscription<Position>? positionStream;
 
@@ -31,10 +20,6 @@ class ZiaratNotifier extends ChangeNotifier {
 
   //* Auto Generated Ziarat Class Level Variables
   bool showAutoSelectionPage = false;
-
-  getSelectedCityZiarat() async {
-    ziarats = List.from((await settingsCollection.doc(CommonDoc.ziarat.name).get()).data()![selectedCity?.name]).map<ZiaratModel>((map) => ZiaratModel.fromMap(map)).toList();
-  }
 
   updateSelectedCity(ZiaratCities city) {
     selectedCity = city;
@@ -59,8 +44,9 @@ class ZiaratNotifier extends ChangeNotifier {
     reset();
   }
 
-  void goToAutoSelectionPage() {
+  void goToBackFromAutoSelectionPage() {
     showAutoSelectionPage = false;
+    positionStream?.cancel();
     notifyListeners();
   }
 
@@ -80,24 +66,26 @@ class ZiaratNotifier extends ChangeNotifier {
   }
 
   void generateZiarat(BuildContext context, WidgetRef ref) async {
-    isLoading = true;
-    notifyListeners();
     try {
-      await getSelectedCityZiarat();
+      isLoading = true;
+      notifyListeners();
+      ziarats = List.from((await settingsCollection.doc(CommonDoc.ziarat.name).get()).data()![selectedCity?.name]).map<ZiaratModel>((map) => ZiaratModel.fromMap(map)).toList();
       var status = await Geolocator.checkPermission();
-      if (status == LocationPermission.denied) {
+      if (status == LocationPermission.denied || status == LocationPermission.deniedForever) {
         var status = await Geolocator.requestPermission();
-        if (status == LocationPermission.denied || status == LocationPermission.deniedForever) {
+        if (status == LocationPermission.deniedForever) {
+          await openAppSettings();
+          return;
+        } else {
           errorToast('Location permission denied, Permission Required to proceed for ward.');
           return;
         }
-      } else if (status == LocationPermission.deniedForever) {
-        await openAppSettings();
-        return;
       }
       if (selectedCreationOption == ZiaratDestinationsCreationOptions.manual) {
         selectedZiarat.clear();
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ManualSelection()));
+        isLoading = false;
+        notifyListeners();
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => ManualSelection()));
       } else {
         ref.read(bottomNavProvider.notifier).updateLogoAlign(MainAxisAlignment.start);
         showAutoSelectionPage = true;
@@ -105,9 +93,10 @@ class ZiaratNotifier extends ChangeNotifier {
     } catch (e) {
       log(e.toString());
       errorToast('Something went wrong, Please try again later.');
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
-    isLoading = false;
-    notifyListeners();
   }
 
   getLocation() async {
@@ -118,20 +107,32 @@ class ZiaratNotifier extends ChangeNotifier {
 
   Future<void> getDistance() async {
     positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.best)).listen((position) async {
-      ziarats =
+      sortedZiarats =
           ziarats.map<ZiaratModel>((ziarat) {
             var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziarat.lat.toDouble(), ziarat.lng.toDouble());
             return ziarat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
           }).toList();
-
-      ziarats.sort((a, b) => int.parse(a.distance).compareTo(int.parse(b.distance)));
-
+      sortedZiarats.sort((a, b) => int.parse(a.distance).compareTo(int.parse(b.distance)));
       notifyListeners();
     });
   }
 
-  void createZiaratRoute(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratMapPage()));
+  void createZiaratRoute(BuildContext context) async {
+    isLoading = true;
+    notifyListeners();
+    var user = await LocalStorageManager.getUser();
+    await userCollection.doc(user!.uid).set({
+      CommonField.selectedZiarat.name: (selectedCreationOption == ZiaratDestinationsCreationOptions.auto ? sortedZiarats : selectedZiarat).map((e) => e.toMap()).toList(),
+    }, SetOptions(merge: true));
+    isLoading = false;
+    notifyListeners();
+    if (selectedCreationOption == ZiaratDestinationsCreationOptions.manual) {
+      Navigator.pop(context);
+    }
+    goToBackFromAutoSelectionPage();
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratMapPage()));
+    selectedZiarat.clear();
+    notifyListeners();
   }
 
   @override

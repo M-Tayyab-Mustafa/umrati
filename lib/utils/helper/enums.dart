@@ -12,6 +12,8 @@ enum ZiaratDestinationsCreationOptions { auto, manual }
 
 enum CollectionNames { users, settings }
 
+enum MapMarkerId { userLocation, destination }
+
 enum CommonDoc {
   alKaba('al_kaba'),
   safaMarwa('safa_marwa'),
@@ -22,4 +24,12 @@ enum CommonDoc {
   const CommonDoc(this.name);
 }
 
-enum CommonField { isInTawaf, startingPoint }
+enum CommonField {
+  isInTawaf('isInTawaf'),
+  startingPoint('startingPoint'),
+  selectedZiarat('selected_ziarat');
+
+  final String name;
+
+  const CommonField(this.name);
+}

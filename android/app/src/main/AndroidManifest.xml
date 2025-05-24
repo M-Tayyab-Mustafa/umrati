@@ -18,6 +18,9 @@
         <!-- <meta-data
             android:name="com.google.android.gms.client.id"
             android:value="@string/default_web_client_id"/> -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAndFtLiS-hr5mZJ4BlqYENlcX_FplebiE"/>
 
         <activity
             android:name=".MainActivity"

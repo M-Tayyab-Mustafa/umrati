@@ -73,3 +73,6 @@ export 'package:flutter_riverpod/flutter_riverpod.dart' hide describeIdentity hi
 export 'package:permission_handler/permission_handler.dart';
 export 'package:cloud_firestore/cloud_firestore.dart' hide kIsWasm;
 export 'package:google_maps_flutter/google_maps_flutter.dart';
+export 'package:geolocator/geolocator.dart' hide ServiceStatus;
+export 'package:geocoding/geocoding.dart';
+export 'package:http4/http4.dart';

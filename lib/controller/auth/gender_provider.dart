@@ -22,7 +22,7 @@ class GenderNotifier extends ChangeNotifier {
     notifyListeners();
     await LocalStorageManager.showGenderPage(false);
     var user = (await LocalStorageManager.getUser())!;
-    user = user.copyWith(gender: selectedGender.name.toLowerCase());
+    user = user.copyWith(gender: Gender.unknown.name.toLowerCase());
     await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(user.uid).set(user.toMap(), SetOptions(merge: true));
     isUpdatingGender = false;
     notifyListeners();

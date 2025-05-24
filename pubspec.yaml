@@ -23,6 +23,7 @@ dependencies:
   geolocator: ^14.0.0
   google_maps_flutter: ^2.12.2
   google_sign_in: ^6.3.0
+  http4: ^0.0.4
   latlong2: ^0.9.1
   permission_handler: ^12.0.0+1
   pinput: ^5.0.1
@@ -42,6 +43,7 @@ flutter:
     - assets/svg/ziarat/
     - assets/png/
     - assets/png/flags/
+    - assets/png/map/
     - assets/translations/
   fonts:
     - family: Roboto

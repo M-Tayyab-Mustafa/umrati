@@ -23,9 +23,9 @@ class AutoSelection extends ConsumerWidget {
               future: provider.getDistance(),
               builder: (context, snapshot) {
                 return ListView.builder(
-                  itemCount: provider.ziarats.length,
+                  itemCount: provider.sortedZiarats.length,
                   itemBuilder: (context, index) {
-                    var ziarat = provider.ziarats[index];
+                    var ziarat = provider.sortedZiarats[index];
                     return CMarker(title: ziarat.title, distance: ziarat.distance);
                   },
                 );
@@ -38,7 +38,7 @@ class AutoSelection extends ConsumerWidget {
             child: Row(
               children: [
                 CButton(
-                  onTap: provider.goToAutoSelectionPage,
+                  onTap: provider.goToBackFromAutoSelectionPage,
                   title: LocaleKeys.go_back.tr(),
                   backgroundColor: Colors.transparent,
                   borderColor: CColors.primary,
@@ -46,7 +46,7 @@ class AutoSelection extends ConsumerWidget {
                   shadows: [],
                 ),
                 Spacer(),
-                CButton(onTap: () => provider.createZiaratRoute(context), title: LocaleKeys.start_your_ziarat.tr()),
+                CButton(isLoading: provider.isLoading, onTap: () => provider.createZiaratRoute(context), title: LocaleKeys.start_your_ziarat.tr()),
               ],
             ),
           ),

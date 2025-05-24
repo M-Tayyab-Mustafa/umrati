@@ -9,11 +9,25 @@ class ZiaratMapPage extends ConsumerStatefulWidget {
 
 class _ZiaratMapPageState extends ConsumerState<ZiaratMapPage> {
   @override
+  void initState() {
+    super.initState();
+    ref.read(mapPageProvider).initialization(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final provider = ref.watch(mapPageProvider);
     return Scaffold(
       body: Stack(
         children: [
+          GoogleMap(
+            mapType: MapType.hybrid,
+            initialCameraPosition: provider.initialCameraPosition,
+            onMapCreated: (controller) => provider.mapController = controller,
+            myLocationEnabled: false,
+            markers: provider.markers,
+            polylines: provider.polylines,
+          ),
           Align(
             alignment: Alignment(-0.9, -0.9),
             child: GestureDetector(
@@ -26,7 +40,6 @@ class _ZiaratMapPageState extends ConsumerState<ZiaratMapPage> {
               ),
             ),
           ),
-          GoogleMap(initialCameraPosition: provider.initialCameraPosition, onMapCreated: (controller) => provider.mapController = controller),
         ],
       ),
     );
