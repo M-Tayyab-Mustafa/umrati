@@ -7,7 +7,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../model/safa_marwa.dart';
 import '../../../utils/helper/constants.dart';
 import '../../../utils/services/toast.dart';
-import '../../../widgets/tawaf_completed_dialog.dart';
+import '../../../widgets/dialog/tawaf_completed_dialog.dart';
 import 'tawaf_provider.dart';
 
 // Provider for SafaMarwaNotifier using ChangeNotifier

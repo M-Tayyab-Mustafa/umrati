@@ -14,6 +14,8 @@ enum CollectionNames { users, settings }
 
 enum MapMarkerId { userLocation, destination }
 
+enum MapPolylineId { route }
+
 enum CommonDoc {
   alKaba('al_kaba'),
   safaMarwa('safa_marwa'),

@@ -1,14 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import '../utils/helper/constants.dart';
-import '../utils/services/translations/locale_keys.g.dart';
-import '../utils/theme/colors.dart';
-import '../utils/theme/text_style.dart';
-import 'button.dart';
-import 'custom_image.dart';
+import '../../utils/helper/constants.dart';
+import '../../utils/services/translations/locale_keys.g.dart';
+import '../../utils/theme/colors.dart';
+import '../../utils/theme/text_style.dart';
+import '../button.dart';
+import '../custom_image.dart';
 
-class TawafCompletionDialog extends StatelessWidget {
-  const TawafCompletionDialog({super.key});
+class AlreadyDoingZiaratDialog extends StatelessWidget {
+  const AlreadyDoingZiaratDialog({super.key});
 
   @override
   Widget build(BuildContext dialogContext) {
@@ -36,12 +36,27 @@ class TawafCompletionDialog extends StatelessWidget {
                         padding: EdgeInsets.only(top: screenSize.height * 0.05),
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.1),
-                          child: Text(LocaleKeys.now_please_pray_while_facing_kibla.tr(), style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center),
+                          child: Text(LocaleKeys.already_in_ziarats.tr(), style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center),
                         ),
                       ),
                     ),
                   ),
-                  CButton(title: 'Continue', titleWithIcon: true, onTap: () => Navigator.pop(dialogContext), margin: EdgeInsets.only(bottom: 30)),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16, right: 8),
+                          child: CButton(title: LocaleKeys.start_new.tr(), onTap: () => Navigator.pop(dialogContext, false), margin: EdgeInsets.only(bottom: 30)),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 16),
+                          child: CButton(title: LocaleKeys.continued.tr(), onTap: () => Navigator.pop(dialogContext, true), margin: EdgeInsets.only(bottom: 30)),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

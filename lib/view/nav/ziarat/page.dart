@@ -10,20 +10,11 @@ class ZiaratPage extends ConsumerStatefulWidget {
 }
 
 class _CitiesPageState extends ConsumerState<ZiaratPage> {
-  late ZiaratNotifier notifier;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    notifier = ref.watch(ziaratProvider.notifier);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      notifier.reset();
-    });
-    super.dispose();
+    log('Change Dependency');
+    ref.read(ziaratProvider).initialization(context);
   }
 
   @override

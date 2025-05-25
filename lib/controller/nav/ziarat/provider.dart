@@ -9,10 +9,10 @@ class ZiaratNotifier extends ChangeNotifier {
   List<ZiaratModel> selectedZiarat = [];
   List<ZiaratModel> ziarats = [];
   List<ZiaratModel> sortedZiarats = [];
-
   StreamSubscription<Position>? positionStream;
-
   bool isLoading = false;
+
+  String myCurrentLocation = '';
 
   //* Creating Class Level Variables
   bool showCreationOptionPage = false;
@@ -20,6 +20,24 @@ class ZiaratNotifier extends ChangeNotifier {
 
   //* Auto Generated Ziarat Class Level Variables
   bool showAutoSelectionPage = false;
+
+  UserModel? user;
+
+  initialization(BuildContext context) async {
+    user = await LocalStorageManager.getUser();
+    var data = (await userCollection.doc(user!.uid).get()).data()!;
+    selectedZiarat = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
+    if (selectedZiarat.isNotEmpty) {
+      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDoingZiaratDialog());
+      if (result == true) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratMapPage()));
+      } else {
+        await userCollection.doc(user!.uid).set({CommonField.selectedZiarat.name: []}, SetOptions(merge: true));
+        selectedZiarat.clear();
+      }
+    }
+    myCurrentLocation = await getLocation();
+  }
 
   updateSelectedCity(ZiaratCities city) {
     selectedCity = city;
@@ -34,8 +52,12 @@ class ZiaratNotifier extends ChangeNotifier {
   reset() {
     selectedCity = null;
     selectedCreationOption = null;
+    showCreationOptionPage = false;
     showAutoSelectionPage = false;
     positionStream?.cancel();
+    selectedZiarat.clear();
+    sortedZiarats.clear();
+    isLoading = false;
     notifyListeners();
   }
 
@@ -99,7 +121,7 @@ class ZiaratNotifier extends ChangeNotifier {
     }
   }
 
-  getLocation() async {
+  Future<String> getLocation() async {
     var position = await Geolocator.getCurrentPosition();
     Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
     return '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';

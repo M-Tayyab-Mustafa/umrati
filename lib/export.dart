@@ -50,7 +50,6 @@ export 'controller/auth/sign_up_provider.dart';
 
 //* Widgets
 export 'widgets/custom_image.dart';
-export 'widgets/already_in_umera.dart';
 export 'widgets/background.dart';
 export 'widgets/bottom_nav.dart';
 export 'widgets/bottom_nav_item.dart';
@@ -62,8 +61,12 @@ export 'widgets/city_card.dart';
 export 'widgets/loading.dart';
 export 'widgets/marker.dart';
 export 'widgets/pin_input.dart';
-export 'widgets/tawaf_completed_dialog.dart';
 export 'widgets/text_field.dart';
+export 'widgets/dialog/tawaf_completed_dialog.dart';
+export 'widgets/dialog/already_in_umera.dart';
+export 'widgets/dialog/already_doing_ziarat.dart';
+export 'widgets/dialog/ziarat_complete_dialog.dart';
+export 'widgets/dialog/reach_your_destination.dart';
 
 //* Other Exports
 

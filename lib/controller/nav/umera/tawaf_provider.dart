@@ -11,7 +11,7 @@ import 'package:umrati/utils/services/local_storage.dart';
 import '../../../model/user.dart';
 import '../../../utils/helper/constants.dart';
 import '../../../utils/services/toast.dart';
-import '../../../widgets/already_in_umera.dart';
+import '../../../widgets/dialog/already_in_umera.dart';
 part '../../../utils/helper/tawaf.dart';
 
 // Provider for TawafNotifier using ChangeNotifier

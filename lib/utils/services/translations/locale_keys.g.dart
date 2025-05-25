@@ -55,6 +55,9 @@ abstract class  LocaleKeys {
   static const start_tawaf = 'start_tawaf';
   static const starting_point = 'starting_point';
   static const start_new = 'start_new';
+  static const already_in_ziarats = 'already_in_ziarats';
+  static const complete_ziarats = 'complete_ziarats';
+  static const ziarat_completion_message = 'ziarat_completion_message';
   static const safa = 'safa';
   static const marwa = 'marwa';
   static const select_ziarat_cities = 'select_ziarat_cities';

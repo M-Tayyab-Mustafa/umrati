@@ -9,6 +9,9 @@ class MapPageNotifier extends ChangeNotifier {
   Set<Polyline> polylines = {};
   UserModel? user;
 
+  var bottomSheetSize = screenSize.height * 0.15;
+
+  ZiaratModel? activeZiarat;
   //* Destinations
   List<ZiaratModel> destinations = [];
 
@@ -19,7 +22,7 @@ class MapPageNotifier extends ChangeNotifier {
 
   CameraPosition initialCameraPosition = CameraPosition(target: LatLng(30.17271735209673, 71.45729802421867), zoom: 20);
 
-  initialization(BuildContext context) async {
+  initialization(BuildContext context, WidgetRef ref) async {
     var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
     initialCameraPosition = CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude), zoom: 20);
     markers.add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: initialCameraPosition.target, icon: await _loadCustomIcon('assets/png/map/user.png')));
@@ -27,40 +30,57 @@ class MapPageNotifier extends ChangeNotifier {
     //* Fetch Destinations
     user = await LocalStorageManager.getUser();
     var data = (await userCollection.doc(user!.uid).get()).data()!;
-    destinations = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList(growable: false);
+    destinations = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
+    activeZiarat = destinations.first;
     //* First Destination Marker
     markers.add(
       Marker(
         markerId: MarkerId(MapMarkerId.destination.name),
-        position: LatLng(destinations.first.lat.toDouble(), destinations.first.lng.toDouble()),
+        position: LatLng(activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble()),
         icon: await _loadCustomIcon('assets/png/map/destination.png'),
       ),
     );
     notifyListeners();
-    await _getRoutePolyline(initialCameraPosition.target, LatLng(destinations.first.lat.toDouble(), destinations.first.lng.toDouble()));
     _positionStream?.cancel();
-    _positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 5)).listen(_updateLocation);
+    _positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation)).listen((position) => _updateLocation(position, context, ref));
   }
 
-  _updateLocation(Position position) async {
+  _updateLocation(Position position, BuildContext context, WidgetRef ref) async {
     markers =
         markers.where((e) => e.markerId.value != MapMarkerId.userLocation.name).toSet()
           ..add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: LatLng(position.latitude, position.longitude), icon: await _loadCustomIcon('assets/png/map/user.png')));
-    var distance = Geolocator.distanceBetween(position.latitude, position.longitude, destinations.first.lat.toDouble(), destinations.first.lng.toDouble());
-
+    var distance = Geolocator.distanceBetween(position.latitude, position.longitude, activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble());
+    activeZiarat = activeZiarat!.copyWith(distance: (distance / 1000).toStringAsFixed(0));
+    notifyListeners();
+    log('Distance $distance');
     if (distance < 20) {
+      _positionStream?.cancel();
+      await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ReachYourDestinationDialog());
       destinations.removeAt(0);
       await userCollection.doc(user!.uid).set({CommonField.selectedZiarat.name: destinations.map((e) => e.toMap()).toList()}, SetOptions(merge: true));
       if (destinations.isEmpty) {
         _positionStream?.cancel();
+        markers = markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet();
+        polylines.where((e) => e.polylineId.value != MapPolylineId.route.name).toSet();
+        notifyListeners();
+        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ZiaratCompleteDialog());
+        Navigator.pop(context);
+        ref.read(ziaratProvider).reset();
         return;
+      } else {
+        _positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation)).listen((position) => _updateLocation(position, context, ref));
+        activeZiarat = destinations.first;
       }
       markers =
-          markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet()
-            ..add(Marker(markerId: MarkerId(MapMarkerId.destination.name), position: LatLng(position.latitude, position.longitude), icon: await _loadCustomIcon('assets/png/map/destination.png')));
+          markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet()..add(
+            Marker(
+              markerId: MarkerId(MapMarkerId.destination.name),
+              position: LatLng(activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble()),
+              icon: await _loadCustomIcon('assets/png/map/destination.png'),
+            ),
+          );
     }
-    await _getRoutePolyline(LatLng(position.latitude, position.longitude), LatLng(destinations.first.lat.toDouble(), destinations.first.lng.toDouble()));
-
+    await _getRoutePolyline(LatLng(position.latitude + 0.000007, position.longitude), LatLng(activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble()));
     notifyListeners();
   }
 
@@ -78,9 +98,13 @@ class MapPageNotifier extends ChangeNotifier {
     if (response.statusCode == 200 && body['routes'].isNotEmpty) {
       final points = body['routes'][0]['overview_polyline']['points'];
       final List<LatLng> routeCoords = _decodePolyline(points);
-      polylines.add(Polyline(polylineId: PolylineId("route"), points: routeCoords, color: CColors.primary, width: 5));
+      polylines =
+          polylines.where((e) => e.polylineId.value != MapPolylineId.route.name).toSet()
+            ..add(Polyline(polylineId: PolylineId(MapPolylineId.route.name), points: routeCoords, color: CColors.primary, width: 5, startCap: Cap.roundCap, endCap: Cap.roundCap));
     } else {
-      polylines.add(Polyline(polylineId: PolylineId("route"), points: [startPoint, endPoint], color: CColors.primary, width: 5));
+      polylines =
+          polylines.where((e) => e.polylineId.value != MapPolylineId.route.name).toSet()
+            ..add(Polyline(polylineId: PolylineId(MapPolylineId.route.name), points: [startPoint, endPoint], color: CColors.primary, width: 5, startCap: Cap.roundCap, endCap: Cap.roundCap));
     }
     notifyListeners();
   }

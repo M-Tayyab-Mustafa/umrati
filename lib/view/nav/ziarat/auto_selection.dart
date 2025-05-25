@@ -11,12 +11,7 @@ class AutoSelection extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(padding: const EdgeInsets.only(top: 16), child: Text('${LocaleKeys.your_current_location.tr()}:', style: CTextStyle.w500(fontSize: 22))),
-          FutureBuilder(
-            future: provider.getLocation(),
-            builder: (context, snapshot) {
-              return Text('${snapshot.hasData ? snapshot.data : ''}', style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal));
-            },
-          ),
+          Text(provider.myCurrentLocation, style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal)),
           Padding(padding: const EdgeInsets.only(top: 16), child: Text(LocaleKeys.your_ziarat_destinations.tr(), style: CTextStyle.w500(fontSize: 20))),
           Expanded(
             child: FutureBuilder(
