@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -18,7 +19,7 @@ class SplashNotifier extends ChangeNotifier {
   void initialization(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 2));
     screenSize = MediaQuery.sizeOf(context);
-    await LocalStorageManager.clearStorage();
+    if (kDebugMode) await LocalStorageManager.clearStorage();
     if (await LocalStorageManager.getSelectLanguagePage()) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectLanguagePage()));
     } else if (await LocalStorageManager.getLoginPage()) {
