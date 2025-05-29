@@ -18,7 +18,7 @@ class SplashNotifier extends ChangeNotifier {
   void initialization(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 2));
     screenSize = MediaQuery.sizeOf(context);
-
+    await LocalStorageManager.clearStorage();
     if (await LocalStorageManager.getSelectLanguagePage()) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectLanguagePage()));
     } else if (await LocalStorageManager.getLoginPage()) {

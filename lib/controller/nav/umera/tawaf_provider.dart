@@ -31,7 +31,7 @@ class TawafNotifier extends ChangeNotifier {
   // Tawaf round tracking
   double tawafCircleCompletionPercent = 0;
   bool isRoundCompleted = false;
-  int circleCount = kDebugMode ? 6 : 0; // Total rounds required for Tawaf
+  int circleCount = kDebugMode ? 5 : 0; // Total rounds required for Tawaf
 
   // Completion flags for different stages
   bool showSafaMarwa = false;
@@ -96,7 +96,7 @@ class TawafNotifier extends ChangeNotifier {
           circleCount++;
           timer.cancel();
         } else {
-          tawafCircleCompletionPercent = tawafCircleCompletionPercent + 0.3;
+          tawafCircleCompletionPercent = tawafCircleCompletionPercent + 0.1;
         }
         notifyListeners();
       }

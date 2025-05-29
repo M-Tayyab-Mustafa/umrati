@@ -1,3 +1,6 @@
+import 'dart:async' show Timer;
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,14 +19,22 @@ final safaMarwaProvider = ChangeNotifierProvider<SafaMarwaNotifier>((ref) => Saf
 class SafaMarwaNotifier extends ChangeNotifier {
   // Context for showing dialogs and other UI operations
   BuildContext? context;
+
   // Reference for accessing other providers
   WidgetRef? ref;
+
+  //* Debug only
+  Timer? timer;
+
   // Controller for scrolling animation during Safa-Marwa run
   ScrollController? scrollController;
+
   // Percentage completion of one side of Safa-Marwa run (0.0 to 1.0)
   double oneSideRunCompletionPercent = 0.0;
+
   // Flag to track if one side of the run is complete
   bool isRunComplete = false;
+
   // Counter for completed rounds between Safa and Marwa
   int circleCount = kDebugMode ? 6 : 0;
 
@@ -31,9 +42,31 @@ class SafaMarwaNotifier extends ChangeNotifier {
   initialization() async {
     notifyListeners();
     if (kDebugMode) {
-      _updateCircleCount();
+      timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+        if (isRunComplete == false) {
+          if (oneSideRunCompletionPercent <= 1) {
+            oneSideRunCompletionPercent = oneSideRunCompletionPercent + 0.1;
+          } else {
+            isRunComplete = true;
+          }
+        }
+        if (isRunComplete == true) {
+          if (oneSideRunCompletionPercent >= 0) {
+            oneSideRunCompletionPercent = oneSideRunCompletionPercent - 0.1;
+          } else {
+            _updateCircleCount();
+          }
+        }
+        log(oneSideRunCompletionPercent.toString());
+        notifyListeners();
+        if (scrollController!.hasClients) {
+          var position = scrollController!.position.maxScrollExtent * (1 - oneSideRunCompletionPercent);
+          scrollController!.animateTo(position, duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
+        }
+      });
+    } else {
+      await _getPermission();
     }
-    await _getPermission();
   }
 
   // Method to request location permissions and setup location tracking
@@ -43,15 +76,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
       // Get threshold distance for considering arrival at Safa/Marwa
       SafaMarwaModel safaMarwa = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
       // Start listening to position updates
-      positionStreamSubscription = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.best)).listen(
-        (position) => _updateLocation(
-          position,
-          LatLng(double.parse(safaMarwa.safaLat), double.parse(safaMarwa.safaLng)),
-          LatLng(double.parse(safaMarwa.marwaLat), double.parse(safaMarwa.marwaLng)),
-          num.parse(safaMarwa.distance),
-          num.parse(safaMarwa.threshold),
-        ),
-      );
+      positionStreamSubscription = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.best)).listen((position) => _updateLocation(position, LatLng(double.parse(safaMarwa.safaLat), double.parse(safaMarwa.safaLng)), LatLng(double.parse(safaMarwa.marwaLat), double.parse(safaMarwa.marwaLng)), num.parse(safaMarwa.distance), num.parse(safaMarwa.threshold)));
     } else {
       // Show error if location permission is denied
       errorToast('Please allow location permission');
@@ -66,14 +91,14 @@ class SafaMarwaNotifier extends ChangeNotifier {
       if (distance <= threshold) {
         _updateCircleCount();
       } else {
-        oneSideRunCompletionPercent = (distance / safaMarwaDistance);
+        oneSideRunCompletionPercent = (distance / safaMarwaDistance).clamp(0, 1);
       }
     } else {
       var distance = (safaMarwaDistance - Geolocator.distanceBetween(position.latitude, position.longitude, marwaLatLng.latitude, marwaLatLng.longitude)).abs();
       if (distance <= threshold) {
         isRunComplete = true;
       } else {
-        oneSideRunCompletionPercent = (distance / safaMarwaDistance);
+        oneSideRunCompletionPercent = (distance / safaMarwaDistance).clamp(0, 1);
       }
     }
     notifyListeners();
@@ -85,11 +110,16 @@ class SafaMarwaNotifier extends ChangeNotifier {
   }
 
   // Method to update circle count when a round is completed
-  _updateCircleCount() {
+  _updateCircleCount() async {
     positionStreamSubscription?.cancel();
     circleCount++;
     if (circleCount == 7) {
+      timer?.cancel();
       tawafCompletionDialog();
+    }
+    if (kDebugMode && circleCount != 7) {
+      await Future.delayed(const Duration(seconds: 2));
+      initialization();
     }
     isRunComplete = false;
   }
@@ -112,6 +142,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
   @override
   void dispose() {
     // Cancel position updates when notifier is disposed
+    timer?.cancel();
     positionStreamSubscription?.cancel();
     super.dispose();
   }
