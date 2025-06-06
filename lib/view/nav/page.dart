@@ -11,12 +11,14 @@ class BottomNavigationPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var provider = ref.watch(bottomNavProvider);
-    return Background(
-      showEmblem: false,
-      backgroundType: BackgroundType.logo,
-      logoAlign: provider.logoAlign,
-      margin: EdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
-      child: BottomNav(selectedTab: provider.selectedTab, onBottomNavTap: provider.onBottomNavTap, child: provider.child),
+    return SafeArea(
+      child: Background(
+        showEmblem: false,
+        backgroundType: BackgroundType.logo,
+        logoAlign: provider.logoAlign,
+        margin: EdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
+        child: BottomNav(selectedTab: provider.selectedTab, onBottomNavTap: provider.onBottomNavTap, child: provider.child),
+      ),
     );
   }
 }

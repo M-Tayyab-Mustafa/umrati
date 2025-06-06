@@ -40,7 +40,6 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   // Initialization method to request location permissions
   initialization() async {
-    notifyListeners();
     if (kDebugMode) {
       timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
         if (isRunComplete == false) {
@@ -76,7 +75,15 @@ class SafaMarwaNotifier extends ChangeNotifier {
       // Get threshold distance for considering arrival at Safa/Marwa
       SafaMarwaModel safaMarwa = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
       // Start listening to position updates
-      positionStreamSubscription = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.best)).listen((position) => _updateLocation(position, LatLng(double.parse(safaMarwa.safaLat), double.parse(safaMarwa.safaLng)), LatLng(double.parse(safaMarwa.marwaLat), double.parse(safaMarwa.marwaLng)), num.parse(safaMarwa.distance), num.parse(safaMarwa.threshold)));
+      positionStreamSubscription = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.best)).listen(
+        (position) => _updateLocation(
+          position,
+          LatLng(double.parse(safaMarwa.safaLat), double.parse(safaMarwa.safaLng)),
+          LatLng(double.parse(safaMarwa.marwaLat), double.parse(safaMarwa.marwaLng)),
+          num.parse(safaMarwa.distance),
+          num.parse(safaMarwa.threshold),
+        ),
+      );
     } else {
       // Show error if location permission is denied
       errorToast('Please allow location permission');
@@ -113,13 +120,9 @@ class SafaMarwaNotifier extends ChangeNotifier {
   _updateCircleCount() async {
     positionStreamSubscription?.cancel();
     circleCount++;
-    if (circleCount == 7) {
+    if (circleCount >= 7) {
       timer?.cancel();
       tawafCompletionDialog();
-    }
-    if (kDebugMode && circleCount != 7) {
-      await Future.delayed(const Duration(seconds: 2));
-      initialization();
     }
     isRunComplete = false;
   }

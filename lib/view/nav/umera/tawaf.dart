@@ -1,17 +1,4 @@
-import 'dart:math';
-import 'package:easy_localization/easy_localization.dart' hide TextDirection;
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:umrati/widgets/loading.dart';
-import '../../../controller/nav/umera/tawaf_provider.dart';
-import '../../../utils/helper/constants.dart';
-import '../../../utils/services/translations/locale_keys.g.dart';
-import '../../../utils/theme/colors.dart';
-import '../../../utils/theme/text_style.dart';
-import '../../../widgets/button.dart';
-import '../../../widgets/card.dart';
-import '../../../widgets/check_box_card.dart';
-import '../../../widgets/custom_image.dart';
+import '../../../export.dart';
 import 'safa_marwa.dart';
 import 'sai_completion.dart';
 import 'umra_completed.dart';
@@ -35,6 +22,7 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(tawafProvider);
+    var safaMarwaProv = ref.watch(safaMarwaProvider);
     return Padding(
       padding: ref.watch(tawafProvider).circleCount != 7 ? EdgeInsets.only(bottom: 16, left: 16, right: 16) : EdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
       child:
@@ -214,32 +202,100 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                             ),
                   ),
 
-                  if (provider.circleCount < 7)
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(LocaleKeys.dua_during_2nd_round.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.deepTeal)),
-                        BasicCard(
-                          margin: EdgeInsets.only(top: 16, bottom: 25),
-                          backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
-                          child: Text(LocaleKeys.round_second_dua.tr(), style: CTextStyle.w500(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center, textDirection: TextDirection.rtl),
-                        ),
-                      ],
-                    )
-                  else
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CheckBoxCard(
-                          title: LocaleKeys.now_perform_2_rakats_salah.tr(),
-                          isSelected: provider.isPerformed2RakatsSalah,
-                          onTap: provider.perform2RakatsSalah,
-                          child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 14)),
-                        ),
-                        CheckBoxCard(margin: EdgeInsets.only(top: 30), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
-                        CButton(margin: EdgeInsets.symmetric(vertical: 30), onTap: () => provider.moveToSafaMarwa(context: context, ref: ref), titleWithIcon: true, title: LocaleKeys.continued.tr()),
-                      ],
-                    ),
+                  if (!provider.showSafaMarwa)
+                    if (provider.circleCount < 7)
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            provider.circleCount == 0
+                                ? LocaleKeys.dua_during_1st_round.tr()
+                                : provider.circleCount == 1
+                                ? LocaleKeys.dua_during_2nd_round.tr()
+                                : provider.circleCount == 2
+                                ? LocaleKeys.dua_during_3rd_round.tr()
+                                : provider.circleCount == 3
+                                ? LocaleKeys.dua_during_4th_round.tr()
+                                : provider.circleCount == 4
+                                ? LocaleKeys.dua_during_5th_round.tr()
+                                : provider.circleCount == 5
+                                ? LocaleKeys.dua_during_6th_round.tr()
+                                : LocaleKeys.dua_during_7th_round.tr(),
+                            style: CTextStyle.w600(fontSize: 20, color: CColors.deepTeal),
+                          ),
+                          BasicCard(
+                            margin: EdgeInsets.only(top: 16, bottom: 25),
+                            backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
+                            child: Text(
+                              provider.circleCount == 0
+                                  ? LocaleKeys.round_one_dua.tr()
+                                  : provider.circleCount == 1
+                                  ? LocaleKeys.round_second_dua.tr()
+                                  : provider.circleCount == 2
+                                  ? LocaleKeys.round_third_dua.tr()
+                                  : provider.circleCount == 3
+                                  ? LocaleKeys.round_fourth_dua.tr()
+                                  : provider.circleCount == 4
+                                  ? LocaleKeys.round_fifth_dua.tr()
+                                  : provider.circleCount == 5
+                                  ? LocaleKeys.round_sixth_dua.tr()
+                                  : LocaleKeys.round_seventh_dua.tr(),
+                              style: CTextStyle.w500(fontSize: 20, color: CColors.deepTeal),
+                              textAlign: TextAlign.center,
+                              textDirection: TextDirection.rtl,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CheckBoxCard(
+                            title: LocaleKeys.now_perform_2_rakats_salah.tr(),
+                            isSelected: provider.isPerformed2RakatsSalah,
+                            onTap: provider.perform2RakatsSalah,
+                            child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 14)),
+                          ),
+                          CheckBoxCard(margin: EdgeInsets.only(top: 30), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
+                          CButton(margin: EdgeInsets.symmetric(vertical: 30), onTap: () => provider.moveToSafaMarwa(context: context, ref: ref), titleWithIcon: true, title: LocaleKeys.continued.tr()),
+                        ],
+                      ),
+                  if (provider.showSafaMarwa)
+                    if (safaMarwaProv.isRunComplete)
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(LocaleKeys.going_to_safa.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.deepTeal)),
+                          BasicCard(
+                            margin: EdgeInsets.only(top: 16, bottom: 25),
+                            backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
+                            child: Text(
+                              LocaleKeys.going_to_safa_dua.tr(),
+                              style: CTextStyle.w500(fontSize: 20, color: CColors.deepTeal),
+                              textAlign: TextAlign.center,
+                              textDirection: TextDirection.rtl,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(LocaleKeys.going_to_marwa.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.deepTeal)),
+                          BasicCard(
+                            margin: EdgeInsets.only(top: 16, bottom: 25),
+                            backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
+                            child: Text(
+                              LocaleKeys.going_to_marwa_dua.tr(),
+                              style: CTextStyle.w500(fontSize: 20, color: CColors.deepTeal),
+                              textAlign: TextAlign.center,
+                              textDirection: TextDirection.rtl,
+                            ),
+                          ),
+                        ],
+                      ),
                 ],
               ),
     );
