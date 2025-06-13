@@ -25,7 +25,7 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
 
   void moveToThreeOtherTasks(BuildContext context) {
     if (!(isCleanlinessChecked && isIhramChecked)) {
-      errorToast('Please check cleanliness and ihram boxes');
+      errorToast(isLTR(context) ? 'Please check cleanliness and ihram boxes' : 'براہ کرم پاکیزگی اور احرام کے خانے چیک کریں۔');
       return;
     }
     LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);

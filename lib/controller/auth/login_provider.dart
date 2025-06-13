@@ -88,7 +88,7 @@ class LoginNotifier extends ChangeNotifier {
   //* Send OTP To Phone Number
   Future<void> sendTheOTP(BuildContext context) async {
     this.context = context;
-    final phoneError = simpleFieldValidation(phoneNumberController.text, LocaleKeys.phone_number.tr());
+    final phoneError = simpleFieldValidation(phoneNumberController.text, LocaleKeys.phone_number.tr(), context);
     if (phoneError != null) {
       errorToast(phoneError);
       return;
@@ -167,7 +167,7 @@ class LoginNotifier extends ChangeNotifier {
 
   //* OTP Verified
   void verifyOTP(BuildContext context) async {
-    var otpError = simpleFieldValidation(LocaleKeys.otp_verification.tr(), otpController.text);
+    var otpError = simpleFieldValidation(LocaleKeys.otp_verification.tr(), otpController.text, context);
     if (otpError != null) {
       errorToast(otpError);
       return;

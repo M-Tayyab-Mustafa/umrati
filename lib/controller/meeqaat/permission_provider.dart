@@ -29,7 +29,7 @@ class MeeqaatPermissionNotifier extends ChangeNotifier {
         context: context,
         builder:
             (dialogContext) => AlertDialog(
-              title: Text(LocaleKeys.location_permission_needed.tr(), style: CTextStyle.w800(color: CColors.deepTeal)),
+              title: Text(LocaleKeys.location_permission_needed.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 22)),
               content: Text(LocaleKeys.permission_description.tr(), style: CTextStyle.w400(color: CColors.deepTeal, fontSize: 14)),
               actions: [
                 CButton(

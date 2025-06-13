@@ -29,7 +29,7 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
               ? ZiaratDestinations()
               : Column(
                 children: [
-                  Padding(padding: const EdgeInsets.only(top: 30), child: Text(LocaleKeys.select_ziarat_cities.tr(), textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24))),
+                  Padding(padding: const EdgeInsets.only(top: 30, bottom: 20), child: Text(LocaleKeys.select_ziarat_cities.tr(), textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24))),
                   GridView.count(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

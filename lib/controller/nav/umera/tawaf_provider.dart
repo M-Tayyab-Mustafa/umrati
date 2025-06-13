@@ -66,7 +66,7 @@ class TawafNotifier extends ChangeNotifier {
   }
 
   // Method to start or stop Tawaf
-  startTawaf() async {
+  startTawaf(BuildContext context) async {
     if (isInTawaf) {
       isInTawaf = false;
       showSafaMarwa = false;
@@ -82,7 +82,7 @@ class TawafNotifier extends ChangeNotifier {
     if (kDebugMode) {
       _updateCircleTemp();
     } else {
-      _getPermission();
+      _getPermission(context);
     }
   }
 
@@ -96,7 +96,7 @@ class TawafNotifier extends ChangeNotifier {
           circleCount++;
           timer.cancel();
         } else {
-          tawafCircleCompletionPercent = tawafCircleCompletionPercent + 0.1;
+          tawafCircleCompletionPercent = tawafCircleCompletionPercent + 0.5;
         }
         notifyListeners();
       }
@@ -104,7 +104,7 @@ class TawafNotifier extends ChangeNotifier {
   }
 
   // Method to request location permissions and initialize Tawaf
-  Future<void> _getPermission() async {
+  Future<void> _getPermission(BuildContext context) async {
     // Reset tracking variables
     tawafCircleCompletionPercent = 0;
     notifyListeners();
@@ -121,7 +121,7 @@ class TawafNotifier extends ChangeNotifier {
         locationSettings: LocationSettings(accuracy: LocationAccuracy.best, distanceFilter: 1),
       ).listen((position) => _updateLocation(position, currentPosition, kabaLatLng));
     } else {
-      errorToast('Please allow location permission');
+      errorToast(isLTR(context) ? 'Please allow location permission' : 'براہ کرم لوکیشن کی اجازت دیں۔');
       _resetTawaf();
     }
   }
@@ -157,13 +157,13 @@ class TawafNotifier extends ChangeNotifier {
   }
 
   // Method to start the next Tawaf round
-  startNextRound() {
+  startNextRound(BuildContext context) {
     tawafCircleCompletionPercent = 0;
     isRoundCompleted = false;
     if (kDebugMode) {
       _updateCircleTemp();
     } else {
-      _getPermission();
+      _getPermission(context);
     }
     notifyListeners();
   }
@@ -180,7 +180,8 @@ class TawafNotifier extends ChangeNotifier {
   moveToSafaMarwa({required BuildContext context, required WidgetRef ref}) {
     // Check if requirements are met
     if (isPerformed2RakatsSalah == false || isDrinkZamzam == false) {
-      errorToast('Please perform 2 rakats salah, and drink Zamzam');
+      errorToast(isLTR(context) ? 'Please perform 2 rakats salah, and drink Zamzam' : 'براہ کرم دو رکعت نماز ادا کریں، اور زم زم پئیں');
+
       return;
     }
     isSafaMarwaComplete = false;

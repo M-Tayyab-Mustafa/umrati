@@ -99,7 +99,7 @@ class ZiaratNotifier extends ChangeNotifier {
           await openAppSettings();
           return;
         } else {
-          errorToast('Location permission denied, Permission Required to proceed for ward.');
+          errorToast(isLTR(context) ? 'Location permission denied, Permission Required to proceed for ward.' : 'لوکیشن کی اجازت مسترد کر دی گئی، آگے بڑھنے کے لیے اجازت درکار ہے۔');
           return;
         }
       }
@@ -114,7 +114,7 @@ class ZiaratNotifier extends ChangeNotifier {
       }
     } catch (e) {
       log(e.toString());
-      errorToast('Something went wrong, Please try again later.');
+      errorToast(isLTR(context) ? 'Something went wrong, Please try again later.' : 'کچھ غلط ہو گیا ہے، براہ کرم بعد میں دوبارہ کوشش کریں۔');
     } finally {
       isLoading = false;
       notifyListeners();

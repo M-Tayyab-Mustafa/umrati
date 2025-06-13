@@ -1,3 +1,5 @@
+import '../../export.dart';
+
 String? emailValidation(String? value) {
   value = value?.trim();
   if (value == null || value.isEmpty) {
@@ -36,10 +38,10 @@ String? confirmPasswordValidation(String? value, String passwordValue) {
   }
 }
 
-String? simpleFieldValidation(String? value, String fieldName) {
+String? simpleFieldValidation(String? value, String fieldName, BuildContext context) {
   value = value?.trim();
   if (value == null || value.isEmpty) {
-    return '$fieldName field can\'t be empty';
+    return isLTR(context) ? '$fieldName field can\'t be empty' : '$fieldName کا خانہ خالی نہیں ہو سکتا';
   } else {
     return null;
   }
@@ -49,7 +51,11 @@ String? restrictedNamesValidation(String? value, String fieldName, {bool fullVal
   value = value?.trim();
   if ((value == null || value.isEmpty) && fullValidation) {
     return '$fieldName field can\'t be empty';
-  } else if ((value?.toLowerCase().contains('admin') ?? false) || (value?.toLowerCase().contains('superadmin') ?? false) || (value?.toLowerCase().contains('administrator') ?? false) || (value?.toLowerCase().contains('super') ?? false) || (value?.toLowerCase().contains('superadministrator') ?? false)) {
+  } else if ((value?.toLowerCase().contains('admin') ?? false) ||
+      (value?.toLowerCase().contains('superadmin') ?? false) ||
+      (value?.toLowerCase().contains('administrator') ?? false) ||
+      (value?.toLowerCase().contains('super') ?? false) ||
+      (value?.toLowerCase().contains('superadministrator') ?? false)) {
     return 'This $fieldName is not allowed please use different $fieldName.';
   } else {
     return null;

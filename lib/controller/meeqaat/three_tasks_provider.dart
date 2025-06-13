@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../utils/services/local_storage.dart';
-import '../../utils/services/toast.dart';
+import '../../export.dart';
 import '../../view/nav/page.dart';
 
 final meeqaatThreeTasksProvider = ChangeNotifierProvider<MeeqaatThreeTasksNotifier>((ref) => MeeqaatThreeTasksNotifier());
@@ -33,7 +30,7 @@ class MeeqaatThreeTasksNotifier extends ChangeNotifier {
 
   void tasksDone(BuildContext context) {
     if (!(isTwoNafiPrayersChecked && isIntentionChecked && isTalbiyahChecked)) {
-      errorToast('Please check Two Nafi Prayers, Intention and, Talbiyah boxes');
+      errorToast(isLTR(context) ? 'Please check Two Nafi Prayers, Intention and, Talbiyah boxes' : 'براہ کرم دو نفل نماز، نیت، اور تلبیہ کے خانے چیک کریں۔');
       return;
     }
     LocalStorageManager.showMeeqaatThreeTasksPage(false);

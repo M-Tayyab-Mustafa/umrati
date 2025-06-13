@@ -17,6 +17,7 @@ class MeeqaatThreeTasksPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var provider = ref.watch(meeqaatThreeTasksProvider);
     return Background(
+      margin: EdgeInsets.only(top: screenSize.height * 0.13, left: 30, right: 30),
       onSkipTap: () => provider.skip(context),
       title: LocaleKeys.do_these_5_ihram_related_tasks.tr(),
       backgroundType: BackgroundType.logoWithSkip,

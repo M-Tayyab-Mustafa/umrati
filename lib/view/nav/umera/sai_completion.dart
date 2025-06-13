@@ -21,8 +21,8 @@ class SaiCompletionPage extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Container(
-              height: constraints.maxHeight * 0.33,
-              width: constraints.maxHeight * 0.33,
+              height: constraints.maxHeight * 0.4,
+              width: constraints.maxHeight * 0.4,
               decoration: BoxDecoration(
                 gradient: CColors.trackingGradient,
                 shape: BoxShape.circle,
@@ -31,8 +31,8 @@ class SaiCompletionPage extends ConsumerWidget {
               ),
               child: Center(
                 child: Container(
-                  height: constraints.maxHeight * 0.28,
-                  width: constraints.maxHeight * 0.28,
+                  height: constraints.maxHeight * 0.35,
+                  width: constraints.maxHeight * 0.35,
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
                   child: Center(

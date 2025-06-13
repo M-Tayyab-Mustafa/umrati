@@ -1,5 +1,4 @@
 import 'dart:async' show Timer;
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +55,6 @@ class SafaMarwaNotifier extends ChangeNotifier {
             _updateCircleCount();
           }
         }
-        log(oneSideRunCompletionPercent.toString());
         notifyListeners();
         if (scrollController!.hasClients) {
           var position = scrollController!.position.maxScrollExtent * (1 - oneSideRunCompletionPercent);
@@ -86,7 +84,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
       );
     } else {
       // Show error if location permission is denied
-      errorToast('Please allow location permission');
+      errorToast(isLTR(context) ? 'Please allow location permission' : 'براہ کرم لوکیشن کی اجازت دیں۔');
       notifyListeners();
     }
   }
