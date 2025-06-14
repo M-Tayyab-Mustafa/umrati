@@ -18,7 +18,7 @@ class BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(child: Padding(padding: EdgeInsets.symmetric(vertical: MediaQuery.sizeOf(context).height * 0.04), child: child)),
+        Expanded(child: Padding(padding: EdgeInsets.symmetric(vertical: MediaQuery.sizeOf(context).height * 0.035), child: child)),
         SizedBox(
           height: 85,
           child: Stack(

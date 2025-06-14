@@ -24,7 +24,7 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
     var provider = ref.watch(tawafProvider);
     var safaMarwaProv = ref.watch(safaMarwaProvider);
     return Padding(
-      padding: ref.watch(tawafProvider).circleCount != 7 ? EdgeInsets.only(bottom: 16, left: 16, right: 16) : EdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
+      padding: ref.watch(tawafProvider).circleCount != 7 ? EdgeInsets.only(left: 16, right: 16) : EdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
       child:
           provider.isLoading
               ? Loading()
@@ -127,8 +127,8 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                                           return Align(
                                             alignment: (provider.circleCount == 7) ? Alignment(0, -0.4) : Alignment.center,
                                             child: Container(
-                                              height: size * 0.8,
-                                              width: size * 0.8,
+                                              height: size * 0.85,
+                                              width: size * 0.85,
                                               decoration: BoxDecoration(
                                                 gradient: CColors.trackingGradient,
                                                 shape: BoxShape.circle,
@@ -137,8 +137,8 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                                               ),
                                               child: Center(
                                                 child: Container(
-                                                  height: size * 0.75,
-                                                  width: size * 0.75,
+                                                  height: size * 0.8,
+                                                  width: size * 0.8,
                                                   decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
                                                   child: Center(
                                                     child: Column(
@@ -187,11 +187,11 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                                                               (provider.isRoundCompleted)
                                                                   ? [
                                                                     CustomImage(path: 'assets/svg/istilaam_time.svg', imageType: ImageType.svg, height: 60),
-                                                                    Padding(padding: const EdgeInsets.only(top: 10), child: Text(LocaleKeys.istilaam_time.tr(), style: CTextStyle.w900(fontSize: 16))),
+                                                                    Padding(padding: const EdgeInsets.only(top: 10), child: Text(LocaleKeys.istilaam_time.tr(), style: CTextStyle.w900(fontSize: 14))),
                                                                   ]
                                                                   : [
                                                                     CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: 80),
-                                                                    Padding(padding: const EdgeInsets.only(top: 10), child: Text(LocaleKeys.tawaf_tracker.tr(), style: CTextStyle.w900(fontSize: 16))),
+                                                                    Padding(padding: const EdgeInsets.only(top: 10), child: Text(LocaleKeys.tawaf_tracker.tr(), style: CTextStyle.w900(fontSize: 14))),
                                                                   ],
                                                         ),
                                                       );
@@ -228,10 +228,10 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                                 : provider.circleCount == 5
                                 ? LocaleKeys.dua_during_6th_round.tr()
                                 : LocaleKeys.dua_during_7th_round.tr(),
-                            style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal),
+                            style: CTextStyle.w600(fontSize: 14, color: CColors.deepTeal),
                           ),
                           BasicCard(
-                            margin: EdgeInsets.only(top: 16, bottom: 10),
+                            margin: EdgeInsets.only(top: 8, bottom: 10),
                             backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
                             child: Text(
                               provider.circleCount == 0
@@ -247,7 +247,7 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                                   : provider.circleCount == 5
                                   ? LocaleKeys.round_sixth_dua.tr()
                                   : LocaleKeys.round_seventh_dua.tr(),
-                              style: CTextStyle.w500(fontSize: 18, color: CColors.deepTeal),
+                              style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal),
                               textAlign: TextAlign.center,
                               textDirection: TextDirection.rtl,
                             ),
@@ -264,8 +264,8 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                             onTap: provider.perform2RakatsSalah,
                             child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 14)),
                           ),
-                          CheckBoxCard(margin: EdgeInsets.only(top: 10), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
-                          CButton(margin: EdgeInsets.symmetric(vertical: 20), onTap: () => provider.moveToSafaMarwa(context: context, ref: ref), titleWithIcon: true, title: LocaleKeys.continued.tr()),
+                          CheckBoxCard(margin: EdgeInsets.only(top: 10, bottom: 10), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
+                          CButton(onTap: () => provider.moveToSafaMarwa(context: context, ref: ref), titleWithIcon: true, title: LocaleKeys.continued.tr()),
                         ],
                       ),
                   if (provider.showSafaMarwa)
@@ -290,7 +290,7 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(LocaleKeys.going_to_marwa.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.deepTeal)),
+                          Text(LocaleKeys.going_to_marwa.tr(), style: CTextStyle.w600(fontSize: 14, color: CColors.deepTeal)),
                           BasicCard(
                             margin: EdgeInsets.only(top: 8),
                             backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
