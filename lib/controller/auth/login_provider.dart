@@ -18,6 +18,7 @@ import '../../utils/services/validation.dart';
 import '../../view/auth/otp.dart';
 import '../../view/auth/gender.dart';
 import '../../view/nav/page.dart';
+import '../../widgets/dialog/confirmation.dart';
 
 final loginProvider = ChangeNotifierProvider.autoDispose<LoginNotifier>((ref) => LoginNotifier());
 
@@ -61,6 +62,10 @@ class LoginNotifier extends ChangeNotifier {
 
   //* Skip Login
   Future<void> skip(BuildContext context) async {
+    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
+    if (result == false) {
+      return;
+    }
     isSkipping = true;
     notifyListeners();
     var userCredential = await _auth.signInAnonymously();

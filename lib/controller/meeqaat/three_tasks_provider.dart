@@ -1,5 +1,6 @@
 import '../../export.dart';
 import '../../view/nav/page.dart';
+import '../../widgets/dialog/confirmation.dart';
 
 final meeqaatThreeTasksProvider = ChangeNotifierProvider<MeeqaatThreeTasksNotifier>((ref) => MeeqaatThreeTasksNotifier());
 
@@ -23,7 +24,11 @@ class MeeqaatThreeTasksNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void skip(BuildContext context) {
+  void skip(BuildContext context) async {
+    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
+    if (result == false) {
+      return;
+    }
     LocalStorageManager.showMeeqaatThreeTasksPage(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
   }

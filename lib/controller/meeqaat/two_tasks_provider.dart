@@ -8,6 +8,7 @@ import '../../view/permission.dart';
 import '../../view/nav/page.dart';
 import '../../widgets/check_box.dart';
 import '../../widgets/custom_image.dart';
+import '../../widgets/dialog/confirmation.dart';
 
 final meeqaatTwoTasksProvider = ChangeNotifierProvider<MeeqaatTwoTasksNotifier>((ref) => MeeqaatTwoTasksNotifier());
 
@@ -16,7 +17,11 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   bool isIhramChecked = false;
   bool isSkipLoading = false;
 
-  void skip(BuildContext context) {
+  void skip(BuildContext context) async {
+    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
+    if (result == false) {
+      return;
+    }
     isSkipLoading = true;
     notifyListeners();
     LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);

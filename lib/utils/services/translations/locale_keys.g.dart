@@ -74,6 +74,7 @@ abstract class  LocaleKeys {
   static const macca = 'macca';
   static const medina = 'medina';
   static const taif = 'taif';
+  static const cancel = 'cancel';
   static const others = 'others';
   static const auto_generate = 'auto_generate';
   static const manual_selection = 'manual_selection';
@@ -82,6 +83,7 @@ abstract class  LocaleKeys {
   static const start_your_ziarat = 'start_your_ziarat';
   static const top_ziarat_destination_of = 'top_ziarat_destination_of';
   static const go_back = 'go_back';
+  static const confirmation_dialog = 'confirmation_dialog';
   static const auto_generate_description = 'auto_generate_description';
   static const manual_selection_description = 'manual_selection_description';
   static const please_select_one_option_to_continue_your_ziarat = 'please_select_one_option_to_continue_your_ziarat';

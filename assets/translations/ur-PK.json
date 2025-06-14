@@ -51,6 +51,8 @@
   "ziarat": "زیارت",
   "settings": "ترتیبات",
   "more": "مزید",
+  "cancel":"منسوخ کریں",
+  "confirmation_dialog":"آپ اس مرحلے کو چھوڑنا چاہتے ہیں؟",
   "off_tracker": "ٹریکر بند کریں",
   "tawaf_tracker": "طواف ٹریکر",
   "istilaam_time": "استلام کا وقت",

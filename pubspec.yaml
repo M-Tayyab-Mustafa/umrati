@@ -45,6 +45,7 @@ flutter:
     - assets/png/flags/
     - assets/png/map/
     - assets/translations/
+    
   fonts:
     - family: Roboto
       fonts:

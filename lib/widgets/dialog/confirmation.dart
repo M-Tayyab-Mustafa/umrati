@@ -1,11 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import '../../utils/helper/constants.dart';
-import '../../utils/services/translations/locale_keys.g.dart';
-import '../../utils/theme/colors.dart';
-import '../../utils/theme/text_style.dart';
-import '../button.dart';
-import '../custom_image.dart';
+import '../../export.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   const ConfirmationDialog({super.key});
@@ -36,7 +29,7 @@ class ConfirmationDialog extends StatelessWidget {
                         padding: EdgeInsets.only(top: screenSize.height * 0.05),
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.1),
-                          child: Text(LocaleKeys.already_in_umera.tr(), style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center),
+                          child: Text(LocaleKeys.confirmation_dialog.tr(), style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center),
                         ),
                       ),
                     ),
@@ -46,7 +39,7 @@ class ConfirmationDialog extends StatelessWidget {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(left: 16, right: 8),
-                          child: CButton(title: LocaleKeys.start_new.tr(), onTap: () => Navigator.pop(dialogContext, false), margin: EdgeInsets.only(bottom: 30)),
+                          child: CButton(title: LocaleKeys.cancel.tr(), onTap: () => Navigator.pop(dialogContext, false), margin: EdgeInsets.only(bottom: 30)),
                         ),
                       ),
                       Expanded(
@@ -61,7 +54,6 @@ class ConfirmationDialog extends StatelessWidget {
               ),
             ),
           ),
-          Align(alignment: Alignment(0, -0.3), child: CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: 80)),
         ],
       ),
     );

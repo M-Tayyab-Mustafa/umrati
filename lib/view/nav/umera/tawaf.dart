@@ -209,7 +209,6 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                               },
                             ),
                   ),
-
                   if (!provider.showSafaMarwa)
                     if (provider.circleCount < 7)
                       Column(

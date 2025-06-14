@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import '../../utils/services/local_storage.dart';
 import '../../view/meeqaat/three_tasks.dart';
 import '../../view/nav/page.dart';
+import '../../widgets/dialog/confirmation.dart';
 
 final locationFetchProvider = ChangeNotifierProvider<MeeqaatLocationFetchProviderNotifier>((ref) => MeeqaatLocationFetchProviderNotifier());
 
@@ -17,8 +18,13 @@ class MeeqaatLocationFetchProviderNotifier extends ChangeNotifier {
     location = '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
   }
 
-  void skip(BuildContext context) {
+  void skip(BuildContext context) async {
+    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
+    if (result == false) {
+      return;
+    }
     LocalStorageManager.showLocationFetchPage(false);
+    LocalStorageManager.showMeeqaatThreeTasksPage(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
   }
 

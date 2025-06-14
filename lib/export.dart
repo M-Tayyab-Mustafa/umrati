@@ -2,7 +2,7 @@
 export 'dart:async' hide AsyncError;
 export 'dart:convert';
 export 'dart:isolate';
-export 'dart:developer' hide Flow hide Timeline;
+export 'dart:developer' hide Flow, Timeline;
 export 'dart:math' hide log;
 export 'dart:ui' show ImageFilter;
 export 'dart:io';
@@ -10,7 +10,7 @@ export 'dart:io';
 //* Flutter Common Exports
 export 'package:flutter/services.dart';
 export 'package:flutter/material.dart';
-export 'package:flutter/cupertino.dart' hide Flow hide ErrorWidget hide RefreshCallback;
+export 'package:flutter/cupertino.dart' hide Flow, ErrorWidget, RefreshCallback;
 export 'package:flutter/foundation.dart';
 export 'package:flutter/gestures.dart';
 
@@ -72,7 +72,7 @@ export 'widgets/dialog/reach_your_destination.dart';
 
 export 'package:country_code_picker/country_code_picker.dart';
 export 'package:easy_localization/easy_localization.dart' hide TextDirection;
-export 'package:flutter_riverpod/flutter_riverpod.dart' hide describeIdentity hide shortHash;
+export 'package:flutter_riverpod/flutter_riverpod.dart' hide describeIdentity, shortHash;
 export 'package:permission_handler/permission_handler.dart';
 export 'package:cloud_firestore/cloud_firestore.dart' hide kIsWasm;
 export 'package:google_maps_flutter/google_maps_flutter.dart';

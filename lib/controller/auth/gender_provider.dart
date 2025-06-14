@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../utils/helper/constants.dart';
 import '../../utils/services/local_storage.dart';
 import '../../view/meeqaat/two_tasks.dart';
+import '../../widgets/dialog/confirmation.dart';
 
 final genderProvider = ChangeNotifierProvider.autoDispose<GenderNotifier>((ref) => GenderNotifier());
 
@@ -18,6 +19,10 @@ class GenderNotifier extends ChangeNotifier {
   }
 
   void skip(BuildContext context) async {
+    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
+    if (result == false) {
+      return;
+    }
     isUpdatingGender = true;
     notifyListeners();
     await LocalStorageManager.showGenderPage(false);
