@@ -69,43 +69,45 @@ class Background extends StatelessWidget {
           SizedBox(
             height: screenSize.height,
             width: screenSize.width,
-            child: Padding(
-              padding: margin ?? EdgeInsets.symmetric(vertical: screenSize.height * 0.13, horizontal: 30),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (backgroundType == BackgroundType.logo || backgroundType == BackgroundType.logoWithSkip)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: logoAlign,
-                          children: [
-                            CustomImage(path: DefaultImages.logoWithName, imageType: ImageType.svg, width: screenSize.width * 0.4),
-                            if (backgroundType == BackgroundType.logoWithSkip)
-                              if (isSkipLoading)
-                                Loading(height: 30, width: 30)
-                              else
-                                GestureDetector(
-                                  onTap: onSkipTap,
-                                  child: Text(LocaleKeys.skip.tr(), style: CTextStyle.w400(fontSize: 22, color: CColors.primary, decoration: TextDecoration.underline)),
-                                ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  if (title != null)
-                    Align(
-                      alignment: titleAlignment ?? (languageDirection(context) == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight),
-                      child: Padding(
-                        padding: titleMargin ?? const EdgeInsets.only(top: 20),
-                        child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
+            child: SafeArea(
+              child: Padding(
+                padding: margin ?? EdgeInsets.symmetric(vertical: screenSize.height * 0.13, horizontal: 30),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (backgroundType == BackgroundType.logo || backgroundType == BackgroundType.logoWithSkip)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: logoAlign,
+                            children: [
+                              CustomImage(path: DefaultImages.logoWithName, imageType: ImageType.svg, width: screenSize.width * 0.4),
+                              if (backgroundType == BackgroundType.logoWithSkip)
+                                if (isSkipLoading)
+                                  Loading(height: 30, width: 30)
+                                else
+                                  GestureDetector(
+                                    onTap: onSkipTap,
+                                    child: Text(LocaleKeys.skip.tr(), style: CTextStyle.w400(fontSize: 22, color: CColors.primary, decoration: TextDecoration.underline)),
+                                  ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                  Expanded(child: child),
-                ],
+                    if (title != null)
+                      Align(
+                        alignment: titleAlignment ?? (languageDirection(context) == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight),
+                        child: Padding(
+                          padding: titleMargin ?? const EdgeInsets.only(top: 20),
+                          child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
+                        ),
+                      ),
+                    Expanded(child: child),
+                  ],
+                ),
               ),
             ),
           ),

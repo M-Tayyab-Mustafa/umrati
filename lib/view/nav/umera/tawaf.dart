@@ -57,25 +57,22 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                             ? StartSafaMarwaPage()
                             : LayoutBuilder(
                               builder: (context, constraints) {
-                                final size = (provider.circleCount == 7) ? constraints.maxHeight * 0.9 : constraints.maxHeight * 0.8;
+                                final size = constraints.maxWidth * 0.84;
+                                final trackingIndicatorSize = size * 0.14;
+                                final tawafCounterSize = size * 0.3;
+                                final centralContentSize = size * 0.77;
                                 final center = Offset(size / 2, size / 2);
                                 final radius = size / 2;
-
                                 final angle = -2 * pi * provider.tawafCircleCompletionPercent + pi;
                                 final trackerDX = center.dx + radius * cos(angle);
                                 final trackerDY = center.dy + radius * sin(angle);
-
                                 final tawafCountAngle = -2 * pi * 0 + pi;
                                 final tawafCountDX = center.dx + radius * cos(tawafCountAngle);
                                 final tawafCountDY = center.dy + radius * sin(tawafCountAngle);
 
-                                final tawafCounterSize = size * 0.3;
-                                final trackingIndicatorSize = size * 0.15;
-
                                 return Stack(
                                   children: [
-                                    Align(
-                                      alignment: (provider.circleCount == 7) ? Alignment.topCenter : Alignment.center,
+                                    Center(
                                       child: CustomPaint(
                                         size: Size(size, size),
                                         painter: DashedCirclePainter(primaryColor: CColors.primary, gradientRadiusFactor: provider.tawafCircleCompletionPercent),
@@ -120,191 +117,157 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
                                           ),
                                         ),
                                       ),
-
-                                    Builder(
-                                      builder: (context) {
-                                        if (provider.circleCount == 7) {
-                                          return Align(
-                                            alignment: (provider.circleCount == 7) ? Alignment(0, -0.4) : Alignment.center,
-                                            child: Container(
-                                              height: size * 0.85,
-                                              width: size * 0.85,
-                                              decoration: BoxDecoration(
-                                                gradient: CColors.trackingGradient,
-                                                shape: BoxShape.circle,
-                                                border: Border.all(color: CColors.primary),
-                                                boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
-                                              ),
-                                              child: Center(
-                                                child: Container(
-                                                  height: size * 0.8,
-                                                  width: size * 0.8,
-                                                  decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
-                                                  child: Center(
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                                      children: [
-                                                        CustomImage(
-                                                          path: 'assets/svg/complete_check.svg',
-                                                          imageType: ImageType.svg,
-                                                          height: (size * 0.75) * 0.4,
-                                                          width: (size * 0.75) * 0.4,
-                                                          margin: EdgeInsets.only(bottom: 8),
-                                                        ),
-                                                        Text(LocaleKeys.seven_rounds_completed.tr(), style: CTextStyle.w800(fontSize: 16, color: Colors.white), textAlign: TextAlign.center),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                        return Center(
-                                          child: GestureDetector(
-                                            onTap: (provider.isRoundCompleted) ? () => provider.startNextRound(context) : null,
-                                            child: Container(
-                                              height: size * 0.75,
-                                              width: size * 0.75,
-                                              decoration: BoxDecoration(
-                                                gradient: CColors.trackingGradient,
-                                                shape: BoxShape.circle,
-                                                boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
-                                              ),
-                                              child: Center(
-                                                child: Container(
-                                                  height: size * 0.7,
-                                                  width: size * 0.7,
-                                                  decoration: BoxDecoration(gradient: CColors.trackingSecondaryGradient, shape: BoxShape.circle),
-                                                  child: Builder(
-                                                    builder: (context) {
-                                                      return GestureDetector(
-                                                        child: Column(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children:
-                                                              (provider.isRoundCompleted)
-                                                                  ? [
-                                                                    CustomImage(path: 'assets/svg/istilaam_time.svg', imageType: ImageType.svg, height: 60),
-                                                                    Padding(padding: const EdgeInsets.only(top: 10), child: Text(LocaleKeys.istilaam_time.tr(), style: CTextStyle.w900(fontSize: 14))),
-                                                                  ]
-                                                                  : [
-                                                                    CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: 80),
-                                                                    Padding(padding: const EdgeInsets.only(top: 10), child: Text(LocaleKeys.tawaf_tracker.tr(), style: CTextStyle.w900(fontSize: 14))),
-                                                                  ],
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
+                                    Center(
+                                      child: _buildCentralContent(
+                                        size: centralContentSize,
+                                        isRoundCompleted: provider.isRoundCompleted,
+                                        isCompleted: provider.circleCount == 7,
+                                        provider: provider,
+                                        context: context,
+                                      ),
                                     ),
                                   ],
                                 );
                               },
                             ),
                   ),
-                  if (!provider.showSafaMarwa)
-                    if (provider.circleCount < 7)
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            provider.circleCount == 0
-                                ? LocaleKeys.dua_during_1st_round.tr()
-                                : provider.circleCount == 1
-                                ? LocaleKeys.dua_during_2nd_round.tr()
-                                : provider.circleCount == 2
-                                ? LocaleKeys.dua_during_3rd_round.tr()
-                                : provider.circleCount == 3
-                                ? LocaleKeys.dua_during_4th_round.tr()
-                                : provider.circleCount == 4
-                                ? LocaleKeys.dua_during_5th_round.tr()
-                                : provider.circleCount == 5
-                                ? LocaleKeys.dua_during_6th_round.tr()
-                                : LocaleKeys.dua_during_7th_round.tr(),
-                            style: CTextStyle.w600(fontSize: 14, color: CColors.deepTeal),
-                          ),
-                          BasicCard(
-                            margin: EdgeInsets.only(top: 8, bottom: 10),
-                            backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
-                            child: Text(
-                              provider.circleCount == 0
-                                  ? LocaleKeys.round_one_dua.tr()
-                                  : provider.circleCount == 1
-                                  ? LocaleKeys.round_second_dua.tr()
-                                  : provider.circleCount == 2
-                                  ? LocaleKeys.round_third_dua.tr()
-                                  : provider.circleCount == 3
-                                  ? LocaleKeys.round_fourth_dua.tr()
-                                  : provider.circleCount == 4
-                                  ? LocaleKeys.round_fifth_dua.tr()
-                                  : provider.circleCount == 5
-                                  ? LocaleKeys.round_sixth_dua.tr()
-                                  : LocaleKeys.round_seventh_dua.tr(),
-                              style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal),
-                              textAlign: TextAlign.center,
-                              textDirection: TextDirection.rtl,
-                            ),
-                          ),
-                        ],
-                      )
-                    else
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CheckBoxCard(
-                            title: LocaleKeys.now_perform_2_rakats_salah.tr(),
-                            isSelected: provider.isPerformed2RakatsSalah,
-                            onTap: provider.perform2RakatsSalah,
-                            child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 14)),
-                          ),
-                          CheckBoxCard(margin: EdgeInsets.only(top: 10, bottom: 10), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
-                          CButton(onTap: () => provider.moveToSafaMarwa(context: context, ref: ref), titleWithIcon: true, title: LocaleKeys.continued.tr()),
-                        ],
-                      ),
-                  if (provider.showSafaMarwa)
-                    if (safaMarwaProv.isRunComplete)
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(LocaleKeys.going_to_safa.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.deepTeal)),
-                          BasicCard(
-                            margin: EdgeInsets.only(top: 8),
-                            backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
-                            child: Text(
-                              LocaleKeys.going_to_safa_dua.tr(),
-                              style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal),
-                              textAlign: TextAlign.center,
-                              textDirection: TextDirection.rtl,
-                            ),
-                          ),
-                        ],
-                      )
-                    else
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(LocaleKeys.going_to_marwa.tr(), style: CTextStyle.w600(fontSize: 14, color: CColors.deepTeal)),
-                          BasicCard(
-                            margin: EdgeInsets.only(top: 8),
-                            backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
-                            child: Text(
-                              LocaleKeys.going_to_marwa_dua.tr(),
-                              style: CTextStyle.w500(fontSize: 18, color: CColors.deepTeal),
-                              textAlign: TextAlign.center,
-                              textDirection: TextDirection.rtl,
-                            ),
-                          ),
-                        ],
-                      ),
+                  _buildDuaContent(context: context, isShowingSafaMarwa: provider.showSafaMarwa, provider: provider, safaMarwaProv: safaMarwaProv),
                 ],
               ),
     );
+  }
+
+  Widget _buildCentralContent({required BuildContext context, required double size, required bool isRoundCompleted, required bool isCompleted, required TawafNotifier provider}) {
+    if (isCompleted) {
+      return Container(
+        height: size,
+        width: size,
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(size * 0.03),
+        decoration: BoxDecoration(
+          gradient: CColors.trackingGradient,
+          shape: BoxShape.circle,
+          border: Border.all(color: CColors.primary),
+          boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
+        ),
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CustomImage(path: 'assets/svg/complete_check.svg', imageType: ImageType.svg, height: size * 0.35, width: size * 0.35, margin: EdgeInsets.only(bottom: 8)),
+              Text(LocaleKeys.seven_rounds_completed.tr(), style: CTextStyle.w800(fontSize: 18, color: Colors.white), textAlign: TextAlign.center),
+            ],
+          ),
+        ),
+      );
+    }
+    return GestureDetector(
+      onTap: (provider.isRoundCompleted) ? () => provider.startNextRound(context) : null,
+      child: Container(
+        height: size,
+        width: size,
+        padding: EdgeInsets.all(size * 0.03),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          gradient: CColors.trackingGradient,
+          shape: BoxShape.circle,
+          boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
+        ),
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(gradient: CColors.trackingSecondaryGradient, shape: BoxShape.circle),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CustomImage(path: isRoundCompleted ? 'assets/svg/istilaam_time.svg' : 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: size * 0.25, margin: EdgeInsets.only(bottom: 12)),
+              Text(isRoundCompleted ? LocaleKeys.istilaam_time.tr() : LocaleKeys.tawaf_tracker.tr(), style: CTextStyle.w900(fontSize: isLTR(context) ? 14 : 22)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDuaContent({required BuildContext context, required bool isShowingSafaMarwa, required TawafNotifier provider, required SafaMarwaNotifier safaMarwaProv}) {
+    if (isShowingSafaMarwa) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(safaMarwaProv.isRunComplete ? LocaleKeys.going_to_safa.tr() : LocaleKeys.going_to_marwa.tr(), style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal)),
+          BasicCard(
+            margin: EdgeInsets.only(top: 8, bottom: 8),
+            backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
+            child: Text(
+              safaMarwaProv.isRunComplete ? LocaleKeys.going_to_safa_dua.tr() : LocaleKeys.going_to_marwa_dua.tr(),
+              style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular'),
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
+            ),
+          ),
+        ],
+      );
+    }
+    return provider.circleCount < 7
+        ? Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              provider.circleCount == 0
+                  ? LocaleKeys.dua_during_1st_round.tr()
+                  : provider.circleCount == 1
+                  ? LocaleKeys.dua_during_2nd_round.tr()
+                  : provider.circleCount == 2
+                  ? LocaleKeys.dua_during_3rd_round.tr()
+                  : provider.circleCount == 3
+                  ? LocaleKeys.dua_during_4th_round.tr()
+                  : provider.circleCount == 4
+                  ? LocaleKeys.dua_during_5th_round.tr()
+                  : provider.circleCount == 5
+                  ? LocaleKeys.dua_during_6th_round.tr()
+                  : LocaleKeys.dua_during_7th_round.tr(),
+              style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal),
+            ),
+            BasicCard(
+              margin: EdgeInsets.symmetric(vertical: 14),
+              backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
+              child: Text(
+                provider.circleCount == 0
+                    ? LocaleKeys.round_one_dua.tr()
+                    : provider.circleCount == 1
+                    ? LocaleKeys.round_second_dua.tr()
+                    : provider.circleCount == 2
+                    ? LocaleKeys.round_third_dua.tr()
+                    : provider.circleCount == 3
+                    ? LocaleKeys.round_fourth_dua.tr()
+                    : provider.circleCount == 4
+                    ? LocaleKeys.round_fifth_dua.tr()
+                    : provider.circleCount == 5
+                    ? LocaleKeys.round_sixth_dua.tr()
+                    : LocaleKeys.round_seventh_dua.tr(),
+                style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal),
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.rtl,
+              ),
+            ),
+          ],
+        )
+        : Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CheckBoxCard(
+              margin: EdgeInsets.only(top: 16),
+              title: LocaleKeys.now_perform_2_rakats_salah.tr(),
+              isSelected: provider.isPerformed2RakatsSalah,
+              onTap: provider.perform2RakatsSalah,
+              child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 14, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular')),
+            ),
+            CheckBoxCard(margin: EdgeInsets.symmetric(vertical: 10), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
+            CButton(margin: EdgeInsets.only(bottom: 16), onTap: () => provider.moveToSafaMarwa(context: context, ref: ref), titleWithIcon: true, title: LocaleKeys.continued.tr()),
+          ],
+        );
   }
 }

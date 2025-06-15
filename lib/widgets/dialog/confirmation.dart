@@ -34,21 +34,32 @@ class ConfirmationDialog extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 16, right: 8),
-                          child: CButton(title: LocaleKeys.cancel.tr(), onTap: () => Navigator.pop(dialogContext, false), margin: EdgeInsets.only(bottom: 30)),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CButton(
+                            margin: const EdgeInsets.only(left: 16, right: 8),
+                            height: 50,
+                            shadows: [],
+                            fontSize: 14,
+                            title: LocaleKeys.cancel.tr(),
+                            onTap: () => Navigator.pop(dialogContext, false),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8, right: 16),
-                          child: CButton(title: LocaleKeys.continued.tr(), onTap: () => Navigator.pop(dialogContext, true), margin: EdgeInsets.only(bottom: 30)),
+                        Expanded(
+                          child: CButton(
+                            margin: const EdgeInsets.only(left: 8, right: 16),
+                            shadows: [],
+                            height: 50,
+                            fontSize: 14,
+                            title: LocaleKeys.continued.tr(),
+                            onTap: () => Navigator.pop(dialogContext, true),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

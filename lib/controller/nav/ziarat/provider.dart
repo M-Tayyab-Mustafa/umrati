@@ -98,7 +98,7 @@ class ZiaratNotifier extends ChangeNotifier {
         if (status == LocationPermission.deniedForever) {
           await openAppSettings();
           return;
-        } else {
+        } else if (status == LocationPermission.denied) {
           errorToast(isLTR(context) ? 'Location permission denied, Permission Required to proceed for ward.' : 'لوکیشن کی اجازت مسترد کر دی گئی، آگے بڑھنے کے لیے اجازت درکار ہے۔');
           return;
         }

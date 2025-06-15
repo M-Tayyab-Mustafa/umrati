@@ -71,6 +71,7 @@ export 'widgets/dialog/reach_your_destination.dart';
 //* Other Exports
 
 export 'package:country_code_picker/country_code_picker.dart';
+export 'package:firebase_core/firebase_core.dart';
 export 'package:easy_localization/easy_localization.dart' hide TextDirection;
 export 'package:flutter_riverpod/flutter_riverpod.dart' hide describeIdentity, shortHash;
 export 'package:permission_handler/permission_handler.dart';
