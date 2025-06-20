@@ -14,7 +14,7 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     log('Change Dependency');
-    ref.read(ziaratProvider).initialization(context);
+    ref.read(ziaratProvider).initialization(context, ref);
   }
 
   @override

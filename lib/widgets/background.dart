@@ -84,7 +84,12 @@ class Background extends StatelessWidget {
                           Row(
                             mainAxisAlignment: logoAlign,
                             children: [
-                              CustomImage(path: DefaultImages.logoWithName, imageType: ImageType.svg, width: screenSize.width * 0.4),
+                              CustomImage(
+                                margin: logoAlign != MainAxisAlignment.center ? EdgeInsets.only(left: 16) : EdgeInsets.zero,
+                                path: DefaultImages.logoWithName,
+                                imageType: ImageType.svg,
+                                width: screenSize.width * 0.4,
+                              ),
                               if (backgroundType == BackgroundType.logoWithSkip)
                                 if (isSkipLoading)
                                   Loading(height: 30, width: 30)

@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:umrati/export.dart';
-
+import '../../export.dart';
 import '../../view/nav/umera/tawaf.dart';
-import '../../utils/helper/constants.dart';
 import '../../view/nav/ziarat/page.dart';
 
 final bottomNavProvider = ChangeNotifierProvider<BottomNavNotifier>((ref) => BottomNavNotifier());

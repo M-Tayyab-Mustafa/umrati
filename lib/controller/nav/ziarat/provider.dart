@@ -6,6 +6,7 @@ final ziaratProvider = ChangeNotifierProvider<ZiaratNotifier>((ref) => ZiaratNot
 
 class ZiaratNotifier extends ChangeNotifier {
   ZiaratCities? selectedCity;
+  WidgetRef? ref;
   List<ZiaratModel> selectedZiarat = [];
   List<ZiaratModel> ziarats = [];
   List<ZiaratModel> sortedZiarats = [];
@@ -23,8 +24,9 @@ class ZiaratNotifier extends ChangeNotifier {
 
   UserModel? user;
 
-  initialization(BuildContext context) async {
+  initialization(BuildContext context, WidgetRef ref) async {
     user = await LocalStorageManager.getUser();
+    this.ref = ref;
     var data = (await userCollection.doc(user!.uid).get()).data()!;
     selectedZiarat = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
     if (selectedZiarat.isNotEmpty) {
@@ -67,6 +69,7 @@ class ZiaratNotifier extends ChangeNotifier {
   }
 
   void goToBackFromAutoSelectionPage() {
+    ref?.read(bottomNavProvider.notifier).updateLogoAlign(MainAxisAlignment.center);
     showAutoSelectionPage = false;
     positionStream?.cancel();
     notifyListeners();
@@ -87,7 +90,7 @@ class ZiaratNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void generateZiarat(BuildContext context, WidgetRef ref) async {
+  void generateZiarat(BuildContext context) async {
     try {
       isLoading = true;
       notifyListeners();
@@ -109,7 +112,7 @@ class ZiaratNotifier extends ChangeNotifier {
         notifyListeners();
         await Navigator.push(context, MaterialPageRoute(builder: (context) => ManualSelection()));
       } else {
-        ref.read(bottomNavProvider.notifier).updateLogoAlign(MainAxisAlignment.start);
+        ref?.read(bottomNavProvider.notifier).updateLogoAlign(MainAxisAlignment.start);
         showAutoSelectionPage = true;
       }
     } catch (e) {

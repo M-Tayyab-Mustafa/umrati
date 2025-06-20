@@ -32,16 +32,18 @@ class ZiaratDestinations extends ConsumerWidget {
                   borderColor: isAutoSelected ? null : CColors.greyShade2,
                   boxShadow: isAutoSelected ? null : [],
                   borderWidth: 3,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Text(LocaleKeys.auto_generate.tr(), style: CTextStyle.w400(fontSize: 24, color: isAutoSelected ? CColors.primary : CColors.greyShade2)),
-                      ),
-                      Text(LocaleKeys.auto_generate_description.tr(), style: CTextStyle.w400(fontSize: 14, color: isAutoSelected ? CColors.primary : CColors.greyShade2)),
-                    ],
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(LocaleKeys.auto_generate.tr(), style: CTextStyle.w400(fontSize: 24, color: isAutoSelected ? CColors.primary : CColors.greyShade2)),
+                        ),
+                        Text(LocaleKeys.auto_generate_description.tr(), style: CTextStyle.w400(fontSize: 14, color: isAutoSelected ? CColors.primary : CColors.greyShade2)),
+                      ],
+                    ),
                   ),
                 ),
                 BasicCard(
@@ -51,26 +53,22 @@ class ZiaratDestinations extends ConsumerWidget {
                   borderColor: isManualSelected ? CColors.primary : CColors.greyShade2,
                   boxShadow: isManualSelected ? null : [],
                   borderWidth: 3,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Text(LocaleKeys.manual_selection.tr(), style: CTextStyle.w400(fontSize: 24, color: isManualSelected ? CColors.primary : CColors.greyShade2)),
-                      ),
-                      Text(LocaleKeys.manual_selection_description.tr(), style: CTextStyle.w400(fontSize: 14, color: isManualSelected ? CColors.primary : CColors.greyShade2)),
-                    ],
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(LocaleKeys.manual_selection.tr(), style: CTextStyle.w400(fontSize: 24, color: isManualSelected ? CColors.primary : CColors.greyShade2)),
+                        ),
+                        Text(LocaleKeys.manual_selection_description.tr(), style: CTextStyle.w400(fontSize: 14, color: isManualSelected ? CColors.primary : CColors.greyShade2)),
+                      ],
+                    ),
                   ),
                 ),
                 if (ref.watch(ziaratProvider).selectedCreationOption != null)
-                  CButton(
-                    margin: const EdgeInsets.only(bottom: 30),
-                    isLoading: provider.isLoading,
-                    onTap: () => provider.generateZiarat(context, ref),
-                    title: LocaleKeys.proceed_forward.tr(),
-                    width: 200,
-                  ),
+                  CButton(margin: const EdgeInsets.only(bottom: 30), isLoading: provider.isLoading, onTap: () => provider.generateZiarat(context), title: LocaleKeys.proceed_forward.tr(), width: 200),
               ],
             ),
           ),
