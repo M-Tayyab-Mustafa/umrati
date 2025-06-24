@@ -24,16 +24,16 @@ class ConfirmationDialog extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: screenSize.height * 0.05),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.1),
-                          child: Text(LocaleKeys.confirmation_dialog.tr(), style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: screenSize.height * 0.05, left: screenSize.width * 0.1, right: screenSize.width * 0.1),
+                      child: Center(
+                        child: SingleChildScrollView(
+                          child: Column(children: [Text(LocaleKeys.confirmation_dialog.tr(), style: CTextStyle.w900(fontSize: 18, color: CColors.deepTeal), textAlign: TextAlign.center)]),
                         ),
                       ),
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(bottom: 30),
                     child: Row(
@@ -41,21 +41,23 @@ class ConfirmationDialog extends StatelessWidget {
                         Expanded(
                           child: CButton(
                             margin: const EdgeInsets.only(left: 16, right: 8),
-                            height: 50,
+                            height: 45,
                             shadows: [],
                             fontSize: 14,
                             title: LocaleKeys.cancel.tr(),
                             onTap: () => Navigator.pop(dialogContext, false),
+                            style: CTextStyle.w400(fontSize: 12, color: Colors.white),
                           ),
                         ),
                         Expanded(
                           child: CButton(
                             margin: const EdgeInsets.only(left: 8, right: 16),
                             shadows: [],
-                            height: 50,
+                            height: 45,
                             fontSize: 14,
                             title: LocaleKeys.continued.tr(),
                             onTap: () => Navigator.pop(dialogContext, true),
+                            style: CTextStyle.w400(fontSize: 12, color: Colors.white),
                           ),
                         ),
                       ],

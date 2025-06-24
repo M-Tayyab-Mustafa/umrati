@@ -1,17 +1,5 @@
-import 'dart:async' show Timer;
-import 'dart:math' hide log;
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:umrati/utils/services/local_storage.dart';
-import '../../../model/user.dart';
-import '../../../utils/helper/constants.dart';
-import '../../../utils/services/toast.dart';
-import '../../../widgets/dialog/already_in_umera.dart';
+import '../../../export.dart' hide LatLng;
 part '../../../utils/helper/tawaf.dart';
 
 // Provider for TawafNotifier using ChangeNotifier
@@ -47,7 +35,7 @@ class TawafNotifier extends ChangeNotifier {
     notifyListeners();
     user = UserModel.fromMap((await userCollection.doc(((await LocalStorageManager.getUser())!.uid)).get()).data() as Map<String, dynamic>);
     if (user?.is_tawaf_completed == true) {
-      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyInUmeraDialog());
+      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmera: true));
       if (result == true) {
         isInTawaf = true;
         showSafaMarwa = true;

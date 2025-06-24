@@ -63,8 +63,7 @@ export 'widgets/marker.dart';
 export 'widgets/pin_input.dart';
 export 'widgets/text_field.dart';
 export 'widgets/dialog/tawaf_completed_dialog.dart';
-export 'widgets/dialog/already_in_umera.dart';
-export 'widgets/dialog/already_doing_ziarat.dart';
+export 'widgets/dialog/already_dialog.dart';
 export 'widgets/dialog/ziarat_complete_dialog.dart';
 export 'widgets/dialog/reach_your_destination.dart';
 

@@ -19,7 +19,7 @@ class ZiaratCompleteDialog extends StatelessWidget {
           Center(child: Container(decoration: BoxDecoration(color: Colors.black26))),
           Center(
             child: Container(
-              height: screenSize.width * 0.67,
+              height: screenSize.height * 0.35,
               padding: EdgeInsets.symmetric(vertical: screenSize.height * 0.0),
               margin: EdgeInsets.symmetric(horizontal: screenSize.width * 0.08),
               decoration: BoxDecoration(
@@ -31,16 +31,16 @@ class ZiaratCompleteDialog extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: screenSize.height * 0.05),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.1),
-                          child: Text(LocaleKeys.complete_ziarats.tr(), style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: screenSize.height * 0.05, left: screenSize.width * 0.1, right: screenSize.width * 0.1),
+                      child: Center(
+                        child: SingleChildScrollView(
+                          child: Column(children: [Text(LocaleKeys.complete_ziarats.tr(), style: CTextStyle.w900(fontSize: 18, color: CColors.deepTeal), textAlign: TextAlign.center)]),
                         ),
                       ),
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.only(left: 8, right: 16),
                     child: CButton(title: LocaleKeys.continued.tr(), onTap: () => Navigator.pop(dialogContext), margin: EdgeInsets.only(bottom: 30)),
@@ -49,7 +49,7 @@ class ZiaratCompleteDialog extends StatelessWidget {
               ),
             ),
           ),
-          Align(alignment: Alignment(0, -0.3), child: CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: 80)),
+          Positioned(top: screenSize.height * 0.275, left: (screenSize.width * 0.5) - 40, child: CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: 80)),
         ],
       ),
     );
