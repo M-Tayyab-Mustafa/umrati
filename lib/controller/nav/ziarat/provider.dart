@@ -1,6 +1,6 @@
 import '../../../export.dart';
-import '../../../view/nav/ziarat/map.dart';
-import '../../../view/nav/ziarat/page.dart';
+import '../../../view/nav/home/ziarat/map.dart';
+import '../../../view/nav/home/ziarat/page.dart';
 
 final ziaratProvider = ChangeNotifierProvider<ZiaratNotifier>((ref) => ZiaratNotifier());
 
@@ -69,7 +69,7 @@ class ZiaratNotifier extends ChangeNotifier {
   }
 
   void goToBackFromAutoSelectionPage() {
-    ref?.read(bottomNavProvider.notifier).updateLogoAlign(MainAxisAlignment.center);
+    ref?.read(bottomNavProvider.notifier).updateLogoAlign(Alignment.center);
     showAutoSelectionPage = false;
     positionStream?.cancel();
     notifyListeners();
@@ -102,7 +102,7 @@ class ZiaratNotifier extends ChangeNotifier {
           await openAppSettings();
           return;
         } else if (status == LocationPermission.denied) {
-          errorToast(isLTR(context) ? 'Location permission denied, Permission Required to proceed for ward.' : 'لوکیشن کی اجازت مسترد کر دی گئی، آگے بڑھنے کے لیے اجازت درکار ہے۔');
+          errorToast(LocaleKeys.location_permission_denied_permission_is_required_to_proceed_forward.tr());
           return;
         }
       }
@@ -112,12 +112,12 @@ class ZiaratNotifier extends ChangeNotifier {
         notifyListeners();
         await Navigator.push(context, MaterialPageRoute(builder: (context) => ManualSelection()));
       } else {
-        ref?.read(bottomNavProvider.notifier).updateLogoAlign(MainAxisAlignment.start);
+        ref?.read(bottomNavProvider.notifier).updateLogoAlign(Alignment.centerLeft);
         showAutoSelectionPage = true;
       }
     } catch (e) {
       log(e.toString());
-      errorToast(isLTR(context) ? 'Something went wrong, Please try again later.' : 'کچھ غلط ہو گیا ہے، براہ کرم بعد میں دوبارہ کوشش کریں۔');
+      errorToast(LocaleKeys.something_went_wrong_please_try_again_later.tr());
     } finally {
       isLoading = false;
       notifyListeners();

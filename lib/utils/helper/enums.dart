@@ -2,9 +2,9 @@ part of 'constants.dart';
 
 enum Gender { male, female, unknown }
 
-enum BackgroundType { empty, logo, logoWithSkip }
+enum BackgroundType { empty, logo, logoWithBackButton, logoWithSkip }
 
-enum BottomNavTabs { profile, umera, more, ziarat, settings }
+enum BottomNavTabs { profile, supplications, home, prayer, settings }
 
 enum ZiaratCities { macca, medina, taif, other }
 

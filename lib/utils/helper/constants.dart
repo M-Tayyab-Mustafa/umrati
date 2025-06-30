@@ -1,10 +1,10 @@
-import 'package:geolocator/geolocator.dart' show Position;
 import '../../export.dart';
 part 'enums.dart';
 
 late Size screenSize;
 
 final primaryShadows = [BoxShadow(color: CColors.shadow, blurRadius: 10, blurStyle: BlurStyle.outer)];
+final greyShadows = [BoxShadow(color: CColors.grey, blurRadius: 10, blurStyle: BlurStyle.outer)];
 final innerPrimaryShadows = [BoxShadow(color: CColors.shadow, blurRadius: 10, blurStyle: BlurStyle.inner)];
 
 FutureOr<bool> requestLocationAlways() async {

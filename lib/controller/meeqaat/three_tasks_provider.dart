@@ -35,7 +35,7 @@ class MeeqaatThreeTasksNotifier extends ChangeNotifier {
 
   void tasksDone(BuildContext context) {
     if (!(isTwoNafiPrayersChecked && isIntentionChecked && isTalbiyahChecked)) {
-      errorToast(isLTR(context) ? 'Please check Two Nafi Prayers, Intention and, Talbiyah boxes' : 'براہ کرم دو نفل نماز، نیت، اور تلبیہ کے خانے چیک کریں۔');
+      errorToast(LocaleKeys.please_check_the_boxes_for_the_two_nafl_prayers_the_intention_and_the_talbiyah.tr());
       return;
     }
     LocalStorageManager.showMeeqaatThreeTasksPage(false);

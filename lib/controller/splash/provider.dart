@@ -9,7 +9,7 @@ import '../../view/auth/login.dart';
 import '../../view/language/select_language.dart';
 import '../../view/meeqaat/location_fetched.dart';
 import '../../view/meeqaat/three_tasks.dart';
-import '../../view/permission.dart';
+import '../../view/meeqaat/permission.dart';
 import '../../view/meeqaat/two_tasks.dart';
 import '../../view/nav/page.dart';
 
@@ -19,6 +19,7 @@ class SplashNotifier extends ChangeNotifier {
   void initialization(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 2));
     screenSize = MediaQuery.sizeOf(context);
+    // await LocalStorageManager.clearStorage();
     if (await LocalStorageManager.getSelectLanguagePage()) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectLanguagePage()));
     } else if (await LocalStorageManager.getLoginPage()) {

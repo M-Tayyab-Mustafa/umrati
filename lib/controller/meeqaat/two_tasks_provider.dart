@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:umrati/export.dart';
 import 'package:umrati/utils/services/toast.dart';
 import '../../utils/helper/constants.dart';
 import '../../utils/services/local_storage.dart';
 import '../../utils/theme/colors.dart';
-import '../../view/permission.dart';
+import '../../view/meeqaat/permission.dart';
 import '../../view/nav/page.dart';
 import '../../widgets/check_box.dart';
 import '../../widgets/custom_image.dart';
@@ -25,12 +26,15 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
     isSkipLoading = true;
     notifyListeners();
     LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
+    LocalStorageManager.showGetLocationPermissionPage(false);
+    LocalStorageManager.showLocationFetchPage(false);
+    LocalStorageManager.showMeeqaatThreeTasksPage(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
   }
 
   void moveToThreeOtherTasks(BuildContext context) {
     if (!(isCleanlinessChecked && isIhramChecked)) {
-      errorToast(isLTR(context) ? 'Please check cleanliness and ihram boxes' : 'براہ کرم پاکیزگی اور احرام کے خانے چیک کریں۔');
+      errorToast(LocaleKeys.please_check_the_cleanliness_and_ihram_boxes.tr());
       return;
     }
     LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);

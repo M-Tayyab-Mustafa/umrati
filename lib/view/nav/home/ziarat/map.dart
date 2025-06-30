@@ -1,5 +1,5 @@
-import '../../../controller/nav/ziarat/map_provider.dart';
-import '../../../export.dart';
+import '../../../../controller/nav/ziarat/map_provider.dart';
+import '../../../../export.dart';
 
 class ZiaratMapPage extends ConsumerStatefulWidget {
   const ZiaratMapPage({super.key});

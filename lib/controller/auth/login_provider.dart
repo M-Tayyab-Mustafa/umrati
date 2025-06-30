@@ -69,19 +69,14 @@ class LoginNotifier extends ChangeNotifier {
     isSkipping = true;
     notifyListeners();
     var userCredential = await _auth.signInAnonymously();
-    var timer = DateTime.now().toIso8601String();
     UserModel user = UserModel(
       uid: userCredential.user!.uid,
       name: userCredential.user!.displayName ?? '',
       email: userCredential.user!.email ?? '',
       phone: userCredential.user!.phoneNumber ?? '',
       photo: userCredential.user!.photoURL ?? '',
-      is_tawaf_completed: false,
-      created_at: timer,
-      updated_at: timer,
       gender: Gender.unknown.name.toLowerCase(),
     );
-    await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(userCredential.user!.uid).set(user.toMap(), SetOptions(merge: true));
     await LocalStorageManager.saveUser(user);
     LocalStorageManager.showLoginPage(false);
     isSkipping = false;
@@ -182,19 +177,14 @@ class LoginNotifier extends ChangeNotifier {
     final credential = PhoneAuthProvider.credential(verificationId: _verificationId!, smsCode: otpController.text);
     var userCredential = await _auth.signInWithCredential(credential);
     if (userCredential.additionalUserInfo!.isNewUser) {
-      var timer = DateTime.now().toIso8601String();
       UserModel user = UserModel(
         uid: userCredential.user!.uid,
         name: userCredential.user!.displayName ?? '',
         email: userCredential.user!.email ?? '',
         phone: userCredential.user!.phoneNumber ?? '',
         photo: userCredential.user!.photoURL ?? '',
-        is_tawaf_completed: false,
-        created_at: timer,
-        updated_at: timer,
         gender: Gender.unknown.name.toLowerCase(),
       );
-      await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(userCredential.user!.uid).set(user.toMap(), SetOptions(merge: true));
       await LocalStorageManager.saveUser(user);
       LocalStorageManager.showLoginPage(false);
       //* Disable Loading
@@ -203,8 +193,7 @@ class LoginNotifier extends ChangeNotifier {
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectGenderPage()));
     } else {
-      var user = UserModel.fromMap((await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(userCredential.user!.uid).get()).data()!);
-      await LocalStorageManager.saveUser(user);
+      await LocalStorageManager.saveUser(UserModel.fromMap((await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(userCredential.user!.uid).get()).data()!));
       LocalStorageManager.showLoginPage(false);
       //* Disable Loading
       isVerifyingOTP = false;

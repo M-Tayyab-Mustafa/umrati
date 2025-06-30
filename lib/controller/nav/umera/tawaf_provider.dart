@@ -3,14 +3,14 @@ import '../../../export.dart' hide LatLng;
 part '../../../utils/helper/tawaf.dart';
 
 // Provider for TawafNotifier using ChangeNotifier
-final tawafProvider = ChangeNotifierProvider<TawafNotifier>((ref) => TawafNotifier());
+final tawafProvider = ChangeNotifierProvider.autoDispose<TawafNotifier>((ref) => TawafNotifier());
 
 class TawafNotifier extends ChangeNotifier {
-  bool isLoading = false;
-
   // Flag to track if user is currently performing Tawaf
   bool isInTawaf = false;
   UserModel? user;
+
+  bool isFromUmera = true;
 
   // Flags for Tawaf requirements
   bool isPerformed2RakatsSalah = false;
@@ -19,7 +19,7 @@ class TawafNotifier extends ChangeNotifier {
   // Tawaf round tracking
   double tawafCircleCompletionPercent = 0;
   bool isRoundCompleted = false;
-  int circleCount = kDebugMode ? 6 : 0; // Total rounds required for Tawaf
+  int circleCount = 0; // Total rounds required for Tawaf
 
   // Completion flags for different stages
   bool showSafaMarwa = false;
@@ -31,26 +31,16 @@ class TawafNotifier extends ChangeNotifier {
 
   // Initialize TawafNotifier
   initialization(BuildContext context) async {
-    isLoading = true;
+    user = await LocalStorageManager.getUser();
+    circleCount = int.tryParse(user!.tawaf_circle_count) ?? 0;
     notifyListeners();
-    user = UserModel.fromMap((await userCollection.doc(((await LocalStorageManager.getUser())!.uid)).get()).data() as Map<String, dynamic>);
-    if (user?.is_tawaf_completed == true) {
-      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmera: true));
-      if (result == true) {
-        isInTawaf = true;
-        showSafaMarwa = true;
+    if (isInTawaf) {
+      if (kDebugMode) {
+        _updateCircleTemp();
       } else {
-        updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false));
+        _getPermission(context);
       }
     }
-    isLoading = false;
-    notifyListeners();
-  }
-
-  updateUserOnFirebase(UserModel user) async {
-    this.user = user;
-    notifyListeners();
-    await userCollection.doc(user.uid).set(user.toMap(), SetOptions(merge: true));
   }
 
   // Method to start or stop Tawaf
@@ -59,8 +49,9 @@ class TawafNotifier extends ChangeNotifier {
       isInTawaf = false;
       showSafaMarwa = false;
       isSafaMarwaComplete = false;
-      updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false));
       positionStreamSubscription?.cancel();
+      user = user!.copyWith(tawaf_circle_count: '0');
+      LocalStorageManager.saveUser(user!);
       _resetTawaf();
       return;
     }
@@ -75,18 +66,20 @@ class TawafNotifier extends ChangeNotifier {
   }
 
   _updateCircleTemp() async {
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (circleCount >= 7) {
-        updateUserOnFirebase(user!.copyWith(is_tawaf_completed: true));
-      } else {
+    Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (!(circleCount >= 7)) {
         if (tawafCircleCompletionPercent >= 0.9) {
           isRoundCompleted = true;
           circleCount++;
           timer.cancel();
+          user = user!.copyWith(tawaf_circle_count: '$circleCount');
+          LocalStorageManager.saveUser(user!);
         } else {
           tawafCircleCompletionPercent = tawafCircleCompletionPercent + 0.5;
         }
         notifyListeners();
+      } else {
+        timer.cancel();
       }
     });
   }
@@ -109,7 +102,7 @@ class TawafNotifier extends ChangeNotifier {
         locationSettings: LocationSettings(accuracy: LocationAccuracy.best, distanceFilter: 1),
       ).listen((position) => _updateLocation(position, currentPosition, kabaLatLng));
     } else {
-      errorToast(isLTR(context) ? 'Please allow location permission' : 'براہ کرم لوکیشن کی اجازت دیں۔');
+      errorToast(LocaleKeys.please_allow_location_permissions.tr());
       _resetTawaf();
     }
   }
@@ -118,7 +111,8 @@ class TawafNotifier extends ChangeNotifier {
   Future<void> _updateLocation(Position currentPosition, Position startingPosition, LatLng kabaLatLng) async {
     if (circleCount >= 7) {
       positionStreamSubscription?.cancel();
-      updateUserOnFirebase(user!.copyWith(is_tawaf_completed: true));
+      user = user!.copyWith(tawaf_circle_count: '$circleCount');
+      LocalStorageManager.saveUser(user!);
     }
     final currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
     final startingLatLng = LatLng(startingPosition.latitude, startingPosition.longitude);
@@ -131,14 +125,13 @@ class TawafNotifier extends ChangeNotifier {
     double progressAngle = antiClockwiseDelta(startBearing, currentBearing);
 
     if (progressAngle > 0) {
-      // Update completion percentage (0.0 to 1.0)
       tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
-
-      // Check if round is completed (360 degrees)
       if (progressAngle >= 360) {
         isRoundCompleted = true;
         circleCount++;
         positionStreamSubscription?.cancel();
+        user = user!.copyWith(tawaf_circle_count: '$circleCount');
+        LocalStorageManager.saveUser(user!);
       }
     }
     notifyListeners();
@@ -159,6 +152,7 @@ class TawafNotifier extends ChangeNotifier {
   // Method to reset Tawaf tracking variables
   _resetTawaf() {
     circleCount = 0;
+    LocalStorageManager.saveUser(user!);
     tawafCircleCompletionPercent = 0;
     isRoundCompleted = false;
     notifyListeners();
@@ -166,9 +160,14 @@ class TawafNotifier extends ChangeNotifier {
 
   // Method to move to Safa-Marwa after completing Tawaf
   moveToSafaMarwa({required BuildContext context, required WidgetRef ref}) {
-    // Check if requirements are met
+    if (!isFromUmera) {
+      Navigator.pop(context);
+      LocalStorageManager.saveUser(user!.copyWith(tawaf_circle_count: '0'));
+      infoToast(LocaleKeys.your_tawaf_has_been_successfully_completed.tr());
+      return;
+    }
     if (isPerformed2RakatsSalah == false || isDrinkZamzam == false) {
-      errorToast(isLTR(context) ? 'Please perform 2 rakats salah, and drink Zamzam' : 'براہ کرم دو رکعت نماز ادا کریں، اور زم زم پئیں');
+      errorToast(LocaleKeys.please_offer_two_rakat_of_salah_and_drink_zamzam.tr());
 
       return;
     }
@@ -196,11 +195,13 @@ class TawafNotifier extends ChangeNotifier {
   }
 
   // Method to return to home state
-  void goToHome() {
+  void goToHome({required BuildContext context}) {
     isInTawaf = false;
     showSafaMarwa = false;
     isUmeraCompleted = false;
     isSafaMarwaComplete = false;
+    LocalStorageManager.saveUser(user!.copyWith(tawaf_circle_count: '0'));
+    Navigator.pop(context);
     notifyListeners();
   }
 
@@ -218,14 +219,13 @@ class TawafNotifier extends ChangeNotifier {
 
   @override
   void dispose() {
-    // Cancel position updates when notifier is disposed
     positionStreamSubscription?.cancel();
     super.dispose();
   }
 
   void isSafaMarwaCompleted() {
     isSafaMarwaComplete = true;
-    updateUserOnFirebase(user!.copyWith(is_tawaf_completed: false));
+
     notifyListeners();
   }
 }

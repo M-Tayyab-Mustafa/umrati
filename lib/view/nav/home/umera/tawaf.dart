@@ -1,8 +1,8 @@
-import '../../../export.dart';
+import '../../../../export.dart';
 import 'safa_marwa.dart';
 import 'sai_completion.dart';
 import 'umra_completed.dart';
-part '../../../widgets/dashes_circle.dart';
+part '../../../../widgets/dashes_circle.dart';
 
 class StartTawafPage extends ConsumerStatefulWidget {
   const StartTawafPage({super.key});
@@ -12,8 +12,8 @@ class StartTawafPage extends ConsumerStatefulWidget {
 
 class _StartTawafPageState extends ConsumerState<StartTawafPage> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(tawafProvider).initialization(context);
     });
@@ -23,12 +23,13 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(tawafProvider);
     var safaMarwaProv = ref.watch(safaMarwaProvider);
-    return Padding(
-      padding: ref.watch(tawafProvider).circleCount != 7 ? EdgeInsets.only(left: 16, right: 16) : EdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
+    return Background(
+      showEmblem: false,
+      backgroundType: BackgroundType.logoWithBackButton,
+      logoAlign: Alignment.center,
+      margin: EdgeInsets.only(left: 16, right: 16, top: kToolbarHeight * 0.5, bottom: ref.watch(tawafProvider).circleCount != 7 ? 0 : kToolbarHeight),
       child:
-          provider.isLoading
-              ? Loading()
-              : provider.isUmeraCompleted
+          provider.isUmeraCompleted
               ? UmraCompleted()
               : provider.isSafaMarwaComplete
               ? SaiCompletionPage()

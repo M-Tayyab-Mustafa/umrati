@@ -1,32 +1,32 @@
 import '../../export.dart';
-import '../../view/nav/umera/tawaf.dart';
-import '../../view/nav/ziarat/page.dart';
+import '../../view/nav/home/page.dart';
 
 final bottomNavProvider = ChangeNotifierProvider<BottomNavNotifier>((ref) => BottomNavNotifier());
 
 class BottomNavNotifier extends ChangeNotifier {
-  BottomNavTabs selectedTab = BottomNavTabs.umera;
-  Widget child = const StartTawafPage();
+  BottomNavTabs selectedTab = BottomNavTabs.home;
+  Widget child = const HomePage();
 
-  var logoAlign = MainAxisAlignment.center;
+  var logoAlign = Alignment.center;
 
   void onBottomNavTap(BottomNavTabs selectedOption) {
-    logoAlign = MainAxisAlignment.center;
+    logoAlign = Alignment.center;
     selectedTab = selectedOption;
     switch (selectedOption) {
       case BottomNavTabs.profile:
-        _setMyLocationToMacca();
+        child = const SizedBox.shrink();
         break;
-      case BottomNavTabs.umera:
-        child = const StartTawafPage();
+      case BottomNavTabs.supplications:
+        child = const SizedBox.shrink();
         break;
-      case BottomNavTabs.more:
+      case BottomNavTabs.home:
+        child = HomePage();
         break;
-      case BottomNavTabs.ziarat:
-        child = const ZiaratPage();
+      case BottomNavTabs.prayer:
+        child = const SizedBox.shrink();
         break;
       default:
-        child = Scaffold();
+        child = const SizedBox.shrink();
     }
     notifyListeners();
   }
@@ -36,22 +36,9 @@ class BottomNavNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateLogoAlign(MainAxisAlignment align) {
+  void updateLogoAlign(Alignment align) {
     logoAlign = align;
     notifyListeners();
-  }
-
-  void _setMyLocationToMacca() async {
-    await Geolocator.requestPermission();
-    var position = await Geolocator.getCurrentPosition();
-    await settingsCollection.doc(CommonDoc.alKaba.name).update({'lat': position.latitude, 'lng': position.longitude});
-    await settingsCollection.doc(CommonDoc.safaMarwa.name).update({'safaLat': position.latitude, 'safaLng': position.longitude});
-    LatLng marwaNewLocation = offsetLatLng(
-      LatLng(position.latitude, position.longitude),
-      double.tryParse((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!['distance'] as String) ?? 450,
-      0,
-    );
-    await settingsCollection.doc(CommonDoc.safaMarwa.name).update({'marwaLat': marwaNewLocation.latitude, 'marwaLng': marwaNewLocation.longitude});
   }
 }
 

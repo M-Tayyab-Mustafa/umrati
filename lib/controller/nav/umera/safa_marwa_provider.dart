@@ -1,19 +1,8 @@
-import 'dart:async' show Timer;
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-
-import '../../../model/safa_marwa.dart';
-import '../../../utils/helper/constants.dart';
-import '../../../utils/services/toast.dart';
-import '../../../widgets/dialog/tawaf_completed_dialog.dart';
-import 'tawaf_provider.dart';
+import '../../../export.dart' hide LatLng;
 
 // Provider for SafaMarwaNotifier using ChangeNotifier
-final safaMarwaProvider = ChangeNotifierProvider<SafaMarwaNotifier>((ref) => SafaMarwaNotifier());
+final safaMarwaProvider = ChangeNotifierProvider.autoDispose<SafaMarwaNotifier>((ref) => SafaMarwaNotifier());
 
 class SafaMarwaNotifier extends ChangeNotifier {
   // Context for showing dialogs and other UI operations
@@ -83,8 +72,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
         ),
       );
     } else {
-      // Show error if location permission is denied
-      errorToast(isLTR(context) ? 'Please allow location permission' : 'براہ کرم لوکیشن کی اجازت دیں۔');
+      errorToast(LocaleKeys.please_allow_location_permissions.tr());
       notifyListeners();
     }
   }

@@ -51,7 +51,6 @@ export 'controller/auth/sign_up_provider.dart';
 //* Widgets
 export 'widgets/custom_image.dart';
 export 'widgets/background.dart';
-export 'widgets/bottom_nav.dart';
 export 'widgets/bottom_nav_item.dart';
 export 'widgets/button.dart';
 export 'widgets/card.dart';

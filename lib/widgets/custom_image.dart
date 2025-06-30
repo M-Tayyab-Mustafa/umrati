@@ -11,6 +11,7 @@ class CustomImage extends StatelessWidget {
     super.key,
     required this.path,
     this.fit,
+    this.size,
     this.height,
     this.width,
     this.imageType = ImageType.network,
@@ -29,6 +30,7 @@ class CustomImage extends StatelessWidget {
 
   final String path;
   final BoxFit? fit;
+  final double? size;
   final double? height;
   final double? width;
   final double? loadingHeight;
@@ -57,28 +59,38 @@ class CustomImage extends StatelessWidget {
             clipper: clipper,
             clipBehavior: clipBehavior,
             child: SizedBox(
-              height: height,
-              width: width,
+              height: size ?? height,
+              width: size ?? width,
               child: Padding(
                 padding: padding ?? EdgeInsets.zero,
                 child: Center(
                   child:
                       path.isEmpty
-                          ? SvgPicture.asset('assets/svg/logo.svg', height: height, width: width, colorFilter: color == null ? null : ColorFilter.mode(color!, BlendMode.srcIn))
+                          ? SvgPicture.asset('assets/svg/logo.svg', height: size ?? height, width: size ?? width, colorFilter: color == null ? null : ColorFilter.mode(color!, BlendMode.srcIn))
                           : imageType == ImageType.file
-                          ? Image.file(File(path), height: height, width: width, fit: fit, color: color)
+                          ? Image.file(File(path), height: size ?? height, width: size ?? width, fit: fit, color: color)
                           : imageType == ImageType.png
-                          ? Image.asset(path, height: height, width: width, fit: fit, color: color)
+                          ? Image.asset(path, height: size ?? height, width: size ?? width, fit: fit, color: color)
                           : imageType == ImageType.svg
-                          ? SvgPicture.asset(path, colorFilter: color == null ? null : ColorFilter.mode(color!, BlendMode.srcIn), height: height, width: width, fit: fit ?? BoxFit.contain)
+                          ? SvgPicture.asset(
+                            path,
+                            colorFilter: color == null ? null : ColorFilter.mode(color!, BlendMode.srcIn),
+                            height: size ?? height,
+                            width: size ?? width,
+                            fit: fit ?? BoxFit.contain,
+                          )
                           : CachedNetworkImage(
                             imageUrl: path,
-                            width: width,
-                            height: height,
+                            width: size ?? width,
+                            height: size ?? height,
                             fit: fit,
                             errorWidget:
-                                (context, exception, stackTrace) =>
-                                    SvgPicture.asset('assets/svg/logo.svg', height: height, width: width, colorFilter: color == null ? null : ColorFilter.mode(color!, BlendMode.srcIn)),
+                                (context, exception, stackTrace) => SvgPicture.asset(
+                                  'assets/svg/logo.svg',
+                                  height: size ?? height,
+                                  width: size ?? width,
+                                  colorFilter: color == null ? null : ColorFilter.mode(color!, BlendMode.srcIn),
+                                ),
                             placeholder: (context, _) => SizedBox(height: loadingHeight, width: loadingWidth, child: Loading()),
                           ),
                 ),

@@ -1,8 +1,6 @@
-import 'dart:async' show FutureOr;
-
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../model/user.dart';
+import '../../export.dart';
 
 class LocalStorageManager {
   static SharedPreferences? _sharedPreferences;
@@ -41,14 +39,21 @@ class LocalStorageManager {
     return (_sharedPreferences!.getBool(_loginPage)) ?? true;
   }
 
-  static FutureOr<bool?> saveUser(UserModel user) {
-    return _sharedPreferences!.setString(_user, user.toJson());
+  static FutureOr<void> saveUser(UserModel user) async {
+    userCollection.doc(user.uid).set(user.toMap(), SetOptions(merge: true));
+    _sharedPreferences!.setString(_user, user.toJson());
   }
 
   static FutureOr<UserModel?> getUser() async {
-    var json = (_sharedPreferences!.getString(_user));
+    var json = _sharedPreferences!.getString(_user);
     if (json != null) {
-      return UserModel.fromJson(json);
+      var doc = await userCollection.doc(jsonDecode(json)['uid']).get();
+      if (doc.exists) {
+        return UserModel.fromMap(doc.data() as Map<String, dynamic>);
+      } else {
+        clearStorage();
+        return null;
+      }
     }
     return null;
   }
