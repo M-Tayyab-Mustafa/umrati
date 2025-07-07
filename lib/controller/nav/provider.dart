@@ -1,5 +1,7 @@
 import '../../export.dart';
 import '../../view/nav/home/page.dart';
+import '../../view/nav/home/umra/page.dart';
+import '../../view/nav/home/ziarat/page.dart';
 
 final bottomNavProvider = ChangeNotifierProvider<BottomNavNotifier>((ref) => BottomNavNotifier());
 
@@ -16,14 +18,14 @@ class BottomNavNotifier extends ChangeNotifier {
       case BottomNavTabs.profile:
         child = const SizedBox.shrink();
         break;
-      case BottomNavTabs.supplications:
-        child = const SizedBox.shrink();
+      case BottomNavTabs.umra:
+        child = UmraPage();
         break;
       case BottomNavTabs.home:
         child = HomePage();
         break;
-      case BottomNavTabs.prayer:
-        child = const SizedBox.shrink();
+      case BottomNavTabs.ziarat:
+        child = ZiaratPage();
         break;
       default:
         child = const SizedBox.shrink();

@@ -9,7 +9,7 @@ class BottomNavigationPage extends ConsumerWidget {
       showEmblem: false,
       backgroundType: BackgroundType.logo,
       logoAlign: provider.logoAlign,
-      margin: EdgeInsets.only(top: kToolbarHeight * 0.5),
+      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
       child: Column(
         children: [
           Expanded(child: provider.child),
@@ -23,7 +23,6 @@ class BottomNavigationPage extends ConsumerWidget {
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       height: 60,
-                      margin: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
@@ -44,10 +43,10 @@ class BottomNavigationPage extends ConsumerWidget {
                                   title: LocaleKeys.profile.tr(),
                                 ),
                                 BottomNavItem(
-                                  onTap: () => provider.onBottomNavTap.call(BottomNavTabs.supplications),
-                                  isSelected: BottomNavTabs.supplications == provider.selectedTab,
+                                  onTap: () => provider.onBottomNavTap.call(BottomNavTabs.umra),
+                                  isSelected: BottomNavTabs.umra == provider.selectedTab,
                                   icon: 'assets/svg/bottom_nav/supplications.svg',
-                                  title: LocaleKeys.supplications.tr(),
+                                  title: LocaleKeys.umra.tr(),
                                 ),
                               ],
                             ),
@@ -59,10 +58,10 @@ class BottomNavigationPage extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 BottomNavItem(
-                                  onTap: () => provider.onBottomNavTap.call(BottomNavTabs.prayer),
-                                  isSelected: BottomNavTabs.prayer == provider.selectedTab,
-                                  icon: 'assets/svg/bottom_nav/prayer.svg',
-                                  title: LocaleKeys.prayer.tr(),
+                                  onTap: () => provider.onBottomNavTap.call(BottomNavTabs.ziarat),
+                                  isSelected: BottomNavTabs.ziarat == provider.selectedTab,
+                                  icon: 'assets/svg/bottom_nav/ziarat.svg',
+                                  title: LocaleKeys.ziarat.tr(),
                                 ),
                                 BottomNavItem(
                                   onTap: () => provider.onBottomNavTap.call(BottomNavTabs.settings),

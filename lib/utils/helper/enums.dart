@@ -4,7 +4,7 @@ enum Gender { male, female, unknown }
 
 enum BackgroundType { empty, logo, logoWithBackButton, logoWithSkip }
 
-enum BottomNavTabs { profile, supplications, home, prayer, settings }
+enum BottomNavTabs { profile, umra, home, ziarat, settings }
 
 enum ZiaratCities { macca, medina, taif, other }
 

@@ -9,47 +9,36 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(homeProvider).initialization();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: screenSize.width * 0.06, right: screenSize.width * 0.06, top: 16),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              card(
-                constraints: constraints,
-                onTap: () => ref.read(homeProvider).onUmeraTap(context: context, ref: ref),
-                title: LocaleKeys.umera.tr(),
-                description: LocaleKeys.start_your_umera_from_here.tr(),
-                image: '',
-              ),
-              card(
-                constraints: constraints,
-                onTap: () => ref.read(homeProvider).onTawafTap(context: context, ref: ref),
-                title: LocaleKeys.tawaf.tr(),
-                description: LocaleKeys.start_your_tawaf_from_here.tr(),
-                image: '',
-              ),
-              card(
-                constraints: constraints,
-                onTap: () => ref.read(homeProvider).onZiaratTap(context: context, ref: ref),
-                title: LocaleKeys.ziarat.tr(),
-                description: LocaleKeys.start_your_ziarat_from_here.tr(),
-                image: '',
-              ),
-            ],
-          );
-        },
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            card(
+              constraints: constraints,
+              onTap: () => ref.read(homeProvider).onumraTap(context: context, ref: ref),
+              title: LocaleKeys.umra.tr(),
+              description: LocaleKeys.start_your_umra_from_here.tr(),
+              image: '',
+            ),
+            card(
+              constraints: constraints,
+              onTap: () => ref.read(homeProvider).onTawafTap(context: context, ref: ref),
+              title: LocaleKeys.tawaf.tr(),
+              description: LocaleKeys.start_your_tawaf_from_here.tr(),
+              image: '',
+            ),
+            card(
+              constraints: constraints,
+              onTap: () => ref.read(homeProvider).onZiaratTap(context: context, ref: ref),
+              title: LocaleKeys.ziarat.tr(),
+              description: LocaleKeys.start_your_ziarat_from_here.tr(),
+              image: '',
+            ),
+          ],
+        );
+      },
     );
   }
 

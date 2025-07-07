@@ -35,8 +35,8 @@ export 'model/ziarat.dart';
 //* Controller
 export 'controller/splash/provider.dart';
 export 'controller/nav/provider.dart';
-export 'controller/nav/umera/safa_marwa_provider.dart';
-export 'controller/nav/umera/tawaf_provider.dart';
+export 'controller/nav/umra/safa_marwa_provider.dart';
+export 'controller/nav/umra/umra_provider.dart';
 export 'controller/nav/ziarat/provider.dart';
 export 'controller/meeqaat/location_fetch_provider.dart';
 export 'controller/meeqaat/permission_provider.dart';

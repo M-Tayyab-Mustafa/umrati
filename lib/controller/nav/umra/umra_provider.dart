@@ -10,7 +10,7 @@ class TawafNotifier extends ChangeNotifier {
   bool isInTawaf = false;
   UserModel? user;
 
-  bool isFromUmera = true;
+  bool isFromumra = true;
 
   // Flags for Tawaf requirements
   bool isPerformed2RakatsSalah = false;
@@ -25,15 +25,27 @@ class TawafNotifier extends ChangeNotifier {
   bool showSafaMarwa = false;
   bool isSafaMarwaComplete = false;
 
-  //* Umera Complete
-  bool isUmeraCompleted = false;
+  //* umra Complete
+  bool isUmraCompleted = false;
   bool isShavedHead = false;
 
   // Initialize TawafNotifier
   initialization(BuildContext context) async {
+    user ??= await LocalStorageManager.getUser();
+    if ((int.tryParse(user!.tawaf_circle_count) ?? 0) > 0) {
+      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingumra: true));
+      if (result == null) return;
+      if (result == true) {
+        isInTawaf = true;
+        if ((int.tryParse(user!.tawaf_circle_count) ?? 0) >= 7) {
+          showSafaMarwa = true;
+        }
+      } else {
+        await LocalStorageManager.saveUser(user!.copyWith(tawaf_circle_count: '0'));
+      }
+    }
     user = await LocalStorageManager.getUser();
-    circleCount = int.tryParse(user!.tawaf_circle_count) ?? 0;
-    notifyListeners();
+
     if (isInTawaf) {
       if (kDebugMode) {
         _updateCircleTemp();
@@ -160,7 +172,7 @@ class TawafNotifier extends ChangeNotifier {
 
   // Method to move to Safa-Marwa after completing Tawaf
   moveToSafaMarwa({required BuildContext context, required WidgetRef ref}) {
-    if (!isFromUmera) {
+    if (!isFromumra) {
       Navigator.pop(context);
       LocalStorageManager.saveUser(user!.copyWith(tawaf_circle_count: '0'));
       infoToast(LocaleKeys.your_tawaf_has_been_successfully_completed.tr());
@@ -189,8 +201,8 @@ class TawafNotifier extends ChangeNotifier {
   }
 
   // Method to mark Umra as completed
-  void umeraCompleted() {
-    isUmeraCompleted = true;
+  void umraCompleted() {
+    isUmraCompleted = true;
     notifyListeners();
   }
 
@@ -198,10 +210,8 @@ class TawafNotifier extends ChangeNotifier {
   void goToHome({required BuildContext context}) {
     isInTawaf = false;
     showSafaMarwa = false;
-    isUmeraCompleted = false;
+    isUmraCompleted = false;
     isSafaMarwaComplete = false;
-    LocalStorageManager.saveUser(user!.copyWith(tawaf_circle_count: '0'));
-    Navigator.pop(context);
     notifyListeners();
   }
 
@@ -217,15 +227,15 @@ class TawafNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void isSafaMarwaCompleted() async {
+    isSafaMarwaComplete = true;
+    await LocalStorageManager.saveUser(user!.copyWith(tawaf_circle_count: '0'));
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     positionStreamSubscription?.cancel();
     super.dispose();
-  }
-
-  void isSafaMarwaCompleted() {
-    isSafaMarwaComplete = true;
-
-    notifyListeners();
   }
 }

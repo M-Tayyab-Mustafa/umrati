@@ -30,7 +30,7 @@ class ZiaratNotifier extends ChangeNotifier {
     var data = (await userCollection.doc(user!.uid).get()).data()!;
     selectedZiarat = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
     if (selectedZiarat.isNotEmpty) {
-      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmera: false));
+      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingumra: false));
       if (result == true) {
         Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratMapPage()));
       } else {

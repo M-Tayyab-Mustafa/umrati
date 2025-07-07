@@ -4,13 +4,13 @@ import 'sai_completion.dart';
 import 'umra_completed.dart';
 part '../../../../widgets/dashes_circle.dart';
 
-class StartTawafPage extends ConsumerStatefulWidget {
-  const StartTawafPage({super.key});
+class UmraPage extends ConsumerStatefulWidget {
+  const UmraPage({super.key});
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _StartTawafPageState();
 }
 
-class _StartTawafPageState extends ConsumerState<StartTawafPage> {
+class _StartTawafPageState extends ConsumerState<UmraPage> {
   @override
   void initState() {
     super.initState();
@@ -23,119 +23,103 @@ class _StartTawafPageState extends ConsumerState<StartTawafPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(tawafProvider);
     var safaMarwaProv = ref.watch(safaMarwaProvider);
-    return Background(
-      showEmblem: false,
-      backgroundType: BackgroundType.logoWithBackButton,
-      logoAlign: Alignment.center,
-      margin: EdgeInsets.only(left: 16, right: 16, top: kToolbarHeight * 0.5, bottom: ref.watch(tawafProvider).circleCount != 7 ? 0 : kToolbarHeight),
-      child:
-          provider.isUmeraCompleted
-              ? UmraCompleted()
-              : provider.isSafaMarwaComplete
-              ? SaiCompletionPage()
-              : Column(
-                children: [
-                  if (provider.circleCount != 7)
-                    CButton(
-                      shadows: [],
-                      height: 50,
-                      margin: EdgeInsets.symmetric(vertical: 30),
-                      onTap: () => provider.startTawaf(context),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CustomImage(path: provider.isInTawaf ? 'assets/svg/pause.svg' : 'assets/svg/play.svg', imageType: ImageType.svg, height: 16),
-                          Padding(
-                            padding: EdgeInsets.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
-                            child: Text(provider.isInTawaf ? LocaleKeys.off_tracker.tr() : LocaleKeys.start_tawaf.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
-                          ),
-                        ],
-                      ),
+    return provider.isUmraCompleted
+        ? UmraCompleted()
+        : provider.isSafaMarwaComplete
+        ? SaiCompletionPage()
+        : Column(
+          children: [
+            if (provider.circleCount != 7)
+              CButton(
+                shadows: [],
+                height: 50,
+                margin: EdgeInsets.symmetric(vertical: 30),
+                onTap: () => provider.startTawaf(context),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomImage(path: provider.isInTawaf ? 'assets/svg/pause.svg' : 'assets/svg/play.svg', imageType: ImageType.svg, height: 16),
+                    Padding(
+                      padding: EdgeInsets.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
+                      child: Text(provider.isInTawaf ? LocaleKeys.off_tracker.tr() : LocaleKeys.start_tawaf.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
                     ),
-                  Expanded(
-                    child:
-                        provider.showSafaMarwa
-                            ? StartSafaMarwaPage()
-                            : LayoutBuilder(
-                              builder: (context, constraints) {
-                                final size = constraints.maxWidth * 0.84;
-                                final trackingIndicatorSize = size * 0.14;
-                                final tawafCounterSize = size * 0.3;
-                                final centralContentSize = size * 0.77;
-                                final center = Offset(size / 2, size / 2);
-                                final radius = size / 2;
-                                final angle = -2 * pi * provider.tawafCircleCompletionPercent + pi;
-                                final trackerDX = center.dx + radius * cos(angle);
-                                final trackerDY = center.dy + radius * sin(angle);
-                                final tawafCountAngle = -2 * pi * 0 + pi;
-                                final tawafCountDX = center.dx + radius * cos(tawafCountAngle);
-                                final tawafCountDY = center.dy + radius * sin(tawafCountAngle);
+                  ],
+                ),
+              ),
+            Expanded(
+              child:
+                  provider.showSafaMarwa
+                      ? StartSafaMarwaPage()
+                      : LayoutBuilder(
+                        builder: (context, constraints) {
+                          final size = constraints.maxWidth * 0.8;
+                          final trackingIndicatorSize = size * 0.14;
+                          final tawafCounterSize = size * 0.3;
+                          final centralContentSize = size * 0.77;
+                          final center = Offset(size / 2, size / 2);
+                          final radius = size / 2;
+                          final angle = -2 * pi * provider.tawafCircleCompletionPercent + pi;
+                          final trackerDX = center.dx + radius * cos(angle);
+                          final trackerDY = center.dy + radius * sin(angle);
+                          final tawafCountAngle = -2 * pi * 0 + pi;
+                          final tawafCountDX = center.dx + radius * cos(tawafCountAngle);
+                          final tawafCountDY = center.dy + radius * sin(tawafCountAngle);
 
-                                return Stack(
-                                  children: [
-                                    Center(
-                                      child: CustomPaint(
-                                        size: Size(size, size),
-                                        painter: DashedCirclePainter(primaryColor: CColors.primary, gradientRadiusFactor: provider.tawafCircleCompletionPercent),
-                                      ),
-                                    ),
-                                    if ((provider.circleCount != 0 || provider.isInTawaf) && provider.circleCount < 7)
-                                      Positioned(
-                                        left: (constraints.maxWidth - size) / 2 + trackerDX - (trackingIndicatorSize / 2),
-                                        top: (constraints.maxHeight - size) / 2 + trackerDY - (trackingIndicatorSize / 2),
-                                        child: Container(
-                                          width: trackingIndicatorSize,
-                                          height: trackingIndicatorSize,
-                                          decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
-                                          child: Padding(padding: const EdgeInsets.only(left: 5), child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: 20)),
+                          return Stack(
+                            children: [
+                              Center(
+                                child: CustomPaint(size: Size(size, size), painter: DashedCirclePainter(primaryColor: CColors.primary, gradientRadiusFactor: provider.tawafCircleCompletionPercent)),
+                              ),
+                              if ((provider.circleCount != 0 || provider.isInTawaf) && provider.circleCount < 7)
+                                Positioned(
+                                  left: (constraints.maxWidth - size) / 2 + trackerDX - (trackingIndicatorSize / 2),
+                                  top: (constraints.maxHeight - size) / 2 + trackerDY - (trackingIndicatorSize / 2),
+                                  child: Container(
+                                    width: trackingIndicatorSize,
+                                    height: trackingIndicatorSize,
+                                    decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
+                                    child: Padding(padding: const EdgeInsets.only(left: 5), child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: 20)),
+                                  ),
+                                ),
+                              if (provider.circleCount > 0 && provider.circleCount < 7)
+                                Positioned(
+                                  left: (constraints.maxWidth - size) / 2 + tawafCountDX - (tawafCounterSize / 2),
+                                  top: (constraints.maxHeight - size) / 2 + tawafCountDY - (tawafCounterSize / 2),
+                                  child: SizedBox(
+                                    width: tawafCounterSize,
+                                    height: tawafCounterSize,
+                                    child: Stack(
+                                      children: [
+                                        Center(
+                                          child: CustomImage(width: tawafCounterSize, height: tawafCounterSize, path: 'assets/svg/tawaf_counter_bg.svg', imageType: ImageType.svg, fit: BoxFit.fill),
                                         ),
-                                      ),
-                                    if (provider.circleCount > 0 && provider.circleCount < 7)
-                                      Positioned(
-                                        left: (constraints.maxWidth - size) / 2 + tawafCountDX - (tawafCounterSize / 2),
-                                        top: (constraints.maxHeight - size) / 2 + tawafCountDY - (tawafCounterSize / 2),
-                                        child: SizedBox(
-                                          width: tawafCounterSize,
-                                          height: tawafCounterSize,
-                                          child: Stack(
-                                            children: [
-                                              Center(
-                                                child: CustomImage(
-                                                  width: tawafCounterSize,
-                                                  height: tawafCounterSize,
-                                                  path: 'assets/svg/tawaf_counter_bg.svg',
-                                                  imageType: ImageType.svg,
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                              Center(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(bottom: 3),
-                                                  child: Text(provider.circleCount.toString(), style: CTextStyle.w900(fontSize: 16, color: CColors.primary)),
-                                                ),
-                                              ),
-                                            ],
+                                        Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(bottom: 3),
+                                            child: Text(provider.circleCount.toString(), style: CTextStyle.w900(fontSize: 16, color: CColors.primary)),
                                           ),
                                         ),
-                                      ),
-                                    Center(
-                                      child: _buildCentralContent(
-                                        size: centralContentSize,
-                                        isRoundCompleted: provider.isRoundCompleted,
-                                        isCompleted: provider.circleCount == 7,
-                                        provider: provider,
-                                        context: context,
-                                      ),
+                                      ],
                                     ),
-                                  ],
-                                );
-                              },
-                            ),
-                  ),
-                  _buildDuaContent(context: context, isShowingSafaMarwa: provider.showSafaMarwa, provider: provider, safaMarwaProv: safaMarwaProv),
-                ],
-              ),
-    );
+                                  ),
+                                ),
+                              Center(
+                                child: _buildCentralContent(
+                                  size: centralContentSize,
+                                  isRoundCompleted: provider.isRoundCompleted,
+                                  isCompleted: provider.circleCount == 7,
+                                  provider: provider,
+                                  context: context,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+            ),
+            _buildDuaContent(context: context, isShowingSafaMarwa: provider.showSafaMarwa, provider: provider, safaMarwaProv: safaMarwaProv),
+          ],
+        );
   }
 
   Widget _buildCentralContent({required BuildContext context, required double size, required bool isRoundCompleted, required bool isCompleted, required TawafNotifier provider}) {
