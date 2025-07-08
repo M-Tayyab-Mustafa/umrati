@@ -8,8 +8,8 @@ import '../button.dart';
 import '../custom_image.dart';
 
 class AlreadyDialog extends StatelessWidget {
-  const AlreadyDialog({super.key, required this.isDoingumra});
-  final bool isDoingumra;
+  const AlreadyDialog({super.key, required this.isDoingUmra});
+  final bool isDoingUmra;
 
   @override
   Widget build(BuildContext dialogContext) {
@@ -39,7 +39,7 @@ class AlreadyDialog extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                isDoingumra ? LocaleKeys.already_in_umra.tr() : LocaleKeys.already_in_ziarats.tr(),
+                                isDoingUmra ? LocaleKeys.already_in_umra.tr() : LocaleKeys.already_in_ziarats.tr(),
                                 style: CTextStyle.w900(fontSize: 16, color: CColors.deepTeal),
                                 textAlign: TextAlign.center,
                               ),

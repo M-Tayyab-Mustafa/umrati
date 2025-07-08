@@ -45,7 +45,6 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    positionStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }

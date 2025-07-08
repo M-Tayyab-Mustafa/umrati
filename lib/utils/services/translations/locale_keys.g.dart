@@ -80,12 +80,10 @@ abstract class LocaleKeys {
   static const ziarat_completion_message = 'ziarat_completion_message';
   static const going_to_safa = 'going_to_safa';
   static const going_to_marwa = 'going_to_marwa';
-  static const going_to_safa_dua = 'going_to_safa_dua';
-  static const going_to_marwa_dua = 'going_to_marwa_dua';
   static const safa = 'safa';
   static const marwa = 'marwa';
   static const select_ziarat_cities = 'select_ziarat_cities';
-  static const macca = 'macca';
+  static const Mecca = 'Mecca';
   static const medina = 'medina';
   static const taif = 'taif';
   static const cancel = 'cancel';
@@ -104,13 +102,6 @@ abstract class LocaleKeys {
   static const now_please_pray_while_facing_kibla = 'now_please_pray_while_facing_kibla';
   static const your_sai_has_completed = 'your_sai_has_completed';
   static const seven_rounds_completed = 'seven_rounds_completed';
-  static const round_one_dua = 'round_one_dua';
-  static const round_second_dua = 'round_second_dua';
-  static const round_third_dua = 'round_third_dua';
-  static const round_fourth_dua = 'round_fourth_dua';
-  static const round_fifth_dua = 'round_fifth_dua';
-  static const round_sixth_dua = 'round_sixth_dua';
-  static const round_seventh_dua = 'round_seventh_dua';
   static const now_perform_2_rakats_salah = 'now_perform_2_rakats_salah';
   static const please_check_makrooh_time_before = 'please_check_makrooh_time_before';
   static const drink_zamzam = 'drink_zamzam';

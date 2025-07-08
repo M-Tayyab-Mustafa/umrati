@@ -174,37 +174,47 @@ class LoginNotifier extends ChangeNotifier {
     }
     isVerifyingOTP = true;
     notifyListeners();
-    final credential = PhoneAuthProvider.credential(verificationId: _verificationId!, smsCode: otpController.text);
-    var userCredential = await _auth.signInWithCredential(credential);
-    if (userCredential.additionalUserInfo!.isNewUser) {
-      UserModel user = UserModel(
-        uid: userCredential.user!.uid,
-        name: userCredential.user!.displayName ?? '',
-        email: userCredential.user!.email ?? '',
-        phone: userCredential.user!.phoneNumber ?? '',
-        photo: userCredential.user!.photoURL ?? '',
-        gender: Gender.unknown.name.toLowerCase(),
-      );
-      await LocalStorageManager.saveUser(user);
-      LocalStorageManager.showLoginPage(false);
-      //* Disable Loading
+    try {
+      final credential = PhoneAuthProvider.credential(verificationId: _verificationId!, smsCode: otpController.text);
+      var userCredential = await _auth.signInWithCredential(credential);
+      if (userCredential.additionalUserInfo!.isNewUser) {
+        UserModel user = UserModel(
+          uid: userCredential.user!.uid,
+          name: userCredential.user!.displayName ?? '',
+          email: userCredential.user!.email ?? '',
+          phone: userCredential.user!.phoneNumber ?? '',
+          photo: userCredential.user!.photoURL ?? '',
+          gender: Gender.unknown.name.toLowerCase(),
+        );
+        await LocalStorageManager.saveUser(user);
+        LocalStorageManager.showLoginPage(false);
+        //* Disable Loading
+        isVerifyingOTP = false;
+        notifyListeners();
+        Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectGenderPage()));
+      } else {
+        await LocalStorageManager.saveUser(UserModel.fromMap((await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(userCredential.user!.uid).get()).data()!));
+        LocalStorageManager.showLoginPage(false);
+        //* Disable Loading
+        isVerifyingOTP = false;
+        notifyListeners();
+        LocalStorageManager.showGenderPage(false);
+        LocalStorageManager.showGetLocationPermissionPage(false);
+        LocalStorageManager.showLocationFetchPage(false);
+        LocalStorageManager.showMeeqaatThreeTasksPage(false);
+        LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
+        Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavigationPage()));
+      }
+    } on FirebaseAuthException catch (e) {
       isVerifyingOTP = false;
       notifyListeners();
-      Navigator.popUntil(context, (route) => route.isFirst);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectGenderPage()));
-    } else {
-      await LocalStorageManager.saveUser(UserModel.fromMap((await FirebaseFirestore.instance.collection(CollectionNames.users.name).doc(userCredential.user!.uid).get()).data()!));
-      LocalStorageManager.showLoginPage(false);
-      //* Disable Loading
+      errorToast(e.message.toString());
+    } catch (e) {
       isVerifyingOTP = false;
       notifyListeners();
-      LocalStorageManager.showGenderPage(false);
-      LocalStorageManager.showGetLocationPermissionPage(false);
-      LocalStorageManager.showLocationFetchPage(false);
-      LocalStorageManager.showMeeqaatThreeTasksPage(false);
-      LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
-      Navigator.popUntil(context, (route) => route.isFirst);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavigationPage()));
+      errorToast(e.toString());
     }
   }
 

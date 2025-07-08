@@ -9,7 +9,9 @@ class UserModel {
   final String photo;
   final String gender;
   final bool is_doing_ziarat;
-  final String tawaf_circle_count;
+  final int tawafCircleCount;
+  final int saiRoundCount;
+  final bool isOneSideSaiRunCompleted;
   final String? created_at;
   final String? updated_at;
   final _timer = DateTime.now().toIso8601String();
@@ -22,7 +24,9 @@ class UserModel {
     required this.photo,
     required this.gender,
     this.is_doing_ziarat = false,
-    this.tawaf_circle_count = '0',
+    this.isOneSideSaiRunCompleted = false,
+    this.tawafCircleCount = 0,
+    this.saiRoundCount = 0,
     this.created_at,
     this.updated_at,
   });
@@ -35,7 +39,9 @@ class UserModel {
     String? photo,
     String? gender,
     bool? is_doing_ziarat,
-    String? tawaf_circle_count,
+    bool? isOneSideSaiRunCompleted,
+    int? tawafCircleCount,
+    int? saiRoundCount,
     String? created_at,
     String? updated_at,
   }) {
@@ -47,7 +53,9 @@ class UserModel {
       photo: photo ?? this.photo,
       gender: gender ?? this.gender,
       is_doing_ziarat: is_doing_ziarat ?? this.is_doing_ziarat,
-      tawaf_circle_count: tawaf_circle_count ?? this.tawaf_circle_count,
+      tawafCircleCount: tawafCircleCount ?? this.tawafCircleCount,
+      isOneSideSaiRunCompleted: isOneSideSaiRunCompleted ?? this.isOneSideSaiRunCompleted,
+      saiRoundCount: saiRoundCount ?? this.saiRoundCount,
       created_at: created_at ?? this.created_at,
       updated_at: updated_at ?? this.updated_at,
     );
@@ -62,7 +70,9 @@ class UserModel {
       'photo': photo,
       'gender': gender,
       'is_doing_ziarat': is_doing_ziarat,
-      'tawaf_circle_count': tawaf_circle_count,
+      'tawaf_circle_count': tawafCircleCount,
+      'is_one_side_sai_run_completed': isOneSideSaiRunCompleted,
+      'sai_round_count': saiRoundCount,
       'created_at': created_at ?? _timer,
       'updated_at': updated_at ?? _timer,
     };
@@ -77,7 +87,9 @@ class UserModel {
       photo: map['photo']?.toString() ?? '',
       gender: map['gender']?.toString() ?? '',
       is_doing_ziarat: map['is_doing_ziarat'] ?? false,
-      tawaf_circle_count: map['tawaf_circle_count']?.toString() ?? '0',
+      isOneSideSaiRunCompleted: map['is_one_side_sai_run_completed'] ?? false,
+      tawafCircleCount: map['tawaf_circle_count'] ?? 0,
+      saiRoundCount: map['sai_round_count'] ?? 0,
       created_at: map['created_at']?.toString() ?? '',
       updated_at: map['updated_at']?.toString() ?? '',
     );
@@ -89,7 +101,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, email: $email, phone: $phone, photo: $photo, gender: $gender, tawaf_circle_count: $tawaf_circle_count, is_doing_ziarat: $is_doing_ziarat, created_at: $created_at, updated_at: $updated_at)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, phone: $phone, photo: $photo, gender: $gender, tawaf_circle_count: $tawafCircleCount, sai_round_count: $saiRoundCount, is_one_side_sai_run_completed: $isOneSideSaiRunCompleted, is_doing_ziarat: $is_doing_ziarat, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -102,7 +114,9 @@ class UserModel {
         other.phone == phone &&
         other.photo == photo &&
         other.gender == gender &&
-        other.tawaf_circle_count == tawaf_circle_count &&
+        other.isOneSideSaiRunCompleted == isOneSideSaiRunCompleted &&
+        other.tawafCircleCount == tawafCircleCount &&
+        other.saiRoundCount == saiRoundCount &&
         other.is_doing_ziarat == is_doing_ziarat &&
         other.created_at == created_at &&
         other.updated_at == updated_at;
@@ -116,7 +130,9 @@ class UserModel {
         phone.hashCode ^
         photo.hashCode ^
         gender.hashCode ^
-        tawaf_circle_count.hashCode ^
+        isOneSideSaiRunCompleted.hashCode ^
+        tawafCircleCount.hashCode ^
+        saiRoundCount.hashCode ^
         is_doing_ziarat.hashCode ^
         created_at.hashCode ^
         updated_at.hashCode;

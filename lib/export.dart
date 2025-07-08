@@ -78,3 +78,5 @@ export 'package:google_maps_flutter/google_maps_flutter.dart';
 export 'package:geolocator/geolocator.dart' hide ServiceStatus;
 export 'package:geocoding/geocoding.dart';
 export 'package:http4/http4.dart';
+export 'package:firebase_auth/firebase_auth.dart';
+export 'package:google_sign_in/google_sign_in.dart';

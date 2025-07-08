@@ -25,7 +25,7 @@ class _SafaMarwaHomePageState extends ConsumerState<StartSafaMarwaPage> {
     notifier = ref.watch(safaMarwaProvider);
     notifier.scrollController = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      notifier.initialization();
+      notifier.initialization(ref, context);
       if (notifier.scrollController!.hasClients) {
         notifier.scrollController!.jumpTo(notifier.scrollController!.position.maxScrollExtent);
       }
@@ -43,17 +43,15 @@ class _SafaMarwaHomePageState extends ConsumerState<StartSafaMarwaPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(safaMarwaProvider);
-    provider.context = context;
-    provider.ref = ref;
     return Stack(
       children: [
-        if (provider.circleCount > 0)
+        if (provider.saiRoundCount > 0)
           Center(
             child: Container(
               height: 40,
               width: 40,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(9999), boxShadow: primaryShadows, color: Colors.white),
-              child: Center(child: Text(provider.circleCount.toString(), style: CTextStyle.w700())),
+              child: Center(child: Text(provider.saiRoundCount.toString(), style: CTextStyle.w700())),
             ),
           ),
         SizedBox(

@@ -45,8 +45,8 @@ class ManualSelection extends ConsumerWidget {
 
   String _cityName(ZiaratCities city) {
     switch (city) {
-      case ZiaratCities.macca:
-        return LocaleKeys.macca.tr();
+      case ZiaratCities.Mecca:
+        return LocaleKeys.Mecca.tr();
       case ZiaratCities.medina:
         return LocaleKeys.medina.tr();
       case ZiaratCities.taif:

@@ -12,7 +12,20 @@
           "package_name": "com.mightysofts.umrati"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "422094310480-s9opo7tvle3l83k3fm0c9vuidmb0kl98.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mightysofts.umrati",
+            "certificate_hash": "19d0f11eacc391237a52eb50879cb323f85fb2f5"
+          }
+        },
+        {
+          "client_id": "422094310480-7243b3855h47a2h37lc7g1r0v6b5mcnd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAhFG9V782qk9gWpsh4qqiDLxWE2I5QOqk"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "422094310480-7243b3855h47a2h37lc7g1r0v6b5mcnd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "422094310480-ulfu76ta97gusud3u389ckb53v1hcvlq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mightysofts.umrati"
+              }
+            }
+          ]
         }
       }
     }

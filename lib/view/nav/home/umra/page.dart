@@ -29,12 +29,12 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
         ? SaiCompletionPage()
         : Column(
           children: [
-            if (provider.circleCount != 7)
+            if (provider.tawafCircleCount != 7)
               CButton(
                 shadows: [],
                 height: 50,
                 margin: EdgeInsets.symmetric(vertical: 30),
-                onTap: () => provider.startTawaf(context),
+                onTap: () => provider.toggleTawaf(context),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -70,7 +70,7 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
                               Center(
                                 child: CustomPaint(size: Size(size, size), painter: DashedCirclePainter(primaryColor: CColors.primary, gradientRadiusFactor: provider.tawafCircleCompletionPercent)),
                               ),
-                              if ((provider.circleCount != 0 || provider.isInTawaf) && provider.circleCount < 7)
+                              if ((provider.tawafCircleCount != 0 || provider.isInTawaf) && provider.tawafCircleCount < 7)
                                 Positioned(
                                   left: (constraints.maxWidth - size) / 2 + trackerDX - (trackingIndicatorSize / 2),
                                   top: (constraints.maxHeight - size) / 2 + trackerDY - (trackingIndicatorSize / 2),
@@ -81,7 +81,7 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
                                     child: Padding(padding: const EdgeInsets.only(left: 5), child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: 20)),
                                   ),
                                 ),
-                              if (provider.circleCount > 0 && provider.circleCount < 7)
+                              if (provider.tawafCircleCount > 0 && provider.tawafCircleCount < 7)
                                 Positioned(
                                   left: (constraints.maxWidth - size) / 2 + tawafCountDX - (tawafCounterSize / 2),
                                   top: (constraints.maxHeight - size) / 2 + tawafCountDY - (tawafCounterSize / 2),
@@ -96,7 +96,7 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
                                         Center(
                                           child: Padding(
                                             padding: const EdgeInsets.only(bottom: 3),
-                                            child: Text(provider.circleCount.toString(), style: CTextStyle.w900(fontSize: 16, color: CColors.primary)),
+                                            child: Text(provider.tawafCircleCount.toString(), style: CTextStyle.w900(fontSize: 16, color: CColors.primary)),
                                           ),
                                         ),
                                       ],
@@ -107,7 +107,7 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
                                 child: _buildCentralContent(
                                   size: centralContentSize,
                                   isRoundCompleted: provider.isRoundCompleted,
-                                  isCompleted: provider.circleCount == 7,
+                                  isCompleted: provider.tawafCircleCount == 7,
                                   provider: provider,
                                   context: context,
                                 ),
@@ -187,7 +187,7 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
             margin: EdgeInsets.only(top: 8, bottom: 8),
             backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
             child: Text(
-              safaMarwaProv.isRunComplete ? LocaleKeys.going_to_safa_dua.tr() : LocaleKeys.going_to_marwa_dua.tr(),
+              safaMarwaProv.isRunComplete ? Dua.goingToSafa.dua : Dua.goingToMarwa.dua,
               style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular'),
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
@@ -196,22 +196,22 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
         ],
       );
     }
-    return provider.circleCount < 7
+    return provider.tawafCircleCount < 7
         ? Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              provider.circleCount == 0
+              provider.tawafCircleCount == 0
                   ? LocaleKeys.dua_during_1st_round.tr()
-                  : provider.circleCount == 1
+                  : provider.tawafCircleCount == 1
                   ? LocaleKeys.dua_during_2nd_round.tr()
-                  : provider.circleCount == 2
+                  : provider.tawafCircleCount == 2
                   ? LocaleKeys.dua_during_3rd_round.tr()
-                  : provider.circleCount == 3
+                  : provider.tawafCircleCount == 3
                   ? LocaleKeys.dua_during_4th_round.tr()
-                  : provider.circleCount == 4
+                  : provider.tawafCircleCount == 4
                   ? LocaleKeys.dua_during_5th_round.tr()
-                  : provider.circleCount == 5
+                  : provider.tawafCircleCount == 5
                   ? LocaleKeys.dua_during_6th_round.tr()
                   : LocaleKeys.dua_during_7th_round.tr(),
               style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal),
@@ -220,19 +220,19 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
               margin: EdgeInsets.symmetric(vertical: 14),
               backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
               child: Text(
-                provider.circleCount == 0
-                    ? LocaleKeys.round_one_dua.tr()
-                    : provider.circleCount == 1
-                    ? LocaleKeys.round_second_dua.tr()
-                    : provider.circleCount == 2
-                    ? LocaleKeys.round_third_dua.tr()
-                    : provider.circleCount == 3
-                    ? LocaleKeys.round_fourth_dua.tr()
-                    : provider.circleCount == 4
-                    ? LocaleKeys.round_fifth_dua.tr()
-                    : provider.circleCount == 5
-                    ? LocaleKeys.round_sixth_dua.tr()
-                    : LocaleKeys.round_seventh_dua.tr(),
+                provider.tawafCircleCount == 0
+                    ? Dua.round1.dua
+                    : provider.tawafCircleCount == 1
+                    ? Dua.round2.dua
+                    : provider.tawafCircleCount == 2
+                    ? Dua.round3.dua
+                    : provider.tawafCircleCount == 3
+                    ? Dua.round4.dua
+                    : provider.tawafCircleCount == 4
+                    ? Dua.round5.dua
+                    : provider.tawafCircleCount == 5
+                    ? Dua.round6.dua
+                    : Dua.round7.dua,
                 style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal),
                 textAlign: TextAlign.center,
                 textDirection: TextDirection.rtl,

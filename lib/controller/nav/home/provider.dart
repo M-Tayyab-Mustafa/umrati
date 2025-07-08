@@ -4,12 +4,12 @@ final homeProvider = ChangeNotifierProvider.autoDispose<HomeNotifier>((ref) => H
 
 class HomeNotifier extends ChangeNotifier {
   void onumraTap({required BuildContext context, required WidgetRef ref}) async {
-    ref.watch(tawafProvider).isFromumra = true;
+    ref.watch(tawafProvider).isFromUmra = true;
     ref.watch(bottomNavProvider).onBottomNavTap(BottomNavTabs.umra);
   }
 
   void onTawafTap({required BuildContext context, required WidgetRef ref}) async {
-    ref.watch(tawafProvider).isFromumra = false;
+    ref.watch(tawafProvider).isFromUmra = false;
     ref.watch(bottomNavProvider).onBottomNavTap(BottomNavTabs.umra);
   }
 

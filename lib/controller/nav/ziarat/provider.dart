@@ -30,7 +30,7 @@ class ZiaratNotifier extends ChangeNotifier {
     var data = (await userCollection.doc(user!.uid).get()).data()!;
     selectedZiarat = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
     if (selectedZiarat.isNotEmpty) {
-      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingumra: false));
+      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmra: false));
       if (result == true) {
         Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratMapPage()));
       } else {
@@ -95,17 +95,6 @@ class ZiaratNotifier extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
       ziarats = List.from((await settingsCollection.doc(CommonDoc.ziarat.name).get()).data()![selectedCity?.name]).map<ZiaratModel>((map) => ZiaratModel.fromMap(map)).toList();
-      var status = await Geolocator.checkPermission();
-      if (status == LocationPermission.denied || status == LocationPermission.deniedForever) {
-        var status = await Geolocator.requestPermission();
-        if (status == LocationPermission.deniedForever) {
-          await openAppSettings();
-          return;
-        } else if (status == LocationPermission.denied) {
-          errorToast(LocaleKeys.location_permission_denied_permission_is_required_to_proceed_forward.tr());
-          return;
-        }
-      }
       if (selectedCreationOption == ZiaratDestinationsCreationOptions.manual) {
         selectedZiarat.clear();
         isLoading = false;
@@ -131,7 +120,7 @@ class ZiaratNotifier extends ChangeNotifier {
   }
 
   Future<void> getDistance() async {
-    positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.best)).listen((position) async {
+    positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation)).listen((position) async {
       sortedZiarats =
           ziarats.map<ZiaratModel>((ziarat) {
             var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziarat.lat.toDouble(), ziarat.lng.toDouble());

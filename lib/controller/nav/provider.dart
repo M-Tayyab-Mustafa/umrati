@@ -2,6 +2,8 @@ import '../../export.dart';
 import '../../view/nav/home/page.dart';
 import '../../view/nav/home/umra/page.dart';
 import '../../view/nav/home/ziarat/page.dart';
+import '../../view/nav/profile/page.dart';
+import '../../view/nav/settings/page.dart';
 
 final bottomNavProvider = ChangeNotifierProvider<BottomNavNotifier>((ref) => BottomNavNotifier());
 
@@ -16,19 +18,19 @@ class BottomNavNotifier extends ChangeNotifier {
     selectedTab = selectedOption;
     switch (selectedOption) {
       case BottomNavTabs.profile:
-        child = const SizedBox.shrink();
+        child = const ProfilePage();
         break;
       case BottomNavTabs.umra:
-        child = UmraPage();
+        child = const UmraPage();
         break;
       case BottomNavTabs.home:
-        child = HomePage();
+        child = const HomePage();
         break;
       case BottomNavTabs.ziarat:
-        child = ZiaratPage();
+        child = const ZiaratPage();
         break;
       default:
-        child = const SizedBox.shrink();
+        child = const SettingsPage();
     }
     notifyListeners();
   }
