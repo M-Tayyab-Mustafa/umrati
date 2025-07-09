@@ -36,7 +36,7 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
               crossAxisSpacing: 30,
               children: [
                 ZiaratCityCard(
-                  icon: 'assets/svg/ziarat/Mecca.svg',
+                  icon: 'assets/svg/ziarat/mecca.svg',
                   title: LocaleKeys.Mecca.tr(),
                   isSelected: provider.selectedCity == ZiaratCities.Mecca,
                   onTap: () => provider.updateSelectedCity(ZiaratCities.Mecca),
