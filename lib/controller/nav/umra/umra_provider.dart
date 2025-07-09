@@ -99,47 +99,36 @@ class TawafNotifier extends ChangeNotifier {
     var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
     // Start listening to position updates
     positionStreamSubscription = Geolocator.getPositionStream(
-      locationSettings: LocationSettings(accuracy: LocationAccuracy.high),
+      locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
     ).listen((position) => _updateLocation(position, currentPosition, kabaLatLng));
   }
 
+  // Method to update location and track Tawaf progress
   Future<void> _updateLocation(Position currentPosition, Position startingPosition, LatLng kabaLatLng) async {
-    try {
-      // Exit early if Tawaf is not active or subscription is null
-      if (!isInTawaf || positionStreamSubscription == null) {
-        _cancelPositionStreamSubscription();
-        return;
-      }
-
-      final currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
-      final startingLatLng = LatLng(startingPosition.latitude, startingPosition.longitude);
-
-      // Calculate bearings from Kaaba to starting and current positions
-      final startBearing = calculateBearing(kabaLatLng, startingLatLng);
-      final currentBearing = calculateBearing(kabaLatLng, currentLatLng);
-
-      // Calculate anti-clockwise progress angle
-      double progressAngle = (startBearing - currentBearing) % 360;
-      if (progressAngle < 0) progressAngle += 360;
-      // Don't proceed if no progress made
-      if (progressAngle == 0) return;
-
-      tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
-
-      // If a full round is completed
-      if (tawafCircleCompletionPercent >= 0.99) {
-        isRoundCompleted = true;
-        tawafCircleCount++;
-
-        // Persist data and cleanup
-        _cancelPositionStreamSubscription();
-        await LocalStorageManager.saveUser(user.copyWith(tawafCircleCount: tawafCircleCount));
-      }
-      notifyListeners();
-    } catch (e, stackTrace) {
-      log('Tawaf location update error: $e\n$stackTrace');
+    // Exit early if Tawaf is not active or subscription is null
+    if (!isInTawaf || positionStreamSubscription == null) {
       _cancelPositionStreamSubscription();
+      return;
     }
+
+    final currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
+    final startingLatLng = LatLng(startingPosition.latitude, startingPosition.longitude);
+
+    // Calculate bearings from Kaaba to starting and current positions
+    double startBearing = calculateBearing(kabaLatLng, startingLatLng);
+    double currentBearing = calculateBearing(kabaLatLng, currentLatLng);
+
+    // Calculate progress angle in anti-clockwise direction
+    double progressAngle = antiClockwiseDelta(startBearing, currentBearing);
+
+    tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
+    if (tawafCircleCompletionPercent >= 0.96) {
+      isRoundCompleted = true;
+      tawafCircleCount++;
+      _cancelPositionStreamSubscription();
+      await LocalStorageManager.saveUser(user.copyWith(tawafCircleCount: tawafCircleCount));
+    }
+    notifyListeners();
   }
 
   // Method to start the next Tawaf round

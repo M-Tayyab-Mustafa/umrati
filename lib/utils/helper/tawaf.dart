@@ -15,10 +15,11 @@ double calculateBearing(LatLng from, LatLng to) {
   return (_radToDeg(bearing) + 360) % 360; // Normalize to 0-360
 }
 
-double angleDifference(double previous, double current) {
-  double diff = (current - previous + 360) % 360;
-  if (diff > 180) diff -= 360; // Normalize to -180..180
-  return diff;
+// Helper method to calculate anti-clockwise angle difference
+double antiClockwiseDelta(double from, double to) {
+  double delta = from - to;
+  if (delta < 0) delta += 360;
+  return delta;
 }
 
 double _degToRad(double deg) => deg * pi / 180;
