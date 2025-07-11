@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mightysofts.umrati">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.mightysofts.umrati">
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,33 +7,13 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <application
-        android:label="umrati"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:enableOnBackInvokedCallback="true">
+    <application android:label="umrati" android:name="${applicationName}" android:icon="@mipmap/ic_launcher" android:enableOnBackInvokedCallback="true">
+        <service android:name="com.baseflow.geolocator.service.LocationForegroundService" android:foregroundServiceType="location" />
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAndFtLiS-hr5mZJ4BlqYENlcX_FplebiE"/>
 
-        <!-- Google Sign-In configuration -->
-        <!-- <meta-data
-            android:name="com.google.android.gms.client.id"
-            android:value="@string/default_web_client_id"/> -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAndFtLiS-hr5mZJ4BlqYENlcX_FplebiE"/>
+        <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:taskAffinity="" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:taskAffinity=""
-            android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
-
-            <meta-data
-                android:name="io.flutter.embedding.android.NormalTheme"
-                android:resource="@style/NormalTheme" />
+            <meta-data android:name="io.flutter.embedding.android.NormalTheme" android:resource="@style/NormalTheme" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,9 +21,7 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="flutterEmbedding"
-            android:value="2" />
+        <meta-data android:name="flutterEmbedding" android:value="2" />
     </application>
 
     <!-- Optional: Required for querying text intents -->
