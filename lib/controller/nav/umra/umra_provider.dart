@@ -105,6 +105,9 @@ class TawafNotifier extends ChangeNotifier {
 
   // Method to update location and track Tawaf progress
   Future<void> _updateLocation(Position currentPosition, Position startingPosition, LatLng kabaLatLng) async {
+    // Keep 12 meters distance minimum from kaba.
+    var distance = Geolocator.distanceBetween(currentPosition.latitude, currentPosition.longitude, kabaLatLng.latitude, kabaLatLng.longitude);
+    if (distance < 12) return;
     // Exit early if Tawaf is not active or subscription is null
     if (!isInTawaf || positionStreamSubscription == null) {
       _cancelPositionStreamSubscription();
