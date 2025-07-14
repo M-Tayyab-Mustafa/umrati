@@ -5,7 +5,7 @@ import '../../view/nav/home/ziarat/page.dart';
 import '../../view/nav/profile/page.dart';
 import '../../view/nav/settings/page.dart';
 
-final bottomNavProvider = ChangeNotifierProvider<BottomNavNotifier>((ref) => BottomNavNotifier());
+final bottomNavProvider = ChangeNotifierProvider.autoDispose<BottomNavNotifier>((ref) => BottomNavNotifier());
 
 class BottomNavNotifier extends ChangeNotifier {
   BottomNavTabs selectedTab = BottomNavTabs.home;

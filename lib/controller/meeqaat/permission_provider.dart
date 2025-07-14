@@ -3,7 +3,7 @@ import '../../view/meeqaat/location_fetched.dart';
 import '../../view/nav/page.dart';
 import '../../widgets/dialog/confirmation.dart';
 
-final meeqaatPermissionProvider = ChangeNotifierProvider<MeeqaatPermissionNotifier>((ref) => MeeqaatPermissionNotifier());
+final meeqaatPermissionProvider = ChangeNotifierProvider.autoDispose<MeeqaatPermissionNotifier>((ref) => MeeqaatPermissionNotifier());
 
 class MeeqaatPermissionNotifier extends ChangeNotifier {
   bool isConfirmingMeeqaat = false;

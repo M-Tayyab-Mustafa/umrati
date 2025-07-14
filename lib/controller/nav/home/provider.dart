@@ -3,7 +3,7 @@ import '../../../export.dart';
 final homeProvider = ChangeNotifierProvider.autoDispose<HomeNotifier>((ref) => HomeNotifier());
 
 class HomeNotifier extends ChangeNotifier {
-  void onumraTap({required BuildContext context, required WidgetRef ref}) async {
+  void onUmraTap({required BuildContext context, required WidgetRef ref}) async {
     ref.watch(tawafProvider).isFromUmra = true;
     ref.watch(bottomNavProvider).onBottomNavTap(BottomNavTabs.umra);
   }

@@ -1,10 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:umrati/export.dart';
-import '../../utils/helper/constants.dart';
-import '../../utils/services/local_storage.dart';
+import '../../export.dart';
 import '../../view/auth/gender.dart';
 import '../../view/auth/login.dart';
 import '../../view/language/select_language.dart';

@@ -1,21 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
-
-import '../../utils/services/local_storage.dart';
+import '../../export.dart';
 import '../../view/meeqaat/three_tasks.dart';
 import '../../view/nav/page.dart';
 import '../../widgets/dialog/confirmation.dart';
 
-final locationFetchProvider = ChangeNotifierProvider<MeeqaatLocationFetchProviderNotifier>((ref) => MeeqaatLocationFetchProviderNotifier());
+final locationFetchProvider = ChangeNotifierProvider.autoDispose<MeeqaatLocationFetchProviderNotifier>((ref) => MeeqaatLocationFetchProviderNotifier());
 
 class MeeqaatLocationFetchProviderNotifier extends ChangeNotifier {
   String location = '';
   getLocation() async {
-    var position = await Geolocator.getCurrentPosition();
-    Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
-    location = '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
+    try {
+      var position = await Geolocator.getCurrentPosition().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
+      location = '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
+    } catch (e) {
+      errorToast(e.toString());
+    }
   }
 
   void skip(BuildContext context) async {

@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.mightysofts.umrati">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" package="com.mightysofts.umrati">
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -6,10 +7,24 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/> -->
 
     <application android:label="umrati" android:name="${applicationName}" android:icon="@mipmap/ic_launcher" android:enableOnBackInvokedCallback="true">
+        <!-- <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/> -->
+
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_key"/>
+        <activity android:name="com.aboutyou.dart_packages.sign_in_with_apple.SignInWithAppleCallback" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="signinwithapple" />
+                <data android:path="callback" />
+            </intent-filter>
+        </activity>
+
         <service android:name="com.baseflow.geolocator.service.LocationForegroundService" android:foregroundServiceType="location" />
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyAndFtLiS-hr5mZJ4BlqYENlcX_FplebiE"/>
 
         <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:taskAffinity="" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
 
@@ -23,9 +38,8 @@
 
         <meta-data android:name="flutterEmbedding" android:value="2" />
     </application>
-
-    <!-- Optional: Required for querying text intents -->
     <queries>
+        <!-- <provider android:authorities="com.facebook.katana.provider.PlatformProvider" /> -->
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT" />
             <data android:mimeType="text/plain" />

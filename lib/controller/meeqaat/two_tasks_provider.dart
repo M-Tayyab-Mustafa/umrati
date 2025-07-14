@@ -1,17 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:umrati/export.dart';
-import 'package:umrati/utils/services/toast.dart';
-import '../../utils/helper/constants.dart';
-import '../../utils/services/local_storage.dart';
-import '../../utils/theme/colors.dart';
+import '../../export.dart';
 import '../../view/meeqaat/permission.dart';
 import '../../view/nav/page.dart';
-import '../../widgets/check_box.dart';
-import '../../widgets/custom_image.dart';
 import '../../widgets/dialog/confirmation.dart';
 
-final meeqaatTwoTasksProvider = ChangeNotifierProvider<MeeqaatTwoTasksNotifier>((ref) => MeeqaatTwoTasksNotifier());
+final meeqaatTwoTasksProvider = ChangeNotifierProvider.autoDispose<MeeqaatTwoTasksNotifier>((ref) => MeeqaatTwoTasksNotifier());
 
 class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   bool isCleanlinessChecked = false;

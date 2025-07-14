@@ -2,7 +2,7 @@ import '../../export.dart';
 import '../../view/nav/page.dart';
 import '../../widgets/dialog/confirmation.dart';
 
-final meeqaatThreeTasksProvider = ChangeNotifierProvider<MeeqaatThreeTasksNotifier>((ref) => MeeqaatThreeTasksNotifier());
+final meeqaatThreeTasksProvider = ChangeNotifierProvider.autoDispose<MeeqaatThreeTasksNotifier>((ref) => MeeqaatThreeTasksNotifier());
 
 class MeeqaatThreeTasksNotifier extends ChangeNotifier {
   bool isTwoNafiPrayersChecked = false;

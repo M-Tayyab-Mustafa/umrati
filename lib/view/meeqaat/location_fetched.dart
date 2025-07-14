@@ -1,8 +1,4 @@
-import '../../controller/meeqaat/location_fetch_provider.dart';
 import '../../export.dart';
-import '../../widgets/background.dart';
-import '../../widgets/button.dart';
-import '../../widgets/marker.dart';
 
 class MeeqaatLocationFetchedPage extends ConsumerWidget {
   const MeeqaatLocationFetchedPage({super.key});

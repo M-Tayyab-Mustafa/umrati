@@ -17,7 +17,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           children: [
             card(
               constraints: constraints,
-              onTap: () => ref.read(homeProvider).onumraTap(context: context, ref: ref),
+              onTap: () => ref.read(homeProvider).onUmraTap(context: context, ref: ref),
               title: LocaleKeys.umra.tr(),
               description: LocaleKeys.start_your_umra_from_here.tr(),
               image: '',

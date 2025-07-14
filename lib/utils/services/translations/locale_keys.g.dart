@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const select_your_language = 'select_your_language';
   static const change_the_language = 'change_the_language';
   static const register_your_account = 'register_your_account';
@@ -18,6 +18,7 @@ abstract class LocaleKeys {
   static const resend_the_otp = 'resend_the_otp';
   static const resend_the_otp_in = 'resend_the_otp_in';
   static const select_your_gender = 'select_your_gender';
+  static const timeout_error = 'timeout_error';
   static const already_in_umra = 'already_in_umra';
   static const enter_the_otp_you_received_to = 'enter_the_otp_you_received_to';
   static const or_continue_with = 'or_continue_with';
@@ -113,4 +114,5 @@ abstract class LocaleKeys {
   static const shave_the_head_description = 'shave_the_head_description';
   static const take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram = 'take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram';
   static const do_these_5_ihram_related_tasks = 'do_these_5_ihram_related_tasks';
+
 }

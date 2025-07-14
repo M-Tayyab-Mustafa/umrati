@@ -1,15 +1,4 @@
-import 'dart:math' show pi;
-
-import 'package:easy_localization/easy_localization.dart' hide TextDirection;
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../controller/nav/umra/safa_marwa_provider.dart';
-import '../../../../utils/helper/constants.dart';
-import '../../../../utils/services/translations/locale_keys.g.dart';
-import '../../../../utils/theme/colors.dart';
-import '../../../../utils/theme/text_style.dart';
-import '../../../../widgets/custom_image.dart';
+import '../../../../export.dart';
 
 class StartSafaMarwaPage extends ConsumerStatefulWidget {
   const StartSafaMarwaPage({super.key});

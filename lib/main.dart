@@ -1,7 +1,7 @@
 import 'export.dart';
 import 'view/splash.dart';
 
-FutureOr<void> main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorageManager.initialization();
   await EasyLocalization.ensureInitialized();

@@ -36,17 +36,21 @@ class BottomNavigationPage extends ConsumerWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                BottomNavItem(
-                                  onTap: () => provider.onBottomNavTap.call(BottomNavTabs.profile),
-                                  isSelected: BottomNavTabs.profile == provider.selectedTab,
-                                  icon: 'assets/svg/bottom_nav/profile.svg',
-                                  title: LocaleKeys.profile.tr(),
+                                Expanded(
+                                  child: BottomNavItem(
+                                    onTap: () => provider.onBottomNavTap.call(BottomNavTabs.profile),
+                                    isSelected: BottomNavTabs.profile == provider.selectedTab,
+                                    icon: 'assets/svg/bottom_nav/profile.svg',
+                                    title: LocaleKeys.profile.tr(),
+                                  ),
                                 ),
-                                BottomNavItem(
-                                  onTap: () => provider.onBottomNavTap.call(BottomNavTabs.umra),
-                                  isSelected: BottomNavTabs.umra == provider.selectedTab,
-                                  icon: 'assets/svg/bottom_nav/supplications.svg',
-                                  title: LocaleKeys.umra.tr(),
+                                Expanded(
+                                  child: BottomNavItem(
+                                    onTap: () => provider.onBottomNavTap.call(BottomNavTabs.umra),
+                                    isSelected: BottomNavTabs.umra == provider.selectedTab,
+                                    icon: 'assets/svg/bottom_nav/supplications.svg',
+                                    title: LocaleKeys.umra.tr(),
+                                  ),
                                 ),
                               ],
                             ),
@@ -57,17 +61,21 @@ class BottomNavigationPage extends ConsumerWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                BottomNavItem(
-                                  onTap: () => provider.onBottomNavTap.call(BottomNavTabs.ziarat),
-                                  isSelected: BottomNavTabs.ziarat == provider.selectedTab,
-                                  icon: 'assets/svg/bottom_nav/ziarat.svg',
-                                  title: LocaleKeys.ziarat.tr(),
+                                Expanded(
+                                  child: BottomNavItem(
+                                    onTap: () => provider.onBottomNavTap.call(BottomNavTabs.ziarat),
+                                    isSelected: BottomNavTabs.ziarat == provider.selectedTab,
+                                    icon: 'assets/svg/bottom_nav/ziarat.svg',
+                                    title: LocaleKeys.ziarat.tr(),
+                                  ),
                                 ),
-                                BottomNavItem(
-                                  onTap: () => provider.onBottomNavTap.call(BottomNavTabs.settings),
-                                  isSelected: BottomNavTabs.settings == provider.selectedTab,
-                                  icon: 'assets/svg/bottom_nav/settings.svg',
-                                  title: LocaleKeys.settings.tr(),
+                                Expanded(
+                                  child: BottomNavItem(
+                                    onTap: () => provider.onBottomNavTap.call(BottomNavTabs.settings),
+                                    isSelected: BottomNavTabs.settings == provider.selectedTab,
+                                    icon: 'assets/svg/bottom_nav/settings.svg',
+                                    title: LocaleKeys.settings.tr(),
+                                  ),
                                 ),
                               ],
                             ),

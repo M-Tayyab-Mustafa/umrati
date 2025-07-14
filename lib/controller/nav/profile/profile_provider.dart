@@ -6,20 +6,33 @@ class ProfileNotifier extends ChangeNotifier {
   bool isLoading = false;
 
   void setMyLocationToMecca() async {
-    isLoading = true;
-    notifyListeners();
-    var position = await Geolocator.getCurrentPosition();
-    await settingsCollection.doc(CommonDoc.alKaba.name).update({'lat': position.latitude, 'lng': position.longitude});
-    await settingsCollection.doc(CommonDoc.safaMarwa.name).update({'safaLat': position.latitude, 'safaLng': position.longitude});
-    LatLng marwaNewLocation = offsetLatLng(
-      LatLng(position.latitude, position.longitude),
-      double.tryParse((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!['distance'] as String) ?? 450,
-      0,
-    );
-    await settingsCollection.doc(CommonDoc.safaMarwa.name).update({'marwaLat': marwaNewLocation.latitude, 'marwaLng': marwaNewLocation.longitude});
-    infoToast('Location Set');
-    isLoading = false;
-    notifyListeners();
+    try {
+      isLoading = true;
+      notifyListeners();
+      var position = await Geolocator.getCurrentPosition();
+      await settingsCollection
+          .doc(CommonDoc.alKaba.name)
+          .update({'lat': position.latitude, 'lng': position.longitude})
+          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      await settingsCollection
+          .doc(CommonDoc.safaMarwa.name)
+          .update({'safaLat': position.latitude, 'safaLng': position.longitude})
+          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      LatLng marwaNewLocation = offsetLatLng(
+        LatLng(position.latitude, position.longitude),
+        double.tryParse((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!['distance'] as String) ?? 450,
+        0,
+      );
+      await settingsCollection
+          .doc(CommonDoc.safaMarwa.name)
+          .update({'marwaLat': marwaNewLocation.latitude, 'marwaLng': marwaNewLocation.longitude})
+          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      infoToast('Location Set');
+      isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      errorToast(e.toString());
+    }
   }
 
   LatLng offsetLatLng(LatLng origin, double distanceInMeters, double bearingInDegrees) {
@@ -37,13 +50,23 @@ class ProfileNotifier extends ChangeNotifier {
   }
 
   void setOriginalLocation() async {
-    isLoading = true;
-    notifyListeners();
-    await settingsCollection.doc(CommonDoc.alKaba.name).update({'lat': 21.422487, 'lng': 39.826206});
-    await settingsCollection.doc(CommonDoc.safaMarwa.name).update({'safaLat': 21.422933, 'safaLng': 39.827145});
-    await settingsCollection.doc(CommonDoc.safaMarwa.name).update({'marwaLat': 21.423713, 'marwaLng': 39.828450});
-    infoToast('Location Set');
-    isLoading = false;
-    notifyListeners();
+    try {
+      isLoading = true;
+      notifyListeners();
+      await settingsCollection.doc(CommonDoc.alKaba.name).update({'lat': 21.422487, 'lng': 39.826206}).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      await settingsCollection
+          .doc(CommonDoc.safaMarwa.name)
+          .update({'safaLat': 21.422933, 'safaLng': 39.827145})
+          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      await settingsCollection
+          .doc(CommonDoc.safaMarwa.name)
+          .update({'marwaLat': 21.423713, 'marwaLng': 39.828450})
+          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      infoToast('Location Set');
+      isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      errorToast(e.toString());
+    }
   }
 }
