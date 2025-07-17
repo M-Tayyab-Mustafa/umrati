@@ -29,7 +29,8 @@ class ZiaratNotifier extends ChangeNotifier {
       user = await LocalStorageManager.getUser();
       this.ref = ref;
       var doc = await userCollection.doc(user!.uid).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      selectedZiarat = List.from(doc.data()![CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
+      var firebaseZiarats = doc.data()!.containsKey(CommonField.selectedZiarat.name) ? doc.data()![CommonField.selectedZiarat.name] : [];
+      selectedZiarat = List.from(firebaseZiarats).map((e) => ZiaratModel.fromMap(e)).toList();
       if (selectedZiarat.isNotEmpty) {
         var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmra: false));
         if (result == true) {
