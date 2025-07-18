@@ -29,6 +29,7 @@ class TawafNotifier extends ChangeNotifier {
   //* umra Complete
   bool isUmraCompleted = false;
   bool isShavedHead = false;
+  Position? startingPosition;
 
   UserModel? _user;
   UserModel get user => _user!;
@@ -78,6 +79,7 @@ class TawafNotifier extends ChangeNotifier {
 
   Future<void> _startTawaf(BuildContext context) async {
     isInTawaf = true;
+    tawafCircleCompletionPercent = 0;
     notifyListeners();
     try {
       await _initializeTawafLocationTracking(context);
@@ -89,18 +91,14 @@ class TawafNotifier extends ChangeNotifier {
 
   // Method to request location permissions and initialize Tawaf
   Future<void> _initializeTawafLocationTracking(BuildContext context) async {
-    // Reset tracking variables
-    tawafCircleCompletionPercent = 0;
-    notifyListeners();
-
     // Get current position and Kaaba coordinates
-    var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
+    startingPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
     var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
     var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
     // Start listening to position updates
     positionStreamSubscription = Geolocator.getPositionStream(
       locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
-    ).listen((position) => _updateLocation(position, currentPosition, kabaLatLng));
+    ).listen((position) => _updateLocation(position, startingPosition!, kabaLatLng));
   }
 
   // Method to update location and track Tawaf progress
@@ -123,13 +121,12 @@ class TawafNotifier extends ChangeNotifier {
 
     // Calculate progress angle in anti-clockwise direction
     double progressAngle = antiClockwiseDelta(startBearing, currentBearing);
-
-    tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
-    if (tawafCircleCompletionPercent >= 0.96) {
+    if (!isRoundCompleted) tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
+    if (tawafCircleCompletionPercent >= 0.975) {
       isRoundCompleted = true;
       tawafCircleCount++;
-      _cancelPositionStreamSubscription();
-      await LocalStorageManager.saveUser(user.copyWith(tawafCircleCount: tawafCircleCount));
+      tawafCircleCompletionPercent = 0;
+      LocalStorageManager.saveUser(user.copyWith(tawafCircleCount: tawafCircleCount));
     }
     notifyListeners();
   }
@@ -137,7 +134,7 @@ class TawafNotifier extends ChangeNotifier {
   // Method to start the next Tawaf round
   startNextRound(BuildContext context) {
     isRoundCompleted = false;
-    _initializeTawafLocationTracking(context);
+    notifyListeners();
   }
 
   /// Moves user to Safa-Marwa section after completing Tawaf
