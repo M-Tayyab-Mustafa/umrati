@@ -20,21 +20,21 @@ class _HomePageState extends ConsumerState<HomePage> {
               onTap: () => ref.read(homeProvider).onUmraTap(context: context, ref: ref),
               title: LocaleKeys.umra.tr(),
               description: LocaleKeys.start_your_umra_from_here.tr(),
-              image: '',
+              image: 'assets/png/home/umrah.png',
             ),
             card(
               constraints: constraints,
               onTap: () => ref.read(homeProvider).onTawafTap(context: context, ref: ref),
               title: LocaleKeys.tawaf.tr(),
               description: LocaleKeys.start_your_tawaf_from_here.tr(),
-              image: '',
+              image: 'assets/png/home/tawaf.png',
             ),
             card(
               constraints: constraints,
               onTap: () => ref.read(homeProvider).onZiaratTap(context: context, ref: ref),
               title: LocaleKeys.ziarat.tr(),
               description: LocaleKeys.start_your_ziarat_from_here.tr(),
-              image: '',
+              image: 'assets/png/home/ziarat.png',
             ),
           ],
         );
@@ -45,12 +45,16 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget card({required BoxConstraints constraints, required VoidCallback onTap, required String title, required String description, required String image}) {
     return BasicCard(
       onTap: onTap,
+      padding: EdgeInsets.only(top: 16, bottom: 16, right: 16),
       height: constraints.maxHeight * 0.25,
       borderColor: CColors.grey,
       boxShadow: greyShadows,
       child: Row(
         children: [
-          Expanded(flex: 3, child: CustomImage(path: image, fit: BoxFit.fill)),
+          Expanded(
+            flex: 3,
+            child: LayoutBuilder(builder: (context, constraints) => CustomImage(width: constraints.maxWidth, height: constraints.maxHeight, path: image, fit: BoxFit.fill, imageType: ImageType.png)),
+          ),
           Expanded(
             flex: 7,
             child: Padding(

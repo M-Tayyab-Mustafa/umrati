@@ -45,6 +45,7 @@ flutter:
     - assets/svg/ziarat/
     - assets/svg/bottom_nav/
     - assets/png/
+    - assets/png/home/
     - assets/png/flags/
     - assets/png/map/
     - assets/translations/
