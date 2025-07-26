@@ -26,9 +26,9 @@ class SocialLoginService {
         scopes: AppleIDAuthorizationScopes.values,
         webAuthenticationOptions: WebAuthenticationOptions(
           //Todo:: Required Apple Service ID
-          clientId: 'de.lunaone.flutter.signinwithappleexample.service',
+          clientId: 'com.mightysofts.umrati.service',
           //Todo:: Required redirect URI
-          redirectUri: Uri.parse('https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple'),
+          redirectUri: Uri.parse('https://umrati-ec453.firebaseapp.com/__/auth/handler'),
         ),
       ).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       final oauthCredential = OAuthProvider("apple.com").credential(idToken: appleCredential.identityToken, accessToken: appleCredential.authorizationCode);

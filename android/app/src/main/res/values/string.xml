@@ -5,5 +5,6 @@
     <string name="google_key">AIzaSyAhFG9V782qk9gWpsh4qqiDLxWE2I5QOqk</string>
     <string name="facebook_app_id">726586746835054</string>
     <string name="facebook_client_token">0fbe8e49197b42cb1fd2ee4e0ea0cb28</string>
+    <string name="fb_login_protocol_scheme">fb726586746835054</string>
     <string name="app_name">umrati</string>
 </resources>
