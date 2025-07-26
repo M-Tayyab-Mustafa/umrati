@@ -53,8 +53,6 @@ class MapPageNotifier extends ChangeNotifier {
         markers.where((e) => e.markerId.value != MapMarkerId.userLocation.name).toSet()
           ..add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: LatLng(position.latitude, position.longitude), icon: await _loadCustomIcon('assets/png/map/user.png')));
     var distance = Geolocator.distanceBetween(position.latitude, position.longitude, activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble());
-    activeZiarat = activeZiarat!.copyWith(distance: (distance / 1000).toStringAsFixed(0));
-    notifyListeners();
     if (distance < 20) {
       _positionStream?.cancel();
       await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ReachYourDestinationDialog());
@@ -150,8 +148,7 @@ class MapPageNotifier extends ChangeNotifier {
   Future<void> updateActiveZiarat({required ZiaratModel activeZiarat}) async {
     var data = (await userCollection.doc(user!.uid).get()).data()!;
     destinations = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
-    destinations.first = activeZiarat;
-    await userCollection.doc(user!.uid).update({CommonField.selectedZiarat.name: destinations.map((e) => e.toMap()).toList()});
+    await userCollection.doc(user!.uid).update({CommonField.selectedZiarat.name: destinations.map((e) => e.title == activeZiarat.title ? activeZiarat.toMap() : e.toMap()).toList()});
   }
 
   @override
