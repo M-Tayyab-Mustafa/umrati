@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="default_web_client_id">422094310480-7243b3855h47a2h37lc7g1r0v6b5mcnd.apps.googleusercontent.com</string>
-    <string name="google_key">AIzaSyAndFtLiS-hr5mZJ4BlqYENlcX_FplebiE</string>
+    <string name="default_web_client_id">
+        422094310480-7243b3855h47a2h37lc7g1r0v6b5mcnd.apps.googleusercontent.com</string>
+    <string name="google_key">AIzaSyAhFG9V782qk9gWpsh4qqiDLxWE2I5QOqk</string>
     <string name="facebook_app_id">YOUR_FACEBOOK_APP_ID</string>
     <string name="facebook_client_token">YOUR_FACEBOOK_CLIENT_TOKEN</string>
     <string name="app_name">umrati</string>

@@ -2,6 +2,7 @@ import '../../export.dart';
 part 'enums.dart';
 
 late Size screenSize;
+int distanceFilter = 10;
 
 final primaryShadows = [BoxShadow(color: CColors.shadow, blurRadius: 10, blurStyle: BlurStyle.outer)];
 final greyShadows = [BoxShadow(color: CColors.grey, blurRadius: 10, blurStyle: BlurStyle.outer)];
@@ -17,4 +18,4 @@ var settingsCollection = FirebaseFirestore.instance.collection(CollectionNames.s
 
 bool isLTR(context) => languageDirection(context) == TextDirection.ltr;
 
-var mapsApiKey = 'AIzaSyAndFtLiS-hr5mZJ4BlqYENlcX_FplebiE';
+get mapsApiKey async => (await settingsCollection.doc(CommonDoc.constants.name).get()).get(CommonField.googleMapKey.name);

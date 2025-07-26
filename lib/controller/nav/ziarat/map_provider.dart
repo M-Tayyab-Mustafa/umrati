@@ -40,9 +40,12 @@ class MapPageNotifier extends ChangeNotifier {
         icon: await _loadCustomIcon('assets/png/map/destination.png'),
       ),
     );
+
     notifyListeners();
     _positionStream?.cancel();
-    _positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation)).listen((position) => _updateLocation(position, context, ref));
+    _positionStream = Geolocator.getPositionStream(
+      locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter),
+    ).listen((position) => _updateLocation(position, context, ref));
   }
 
   _updateLocation(Position position, BuildContext context, WidgetRef ref) async {
@@ -52,7 +55,6 @@ class MapPageNotifier extends ChangeNotifier {
     var distance = Geolocator.distanceBetween(position.latitude, position.longitude, activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble());
     activeZiarat = activeZiarat!.copyWith(distance: (distance / 1000).toStringAsFixed(0));
     notifyListeners();
-    log('Distance $distance');
     if (distance < 20) {
       _positionStream?.cancel();
       await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ReachYourDestinationDialog());
@@ -61,14 +63,15 @@ class MapPageNotifier extends ChangeNotifier {
       if (destinations.isEmpty) {
         _positionStream?.cancel();
         markers = markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet();
-        polylines.where((e) => e.polylineId.value != MapPolylineId.route.name).toSet();
         notifyListeners();
         await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ZiaratCompleteDialog());
         Navigator.pop(context);
         ref.read(ziaratProvider).reset();
         return;
       } else {
-        _positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation)).listen((position) => _updateLocation(position, context, ref));
+        _positionStream = Geolocator.getPositionStream(
+          locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter),
+        ).listen((position) => _updateLocation(position, context, ref));
         activeZiarat = destinations.first;
       }
       markers =
@@ -89,59 +92,66 @@ class MapPageNotifier extends ChangeNotifier {
   }
 
   Future<void> _getRoutePolyline(LatLng startPoint, LatLng endPoint) async {
-    final String url =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=${startPoint.latitude},${startPoint.longitude}&destination=${endPoint.latitude},${endPoint.longitude}&mode=driving&key=$mapsApiKey';
-
-    final response = await get(Uri.parse(url));
-    log(response.body);
+    final uri = Uri.https('maps.googleapis.com', '/maps/api/directions/json', {
+      'origin': '${startPoint.latitude},${startPoint.longitude}',
+      'destination': '${endPoint.latitude},${endPoint.longitude}',
+      'mode': 'driving',
+      'key': await mapsApiKey,
+    });
+    log(uri.toString());
+    final response = await get(uri);
     var body = jsonDecode(response.body);
     if (response.statusCode == 200 && body['routes'].isNotEmpty) {
-      final points = body['routes'][0]['overview_polyline']['points'];
-      final List<LatLng> routeCoords = _decodePolyline(points);
-      polylines =
-          polylines.where((e) => e.polylineId.value != MapPolylineId.route.name).toSet()
-            ..add(Polyline(polylineId: PolylineId(MapPolylineId.route.name), points: routeCoords, color: CColors.primary, width: 5, startCap: Cap.roundCap, endCap: Cap.roundCap));
-    } else {
-      polylines =
-          polylines.where((e) => e.polylineId.value != MapPolylineId.route.name).toSet()
-            ..add(Polyline(polylineId: PolylineId(MapPolylineId.route.name), points: [startPoint, endPoint], color: CColors.primary, width: 5, startCap: Cap.roundCap, endCap: Cap.roundCap));
+      final route = body['routes'].first as Map<String, dynamic>;
+      final leg = route['legs'].first;
+      activeZiarat = activeZiarat!.copyWith(distance: leg['distance']['text'], time: leg['duration']['text']);
+      updateActiveZiarat(activeZiarat: activeZiarat!);
+      var steps = leg['steps'] as List;
+      for (var step in steps) {
+        final points = step['polyline']['points'];
+        final List<LatLng> routeCoords = _decodePolyline(points);
+        final line = Polyline(polylineId: PolylineId(points), points: routeCoords, color: CColors.primary, width: 5, startCap: Cap.roundCap, endCap: Cap.roundCap);
+        polylines = polylines.where((e) => e.polylineId.value != points).toSet()..add(line);
+      }
     }
     notifyListeners();
   }
 
   List<LatLng> _decodePolyline(String encoded) {
-    List<LatLng> points = [];
+    List<LatLng> polyline = [];
     int index = 0, len = encoded.length;
     int lat = 0, lng = 0;
 
     while (index < len) {
       int b, shift = 0, result = 0;
-
       do {
         b = encoded.codeUnitAt(index++) - 63;
-        result |= (b & 0x1F) << shift;
+        result |= (b & 0x1f) << shift;
         shift += 5;
       } while (b >= 0x20);
-
-      int dlat = ((result & 1) != 0 ? ~(result >> 1) : result >> 1);
+      int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
       lat += dlat;
 
       shift = 0;
       result = 0;
-
       do {
         b = encoded.codeUnitAt(index++) - 63;
-        result |= (b & 0x1F) << shift;
+        result |= (b & 0x1f) << shift;
         shift += 5;
       } while (b >= 0x20);
-
-      int dlng = ((result & 1) != 0 ? ~(result >> 1) : result >> 1);
+      int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
       lng += dlng;
 
-      points.add(LatLng(lat / 1E5, lng / 1E5));
+      polyline.add(LatLng(lat / 1e5, lng / 1e5));
     }
+    return polyline;
+  }
 
-    return points;
+  Future<void> updateActiveZiarat({required ZiaratModel activeZiarat}) async {
+    var data = (await userCollection.doc(user!.uid).get()).data()!;
+    destinations = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
+    destinations.first = activeZiarat;
+    await userCollection.doc(user!.uid).update({CommonField.selectedZiarat.name: destinations.map((e) => e.toMap()).toList()});
   }
 
   @override

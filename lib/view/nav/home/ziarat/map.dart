@@ -78,7 +78,7 @@ class _BottomSheet extends ConsumerWidget {
                     Row(
                       children: [
                         CustomImage(margin: EdgeInsets.only(right: 5), path: 'assets/png/map/destination.png', imageType: ImageType.png, height: 15, width: 15),
-                        Text('${provider.activeZiarat?.distance ?? 0} Km', style: CTextStyle.w400(fontSize: 14, color: CColors.primary), maxLines: 1, overflow: TextOverflow.ellipsis),
+                        Text('${provider.activeZiarat?.distance.split(' ').first ?? 0} Km', style: CTextStyle.w400(fontSize: 14, color: CColors.primary), maxLines: 1, overflow: TextOverflow.ellipsis),
                         CustomImage(margin: EdgeInsets.only(left: 80), path: 'assets/svg/clock.svg', imageType: ImageType.svg, height: 20, width: 20),
                         Text(provider.activeZiarat?.time ?? '0 m', style: CTextStyle.w400(fontSize: 14, color: CColors.primary), maxLines: 1, overflow: TextOverflow.ellipsis),
                       ],

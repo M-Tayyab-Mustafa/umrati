@@ -14,10 +14,9 @@ enum CollectionNames { users, settings }
 
 enum MapMarkerId { userLocation, destination }
 
-enum MapPolylineId { route }
-
 enum CommonDoc {
   alKaba('al_kaba'),
+  constants('constants'),
   safaMarwa('safa_marwa'),
   ziarat('ziarat');
 
@@ -28,6 +27,7 @@ enum CommonDoc {
 
 enum CommonField {
   isInTawaf('isInTawaf'),
+  googleMapKey('google_map_key'),
   startingPoint('startingPoint'),
   selectedZiarat('selected_ziarat');
 
