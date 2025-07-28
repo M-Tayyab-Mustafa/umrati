@@ -6,7 +6,7 @@ enum BackgroundType { empty, logo, logoWithBackButton, logoWithSkip }
 
 enum BottomNavTabs { profile, umra, home, ziarat, settings }
 
-enum ZiaratCities { Mecca, medina, taif, other }
+enum ZiaratCities { mecca, medina, taif, other }
 
 enum ZiaratDestinationsCreationOptions { auto, manual }
 

@@ -38,8 +38,8 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
                 ZiaratCityCard(
                   icon: 'assets/svg/ziarat/mecca.svg',
                   title: LocaleKeys.Mecca.tr(),
-                  isSelected: provider.selectedCity == ZiaratCities.Mecca,
-                  onTap: () => provider.updateSelectedCity(ZiaratCities.Mecca),
+                  isSelected: provider.selectedCity == ZiaratCities.mecca,
+                  onTap: () => provider.updateSelectedCity(ZiaratCities.mecca),
                 ),
                 ZiaratCityCard(
                   icon: 'assets/svg/ziarat/medina.svg',
