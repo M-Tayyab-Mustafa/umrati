@@ -1,15 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../controller/meeqaat/three_tasks_provider.dart';
-import '../../utils/helper/constants.dart';
-import '../../utils/services/translations/locale_keys.g.dart';
-import '../../utils/theme/colors.dart';
-import '../../utils/theme/text_style.dart';
-import '../../widgets/background.dart';
-import '../../widgets/button.dart';
-import '../../widgets/check_box_card.dart';
+import '../../export.dart';
 
 class MeeqaatThreeTasksPage extends ConsumerWidget {
   const MeeqaatThreeTasksPage({super.key});
@@ -17,6 +6,7 @@ class MeeqaatThreeTasksPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var provider = ref.watch(meeqaatThreeTasksProvider);
     return Background(
+      margin: EdgeInsets.only(top: screenSize.height * 0.13, left: 30, right: 30),
       onSkipTap: () => provider.skip(context),
       title: LocaleKeys.do_these_5_ihram_related_tasks.tr(),
       backgroundType: BackgroundType.logoWithSkip,

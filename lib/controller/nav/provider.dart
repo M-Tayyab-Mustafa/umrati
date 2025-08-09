@@ -1,29 +1,36 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../export.dart';
+import '../../view/nav/home/page.dart';
+import '../../view/nav/home/umra/page.dart';
+import '../../view/nav/home/ziarat/page.dart';
+import '../../view/nav/profile/page.dart';
+import '../../view/nav/settings/page.dart';
 
-import '../../view/nav/umera/tawaf.dart';
-import '../../utils/helper/constants.dart';
-import '../../view/nav/ziarat/page.dart';
-
-final bottomNavProvider = ChangeNotifierProvider<BottomNavNotifier>((ref) => BottomNavNotifier());
+final bottomNavProvider = ChangeNotifierProvider.autoDispose<BottomNavNotifier>((ref) => BottomNavNotifier());
 
 class BottomNavNotifier extends ChangeNotifier {
-  BottomNavTabs selectedTab = BottomNavTabs.umera;
-  Widget child = const StartTawafPage();
+  BottomNavTabs selectedTab = BottomNavTabs.home;
+  Widget child = const HomePage();
+
+  var logoAlign = Alignment.center;
 
   void onBottomNavTap(BottomNavTabs selectedOption) {
+    logoAlign = Alignment.center;
     selectedTab = selectedOption;
     switch (selectedOption) {
       case BottomNavTabs.profile:
-      case BottomNavTabs.umera:
-        child = const StartTawafPage();
+        child = const ProfilePage();
         break;
-      case BottomNavTabs.more:
+      case BottomNavTabs.umra:
+        child = const UmraPage();
+        break;
+      case BottomNavTabs.home:
+        child = const HomePage();
+        break;
       case BottomNavTabs.ziarat:
         child = const ZiaratPage();
         break;
       default:
-        child = Scaffold();
+        child = const SettingsPage();
     }
     notifyListeners();
   }
@@ -32,4 +39,23 @@ class BottomNavNotifier extends ChangeNotifier {
     this.child = child;
     notifyListeners();
   }
+
+  void updateLogoAlign(Alignment align) {
+    logoAlign = align;
+    notifyListeners();
+  }
+}
+
+LatLng offsetLatLng(LatLng origin, double distanceInMeters, double bearingInDegrees) {
+  const double earthRadius = 6371000;
+  final double bearing = bearingInDegrees * pi / 180;
+
+  final double lat1 = origin.latitude * pi / 180;
+  final double lon1 = origin.longitude * pi / 180;
+
+  final double lat2 = asin(sin(lat1) * cos(distanceInMeters / earthRadius) + cos(lat1) * sin(distanceInMeters / earthRadius) * cos(bearing));
+
+  final double lon2 = lon1 + atan2(sin(bearing) * sin(distanceInMeters / earthRadius) * cos(lat1), cos(distanceInMeters / earthRadius) - sin(lat1) * sin(lat2));
+
+  return LatLng(lat2 * 180 / pi, lon2 * 180 / pi);
 }

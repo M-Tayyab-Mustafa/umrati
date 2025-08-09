@@ -1,0 +1,41 @@
+import '../../../../export.dart';
+
+class UmraCompleted extends StatelessWidget {
+  const UmraCompleted({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: SizedBox(
+            height: screenSize.height * 0.3,
+            child: Stack(
+              children: [
+                CustomImage(path: 'assets/svg/kaba_image.svg', imageType: ImageType.svg, height: screenSize.height * 0.3, fit: BoxFit.fill),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    height: screenSize.height * 0.12,
+                    width: screenSize.height * 0.12,
+                    decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
+                    child: Center(child: Icon(Icons.check, size: screenSize.height * 0.08, color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Text(LocaleKeys.congratulations.tr(), style: CTextStyle.w800(fontSize: 18)),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 30), child: Text(LocaleKeys.your_umra_has_been_completed.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.primary))),
+        Text(LocaleKeys.may_allah_accept_your_umra_ameen.tr(), style: CTextStyle.w600(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center),
+
+        Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: Consumer(builder: (context, ref, child) => CButton(onTap: () => ref.read(tawafProvider).goToHome(context: context), title: LocaleKeys.go_to_home_screen.tr(), titleWithIcon: true)),
+        ),
+      ],
+    );
+  }
+}

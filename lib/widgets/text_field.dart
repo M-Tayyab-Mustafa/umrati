@@ -37,6 +37,7 @@ class CTextField extends StatelessWidget {
     this.inputFormatters,
     this.border,
     this.focusNode,
+    this.textDirection,
   });
 
   final TextEditingController? controller;
@@ -69,6 +70,7 @@ class CTextField extends StatelessWidget {
   final GestureTapCallback? onSuffixTap;
   final BoxBorder? border;
   final FocusNode? focusNode;
+  final TextDirection? textDirection;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +78,7 @@ class CTextField extends StatelessWidget {
       margin: margin ?? EdgeInsets.zero,
       decoration: BoxDecoration(boxShadow: primaryShadows, borderRadius: BorderRadius.circular(borderRadius ?? 10.0)),
       child: TextFormField(
+        textDirection: textDirection,
         focusNode: focusNode,
         controller: controller,
         onFieldSubmitted: onFieldSubmitted,

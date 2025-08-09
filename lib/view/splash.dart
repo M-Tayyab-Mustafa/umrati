@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../controller/splash/provider.dart';
-import '../utils/theme/colors.dart';
-import '../widgets/custom_image.dart';
+import '../export.dart';
 
 class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});

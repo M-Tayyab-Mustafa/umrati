@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../utils/services/local_storage.dart';
-import '../../utils/services/toast.dart';
+import '../../export.dart';
 import '../../view/nav/page.dart';
+import '../../widgets/dialog/confirmation.dart';
 
-final meeqaatThreeTasksProvider = ChangeNotifierProvider<MeeqaatThreeTasksNotifier>((ref) => MeeqaatThreeTasksNotifier());
+final meeqaatThreeTasksProvider = ChangeNotifierProvider.autoDispose<MeeqaatThreeTasksNotifier>((ref) => MeeqaatThreeTasksNotifier());
 
 class MeeqaatThreeTasksNotifier extends ChangeNotifier {
   bool isTwoNafiPrayersChecked = false;
@@ -26,14 +24,18 @@ class MeeqaatThreeTasksNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void skip(BuildContext context) {
+  void skip(BuildContext context) async {
+    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
+    if (result == false) {
+      return;
+    }
     LocalStorageManager.showMeeqaatThreeTasksPage(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
   }
 
   void tasksDone(BuildContext context) {
     if (!(isTwoNafiPrayersChecked && isIntentionChecked && isTalbiyahChecked)) {
-      errorToast('Please check Two Nafi Prayers, Intention and, Talbiyah boxes');
+      errorToast(LocaleKeys.please_check_the_boxes_for_the_two_nafl_prayers_the_intention_and_the_talbiyah.tr());
       return;
     }
     LocalStorageManager.showMeeqaatThreeTasksPage(false);

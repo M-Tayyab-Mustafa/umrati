@@ -21,10 +21,15 @@ dependencies:
   fluttertoast: ^8.2.12
   geocoding: ^3.0.0
   geolocator: ^14.0.0
+  google_maps_flutter: ^2.12.2
   google_sign_in: ^6.3.0
+  http4: ^0.0.4
+  latlong2: ^0.9.1
   permission_handler: ^12.0.0+1
   pinput: ^5.0.1
   shared_preferences: ^2.5.3
+  sign_in_with_apple: ^7.0.1
+  flutter_facebook_auth: ^7.1.2
 
 dev_dependencies:
   flutter_test:
@@ -38,28 +43,40 @@ flutter:
     - assets/svg/
     - assets/svg/gender/
     - assets/svg/ziarat/
+    - assets/svg/bottom_nav/
     - assets/png/
+    - assets/png/home/
     - assets/png/flags/
+    - assets/png/map/
     - assets/translations/
+    
   fonts:
+    - family: Jameel Noori Nastaleeq Kasheeda
+      fonts:
+        - asset: assets/font/urdu/jameel_noori_nastaleeq_kasheeda.ttf
+      
+    - family: KFGQPC Uthmanic Script HAFS Regular
+      fonts:
+        - asset: assets/font/arabic/kfgqpc_uthmanic_script_hafs_regular.ttf
+      
     - family: Roboto
       fonts:
-        - asset: assets/font/black.ttf
+        - asset: assets/font/english/black.ttf
           weight: 900
-        - asset: assets/font/extra_bold.ttf
+        - asset: assets/font/english/extra_bold.ttf
           weight: 800
-        - asset: assets/font/bold.ttf
+        - asset: assets/font/english/bold.ttf
           weight: 700
-        - asset: assets/font/extra_light.ttf
+        - asset: assets/font/english/extra_light.ttf
           weight: 600
-        - asset: assets/font/light.ttf
+        - asset: assets/font/english/light.ttf
           weight: 500
-        - asset: assets/font/medium.ttf
+        - asset: assets/font/english/medium.ttf
           weight: 400
-        - asset: assets/font/regular.ttf
+        - asset: assets/font/english/regular.ttf
           weight: 300
-        - asset: assets/font/semi_bold.ttf
+        - asset: assets/font/english/semi_bold.ttf
           weight: 200
-        - asset: assets/font/thin.ttf
+        - asset: assets/font/english/thin.ttf
           weight: 100
           

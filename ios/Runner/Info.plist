@@ -32,6 +32,8 @@
 	<string>We need your location to calculate distance even when the app is in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>We need your location to calculate distance.</string>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

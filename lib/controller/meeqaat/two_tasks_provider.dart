@@ -1,28 +1,32 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:umrati/utils/services/toast.dart';
-import '../../utils/helper/constants.dart';
-import '../../utils/services/local_storage.dart';
-import '../../utils/theme/colors.dart';
-import '../../view/permission.dart';
+import '../../export.dart';
+import '../../view/meeqaat/permission.dart';
 import '../../view/nav/page.dart';
-import '../../widgets/check_box.dart';
-import '../../widgets/custom_image.dart';
+import '../../widgets/dialog/confirmation.dart';
 
-final meeqaatTwoTasksProvider = ChangeNotifierProvider<MeeqaatTwoTasksNotifier>((ref) => MeeqaatTwoTasksNotifier());
+final meeqaatTwoTasksProvider = ChangeNotifierProvider.autoDispose<MeeqaatTwoTasksNotifier>((ref) => MeeqaatTwoTasksNotifier());
 
 class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   bool isCleanlinessChecked = false;
   bool isIhramChecked = false;
+  bool isSkipLoading = false;
 
-  void skip(BuildContext context) {
+  void skip(BuildContext context) async {
+    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
+    if (result == false) {
+      return;
+    }
+    isSkipLoading = true;
+    notifyListeners();
     LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
+    LocalStorageManager.showGetLocationPermissionPage(false);
+    LocalStorageManager.showLocationFetchPage(false);
+    LocalStorageManager.showMeeqaatThreeTasksPage(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
   }
 
   void moveToThreeOtherTasks(BuildContext context) {
     if (!(isCleanlinessChecked && isIhramChecked)) {
-      errorToast('Please check cleanliness and ihram boxes');
+      errorToast(LocaleKeys.please_check_the_cleanliness_and_ihram_boxes.tr());
       return;
     }
     LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);

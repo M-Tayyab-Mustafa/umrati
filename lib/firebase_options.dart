@@ -63,6 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '422094310480',
     projectId: 'umrati-ec453',
     storageBucket: 'umrati-ec453.firebasestorage.app',
+    androidClientId: '422094310480-s9opo7tvle3l83k3fm0c9vuidmb0kl98.apps.googleusercontent.com',
+    iosClientId: '422094310480-ulfu76ta97gusud3u389ckb53v1hcvlq.apps.googleusercontent.com',
     iosBundleId: 'com.mightysofts.umrati',
   );
+
 }

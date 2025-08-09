@@ -1,19 +1,13 @@
-import 'dart:async' show FutureOr;
-import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'firebase_options.dart';
-import 'utils/services/local_storage.dart';
-import 'utils/services/translations/codegen_loader.g.dart';
-import 'utils/theme/colors.dart';
+import 'export.dart';
 import 'view/splash.dart';
 
-FutureOr<void> main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalStorageManager.initialization();
   await EasyLocalization.ensureInitialized();
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(
     ProviderScope(
       child: EasyLocalization(
@@ -28,11 +22,37 @@ FutureOr<void> main() async {
   );
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    CTextStyle.context = context;
     return MaterialApp(
       locale: context.locale,
       supportedLocales: context.supportedLocales,

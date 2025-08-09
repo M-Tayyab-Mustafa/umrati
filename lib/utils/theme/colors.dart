@@ -11,6 +11,7 @@ class CColors {
   static const Color grey = Color(0xFF4B4B4B);
   static const Color greyShade1 = Color.fromARGB(255, 117, 117, 117);
   static const Color greyShade2 = Color(0xFF4F4F4F);
+  static const Color greyShade3 = Color(0xFFD9D9D9);
   static const Color deepTeal = Color(0xFF1D4C4F);
   static const Color tackingRadiusColor = Color(0xFFBDCDBB);
   static final Color tackingSecondaryRadiusColor = Color(0xFFBBBABC).withValues(alpha: 0.25);

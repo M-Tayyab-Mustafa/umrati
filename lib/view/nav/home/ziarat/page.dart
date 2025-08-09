@@ -1,0 +1,68 @@
+import '../../../../export.dart';
+part 'auto_selection.dart';
+part 'destinations.dart';
+part 'manual_selection.dart';
+
+class ZiaratPage extends ConsumerStatefulWidget {
+  const ZiaratPage({super.key});
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _CitiesPageState();
+}
+
+class _CitiesPageState extends ConsumerState<ZiaratPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(ziaratProvider).initialization(context, ref);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var provider = ref.watch(ziaratProvider);
+    return provider.showAutoSelectionPage
+        ? AutoSelection()
+        : provider.showCreationOptionPage
+        ? ZiaratDestinations()
+        : Column(
+          children: [
+            Padding(padding: const EdgeInsets.only(top: 30, bottom: 20), child: Text(LocaleKeys.select_ziarat_cities.tr(), textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24))),
+            GridView.count(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              crossAxisCount: 2,
+              mainAxisSpacing: 30,
+              crossAxisSpacing: 30,
+              children: [
+                ZiaratCityCard(
+                  icon: 'assets/svg/ziarat/mecca.svg',
+                  title: LocaleKeys.Mecca.tr(),
+                  isSelected: provider.selectedCity == ZiaratCities.mecca,
+                  onTap: () => provider.updateSelectedCity(ZiaratCities.mecca),
+                ),
+                ZiaratCityCard(
+                  icon: 'assets/svg/ziarat/medina.svg',
+                  title: LocaleKeys.medina.tr(),
+                  isSelected: provider.selectedCity == ZiaratCities.medina,
+                  onTap: () => provider.updateSelectedCity(ZiaratCities.medina),
+                ),
+                ZiaratCityCard(
+                  icon: 'assets/svg/ziarat/taif.svg',
+                  title: LocaleKeys.taif.tr(),
+                  isSelected: provider.selectedCity == ZiaratCities.taif,
+                  onTap: () => provider.updateSelectedCity(ZiaratCities.taif),
+                ),
+                ZiaratCityCard(
+                  icon: 'assets/svg/ziarat/other.svg',
+                  title: LocaleKeys.others.tr(),
+                  isSelected: provider.selectedCity == ZiaratCities.other,
+                  onTap: () => provider.updateSelectedCity(ZiaratCities.other),
+                ),
+              ],
+            ),
+            if (provider.selectedCity != null) CButton(onTap: provider.goToDestinationGenerationPage, margin: EdgeInsets.only(top: 64), title: LocaleKeys.proceed_forward.tr(), width: 200),
+          ],
+        );
+  }
+}
