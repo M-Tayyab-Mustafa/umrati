@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete Account</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/grammarly-sdk"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <div class="warning-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <h1>Delete Your Account</h1>
+        <p class="subtitle">
+          This action cannot be undone. All your data will be permanently
+          removed.
+        </p>
+      </div>
+
+      <div class="card-body">
+        <div class="auth-tabs">
+          <button class="tab-btn active" id="emailTabBtn">
+            <i class="fas fa-envelope"></i> Email
+          </button>
+          <button class="tab-btn" id="phoneTabBtn">
+            <i class="fas fa-mobile-alt"></i> Phone
+          </button>
+        </div>
+
+        <div id="emailAuthForm" class="auth-form">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <div class="input-container">
+              <i class="fas fa-envelope"></i>
+              <input type="email" id="email" placeholder="you@example.com" />
+            </div>
+            <div id="emailError" class="error-message"></div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-container">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="password" placeholder="••••••••" />
+            </div>
+            <div id="passwordError" class="error-message"></div>
+          </div>
+        </div>
+
+        <div id="phoneAuthForm" class="auth-form hidden">
+          <div class="form-group">
+            <label for="phoneNumber">Phone Number</label>
+            <div class="input-container">
+              <i class="fas fa-phone"></i>
+              <input type="tel" id="phoneNumber" placeholder="+1 234 567 8900" />
+            </div>
+            <div id="phoneError" class="error-message"></div>
+            <label for="verificationCode">Verification Code</label>
+            <div class="input-container">
+              <i class="fas fa-shield-alt"></i>
+              <input type="text" id="verificationCode" placeholder="Enter 6-digit code" />
+            </div>
+          </div>
+          <div id="recaptcha-container"></div>
+          <button id="verifyPhoneBtn" class="btn">
+            <span class="btn-text" id="phoneBtnText">Send Verification Code</span>
+          </button>
+        </div>
+        <div id="confirmSection" class="data-confirmation ">
+          <div class="warning-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <div>
+              <h3>Final Warning</h3>
+              <p>This will permanently erase:</p>
+              <ul class="warning-list">
+                <li>Your profile information</li>
+                <li>All saved preferences</li>
+                <li>Account access permanently</li>
+                <li>Any connected services</li>
+              </ul>
+            </div>
+          </div>
+
+          <button id="deleteBtn" class="btn">
+            <i class="fas fa-trash-alt"></i>
+            <span class="btn-text">Permanently Delete Account</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Messages -->
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Message goes here</span>
+  </div>
+
+  <!-- Confirmation Dialog -->
+  <div class="confirmation-dialog" id="confirmationDialog">
+    <div class="dialog-content">
+      <div class="dialog-icon success">
+        <i class="fas fa-check"></i>
+      </div>
+      <h2>Account Deleted</h2>
+      <p>
+        Your account and all associated data have been permanently deleted.
+        You will be redirected shortly.
+      </p>
+      <div class="dialog-buttons">
+        <button class="dialog-btn confirm" onclick="redirectToGoodbye()">
+          Continue
+        </button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="auth.js" defer></script>
+</body>
+
+</html>

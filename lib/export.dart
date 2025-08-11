@@ -24,6 +24,7 @@ export 'utils/theme/text_style.dart';
 export 'utils/services/translations/codegen_loader.g.dart';
 export 'utils/services/translations/locale_keys.g.dart';
 export 'utils/services/local_storage.dart';
+export 'utils/services/social_login.dart';
 export 'utils/services/toast.dart';
 export 'utils/services/validation.dart';
 
@@ -35,8 +36,8 @@ export 'model/ziarat.dart';
 //* Controller
 export 'controller/splash/provider.dart';
 export 'controller/nav/provider.dart';
-export 'controller/nav/umera/safa_marwa_provider.dart';
-export 'controller/nav/umera/tawaf_provider.dart';
+export 'controller/nav/umra/safa_marwa_provider.dart';
+export 'controller/nav/umra/umra_provider.dart';
 export 'controller/nav/ziarat/provider.dart';
 export 'controller/meeqaat/location_fetch_provider.dart';
 export 'controller/meeqaat/permission_provider.dart';
@@ -46,12 +47,10 @@ export 'controller/language/language_provider.dart';
 export 'controller/language/select_language_provider.dart';
 export 'controller/auth/gender_provider.dart';
 export 'controller/auth/login_provider.dart';
-export 'controller/auth/sign_up_provider.dart';
 
 //* Widgets
 export 'widgets/custom_image.dart';
 export 'widgets/background.dart';
-export 'widgets/bottom_nav.dart';
 export 'widgets/bottom_nav_item.dart';
 export 'widgets/button.dart';
 export 'widgets/card.dart';
@@ -68,7 +67,7 @@ export 'widgets/dialog/ziarat_complete_dialog.dart';
 export 'widgets/dialog/reach_your_destination.dart';
 
 //* Other Exports
-
+export 'package:dlibphonenumber/phone_number_util.dart';
 export 'package:country_code_picker/country_code_picker.dart';
 export 'package:firebase_core/firebase_core.dart';
 export 'package:easy_localization/easy_localization.dart' hide TextDirection;
@@ -79,3 +78,7 @@ export 'package:google_maps_flutter/google_maps_flutter.dart';
 export 'package:geolocator/geolocator.dart' hide ServiceStatus;
 export 'package:geocoding/geocoding.dart';
 export 'package:http4/http4.dart';
+export 'package:firebase_auth/firebase_auth.dart';
+export 'package:google_sign_in/google_sign_in.dart';
+export 'package:sign_in_with_apple/sign_in_with_apple.dart' hide IconAlignment;
+export 'package:flutter_facebook_auth/flutter_facebook_auth.dart';

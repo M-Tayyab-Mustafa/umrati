@@ -1,6 +1,4 @@
 import '../export.dart';
-import 'custom_image.dart';
-import 'loading.dart';
 
 class CButton extends StatelessWidget {
   const CButton({

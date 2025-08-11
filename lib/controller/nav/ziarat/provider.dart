@@ -1,8 +1,8 @@
 import '../../../export.dart';
-import '../../../view/nav/ziarat/map.dart';
-import '../../../view/nav/ziarat/page.dart';
+import '../../../view/nav/home/ziarat/map.dart';
+import '../../../view/nav/home/ziarat/page.dart';
 
-final ziaratProvider = ChangeNotifierProvider<ZiaratNotifier>((ref) => ZiaratNotifier());
+final ziaratProvider = ChangeNotifierProvider.autoDispose<ZiaratNotifier>((ref) => ZiaratNotifier());
 
 class ZiaratNotifier extends ChangeNotifier {
   ZiaratCities? selectedCity;
@@ -25,20 +25,25 @@ class ZiaratNotifier extends ChangeNotifier {
   UserModel? user;
 
   initialization(BuildContext context, WidgetRef ref) async {
-    user = await LocalStorageManager.getUser();
-    this.ref = ref;
-    var data = (await userCollection.doc(user!.uid).get()).data()!;
-    selectedZiarat = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
-    if (selectedZiarat.isNotEmpty) {
-      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmera: false));
-      if (result == true) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratMapPage()));
-      } else {
-        await userCollection.doc(user!.uid).set({CommonField.selectedZiarat.name: []}, SetOptions(merge: true));
-        selectedZiarat.clear();
+    try {
+      user = await LocalStorageManager.getUser();
+      this.ref = ref;
+      var doc = await userCollection.doc(user!.uid).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      var firebaseZiarats = doc.data()!.containsKey(CommonField.selectedZiarat.name) ? doc.data()![CommonField.selectedZiarat.name] : [];
+      selectedZiarat = List.from(firebaseZiarats).map((e) => ZiaratModel.fromMap(e)).toList();
+      if (selectedZiarat.isNotEmpty) {
+        var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmra: false));
+        if (result == true) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratMapPage()));
+        } else {
+          await userCollection.doc(user!.uid).set({CommonField.selectedZiarat.name: []}, SetOptions(merge: true));
+          selectedZiarat.clear();
+        }
       }
+      myCurrentLocation = await getLocation();
+    } catch (e) {
+      errorToast(e.toString());
     }
-    myCurrentLocation = await getLocation();
   }
 
   updateSelectedCity(ZiaratCities city) {
@@ -69,7 +74,7 @@ class ZiaratNotifier extends ChangeNotifier {
   }
 
   void goToBackFromAutoSelectionPage() {
-    ref?.read(bottomNavProvider.notifier).updateLogoAlign(MainAxisAlignment.center);
+    ref?.read(bottomNavProvider.notifier).updateLogoAlign(Alignment.center);
     showAutoSelectionPage = false;
     positionStream?.cancel();
     notifyListeners();
@@ -94,30 +99,19 @@ class ZiaratNotifier extends ChangeNotifier {
     try {
       isLoading = true;
       notifyListeners();
-      ziarats = List.from((await settingsCollection.doc(CommonDoc.ziarat.name).get()).data()![selectedCity?.name]).map<ZiaratModel>((map) => ZiaratModel.fromMap(map)).toList();
-      var status = await Geolocator.checkPermission();
-      if (status == LocationPermission.denied || status == LocationPermission.deniedForever) {
-        var status = await Geolocator.requestPermission();
-        if (status == LocationPermission.deniedForever) {
-          await openAppSettings();
-          return;
-        } else if (status == LocationPermission.denied) {
-          errorToast(isLTR(context) ? 'Location permission denied, Permission Required to proceed for ward.' : 'لوکیشن کی اجازت مسترد کر دی گئی، آگے بڑھنے کے لیے اجازت درکار ہے۔');
-          return;
-        }
-      }
+      var doc = await settingsCollection.doc(CommonDoc.ziarat.name).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      ziarats = List.from(doc.data()![selectedCity?.name]).map<ZiaratModel>((map) => ZiaratModel.fromMap(map)).toList();
       if (selectedCreationOption == ZiaratDestinationsCreationOptions.manual) {
         selectedZiarat.clear();
         isLoading = false;
         notifyListeners();
         await Navigator.push(context, MaterialPageRoute(builder: (context) => ManualSelection()));
       } else {
-        ref?.read(bottomNavProvider.notifier).updateLogoAlign(MainAxisAlignment.start);
+        ref?.read(bottomNavProvider.notifier).updateLogoAlign(Alignment.centerLeft);
         showAutoSelectionPage = true;
       }
     } catch (e) {
-      log(e.toString());
-      errorToast(isLTR(context) ? 'Something went wrong, Please try again later.' : 'کچھ غلط ہو گیا ہے، براہ کرم بعد میں دوبارہ کوشش کریں۔');
+      errorToast(e.toString());
     } finally {
       isLoading = false;
       notifyListeners();
@@ -125,13 +119,18 @@ class ZiaratNotifier extends ChangeNotifier {
   }
 
   Future<String> getLocation() async {
-    var position = await Geolocator.getCurrentPosition();
-    Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
-    return '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
+    try {
+      var position = await Geolocator.getCurrentPosition().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
+      return '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
+    } catch (e) {
+      errorToast(e.toString());
+      return '';
+    }
   }
 
   Future<void> getDistance() async {
-    positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.best)).listen((position) async {
+    positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation)).listen((position) async {
       sortedZiarats =
           ziarats.map<ZiaratModel>((ziarat) {
             var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziarat.lat.toDouble(), ziarat.lng.toDouble());

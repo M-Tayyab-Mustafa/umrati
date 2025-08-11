@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show TextInputFormatter;
+import '../../export.dart';
 
 class Helper {
   static String formatePhoneNumber(String phoneNumber, String dialCode) {
     return '$dialCode${phoneNumber.replaceAll(' ', '')}';
   }
+
+  static String timeoutError = LocaleKeys.timeout_error.tr();
+  static const int timeOutTime = 30; // in seconds
 }
 
 class UsPhoneNumberFormatter extends TextInputFormatter {

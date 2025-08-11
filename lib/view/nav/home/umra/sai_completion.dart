@@ -1,13 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../controller/nav/umera/tawaf_provider.dart';
-import '../../../utils/services/translations/locale_keys.g.dart';
-import '../../../utils/theme/colors.dart';
-import '../../../utils/theme/text_style.dart';
-import '../../../widgets/button.dart';
-import '../../../widgets/check_box_card.dart';
-import '../../../widgets/custom_image.dart';
+import '../../../../export.dart';
 
 class SaiCompletionPage extends ConsumerWidget {
   const SaiCompletionPage({super.key});
@@ -54,7 +45,7 @@ class SaiCompletionPage extends ConsumerWidget {
               onTap: provider.toggleShaveTheHead,
               child: Text(LocaleKeys.shave_the_head_description.tr(), style: CTextStyle.w400(color: CColors.primary, height: 1.2)),
             ),
-            CButton(title: LocaleKeys.continued.tr(), titleWithIcon: true, onTap: ref.read(tawafProvider).umeraCompleted),
+            CButton(title: LocaleKeys.continued.tr(), titleWithIcon: true, onTap: ref.read(tawafProvider).umraCompleted),
           ],
         );
       },

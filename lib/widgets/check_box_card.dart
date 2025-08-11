@@ -1,7 +1,4 @@
 import '../export.dart';
-import 'card.dart';
-import 'check_box.dart';
-import 'custom_image.dart';
 
 class CheckBoxCard extends StatelessWidget {
   const CheckBoxCard({super.key, required this.title, required this.isSelected, required this.onTap, this.child, this.margin});

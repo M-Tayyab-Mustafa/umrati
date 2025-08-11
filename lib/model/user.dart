@@ -7,33 +7,57 @@ class UserModel {
   final String email;
   final String phone;
   final String photo;
-  final bool is_tawaf_completed;
-  final String created_at;
-  final String updated_at;
   final String gender;
+  final bool is_doing_ziarat;
+  final int tawafCircleCount;
+  final int saiRoundCount;
+  final bool isOneSideSaiRunCompleted;
+  final String? created_at;
+  final String? updated_at;
+  final _timer = DateTime.now().toIso8601String();
+
   UserModel({
     required this.uid,
     required this.name,
     required this.email,
     required this.phone,
     required this.photo,
-    required this.is_tawaf_completed,
-    required this.created_at,
-    required this.updated_at,
     required this.gender,
+    this.is_doing_ziarat = false,
+    this.isOneSideSaiRunCompleted = false,
+    this.tawafCircleCount = 0,
+    this.saiRoundCount = 0,
+    this.created_at,
+    this.updated_at,
   });
 
-  UserModel copyWith({String? uid, String? name, String? email, String? phone, String? photo, bool? is_tawaf_completed, String? created_at, String? updated_at, String? gender}) {
+  UserModel copyWith({
+    String? uid,
+    String? name,
+    String? email,
+    String? phone,
+    String? photo,
+    String? gender,
+    bool? is_doing_ziarat,
+    bool? isOneSideSaiRunCompleted,
+    int? tawafCircleCount,
+    int? saiRoundCount,
+    String? created_at,
+    String? updated_at,
+  }) {
     return UserModel(
       uid: uid ?? this.uid,
       name: name ?? this.name,
       email: email ?? this.email,
       phone: phone ?? this.phone,
       photo: photo ?? this.photo,
-      is_tawaf_completed: is_tawaf_completed ?? this.is_tawaf_completed,
+      gender: gender ?? this.gender,
+      is_doing_ziarat: is_doing_ziarat ?? this.is_doing_ziarat,
+      tawafCircleCount: tawafCircleCount ?? this.tawafCircleCount,
+      isOneSideSaiRunCompleted: isOneSideSaiRunCompleted ?? this.isOneSideSaiRunCompleted,
+      saiRoundCount: saiRoundCount ?? this.saiRoundCount,
       created_at: created_at ?? this.created_at,
       updated_at: updated_at ?? this.updated_at,
-      gender: gender ?? this.gender,
     );
   }
 
@@ -44,10 +68,13 @@ class UserModel {
       'email': email,
       'phone': phone,
       'photo': photo,
-      'is_tawaf_completed': is_tawaf_completed,
-      'created_at': created_at,
-      'updated_at': updated_at,
       'gender': gender,
+      'is_doing_ziarat': is_doing_ziarat,
+      'tawaf_circle_count': tawafCircleCount,
+      'is_one_side_sai_run_completed': isOneSideSaiRunCompleted,
+      'sai_round_count': saiRoundCount,
+      'created_at': created_at ?? _timer,
+      'updated_at': updated_at ?? _timer,
     };
   }
 
@@ -58,10 +85,13 @@ class UserModel {
       email: map['email']?.toString() ?? '',
       phone: map['phone']?.toString() ?? '',
       photo: map['photo']?.toString() ?? '',
-      is_tawaf_completed: map['is_tawaf_completed'] ?? false,
+      gender: map['gender']?.toString() ?? '',
+      is_doing_ziarat: map['is_doing_ziarat'] ?? false,
+      isOneSideSaiRunCompleted: map['is_one_side_sai_run_completed'] ?? false,
+      tawafCircleCount: map['tawaf_circle_count'] ?? 0,
+      saiRoundCount: map['sai_round_count'] ?? 0,
       created_at: map['created_at']?.toString() ?? '',
       updated_at: map['updated_at']?.toString() ?? '',
-      gender: map['gender']?.toString() ?? '',
     );
   }
 
@@ -71,7 +101,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, email: $email, phone: $phone, photo: $photo, is_tawaf_completed: $is_tawaf_completed, created_at: $created_at, updated_at: $updated_at, gender: $gender)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, phone: $phone, photo: $photo, gender: $gender, tawaf_circle_count: $tawafCircleCount, sai_round_count: $saiRoundCount, is_one_side_sai_run_completed: $isOneSideSaiRunCompleted, is_doing_ziarat: $is_doing_ziarat, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -83,14 +113,28 @@ class UserModel {
         other.email == email &&
         other.phone == phone &&
         other.photo == photo &&
-        other.is_tawaf_completed == is_tawaf_completed &&
+        other.gender == gender &&
+        other.isOneSideSaiRunCompleted == isOneSideSaiRunCompleted &&
+        other.tawafCircleCount == tawafCircleCount &&
+        other.saiRoundCount == saiRoundCount &&
+        other.is_doing_ziarat == is_doing_ziarat &&
         other.created_at == created_at &&
-        other.updated_at == updated_at &&
-        other.gender == gender;
+        other.updated_at == updated_at;
   }
 
   @override
   int get hashCode {
-    return uid.hashCode ^ name.hashCode ^ email.hashCode ^ phone.hashCode ^ photo.hashCode ^ is_tawaf_completed.hashCode ^ created_at.hashCode ^ updated_at.hashCode ^ gender.hashCode;
+    return uid.hashCode ^
+        name.hashCode ^
+        email.hashCode ^
+        phone.hashCode ^
+        photo.hashCode ^
+        gender.hashCode ^
+        isOneSideSaiRunCompleted.hashCode ^
+        tawafCircleCount.hashCode ^
+        saiRoundCount.hashCode ^
+        is_doing_ziarat.hashCode ^
+        created_at.hashCode ^
+        updated_at.hashCode;
   }
 }

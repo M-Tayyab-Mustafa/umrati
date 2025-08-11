@@ -14,13 +14,16 @@ class BottomNavItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CustomImage(path: icon, imageType: ImageType.svg, height: 18, width: 18, fit: BoxFit.scaleDown, color: isSelected ? CColors.primary : CColors.deepTeal),
-          Text(title, style: CTextStyle.w400(color: isSelected ? CColors.primary : CColors.deepTeal, fontSize: 9)),
-        ],
+      child: Container(
+        color: Colors.transparent,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CustomImage(path: icon, imageType: ImageType.svg, height: 30, width: 20, fit: BoxFit.scaleDown, color: isSelected ? CColors.primary : CColors.deepTeal),
+            Text(title, style: CTextStyle.w400(color: isSelected ? CColors.primary : CColors.deepTeal, fontSize: 12)),
+          ],
+        ),
       ),
     );
   }

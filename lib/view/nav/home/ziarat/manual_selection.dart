@@ -31,7 +31,7 @@ class ManualSelection extends ConsumerWidget {
                   onTap: () => provider.updateSelectedZiarat(ziarat),
                   borderColor: provider.selectedZiarat.contains(ziarat) ? null : CColors.greyShade3,
                   boxShadow: provider.selectedZiarat.contains(ziarat) ? null : [],
-                  child: Text(ziarat.title, style: CTextStyle.w500(fontSize: 16)),
+                  child: Directionality(textDirection: TextDirection.rtl, child: Text(ziarat.title, style: CTextStyle.w500(fontSize: 16))),
                 );
               },
             ),
@@ -45,8 +45,8 @@ class ManualSelection extends ConsumerWidget {
 
   String _cityName(ZiaratCities city) {
     switch (city) {
-      case ZiaratCities.macca:
-        return LocaleKeys.macca.tr();
+      case ZiaratCities.mecca:
+        return LocaleKeys.Mecca.tr();
       case ZiaratCities.medina:
         return LocaleKeys.medina.tr();
       case ZiaratCities.taif:

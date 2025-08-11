@@ -1,10 +1,4 @@
 import '../../export.dart';
-import '../../controller/auth/login_provider.dart';
-import '../../utils/services/translations/locale_keys.g.dart';
-import '../../widgets/background.dart';
-import '../../widgets/button.dart';
-import '../../widgets/custom_image.dart';
-import '../../widgets/text_field.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -18,7 +12,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     var provider = ref.watch(loginProvider);
     return Background(
       backgroundType: BackgroundType.logoWithSkip,
-      isSkipLoading: provider.isSkipping,
+      isSkipLoading: provider.isSendingOTP || provider.isSkipping || provider.isSocialLogin,
       onSkipTap: () => provider.skip(context),
       title: LocaleKeys.log_in_to_your_account.tr(),
       child: SingleChildScrollView(
@@ -56,7 +50,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
             ),
             CButton(
-              isLoading: provider.isSendingOTP || provider.isSkipping,
+              isLoading: provider.isSendingOTP || provider.isSkipping || provider.isSocialLogin,
               onTap: () => provider.sendTheOTP(context),
               margin: const EdgeInsets.only(top: 35),
               titleWithIcon: true,

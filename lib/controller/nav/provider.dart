@@ -1,32 +1,36 @@
 import '../../export.dart';
-import '../../view/nav/umera/tawaf.dart';
-import '../../view/nav/ziarat/page.dart';
+import '../../view/nav/home/page.dart';
+import '../../view/nav/home/umra/page.dart';
+import '../../view/nav/home/ziarat/page.dart';
+import '../../view/nav/profile/page.dart';
+import '../../view/nav/settings/page.dart';
 
-final bottomNavProvider = ChangeNotifierProvider<BottomNavNotifier>((ref) => BottomNavNotifier());
+final bottomNavProvider = ChangeNotifierProvider.autoDispose<BottomNavNotifier>((ref) => BottomNavNotifier());
 
 class BottomNavNotifier extends ChangeNotifier {
-  BottomNavTabs selectedTab = BottomNavTabs.umera;
-  Widget child = const StartTawafPage();
+  BottomNavTabs selectedTab = BottomNavTabs.home;
+  Widget child = const HomePage();
 
-  var logoAlign = MainAxisAlignment.center;
+  var logoAlign = Alignment.center;
 
   void onBottomNavTap(BottomNavTabs selectedOption) {
-    logoAlign = MainAxisAlignment.center;
+    logoAlign = Alignment.center;
     selectedTab = selectedOption;
     switch (selectedOption) {
       case BottomNavTabs.profile:
-        _setMyLocationToMacca();
+        child = const ProfilePage();
         break;
-      case BottomNavTabs.umera:
-        child = const StartTawafPage();
+      case BottomNavTabs.umra:
+        child = const UmraPage();
         break;
-      case BottomNavTabs.more:
+      case BottomNavTabs.home:
+        child = const HomePage();
         break;
       case BottomNavTabs.ziarat:
         child = const ZiaratPage();
         break;
       default:
-        child = Scaffold();
+        child = const SettingsPage();
     }
     notifyListeners();
   }
@@ -36,22 +40,9 @@ class BottomNavNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateLogoAlign(MainAxisAlignment align) {
+  void updateLogoAlign(Alignment align) {
     logoAlign = align;
     notifyListeners();
-  }
-
-  void _setMyLocationToMacca() async {
-    await Geolocator.requestPermission();
-    var position = await Geolocator.getCurrentPosition();
-    await settingsCollection.doc(CommonDoc.alKaba.name).update({'lat': position.latitude, 'lng': position.longitude});
-    await settingsCollection.doc(CommonDoc.safaMarwa.name).update({'safaLat': position.latitude, 'safaLng': position.longitude});
-    LatLng marwaNewLocation = offsetLatLng(
-      LatLng(position.latitude, position.longitude),
-      double.tryParse((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!['distance'] as String) ?? 450,
-      0,
-    );
-    await settingsCollection.doc(CommonDoc.safaMarwa.name).update({'marwaLat': marwaNewLocation.latitude, 'marwaLng': marwaNewLocation.longitude});
   }
 }
 

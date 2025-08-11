@@ -1,15 +1,10 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:permission_handler/permission_handler.dart';
-import '../../utils/helper/constants.dart';
-import '../../utils/services/local_storage.dart';
+import '../../export.dart';
 import '../../view/auth/gender.dart';
 import '../../view/auth/login.dart';
 import '../../view/language/select_language.dart';
 import '../../view/meeqaat/location_fetched.dart';
 import '../../view/meeqaat/three_tasks.dart';
-import '../../view/permission.dart';
+import '../../view/meeqaat/permission.dart';
 import '../../view/meeqaat/two_tasks.dart';
 import '../../view/nav/page.dart';
 
@@ -19,6 +14,7 @@ class SplashNotifier extends ChangeNotifier {
   void initialization(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 2));
     screenSize = MediaQuery.sizeOf(context);
+    await Geolocator.requestPermission();
     if (await LocalStorageManager.getSelectLanguagePage()) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectLanguagePage()));
     } else if (await LocalStorageManager.getLoginPage()) {

@@ -1,13 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../controller/nav/umera/tawaf_provider.dart';
-import '../../../utils/helper/constants.dart';
-import '../../../utils/services/translations/locale_keys.g.dart';
-import '../../../utils/theme/colors.dart';
-import '../../../utils/theme/text_style.dart';
-import '../../../widgets/button.dart';
-import '../../../widgets/custom_image.dart';
+import '../../../../export.dart';
 
 class UmraCompleted extends StatelessWidget {
   const UmraCompleted({super.key});
@@ -42,7 +33,7 @@ class UmraCompleted extends StatelessWidget {
 
         Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: Consumer(builder: (context, ref, child) => CButton(onTap: ref.read(tawafProvider).goToHome, title: LocaleKeys.go_to_home_screen.tr(), titleWithIcon: true)),
+          child: Consumer(builder: (context, ref, child) => CButton(onTap: () => ref.read(tawafProvider).goToHome(context: context), title: LocaleKeys.go_to_home_screen.tr(), titleWithIcon: true)),
         ),
       ],
     );

@@ -1,9 +1,4 @@
 import '../../export.dart';
-import '../../controller/meeqaat/two_tasks_provider.dart';
-import '../../utils/services/translations/locale_keys.g.dart';
-import '../../widgets/background.dart';
-import '../../widgets/button.dart';
-import '../../widgets/check_box_card.dart';
 
 class MeeqaatTwoTasksPage extends ConsumerWidget {
   const MeeqaatTwoTasksPage({super.key});
