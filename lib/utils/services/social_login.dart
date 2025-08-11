@@ -24,12 +24,7 @@ class SocialLoginService {
     try {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: AppleIDAuthorizationScopes.values,
-        webAuthenticationOptions: WebAuthenticationOptions(
-          //Todo:: Required Apple Service ID
-          clientId: 'com.mightysofts.umrati.service',
-          //Todo:: Required redirect URI
-          redirectUri: Uri.parse('https://umrati-ec453.firebaseapp.com/__/auth/handler'),
-        ),
+        webAuthenticationOptions: WebAuthenticationOptions(clientId: 'com.mightysofts.umrati.service', redirectUri: Uri.parse('https://umrati-ec453.firebaseapp.com/__/auth/handler')),
       ).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       final oauthCredential = OAuthProvider("apple.com").credential(idToken: appleCredential.identityToken, accessToken: appleCredential.authorizationCode);
       await _signWithCredentials(context: context, credential: oauthCredential);
