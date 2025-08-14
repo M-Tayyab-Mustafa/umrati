@@ -67,7 +67,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   Row(
                     children: [
                       Expanded(child: CustomImage(onTap: () => provider.googleLogin(context), path: 'assets/svg/google_with_border.svg', imageType: ImageType.svg)),
-                      Expanded(child: CustomImage(onTap: () => provider.facebookLogin(context), path: 'assets/svg/facebook_with_border.svg', imageType: ImageType.svg)),
+                      // Expanded(child: CustomImage(onTap: () => provider.facebookLogin(context), path: 'assets/svg/facebook_with_border.svg', imageType: ImageType.svg)),
                       Expanded(child: CustomImage(onTap: () => provider.appleLogin(context), path: 'assets/svg/apple_with_border.svg', imageType: ImageType.svg)),
                     ],
                   ),
