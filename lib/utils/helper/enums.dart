@@ -18,6 +18,7 @@ enum CommonDoc {
   alKaba('al_kaba'),
   constants('constants'),
   safaMarwa('safa_marwa'),
+  safaMarwaRunningPoints('safa_marwa_running_points'),
   ziarat('ziarat');
 
   final String name;
@@ -27,6 +28,7 @@ enum CommonDoc {
 
 enum CommonField {
   isInTawaf('isInTawaf'),
+  points('points'),
   googleMapKey('google_map_key'),
   startingPoint('startingPoint'),
   selectedZiarat('selected_ziarat');

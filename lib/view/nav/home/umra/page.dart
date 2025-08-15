@@ -182,7 +182,10 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(safaMarwaProv.isRunComplete ? LocaleKeys.going_to_safa.tr() : LocaleKeys.going_to_marwa.tr(), style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal)),
+          Text(
+            '${safaMarwaProv.isRunComplete ? LocaleKeys.going_to_safa.tr() : LocaleKeys.going_to_marwa.tr()}${provider.user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}',
+            style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal),
+          ),
           BasicCard(
             margin: EdgeInsets.only(top: 8, bottom: 8),
             backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
@@ -201,7 +204,7 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              provider.tawafCircleCount == 0
+              '${provider.tawafCircleCount == 0
                   ? LocaleKeys.dua_during_1st_round.tr()
                   : provider.tawafCircleCount == 1
                   ? LocaleKeys.dua_during_2nd_round.tr()
@@ -213,7 +216,7 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
                   ? LocaleKeys.dua_during_5th_round.tr()
                   : provider.tawafCircleCount == 5
                   ? LocaleKeys.dua_during_6th_round.tr()
-                  : LocaleKeys.dua_during_7th_round.tr(),
+                  : LocaleKeys.dua_during_7th_round.tr()}${provider.user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}',
               style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal),
             ),
             BasicCard(

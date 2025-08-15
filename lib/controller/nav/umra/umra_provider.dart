@@ -32,12 +32,13 @@ class TawafNotifier extends ChangeNotifier {
   Position? startingPosition;
 
   UserModel? _user;
-  UserModel get user => _user!;
+  UserModel? get user => _user;
 
   // Initialize TawafNotifier
   initialization(BuildContext context) async {
     _user = await LocalStorageManager.getUser();
-    tawafCircleCount = user.tawafCircleCount;
+    tawafCircleCount = user!.tawafCircleCount;
+    notifyListeners();
     if (tawafCircleCount > 0) {
       var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmra: true));
       if (result == null) return;
@@ -49,7 +50,7 @@ class TawafNotifier extends ChangeNotifier {
         }
       } else {
         _resetTawafData();
-        LocalStorageManager.saveUser(user.copyWith(tawafCircleCount: 0, isOneSideSaiRunCompleted: false, saiRoundCount: 0));
+        LocalStorageManager.saveUser(user!.copyWith(tawafCircleCount: 0, isOneSideSaiRunCompleted: false, saiRoundCount: 0));
       }
       notifyListeners();
     }
@@ -74,7 +75,7 @@ class TawafNotifier extends ChangeNotifier {
     isSafaMarwaComplete = false;
     _resetTawafData();
     _cancelPositionStreamSubscription();
-    LocalStorageManager.saveUser(user.copyWith(tawafCircleCount: 0, isOneSideSaiRunCompleted: false, saiRoundCount: 0));
+    LocalStorageManager.saveUser(user!.copyWith(tawafCircleCount: 0, isOneSideSaiRunCompleted: false, saiRoundCount: 0));
   }
 
   Future<void> _startTawaf(BuildContext context) async {
@@ -125,8 +126,11 @@ class TawafNotifier extends ChangeNotifier {
     if (tawafCircleCompletionPercent >= 0.975) {
       isRoundCompleted = true;
       tawafCircleCount++;
+      if (await Vibration.hasVibrator()) {
+        Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
+      }
       tawafCircleCompletionPercent = 0;
-      LocalStorageManager.saveUser(user.copyWith(tawafCircleCount: tawafCircleCount));
+      LocalStorageManager.saveUser(user!.copyWith(tawafCircleCount: tawafCircleCount));
     }
     notifyListeners();
   }

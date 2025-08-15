@@ -51,6 +51,7 @@ abstract class  LocaleKeys {
   static const dua_during_5th_round = 'dua_during_5th_round';
   static const dua_during_6th_round = 'dua_during_6th_round';
   static const dua_during_7th_round = 'dua_during_7th_round';
+  static const in_low_voice = 'in_low_voice';
   static const profile = 'profile';
   static const umra = 'umra';
   static const tawaf = 'tawaf';

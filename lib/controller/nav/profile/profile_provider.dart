@@ -4,69 +4,80 @@ final profileProvider = ChangeNotifierProvider.autoDispose<ProfileNotifier>((ref
 
 class ProfileNotifier extends ChangeNotifier {
   bool isLoading = false;
+  bool isStatingPoint = true;
+  List<PointsLocation> locations = [];
 
-  void setMyLocationToMecca() async {
-    try {
-      isLoading = true;
-      notifyListeners();
+  void setLocation() async {
+    isLoading = true;
+    notifyListeners();
+    var doc = settingsCollection.doc(CommonDoc.safaMarwaRunningPoints.name);
+    if ((await doc.get()).exists) {
+      var points = List.from((await doc.get()).get(CommonField.points.name)).map((e) => PointsLocation.fromMap(e)).toList();
+      await Geolocator.requestPermission();
       var position = await Geolocator.getCurrentPosition();
-      await settingsCollection
-          .doc(CommonDoc.alKaba.name)
-          .update({'lat': position.latitude, 'lng': position.longitude})
-          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      await settingsCollection
-          .doc(CommonDoc.safaMarwa.name)
-          .update({'safaLat': position.latitude, 'safaLng': position.longitude})
-          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      LatLng marwaNewLocation = offsetLatLng(
-        LatLng(position.latitude, position.longitude),
-        double.tryParse((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!['distance'] as String) ?? 450,
-        0,
-      );
-      await settingsCollection
-          .doc(CommonDoc.safaMarwa.name)
-          .update({'marwaLat': marwaNewLocation.latitude, 'marwaLng': marwaNewLocation.longitude})
-          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      infoToast('Location Set');
-      isLoading = false;
-      notifyListeners();
-    } catch (e) {
-      errorToast(e.toString());
+      if (points.last.pointType == 'starting') {
+        points.add(PointsLocation(latitude: position.latitude, longitude: position.longitude, pointType: 'ending'));
+      } else {
+        points.add(PointsLocation(latitude: position.latitude, longitude: position.longitude, pointType: 'starting'));
+      }
+      doc.update({CommonField.points.name: points.map((e) => e.toMap()).toList()});
+    } else {
+      await Geolocator.requestPermission();
+      var position = await Geolocator.getCurrentPosition();
+      doc.set({
+        CommonField.points.name: [PointsLocation(latitude: position.latitude, longitude: position.longitude, pointType: 'starting').toMap()],
+      });
     }
+    locations = List.from((await doc.get()).get(CommonField.points.name)).map((e) => PointsLocation.fromMap(e)).toList();
+
+    isLoading = false;
+    notifyListeners();
   }
 
-  LatLng offsetLatLng(LatLng origin, double distanceInMeters, double bearingInDegrees) {
-    const double earthRadius = 6371000;
-    final double bearing = bearingInDegrees * pi / 180;
+  void clear() async {
+    isLoading = true;
+    notifyListeners();
+    var doc = settingsCollection.doc(CommonDoc.safaMarwaRunningPoints.name);
+    locations.clear();
+    await doc.delete();
+    isLoading = false;
+    notifyListeners();
+  }
+}
 
-    final double lat1 = origin.latitude * pi / 180;
-    final double lon1 = origin.longitude * pi / 180;
+class PointsLocation {
+  final double latitude;
+  final double longitude;
+  final String pointType;
 
-    final double lat2 = asin(sin(lat1) * cos(distanceInMeters / earthRadius) + cos(lat1) * sin(distanceInMeters / earthRadius) * cos(bearing));
+  PointsLocation({required this.latitude, required this.longitude, required this.pointType});
 
-    final double lon2 = lon1 + atan2(sin(bearing) * sin(distanceInMeters / earthRadius) * cos(lat1), cos(distanceInMeters / earthRadius) - sin(lat1) * sin(lat2));
-
-    return LatLng(lat2 * 180 / pi, lon2 * 180 / pi);
+  PointsLocation copyWith({double? latitude, double? longitude, String? pointType}) {
+    return PointsLocation(latitude: latitude ?? this.latitude, longitude: longitude ?? this.longitude, pointType: pointType ?? this.pointType);
   }
 
-  void setOriginalLocation() async {
-    try {
-      isLoading = true;
-      notifyListeners();
-      await settingsCollection.doc(CommonDoc.alKaba.name).update({'lat': 21.422487, 'lng': 39.826206}).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      await settingsCollection
-          .doc(CommonDoc.safaMarwa.name)
-          .update({'safaLat': 21.422933, 'safaLng': 39.827145})
-          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      await settingsCollection
-          .doc(CommonDoc.safaMarwa.name)
-          .update({'marwaLat': 21.423713, 'marwaLng': 39.828450})
-          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      infoToast('Location Set');
-      isLoading = false;
-      notifyListeners();
-    } catch (e) {
-      errorToast(e.toString());
-    }
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{'latitude': latitude, 'longitude': longitude, 'pointType': pointType};
   }
+
+  factory PointsLocation.fromMap(Map<String, dynamic> map) {
+    return PointsLocation(latitude: map['latitude'] as double, longitude: map['longitude'] as double, pointType: map['pointType'] as String);
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory PointsLocation.fromJson(String source) => PointsLocation.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() => 'PointsLocation(latitude: $latitude, longitude: $longitude, pointType: $pointType)';
+
+  @override
+  bool operator ==(covariant PointsLocation other) {
+    if (identical(this, other)) return true;
+
+    return other.latitude == latitude && other.longitude == longitude && other.pointType == pointType;
+  }
+
+  @override
+  int get hashCode => latitude.hashCode ^ longitude.hashCode ^ pointType.hashCode;
 }

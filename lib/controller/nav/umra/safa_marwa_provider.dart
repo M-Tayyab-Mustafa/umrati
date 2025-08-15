@@ -30,8 +30,8 @@ class SafaMarwaNotifier extends ChangeNotifier {
     _ref = ref;
     _context = context;
     _cancelPositionStreamSubscription();
-    isRunComplete = ref.read(tawafProvider).user.isOneSideSaiRunCompleted;
-    saiRoundCount = ref.read(tawafProvider).user.saiRoundCount;
+    isRunComplete = ref.read(tawafProvider).user!.isOneSideSaiRunCompleted;
+    saiRoundCount = ref.read(tawafProvider).user!.saiRoundCount;
     notifyListeners();
 
     var safaMarwaModel = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
@@ -63,7 +63,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
     } else {
       var marwaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, marwaLatLng.latitude, marwaLatLng.longitude).abs();
       if (marwaDistance <= threshold) {
-        LocalStorageManager.saveUser(ref.read(tawafProvider).user.copyWith(isOneSideSaiRunCompleted: true));
+        LocalStorageManager.saveUser(ref.read(tawafProvider).user!.copyWith(isOneSideSaiRunCompleted: true));
         isRunComplete = true;
       } else {
         if (marwaDistance > (safaMarwaDistance + threshold)) return;
@@ -80,9 +80,12 @@ class SafaMarwaNotifier extends ChangeNotifier {
   _updateRoundCount() async {
     isRunComplete = false;
     saiRoundCount++;
+    if (await Vibration.hasVibrator()) {
+      Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
+    }
     oneSideRunCompletionPercent = 0.0;
     notifyListeners();
-    LocalStorageManager.saveUser(ref.read(tawafProvider).user.copyWith(saiRoundCount: saiRoundCount, isOneSideSaiRunCompleted: false));
+    LocalStorageManager.saveUser(ref.read(tawafProvider).user!.copyWith(saiRoundCount: saiRoundCount, isOneSideSaiRunCompleted: false));
     if (saiRoundCount == 7) {
       _cancelPositionStreamSubscription();
       saiRoundCount = 0;
