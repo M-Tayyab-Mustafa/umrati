@@ -39,6 +39,7 @@ export 'controller/nav/provider.dart';
 export 'controller/nav/umra/safa_marwa_provider.dart';
 export 'controller/nav/umra/umra_provider.dart';
 export 'controller/nav/ziarat/provider.dart';
+export 'controller/nav/ziarat/map_provider.dart';
 export 'controller/meeqaat/location_fetch_provider.dart';
 export 'controller/meeqaat/permission_provider.dart';
 export 'controller/meeqaat/three_tasks_provider.dart';
@@ -65,6 +66,7 @@ export 'widgets/dialog/tawaf_completed_dialog.dart';
 export 'widgets/dialog/already_dialog.dart';
 export 'widgets/dialog/ziarat_complete_dialog.dart';
 export 'widgets/dialog/reach_your_destination.dart';
+export 'widgets/dialog/ziarat_reading_detail_dialog.dart';
 
 //* Other Exports
 export 'package:dlibphonenumber/phone_number_util.dart';
@@ -83,3 +85,4 @@ export 'package:google_sign_in/google_sign_in.dart';
 export 'package:sign_in_with_apple/sign_in_with_apple.dart' hide IconAlignment;
 export 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 export 'package:vibration/vibration.dart';
+export 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';

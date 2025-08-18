@@ -4,6 +4,7 @@ class CColors {
   CColors._();
   static const Color primary = Color(0xFF0B7C18);
   static const Color duaBackground = Color(0xFFC5FFAA);
+  static const Color charcoalBlack = Color(0xFF212029);
   static const Color secondaryBackground = Color(0xFFE6FBE2);
   static const Color secondary = Color(0xFF28B67E);
   static final Color background = Color.fromARGB(255, 168, 255, 178).withValues(alpha: 0.4);

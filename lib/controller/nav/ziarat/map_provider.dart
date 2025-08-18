@@ -8,8 +8,10 @@ class MapPageNotifier extends ChangeNotifier {
   Set<Marker> markers = {};
   Set<Polyline> polylines = {};
   UserModel? user;
+  final LayerLink layerLink = LayerLink();
+  OverlayEntry? overlayEntry;
 
-  var bottomSheetSize = screenSize.height * 0.15;
+  var bottomSheetSize = screenSize.height * 0.13;
 
   ZiaratModel? activeZiarat;
   //* Destinations
@@ -21,6 +23,8 @@ class MapPageNotifier extends ChangeNotifier {
   }
 
   CameraPosition initialCameraPosition = CameraPosition(target: LatLng(30.17271735209673, 71.45729802421867), zoom: 20);
+
+  get panelController => SlidingUpPanelController();
 
   initialization(BuildContext context, WidgetRef ref) async {
     var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
@@ -151,9 +155,73 @@ class MapPageNotifier extends ChangeNotifier {
     await userCollection.doc(user!.uid).update({CommonField.selectedZiarat.name: destinations.map((e) => e.title == activeZiarat.title ? activeZiarat.toMap() : e.toMap()).toList()});
   }
 
+  Future<void> showMoreOptions({required BuildContext context}) async {
+    overlayEntry = OverlayEntry(
+      canSizeOverlay: true,
+      builder:
+          (context) => Center(
+            child: CompositedTransformFollower(
+              link: layerLink,
+              showWhenUnlinked: false,
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  width: 130,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(color: const Color(0xFF212029), borderRadius: BorderRadius.circular(32)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("ZIARAT HISTORY", style: CTextStyle.w500(fontSize: 10, color: Colors.white)),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16, bottom: 20),
+                        child: GestureDetector(
+                          onTap: () {
+                            hideMoreOptions();
+                          },
+                          child: Row(
+                            children: [
+                              CustomImage(path: 'assets/svg/ziarat/listen.svg', imageType: ImageType.svg, size: 22, margin: EdgeInsets.only(right: 10)),
+                              Text("Listen", style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: GestureDetector(
+                          onTap: () {
+                            hideMoreOptions();
+                            showDialog(context: context, builder: (context) => ZiaratReadingDetailDialog(ziarat: activeZiarat!));
+                          },
+                          child: Row(
+                            children: [
+                              CustomImage(path: 'assets/svg/ziarat/read.svg', imageType: ImageType.svg, size: 24, margin: EdgeInsets.only(right: 10)),
+                              Text("Read", style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+    );
+    Overlay.of(context).insert(overlayEntry!);
+  }
+
+  void hideMoreOptions() {
+    overlayEntry?.remove();
+    overlayEntry = null;
+  }
+
   @override
   void dispose() {
     _controller?.dispose();
+    hideMoreOptions();
     _positionStream?.cancel();
     super.dispose();
   }
