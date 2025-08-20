@@ -10,6 +10,8 @@ class MapPageNotifier extends ChangeNotifier {
   UserModel? user;
   final LayerLink layerLink = LayerLink();
   OverlayEntry? overlayEntry;
+  final FlutterTts flutterTts = FlutterTts();
+  bool isListening = false;
 
   var bottomSheetSize = screenSize.height * 0.13;
 
@@ -152,7 +154,7 @@ class MapPageNotifier extends ChangeNotifier {
   Future<void> updateActiveZiarat({required ZiaratModel activeZiarat}) async {
     var data = (await userCollection.doc(user!.uid).get()).data()!;
     destinations = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
-    await userCollection.doc(user!.uid).update({CommonField.selectedZiarat.name: destinations.map((e) => e.title == activeZiarat.title ? activeZiarat.toMap() : e.toMap()).toList()});
+    await userCollection.doc(user!.uid).update({CommonField.selectedZiarat.name: destinations.map((e) => e.title_en == activeZiarat.title_en ? activeZiarat.toMap() : e.toMap()).toList()});
   }
 
   Future<void> showMoreOptions({required BuildContext context}) async {
@@ -169,41 +171,44 @@ class MapPageNotifier extends ChangeNotifier {
                   width: 130,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(color: const Color(0xFF212029), borderRadius: BorderRadius.circular(32)),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("ZIARAT HISTORY", style: CTextStyle.w500(fontSize: 10, color: Colors.white)),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16, bottom: 20),
-                        child: GestureDetector(
-                          onTap: () {
-                            hideMoreOptions();
-                          },
-                          child: Row(
-                            children: [
-                              CustomImage(path: 'assets/svg/ziarat/listen.svg', imageType: ImageType.svg, size: 22, margin: EdgeInsets.only(right: 10)),
-                              Text("Listen", style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
-                            ],
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(LocaleKeys.ziarat_history.tr(), style: CTextStyle.w500(fontSize: 11, color: Colors.white)),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16, bottom: 20),
+                          child: GestureDetector(
+                            onTap: () {
+                              hideMoreOptions();
+                            },
+                            child: Row(
+                              children: [
+                                CustomImage(path: 'assets/svg/ziarat/listen.svg', imageType: ImageType.svg, size: 22, margin: EdgeInsets.only(right: 10)),
+                                Text(LocaleKeys.listen.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: GestureDetector(
-                          onTap: () {
-                            hideMoreOptions();
-                            showDialog(context: context, builder: (context) => ZiaratReadingDetailDialog(ziarat: activeZiarat!));
-                          },
-                          child: Row(
-                            children: [
-                              CustomImage(path: 'assets/svg/ziarat/read.svg', imageType: ImageType.svg, size: 24, margin: EdgeInsets.only(right: 10)),
-                              Text("Read", style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
-                            ],
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: GestureDetector(
+                            onTap: () {
+                              hideMoreOptions();
+                              showDialog(context: context, builder: (context) => ZiaratReadingDetailDialog(ziarat: activeZiarat!));
+                            },
+                            child: Row(
+                              children: [
+                                CustomImage(path: 'assets/svg/ziarat/read.svg', imageType: ImageType.svg, size: 24, margin: EdgeInsets.only(right: 10)),
+                                Text(LocaleKeys.read.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -216,6 +221,18 @@ class MapPageNotifier extends ChangeNotifier {
   void hideMoreOptions() {
     overlayEntry?.remove();
     overlayEntry = null;
+  }
+
+  void startListing(String detail) async {
+    await flutterTts.speak(detail);
+    isListening = true;
+    notifyListeners();
+  }
+
+  void stopListing() async {
+    await flutterTts.stop();
+    isListening = false;
+    notifyListeners();
   }
 
   @override

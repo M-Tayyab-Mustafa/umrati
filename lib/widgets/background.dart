@@ -1,12 +1,4 @@
-import 'package:easy_localization/easy_localization.dart' hide TextDirection;
-import 'package:flutter/material.dart';
-import 'package:umrati/widgets/loading.dart';
-import '../utils/helper/constants.dart';
-import '../utils/helper/language_direction.dart';
-import '../utils/services/translations/locale_keys.g.dart';
-import '../utils/theme/colors.dart';
-import '../utils/theme/text_style.dart';
-import 'custom_image.dart';
+import '../export.dart';
 
 class Background extends StatelessWidget {
   const Background({

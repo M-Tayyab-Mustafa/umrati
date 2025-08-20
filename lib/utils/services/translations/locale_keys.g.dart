@@ -53,6 +53,9 @@ abstract class  LocaleKeys {
   static const dua_during_7th_round = 'dua_during_7th_round';
   static const in_low_voice = 'in_low_voice';
   static const your = 'your';
+  static const ziarat_history = 'ziarat_history';
+  static const listen = 'listen';
+  static const read = 'read';
   static const ziarat_detail_not_found = 'ziarat_detail_not_found';
   static const profile = 'profile';
   static const umra = 'umra';

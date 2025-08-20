@@ -1,12 +1,12 @@
 part of 'page.dart';
 
-class ZiaratDestinations extends ConsumerWidget {
-  const ZiaratDestinations({super.key});
+class ChooseDestinations extends ConsumerWidget {
+  const ChooseDestinations({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var provider = ref.watch(ziaratProvider);
-    var isAutoSelected = provider.selectedCreationOption == ZiaratDestinationsCreationOptions.auto;
-    var isManualSelected = provider.selectedCreationOption == ZiaratDestinationsCreationOptions.manual;
+    var isAutoSelected = provider.selectedDestinationsCreationOption == ZiaratDestinationsCreationOptions.auto;
+    var isManualSelected = provider.selectedDestinationsCreationOption == ZiaratDestinationsCreationOptions.manual;
     return Column(
       children: [
         Padding(
@@ -15,7 +15,7 @@ class ZiaratDestinations extends ConsumerWidget {
             textDirection: TextDirection.ltr,
             child: Row(
               children: [
-                CustomImage(onTap: provider.goBackToSelectCities, path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, height: 40, width: 30, margin: EdgeInsets.only(right: 20)),
+                CustomImage(onTap: provider.goBackToSelectCity, path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, height: 40, width: 30, margin: EdgeInsets.only(right: 20)),
                 Expanded(child: Center(child: Text(LocaleKeys.please_select_one_option_to_continue_your_ziarat.tr(), textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24)))),
               ],
             ),
@@ -26,7 +26,7 @@ class ZiaratDestinations extends ConsumerWidget {
             child: Column(
               children: [
                 BasicCard(
-                  onTap: () => ref.read(ziaratProvider.notifier).updateSelectedCreationOption(ZiaratDestinationsCreationOptions.auto),
+                  onTap: () => ref.read(ziaratProvider.notifier).updateSelectedDestinationsCreationOption(ZiaratDestinationsCreationOptions.auto),
                   margin: const EdgeInsets.only(top: 30),
                   padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                   borderColor: isAutoSelected ? null : CColors.greyShade2,
@@ -47,7 +47,7 @@ class ZiaratDestinations extends ConsumerWidget {
                   ),
                 ),
                 BasicCard(
-                  onTap: () => ref.read(ziaratProvider.notifier).updateSelectedCreationOption(ZiaratDestinationsCreationOptions.manual),
+                  onTap: () => ref.read(ziaratProvider.notifier).updateSelectedDestinationsCreationOption(ZiaratDestinationsCreationOptions.manual),
                   padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                   margin: const EdgeInsets.only(top: 30, bottom: 30),
                   borderColor: isManualSelected ? CColors.primary : CColors.greyShade2,
@@ -67,7 +67,7 @@ class ZiaratDestinations extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (ref.watch(ziaratProvider).selectedCreationOption != null)
+                if (ref.watch(ziaratProvider).selectedDestinationsCreationOption != null)
                   CButton(margin: const EdgeInsets.only(bottom: 30), isLoading: provider.isLoading, onTap: () => provider.generateZiarat(context), title: LocaleKeys.proceed_forward.tr(), width: 200),
               ],
             ),

@@ -46,7 +46,10 @@ class _ZiaratMapPageState extends ConsumerState<ZiaratMapPage> {
               alignment: Alignment(0.9, -0.9),
               child: GestureDetector(
                 onTap: () => provider.showMoreOptions(context: context),
-                child: CustomImage(path: 'assets/svg/ziarat/more_options.svg', imageType: ImageType.svg, width: 45, height: 45, borderRadius: BorderRadius.circular(999)),
+                child: Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: CustomImage(path: 'assets/svg/ziarat/more_options.svg', imageType: ImageType.svg, width: 45, height: 45, borderRadius: BorderRadius.circular(999)),
+                ),
               ),
             ),
           Align(alignment: Alignment(0.42, -0.92), child: CompositedTransformTarget(link: provider.layerLink, child: SizedBox(height: 20, width: 20))),
@@ -71,10 +74,17 @@ class _BottomSheet extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: getDirection(provider.activeZiarat?.title ?? '') == TextDirection.rtl ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            crossAxisAlignment:
+                getTextDirection(languageDirection(context) == TextDirection.ltr ? provider.activeZiarat?.title_en ?? '' : provider.activeZiarat?.title_ur ?? '') == TextDirection.rtl
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
             children: [
               Center(child: CustomImage(path: 'assets/svg/arrow_up.svg', imageType: ImageType.svg, height: 30, width: 30)),
-              ziaratDetailCard(title: provider.activeZiarat?.title ?? '', time: provider.activeZiarat?.time ?? '0 m', distance: '${provider.activeZiarat?.distance.split(' ').first ?? 0}'),
+              ziaratDetailCard(
+                title: languageDirection(context) == TextDirection.ltr ? provider.activeZiarat?.title_en ?? '' : provider.activeZiarat?.title_ur ?? '',
+                time: provider.activeZiarat?.time ?? '0 m',
+                distance: '${provider.activeZiarat?.distance.split(' ').first ?? 0}',
+              ),
               if (provider.destinations.isNotEmpty)
                 Expanded(
                   child: ListView.builder(
@@ -82,7 +92,12 @@ class _BottomSheet extends ConsumerWidget {
                     itemCount: provider.destinations.sublist(1).length,
                     itemBuilder: (context, index) {
                       var ziarat = provider.destinations.sublist(1)[index];
-                      return ziaratDetailCard(title: ziarat.title, time: '', distance: ziarat.distance.split(' ').first, index: index + 1);
+                      return ziaratDetailCard(
+                        title: languageDirection(context) == TextDirection.ltr ? provider.activeZiarat?.title_en ?? '' : provider.activeZiarat?.title_ur ?? '',
+                        time: '',
+                        distance: ziarat.distance.split(' ').first,
+                        index: index + 1,
+                      );
                     },
                   ),
                 ),
@@ -95,7 +110,7 @@ class _BottomSheet extends ConsumerWidget {
 
   Widget ziaratDetailCard({required String title, required String time, required String distance, int index = 0}) {
     return Directionality(
-      textDirection: getDirection(title),
+      textDirection: getTextDirection(title),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(

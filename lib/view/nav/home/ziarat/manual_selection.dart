@@ -31,7 +31,10 @@ class ManualSelection extends ConsumerWidget {
                   onTap: () => provider.updateSelectedZiarat(ziarat),
                   borderColor: provider.selectedZiarat.contains(ziarat) ? null : CColors.greyShade3,
                   boxShadow: provider.selectedZiarat.contains(ziarat) ? null : [],
-                  child: Directionality(textDirection: getDirection(ziarat.title), child: Text(ziarat.title, style: CTextStyle.w500(fontSize: 16))),
+                  child: Directionality(
+                    textDirection: getTextDirection(languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur),
+                    child: Text(languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur, style: CTextStyle.w500(fontSize: 16)),
+                  ),
                 );
               },
             ),

@@ -35,7 +35,15 @@ class _ZiaratReadingDetailDialogState extends State<ZiaratReadingDetailDialog> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(padding: const EdgeInsets.only(bottom: 8), child: Text(widget.ziarat.title, style: CTextStyle.w500(fontSize: 24), maxLines: 2, overflow: TextOverflow.ellipsis)),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                languageDirection(context) == TextDirection.ltr ? widget.ziarat.title_en : widget.ziarat.title_ur,
+                style: CTextStyle.w500(fontSize: 24),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             Expanded(
               child: Center(
                 child: ScrollbarTheme(

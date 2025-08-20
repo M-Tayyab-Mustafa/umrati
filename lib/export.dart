@@ -15,8 +15,8 @@ export 'package:flutter/foundation.dart';
 export 'package:flutter/gestures.dart';
 
 export '../firebase_options.dart';
+
 //* Utils
-export 'utils/helper/language_direction.dart';
 export 'utils/helper/constants.dart';
 export 'utils/helper/helper.dart';
 export 'utils/theme/colors.dart';
@@ -86,3 +86,4 @@ export 'package:sign_in_with_apple/sign_in_with_apple.dart' hide IconAlignment;
 export 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 export 'package:vibration/vibration.dart';
 export 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
+export 'package:flutter_tts/flutter_tts.dart';
