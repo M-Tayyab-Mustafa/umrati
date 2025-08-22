@@ -39,10 +39,14 @@ class SafaMarwaNotifier extends ChangeNotifier {
     var marwaLatLng = LatLng(double.parse(safaMarwaModel.marwaLat), double.parse(safaMarwaModel.marwaLng));
     var safaMarwaDistance = num.parse(safaMarwaModel.distance);
     var threshold = num.parse(safaMarwaModel.threshold);
-    // Start listening to position updates
-    positionStreamSubscription = Geolocator.getPositionStream(
-      locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
-    ).listen((position) => _updateLocation(position, safaLatLng, marwaLatLng, safaMarwaDistance, threshold));
+    try {
+      positionStreamSubscription = Geolocator.getPositionStream(
+        locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
+      ).listen((position) => _updateLocation(position, safaLatLng, marwaLatLng, safaMarwaDistance, threshold));
+    } catch (e) {
+      if (kDebugMode) log(e.toString());
+      errorToast(e.toString());
+    }
   }
 
   // Method to update location and track progress between Safa and Marwa

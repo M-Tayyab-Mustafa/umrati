@@ -7,6 +7,49 @@ class Helper {
 
   static String timeoutError = LocaleKeys.timeout_error.tr();
   static const int timeOutTime = 30; // in seconds
+
+  static Future<Region> getUserRegion() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition();
+      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      String countryCode = placemarks.first.isoCountryCode ?? "OTHER";
+      var plansDoc = await FirebaseFirestore.instance.collection(CollectionNames.settings.name).doc(CommonDoc.plans.name).get();
+      var highTierRegionCodes = List.from(await plansDoc.get(CommonField.highTierRegionCodes.name));
+      return highTierRegionCodes.contains(countryCode) ? Region.highTier : Region.rest;
+    } catch (e) {
+      if (kDebugMode) log(e.toString());
+      errorToast(e.toString());
+    }
+    return Region.highTier;
+  }
+
+  static Future<Map<String, dynamic>?> getRouteLeg({required LatLng startPoint, required LatLng endPoint}) async {
+    try {
+      final uri = Uri.https('maps.googleapis.com', '/maps/api/directions/json', {
+        'origin': '${startPoint.latitude},${startPoint.longitude}',
+        'destination': '${endPoint.latitude},${endPoint.longitude}',
+        'mode': 'driving',
+        'key': await mapsApiKey,
+      });
+      final response = await get(uri);
+      var body = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        if (body['routes'].isNotEmpty) {
+          final route = body['routes'].first as Map<String, dynamic>;
+          final leg = route['legs'].first;
+          return leg;
+        } else {
+          log('Routes not found.');
+        }
+      } else {
+        log(body.toString());
+      }
+    } catch (e) {
+      if (kDebugMode) log(e.toString());
+      errorToast(e.toString());
+    }
+    return null;
+  }
 }
 
 class UsPhoneNumberFormatter extends TextInputFormatter {
@@ -22,4 +65,142 @@ class UsPhoneNumberFormatter extends TextInputFormatter {
 
     return TextEditingValue(text: buffer.toString(), selection: TextSelection.collapsed(offset: buffer.length));
   }
+}
+
+class FormattedText extends StatelessWidget {
+  final String rawText;
+  const FormattedText({super.key, required this.rawText});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(parseFormattedText(rawText, context));
+  }
+
+  static TextSpan parseFormattedText(String text, BuildContext context) {
+    final List<InlineSpan> spans = [];
+    int currentPosition = 0;
+
+    // Process the text until we've handled all of it
+    while (currentPosition < text.length) {
+      // Look for the next pattern match from current position
+      final Match? nextMatch = _findNextPattern(text, currentPosition);
+
+      if (nextMatch == null) {
+        // No more patterns found, add remaining text
+        spans.add(TextSpan(text: text.substring(currentPosition)));
+        break;
+      }
+
+      // Add text before the match
+      if (nextMatch.start > currentPosition) {
+        spans.add(TextSpan(text: text.substring(currentPosition, nextMatch.start)));
+      }
+
+      // Handle the matched pattern
+      spans.add(_handleMatch(nextMatch, text, context));
+
+      // Move to the end of this match
+      currentPosition = nextMatch.end;
+    }
+
+    return TextSpan(style: CTextStyle.w400(fontSize: 15), children: spans);
+  }
+
+  static Match? _findNextPattern(String text, int startPosition) {
+    final List<RegExp> patterns = [
+      RegExp(r"^#\s(.*?)(?=\n|$)", multiLine: true), // H1 Heading
+      RegExp(r"^##\s(.*?)(?=\n|$)", multiLine: true), // H2 Heading
+      RegExp(r"^###\s(.*?)(?=\n|$)", multiLine: true), // H3 Heading
+      RegExp(r"\*\*(.*?)\*\*"), // Bold
+      RegExp(r"[*\-]\s(.*?)(?=\n|$)", multiLine: true), // Bullet point
+      RegExp(r"\d+\.\s(.*?)(?=\n|$)", multiLine: true), // Numbered list
+    ];
+
+    Match? earliestMatch;
+
+    for (final pattern in patterns) {
+      final match = pattern.firstMatch(text.substring(startPosition));
+      if (match != null) {
+        final adjustedMatch = _adjustMatch(match, startPosition);
+        if (earliestMatch == null || adjustedMatch.start < earliestMatch.start) {
+          earliestMatch = adjustedMatch;
+        }
+      }
+    }
+
+    return earliestMatch;
+  }
+
+  static Match _adjustMatch(Match match, int offset) {
+    return _OffsetMatch(match, offset);
+  }
+
+  static InlineSpan _handleMatch(Match match, String fullText, BuildContext context) {
+    final String matchedText = match.group(0)!;
+
+    // H1 Heading
+    if (matchedText.startsWith('# ') && !matchedText.startsWith('##')) {
+      final content = matchedText.substring(2);
+      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w800(fontSize: 20));
+    }
+    // H2 Heading
+    else if (matchedText.startsWith('## ') && !matchedText.startsWith('###')) {
+      final content = matchedText.substring(3);
+      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w800(fontSize: 18));
+    }
+    // H3 Heading
+    else if (matchedText.startsWith('### ')) {
+      final content = matchedText.substring(4);
+      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w800(fontSize: 14));
+    }
+    // Bold
+    else if (matchedText.startsWith('**') && matchedText.endsWith('**')) {
+      final content = matchedText.substring(2, matchedText.length - 2);
+      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w800(fontSize: 16));
+    }
+    // Bullet point
+    else if (matchedText.startsWith('* ') || matchedText.startsWith('- ')) {
+      final content = '\n•${matchedText.substring(1)}';
+      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w400(fontSize: 16));
+    }
+    // Numbered list
+    else if (RegExp(r'^\d+\.').hasMatch(matchedText)) {
+      final content = '${match.group(1)}\n';
+      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w600(fontSize: 16));
+    }
+
+    // Fallback: return as plain text
+    return TextSpan(text: matchedText);
+  }
+}
+
+class _OffsetMatch implements Match {
+  final Match _match;
+  final int _offset;
+
+  _OffsetMatch(this._match, this._offset);
+
+  @override
+  String? group(int group) => _match.group(group);
+
+  @override
+  String? operator [](int group) => _match[group];
+
+  @override
+  int get groupCount => _match.groupCount;
+
+  @override
+  Pattern get pattern => _match.pattern;
+
+  @override
+  int get start => _match.start + _offset;
+
+  @override
+  int get end => _match.end + _offset;
+
+  @override
+  List<String?> groups(List<int> groupIndices) => _match.groups(groupIndices);
+
+  @override
+  String get input => _match.input;
 }

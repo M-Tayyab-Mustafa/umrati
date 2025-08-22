@@ -12,11 +12,12 @@ class SettingsPage extends ConsumerWidget {
         CButton(
           title: 'Logout',
           onTap: () async {
-            await LocalStorageManager.clearStorage();
             try {
+              await LocalStorageManager.clearStorage();
               await FirebaseAuth.instance.signOut();
             } catch (e) {
-              log(e.toString());
+              if (kDebugMode) log(e.toString());
+              errorToast(e.toString());
             }
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SelectLanguagePage()));
           },

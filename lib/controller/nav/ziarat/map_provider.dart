@@ -29,29 +29,34 @@ class MapPageNotifier extends ChangeNotifier {
   get panelController => SlidingUpPanelController();
 
   initialization(BuildContext context, WidgetRef ref) async {
-    var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
-    initialCameraPosition = CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude), zoom: 20);
-    markers.add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: initialCameraPosition.target, icon: await _loadCustomIcon('assets/png/map/user.png')));
-    _controller?.animateCamera(CameraUpdate.newLatLng(initialCameraPosition.target));
-    //* Fetch Destinations
-    user = await LocalStorageManager.getUser();
-    var data = (await userCollection.doc(user!.uid).get()).data()!;
-    destinations = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
-    activeZiarat = destinations.first;
-    //* First Destination Marker
-    markers.add(
-      Marker(
-        markerId: MarkerId(MapMarkerId.destination.name),
-        position: LatLng(activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble()),
-        icon: await _loadCustomIcon('assets/png/map/destination.png'),
-      ),
-    );
+    try {
+      var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
+      initialCameraPosition = CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude), zoom: 20);
+      markers.add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: initialCameraPosition.target, icon: await _loadCustomIcon('assets/png/map/user.png')));
+      _controller?.animateCamera(CameraUpdate.newLatLng(initialCameraPosition.target));
+      //* Fetch Destinations
+      user = await LocalStorageManager.getUser();
+      var data = (await userCollection.doc(user!.uid).get()).data()!;
+      destinations = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
+      activeZiarat = destinations.first;
+      //* First Destination Marker
+      markers.add(
+        Marker(
+          markerId: MarkerId(MapMarkerId.destination.name),
+          position: LatLng(activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble()),
+          icon: await _loadCustomIcon('assets/png/map/destination.png'),
+        ),
+      );
 
-    notifyListeners();
-    _positionStream?.cancel();
-    _positionStream = Geolocator.getPositionStream(
-      locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter),
-    ).listen((position) => _updateLocation(position, context, ref));
+      notifyListeners();
+      _positionStream?.cancel();
+      _positionStream = Geolocator.getPositionStream(
+        locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter),
+      ).listen((position) => _updateLocation(position, context, ref));
+    } catch (e) {
+      if (kDebugMode) log(e.toString());
+      errorToast(e.toString());
+    }
   }
 
   _updateLocation(Position position, BuildContext context, WidgetRef ref) async {
@@ -96,18 +101,8 @@ class MapPageNotifier extends ChangeNotifier {
   }
 
   Future<void> _getRoutePolyline(LatLng startPoint, LatLng endPoint) async {
-    final uri = Uri.https('maps.googleapis.com', '/maps/api/directions/json', {
-      'origin': '${startPoint.latitude},${startPoint.longitude}',
-      'destination': '${endPoint.latitude},${endPoint.longitude}',
-      'mode': 'driving',
-      'key': await mapsApiKey,
-    });
-    log(uri.toString());
-    final response = await get(uri);
-    var body = jsonDecode(response.body);
-    if (response.statusCode == 200 && body['routes'].isNotEmpty) {
-      final route = body['routes'].first as Map<String, dynamic>;
-      final leg = route['legs'].first;
+    final leg = await Helper.getRouteLeg(startPoint: startPoint, endPoint: endPoint);
+    if (leg != null) {
       activeZiarat = activeZiarat!.copyWith(distance: leg['distance']['text'], time: leg['duration']['text']);
       updateActiveZiarat(activeZiarat: activeZiarat!);
       var steps = leg['steps'] as List;

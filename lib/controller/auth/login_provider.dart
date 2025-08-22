@@ -1,7 +1,6 @@
 import '../../export.dart';
 import '../../view/auth/otp.dart';
-import '../../view/auth/gender.dart';
-import '../../view/nav/page.dart';
+import '../../view/meeqaat/permission.dart';
 import '../../widgets/dialog/confirmation.dart';
 
 final loginProvider = ChangeNotifierProvider.autoDispose<LoginNotifier>((ref) => LoginNotifier());
@@ -50,11 +49,10 @@ class LoginNotifier extends ChangeNotifier {
   Future<void> skip(BuildContext context) async {
     try {
       var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
-      if (result == false) return;
+      if (result == false || result == null) return;
       isSkipping = true;
       notifyListeners();
       var userCredential = await _auth.signInAnonymously().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-
       UserModel user = UserModel(
         uid: userCredential.user!.uid,
         name: userCredential.user!.displayName ?? '',
@@ -63,13 +61,14 @@ class LoginNotifier extends ChangeNotifier {
         photo: userCredential.user!.photoURL ?? '',
         gender: Gender.unknown.name.toLowerCase(),
       );
-      await LocalStorageManager.saveUser(user);
+      await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
       LocalStorageManager.showLoginPage(false);
       isSkipping = false;
       notifyListeners();
       Navigator.popUntil(context, (route) => route.isFirst);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectGenderPage()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LocationPermissionPage()));
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
   }
@@ -97,6 +96,7 @@ class LoginNotifier extends ChangeNotifier {
           )
           .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
   }
@@ -124,6 +124,7 @@ class LoginNotifier extends ChangeNotifier {
       notifyListeners();
       await SocialLoginService.signInWithGoogle(context);
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     } finally {
       isSocialLogin = false;
@@ -138,6 +139,7 @@ class LoginNotifier extends ChangeNotifier {
       notifyListeners();
       await SocialLoginService.signInWithFacebook(context);
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     } finally {
       isSocialLogin = false;
@@ -152,6 +154,7 @@ class LoginNotifier extends ChangeNotifier {
       notifyListeners();
       await SocialLoginService.signInWithApple(context);
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     } finally {
       isSocialLogin = false;
@@ -189,12 +192,13 @@ class LoginNotifier extends ChangeNotifier {
           )
           .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
   }
 
   //* OTP Verified
-  void verifyOTP(BuildContext context) async {
+  void verifyOTP(BuildContext context, WidgetRef ref) async {
     var otpError = simpleFieldValidation(LocaleKeys.otp_verification.tr(), otpController.text, context);
     if (otpError != null) {
       errorToast(otpError);
@@ -214,32 +218,32 @@ class LoginNotifier extends ChangeNotifier {
           photo: userCredential.user!.photoURL ?? '',
           gender: Gender.unknown.name.toLowerCase(),
         );
-        await LocalStorageManager.saveUser(user);
-        LocalStorageManager.showLoginPage(false);
+        await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
+        await LocalStorageManager.showLoginPage(false);
         //* Disable Loading
         isVerifyingOTP = false;
         notifyListeners();
         Navigator.popUntil(context, (route) => route.isFirst);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectGenderPage()));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LocationPermissionPage()));
       } else {
         await LocalStorageManager.saveUser(UserModel.fromMap((await userCollection.doc(userCredential.user!.uid).get()).data()!), toFirebase: false);
-        LocalStorageManager.showLoginPage(false);
+        await LocalStorageManager.showLoginPage(false);
         //* Disable Loading
         isVerifyingOTP = false;
         notifyListeners();
-        LocalStorageManager.showGenderPage(false);
-        LocalStorageManager.showGetLocationPermissionPage(false);
-        LocalStorageManager.showLocationFetchPage(false);
-        LocalStorageManager.showMeeqaatThreeTasksPage(false);
-        LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
+        await LocalStorageManager.showGenderPage(false);
+        await LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
+        await LocalStorageManager.showMeeqaatPage(false);
+        await LocalStorageManager.showMeeqaatThreeTasksPage(false);
         Navigator.popUntil(context, (route) => route.isFirst);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavigationPage()));
+        ref.read(splashProvider.notifier).redirections(context, false);
       }
     } on FirebaseAuthException catch (e) {
       isVerifyingOTP = false;
       notifyListeners();
       errorToast(e.message.toString());
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       isVerifyingOTP = false;
       notifyListeners();
       errorToast(e.toString());

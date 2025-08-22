@@ -36,7 +36,7 @@ class TawafNotifier extends ChangeNotifier {
 
   // Initialize TawafNotifier
   initialization(BuildContext context) async {
-    _user = await LocalStorageManager.getUser();
+    _user = await LocalStorageManager.getUser(fromFirebase: true);
     tawafCircleCount = user!.tawafCircleCount;
     notifyListeners();
     if (tawafCircleCount > 0) {
@@ -92,14 +92,18 @@ class TawafNotifier extends ChangeNotifier {
 
   // Method to request location permissions and initialize Tawaf
   Future<void> _initializeTawafLocationTracking(BuildContext context) async {
-    // Get current position and Kaaba coordinates
-    startingPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
-    var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
-    var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
-    // Start listening to position updates
-    positionStreamSubscription = Geolocator.getPositionStream(
-      locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
-    ).listen((position) => _updateLocation(position, startingPosition!, kabaLatLng));
+    try {
+      startingPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
+      var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
+      var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
+      // Start listening to position updates
+      positionStreamSubscription = Geolocator.getPositionStream(
+        locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
+      ).listen((position) => _updateLocation(position, startingPosition!, kabaLatLng));
+    } catch (e) {
+      if (kDebugMode) log(e.toString());
+      errorToast(e.toString());
+    }
   }
 
   // Method to update location and track Tawaf progress

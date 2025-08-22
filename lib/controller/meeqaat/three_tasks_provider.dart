@@ -26,7 +26,7 @@ class MeeqaatThreeTasksNotifier extends ChangeNotifier {
 
   void skip(BuildContext context) async {
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
-    if (result == false) {
+    if (result == false || result == null) {
       return;
     }
     LocalStorageManager.showMeeqaatThreeTasksPage(false);

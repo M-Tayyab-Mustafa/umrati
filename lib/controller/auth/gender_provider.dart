@@ -16,7 +16,7 @@ class GenderNotifier extends ChangeNotifier {
   void skip(BuildContext context) async {
     try {
       var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
-      if (result == false) {
+      if (result == false || result == null) {
         return;
       }
       isUpdatingGender = true;
@@ -28,6 +28,7 @@ class GenderNotifier extends ChangeNotifier {
       notifyListeners();
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatTwoTasksPage()));
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
   }
@@ -43,6 +44,7 @@ class GenderNotifier extends ChangeNotifier {
       notifyListeners();
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatTwoTasksPage()));
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
   }

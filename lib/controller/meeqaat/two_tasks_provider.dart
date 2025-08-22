@@ -1,6 +1,5 @@
 import '../../export.dart';
-import '../../view/meeqaat/permission.dart';
-import '../../view/nav/page.dart';
+import '../../view/meeqaat/page.dart';
 import '../../widgets/dialog/confirmation.dart';
 
 final meeqaatTwoTasksProvider = ChangeNotifierProvider.autoDispose<MeeqaatTwoTasksNotifier>((ref) => MeeqaatTwoTasksNotifier());
@@ -12,16 +11,13 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
 
   void skip(BuildContext context) async {
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
-    if (result == false) {
+    if (result == false || result == null) {
       return;
     }
     isSkipLoading = true;
     notifyListeners();
     LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
-    LocalStorageManager.showGetLocationPermissionPage(false);
-    LocalStorageManager.showLocationFetchPage(false);
-    LocalStorageManager.showMeeqaatThreeTasksPage(false);
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatPage()));
   }
 
   void moveToThreeOtherTasks(BuildContext context) {
@@ -30,7 +26,7 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
       return;
     }
     LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LocationPermissionPage()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatPage()));
   }
 
   void showIhramTutorial(BuildContext context) async {

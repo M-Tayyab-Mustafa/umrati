@@ -31,6 +31,8 @@ export 'utils/services/validation.dart';
 //* Models
 export 'model/safa_marwa.dart';
 export 'model/user.dart';
+export 'model/plan.dart';
+export 'model/subscription.dart';
 export 'model/ziarat.dart';
 
 //* Controller
@@ -40,7 +42,7 @@ export 'controller/nav/umra/safa_marwa_provider.dart';
 export 'controller/nav/umra/umra_provider.dart';
 export 'controller/nav/ziarat/provider.dart';
 export 'controller/nav/ziarat/map_provider.dart';
-export 'controller/meeqaat/location_fetch_provider.dart';
+export 'controller/meeqaat/provider.dart';
 export 'controller/meeqaat/permission_provider.dart';
 export 'controller/meeqaat/three_tasks_provider.dart';
 export 'controller/meeqaat/two_tasks_provider.dart';
@@ -87,3 +89,4 @@ export 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 export 'package:vibration/vibration.dart';
 export 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 export 'package:flutter_tts/flutter_tts.dart';
+export 'package:flutter_pay_buttons/flutter_pay_buttons.dart';

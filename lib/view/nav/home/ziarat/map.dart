@@ -93,7 +93,7 @@ class _BottomSheet extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       var ziarat = provider.destinations.sublist(1)[index];
                       return ziaratDetailCard(
-                        title: languageDirection(context) == TextDirection.ltr ? provider.activeZiarat?.title_en ?? '' : provider.activeZiarat?.title_ur ?? '',
+                        title: languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur,
                         time: '',
                         distance: ziarat.distance.split(' ').first,
                         index: index + 1,

@@ -13,20 +13,28 @@ class ProfileNotifier extends ChangeNotifier {
     var doc = settingsCollection.doc(CommonDoc.safaMarwaRunningPoints.name);
     if ((await doc.get()).exists) {
       var points = List.from((await doc.get()).get(CommonField.points.name)).map((e) => PointsLocation.fromMap(e)).toList();
-      await Geolocator.requestPermission();
-      var position = await Geolocator.getCurrentPosition();
-      if (points.last.pointType == 'starting') {
-        points.add(PointsLocation(latitude: position.latitude, longitude: position.longitude, pointType: 'ending'));
-      } else {
-        points.add(PointsLocation(latitude: position.latitude, longitude: position.longitude, pointType: 'starting'));
+      try {
+        var position = await Geolocator.getCurrentPosition();
+        if (points.last.pointType == 'starting') {
+          points.add(PointsLocation(latitude: position.latitude, longitude: position.longitude, pointType: 'ending'));
+        } else {
+          points.add(PointsLocation(latitude: position.latitude, longitude: position.longitude, pointType: 'starting'));
+        }
+        doc.update({CommonField.points.name: points.map((e) => e.toMap()).toList()});
+      } catch (e) {
+        if (kDebugMode) log(e.toString());
+        errorToast(e.toString());
       }
-      doc.update({CommonField.points.name: points.map((e) => e.toMap()).toList()});
     } else {
-      await Geolocator.requestPermission();
-      var position = await Geolocator.getCurrentPosition();
-      doc.set({
-        CommonField.points.name: [PointsLocation(latitude: position.latitude, longitude: position.longitude, pointType: 'starting').toMap()],
-      });
+      try {
+        var position = await Geolocator.getCurrentPosition();
+        doc.set({
+          CommonField.points.name: [PointsLocation(latitude: position.latitude, longitude: position.longitude, pointType: 'starting').toMap()],
+        });
+      } catch (e) {
+        if (kDebugMode) log(e.toString());
+        errorToast(e.toString());
+      }
     }
     locations = List.from((await doc.get()).get(CommonField.points.name)).map((e) => PointsLocation.fromMap(e)).toList();
 

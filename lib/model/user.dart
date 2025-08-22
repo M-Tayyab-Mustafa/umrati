@@ -1,5 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
+import '../export.dart';
 
 class UserModel {
   final String uid;
@@ -12,9 +11,9 @@ class UserModel {
   final int tawafCircleCount;
   final int saiRoundCount;
   final bool isOneSideSaiRunCompleted;
-  final String? created_at;
-  final String? updated_at;
-  final _timer = DateTime.now().toIso8601String();
+  final SubscriptionModel? subscription;
+  final Timestamp? created_at;
+  final Timestamp? updated_at;
 
   UserModel({
     required this.uid,
@@ -25,6 +24,7 @@ class UserModel {
     required this.gender,
     this.is_doing_ziarat = false,
     this.isOneSideSaiRunCompleted = false,
+    this.subscription,
     this.tawafCircleCount = 0,
     this.saiRoundCount = 0,
     this.created_at,
@@ -41,9 +41,10 @@ class UserModel {
     bool? is_doing_ziarat,
     bool? isOneSideSaiRunCompleted,
     int? tawafCircleCount,
+    SubscriptionModel? subscription,
     int? saiRoundCount,
-    String? created_at,
-    String? updated_at,
+    Timestamp? created_at,
+    Timestamp? updated_at,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -56,12 +57,13 @@ class UserModel {
       tawafCircleCount: tawafCircleCount ?? this.tawafCircleCount,
       isOneSideSaiRunCompleted: isOneSideSaiRunCompleted ?? this.isOneSideSaiRunCompleted,
       saiRoundCount: saiRoundCount ?? this.saiRoundCount,
+      subscription: subscription ?? this.subscription,
       created_at: created_at ?? this.created_at,
       updated_at: updated_at ?? this.updated_at,
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({FieldValue? created_at, FieldValue? updated_at, FieldValue? subscription_created_at, FieldValue? subscription_expire_at, FieldValue? subscription_updated_at}) {
     return <String, dynamic>{
       'uid': uid,
       'name': name,
@@ -71,10 +73,11 @@ class UserModel {
       'gender': gender,
       'is_doing_ziarat': is_doing_ziarat,
       'tawaf_circle_count': tawafCircleCount,
+      'subscription': subscription?.toMap(created_at: subscription_created_at, expire_at: subscription_expire_at, updated_at: subscription_updated_at),
       'is_one_side_sai_run_completed': isOneSideSaiRunCompleted,
       'sai_round_count': saiRoundCount,
-      'created_at': created_at ?? _timer,
-      'updated_at': updated_at ?? _timer,
+      'created_at': created_at ?? this.created_at?.millisecondsSinceEpoch,
+      'updated_at': updated_at ?? this.updated_at?.millisecondsSinceEpoch,
     };
   }
 
@@ -87,11 +90,12 @@ class UserModel {
       photo: map['photo']?.toString() ?? '',
       gender: map['gender']?.toString() ?? '',
       is_doing_ziarat: map['is_doing_ziarat'] ?? false,
+      subscription: map['subscription'] != null ? SubscriptionModel.fromMap(map['subscription']) : SubscriptionModel(isFreeSubscribed: true),
       isOneSideSaiRunCompleted: map['is_one_side_sai_run_completed'] ?? false,
       tawafCircleCount: map['tawaf_circle_count'] ?? 0,
       saiRoundCount: map['sai_round_count'] ?? 0,
-      created_at: map['created_at']?.toString() ?? '',
-      updated_at: map['updated_at']?.toString() ?? '',
+      created_at: map['created_at'].runtimeType == int ? Timestamp.fromMillisecondsSinceEpoch(map['created_at']) : map['created_at'],
+      updated_at: map['updated_at'].runtimeType == int ? Timestamp.fromMillisecondsSinceEpoch(map['updated_at']) : map['updated_at'],
     );
   }
 
@@ -101,7 +105,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, email: $email, phone: $phone, photo: $photo, gender: $gender, tawaf_circle_count: $tawafCircleCount, sai_round_count: $saiRoundCount, is_one_side_sai_run_completed: $isOneSideSaiRunCompleted, is_doing_ziarat: $is_doing_ziarat, created_at: $created_at, updated_at: $updated_at)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, phone: $phone, photo: $photo, gender: $gender, tawaf_circle_count: $tawafCircleCount, sai_round_count: $saiRoundCount, is_one_side_sai_run_completed: $isOneSideSaiRunCompleted, subscription: $subscription is_doing_ziarat: $is_doing_ziarat, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -116,6 +120,7 @@ class UserModel {
         other.gender == gender &&
         other.isOneSideSaiRunCompleted == isOneSideSaiRunCompleted &&
         other.tawafCircleCount == tawafCircleCount &&
+        other.subscription == subscription &&
         other.saiRoundCount == saiRoundCount &&
         other.is_doing_ziarat == is_doing_ziarat &&
         other.created_at == created_at &&
@@ -132,6 +137,7 @@ class UserModel {
         gender.hashCode ^
         isOneSideSaiRunCompleted.hashCode ^
         tawafCircleCount.hashCode ^
+        subscription.hashCode ^
         saiRoundCount.hashCode ^
         is_doing_ziarat.hashCode ^
         created_at.hashCode ^

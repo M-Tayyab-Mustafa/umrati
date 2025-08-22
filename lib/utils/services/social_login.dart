@@ -1,5 +1,5 @@
 import '../../export.dart';
-import '../../view/auth/gender.dart';
+import '../../view/meeqaat/permission.dart';
 import '../../view/nav/page.dart';
 
 class SocialLoginService {
@@ -60,13 +60,13 @@ class SocialLoginService {
         photo: userCredential.user!.photoURL ?? '',
         gender: Gender.unknown.name.toLowerCase(),
       );
-      await LocalStorageManager.saveUser(user);
+      await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
       LocalStorageManager.showLoginPage(false);
       if (userCredential.user?.emailVerified ?? false) {
         infoToast("Google Login Successfully");
         Navigator.popUntil(context, (route) => route.isFirst);
         if (userCredential.additionalUserInfo!.isNewUser) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectGenderPage()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LocationPermissionPage()));
         } else {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavigationPage()));
         }
