@@ -60,7 +60,7 @@ class LocalStorageManager {
               ),
               SetOptions(merge: true),
             );
-        user = (await getUser(fromFirebase: true))!;
+        user = UserModel.fromMap((await userCollection.doc(user.uid).get()).data()!);
       }
       await _sharedPreferences!.setString(_user, user.toJson());
     } catch (e) {

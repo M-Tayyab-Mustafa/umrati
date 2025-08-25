@@ -1,6 +1,5 @@
 import '../../export.dart';
 import '../../view/meeqaat/page.dart';
-import '../../widgets/dialog/confirmation.dart';
 
 final meeqaatTwoTasksProvider = ChangeNotifierProvider.autoDispose<MeeqaatTwoTasksNotifier>((ref) => MeeqaatTwoTasksNotifier());
 

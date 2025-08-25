@@ -39,6 +39,7 @@ abstract class  LocaleKeys {
   static const subscribe = 'subscribe';
   static const unlimited = 'unlimited';
   static const subscription_expire_msg = 'subscription_expire_msg';
+  static const umra_start_detail = 'umra_start_detail';
   static const distance_from_meeqaat = 'distance_from_meeqaat';
   static const permission_request_message = 'permission_request_message';
   static const your_current_location = 'your_current_location';

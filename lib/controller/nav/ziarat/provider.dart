@@ -34,7 +34,7 @@ class ZiaratNotifier extends ChangeNotifier {
       user = await LocalStorageManager.getUser();
       checkAlreadyDoingZiarat();
       myCurrentLocation = await getLocation();
-      notifyListeners();
+      if (context.mounted) notifyListeners();
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -110,7 +110,10 @@ class ZiaratNotifier extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
       var doc = await settingsCollection.doc(CommonDoc.ziarat.name).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      ziarats = List.from(doc.data()![selectedCity?.name]).map<ZiaratModel>((map) => ZiaratModel.fromMap(map)).toList().sublist(0, user?.subscription?.isFreeSubscribed == false ? null : 3);
+      ziarats = List.from(doc.data()![selectedCity?.name]).map<ZiaratModel>((map) => ZiaratModel.fromMap(map)).toList();
+      if (ziarats.isNotEmpty) {
+        ziarats = ziarats.sublist(0, user?.subscription?.isFreeSubscribed == false ? null : 3);
+      }
       if (selectedDestinationsCreationOption == ZiaratDestinationsCreationOptions.manual) {
         selectedZiarat.clear();
         isLoading = false;
@@ -122,7 +125,7 @@ class ZiaratNotifier extends ChangeNotifier {
       }
     } catch (e) {
       if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      if (context.mounted) errorToast(e.toString());
     } finally {
       isLoading = false;
       notifyListeners();
@@ -136,7 +139,7 @@ class ZiaratNotifier extends ChangeNotifier {
       return '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
     } catch (e) {
       if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      if (context.mounted) errorToast(e.toString());
       return '';
     }
   }
@@ -155,7 +158,7 @@ class ZiaratNotifier extends ChangeNotifier {
       });
     } catch (e) {
       if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      if (context.mounted) errorToast(e.toString());
     }
   }
 

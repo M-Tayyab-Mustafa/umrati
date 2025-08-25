@@ -1,7 +1,6 @@
 import '../../export.dart';
 import '../../view/auth/otp.dart';
 import '../../view/meeqaat/permission.dart';
-import '../../widgets/dialog/confirmation.dart';
 
 final loginProvider = ChangeNotifierProvider.autoDispose<LoginNotifier>((ref) => LoginNotifier());
 

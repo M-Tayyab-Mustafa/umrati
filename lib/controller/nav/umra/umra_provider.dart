@@ -38,7 +38,7 @@ class TawafNotifier extends ChangeNotifier {
   initialization(BuildContext context) async {
     _user = await LocalStorageManager.getUser(fromFirebase: true);
     tawafCircleCount = user!.tawafCircleCount;
-    notifyListeners();
+    if (context.mounted) notifyListeners();
     if (tawafCircleCount > 0) {
       var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmra: true));
       if (result == null) return;
@@ -52,7 +52,7 @@ class TawafNotifier extends ChangeNotifier {
         _resetTawafData();
         LocalStorageManager.saveUser(user!.copyWith(tawafCircleCount: 0, isOneSideSaiRunCompleted: false, saiRoundCount: 0));
       }
-      notifyListeners();
+      if (context.mounted) notifyListeners();
     }
 
     if (isInTawaf) {
@@ -65,6 +65,7 @@ class TawafNotifier extends ChangeNotifier {
     if (isInTawaf) {
       _stopTawaf();
     } else {
+      await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => UmraStartConfirmationDialog());
       await _startTawaf(context);
     }
   }

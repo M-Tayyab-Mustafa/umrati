@@ -1,6 +1,5 @@
 import '../../export.dart';
 import '../../view/meeqaat/two_tasks.dart';
-import '../../widgets/dialog/confirmation.dart';
 
 final genderProvider = ChangeNotifierProvider.autoDispose<GenderNotifier>((ref) => GenderNotifier());
 

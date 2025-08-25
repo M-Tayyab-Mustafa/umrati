@@ -1,5 +1,4 @@
 import '../../export.dart';
-import '../../widgets/dialog/confirmation.dart';
 
 final locationPermissionProvider = ChangeNotifierProvider.autoDispose<LocationPermissionNotifier>((ref) => LocationPermissionNotifier());
 

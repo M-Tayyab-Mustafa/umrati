@@ -19,13 +19,14 @@ class SplashNotifier extends ChangeNotifier {
   }
 
   Future<void> redirections(BuildContext context, [showPermissionPage = true]) async {
-    var user = await LocalStorageManager.getUser();
-    var isExpired = user?.subscription?.expire_at?.toDate().isBefore(DateTime.now());
+    final user = await LocalStorageManager.getUser();
+    final isExpired = user?.subscription?.expire_at?.toDate().isBefore(DateTime.now());
+    final permissionStatus = await Geolocator.checkPermission();
     if (await LocalStorageManager.getSelectLanguagePage()) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectLanguagePage()));
     } else if (await LocalStorageManager.getLoginPage()) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
-    } else if ((await Permission.locationAlways.status != PermissionStatus.granted && await Permission.locationWhenInUse.status != PermissionStatus.granted) && showPermissionPage) {
+    } else if ((permissionStatus == LocationPermission.deniedForever || permissionStatus == LocationPermission.denied) && showPermissionPage) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LocationPermissionPage()));
     } else if (isExpired == null || isExpired == true) {
       if (user!.subscription?.isFreeSubscribed == false) errorToast(LocaleKeys.subscription_expire_msg.tr());

@@ -35,6 +35,7 @@
   "subscribe": "Subscribe",
   "unlimited": "Unlimited",
   "subscription_expire_msg": "Your subscription has expired. Please renew it.",
+  "umra_start_detail": "Kindly confirm you are near the green light.",
   "distance_from_meeqaat": "Distance from Meeqaat",
   "permission_request_message": "# Why we need your location:\nThis app uses your location to guide and assist you during your Umrah and Ziyarat journey. Without location access, the app cannot:* Track your movement during **Tawaf** or **Sa’i (Safa–Marwa)** runs.* Show your **current distance from Miqat** to help you prepare for wearing Ihram correctly.* Provide accurate **navigation and Ziyarat tracking**.\n\n📍 **Important:** If you do not grant location permission, the app will not function properly and you wont be able to use its core features.",
   "your_current_location": "Your current location",
