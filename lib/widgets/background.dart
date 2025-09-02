@@ -85,7 +85,7 @@ class Background extends StatelessWidget {
                           ),
                           if (backgroundType == BackgroundType.logoWithSkip)
                             if (isSkipLoading)
-                              Loading(height: 30, width: 30)
+                              SizedBox.shrink()
                             else
                               GestureDetector(onTap: onSkipTap, child: Text(LocaleKeys.skip.tr(), style: CTextStyle.w400(fontSize: 22, color: CColors.primary, decoration: TextDecoration.underline))),
                         ],

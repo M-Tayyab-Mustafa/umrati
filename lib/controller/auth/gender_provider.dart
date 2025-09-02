@@ -1,11 +1,15 @@
 import '../../export.dart';
-import '../../view/meeqaat/two_tasks.dart';
 
 final genderProvider = ChangeNotifierProvider.autoDispose<GenderNotifier>((ref) => GenderNotifier());
 
 class GenderNotifier extends ChangeNotifier {
   Gender selectedGender = Gender.unknown;
   bool isUpdatingGender = false;
+
+  WidgetRef? _ref;
+  WidgetRef get ref => _ref!;
+  set ref(WidgetRef value) => _ref = value;
+
   void updateGender(Gender gender) {
     if (selectedGender == gender) return;
     selectedGender = gender;
@@ -20,12 +24,11 @@ class GenderNotifier extends ChangeNotifier {
       }
       isUpdatingGender = true;
       notifyListeners();
-      await LocalStorageManager.showGenderPage(false);
       var user = (await LocalStorageManager.getUser())!.copyWith(gender: Gender.unknown.name.toLowerCase());
       await LocalStorageManager.saveUser(user).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       isUpdatingGender = false;
       notifyListeners();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatTwoTasksPage()));
+      ref.read(splashProvider.notifier).redirections(context, false);
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -38,10 +41,9 @@ class GenderNotifier extends ChangeNotifier {
       notifyListeners();
       var user = (await LocalStorageManager.getUser())!.copyWith(gender: selectedGender.name.toLowerCase());
       await LocalStorageManager.saveUser(user).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      await LocalStorageManager.showGenderPage(false);
       isUpdatingGender = false;
       notifyListeners();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatTwoTasksPage()));
+      ref.read(splashProvider.notifier).redirections(context, false);
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());

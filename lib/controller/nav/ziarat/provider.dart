@@ -111,8 +111,9 @@ class ZiaratNotifier extends ChangeNotifier {
       notifyListeners();
       var doc = await settingsCollection.doc(CommonDoc.ziarat.name).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       ziarats = List.from(doc.data()![selectedCity?.name]).map<ZiaratModel>((map) => ZiaratModel.fromMap(map)).toList();
+
       if (ziarats.isNotEmpty) {
-        ziarats = ziarats.sublist(0, user?.subscription?.isFreeSubscribed == false ? null : 3);
+        ziarats = ziarats.sublist(0, Helper.userSubscription?.plan.type != PlanType.free.name ? null : 3);
       }
       if (selectedDestinationsCreationOption == ZiaratDestinationsCreationOptions.manual) {
         selectedZiarat.clear();

@@ -29,7 +29,7 @@ class _OTPPageState extends ConsumerState<OTPPage> {
             ],
           ),
           Directionality(textDirection: TextDirection.ltr, child: PinInput(controller: provider.otpController, margin: EdgeInsets.symmetric(vertical: 50))),
-          CButton(isLoading: provider.isVerifyingOTP, onTap: () => provider.verifyOTP(context, ref), title: LocaleKeys.verify_the_otp.tr(), titleWithIcon: true),
+          CButton(isLoading: provider.isVerifyingOTP, onTap: () => provider.verifyOTP(ref), title: LocaleKeys.verify_the_otp.tr(), titleWithIcon: true),
 
           if (provider.bounceTimer != null)
             Padding(

@@ -28,7 +28,6 @@ class MeeqaatThreeTasksNotifier extends ChangeNotifier {
     if (result == false || result == null) {
       return;
     }
-    LocalStorageManager.showMeeqaatThreeTasksPage(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
   }
 
@@ -37,7 +36,6 @@ class MeeqaatThreeTasksNotifier extends ChangeNotifier {
       errorToast(LocaleKeys.please_check_the_boxes_for_the_two_nafl_prayers_the_intention_and_the_talbiyah.tr());
       return;
     }
-    LocalStorageManager.showMeeqaatThreeTasksPage(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavigationPage()));
   }
 }

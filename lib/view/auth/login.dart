@@ -10,10 +10,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(loginProvider);
+    ref.read(loginProvider).context = context;
+    ref.read(loginProvider).ref = ref;
+    SocialLoginService.instance.ref = ref;
     return Background(
       backgroundType: BackgroundType.logoWithSkip,
       isSkipLoading: provider.isSendingOTP || provider.isSkipping || provider.isSocialLogin,
-      onSkipTap: () => provider.skip(context),
+      onSkipTap: provider.skip,
       title: LocaleKeys.log_in_to_your_account.tr(),
       child: SingleChildScrollView(
         child: Column(
@@ -51,7 +54,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
             CButton(
               isLoading: provider.isSendingOTP || provider.isSkipping || provider.isSocialLogin,
-              onTap: () => provider.sendTheOTP(context),
+              onTap: provider.sendTheOTP,
               margin: const EdgeInsets.only(top: 35),
               titleWithIcon: true,
               title: LocaleKeys.send_the_otp.tr(),
@@ -66,9 +69,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   Padding(padding: EdgeInsets.only(left: 15, bottom: 10), child: Text(LocaleKeys.or_continue_with.tr(), style: CTextStyle.w500())),
                   Row(
                     children: [
-                      Expanded(child: CustomImage(onTap: () => provider.googleLogin(context), path: 'assets/svg/google_with_border.svg', imageType: ImageType.svg)),
-                      // Expanded(child: CustomImage(onTap: () => provider.facebookLogin(context), path: 'assets/svg/facebook_with_border.svg', imageType: ImageType.svg)),
-                      Expanded(child: CustomImage(onTap: () => provider.appleLogin(context), path: 'assets/svg/apple_with_border.svg', imageType: ImageType.svg)),
+                      Expanded(child: CustomImage(onTap: provider.googleLogin, path: 'assets/svg/google_with_border.svg', imageType: ImageType.svg)),
+                      // Expanded(child: CustomImage(onTap: provider.facebookLogin, path: 'assets/svg/facebook_with_border.svg', imageType: ImageType.svg)),
+                      Expanded(child: CustomImage(onTap: provider.appleLogin, path: 'assets/svg/apple_with_border.svg', imageType: ImageType.svg)),
                     ],
                   ),
                 ],

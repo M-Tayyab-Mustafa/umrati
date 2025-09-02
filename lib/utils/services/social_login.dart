@@ -1,14 +1,18 @@
 import '../../export.dart';
-import '../../view/meeqaat/permission.dart';
-import '../../view/nav/page.dart';
 
 class SocialLoginService {
   SocialLoginService._();
+  static final SocialLoginService _instance = SocialLoginService._();
+  static SocialLoginService get instance => _instance;
 
-  static final _auth = FirebaseAuth.instance;
-  static final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  static Future<void> signInWithGoogle(BuildContext context) async {
+  WidgetRef? _ref;
+  WidgetRef get ref => _ref!;
+  set ref(WidgetRef value) => _ref = value;
+
+  Future<void> signInWithGoogle(BuildContext context) async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       if (googleUser == null) return;
@@ -20,7 +24,7 @@ class SocialLoginService {
     }
   }
 
-  static Future<void> signInWithApple(BuildContext context) async {
+  Future<void> signInWithApple(BuildContext context) async {
     try {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: AppleIDAuthorizationScopes.values,
@@ -33,7 +37,7 @@ class SocialLoginService {
     }
   }
 
-  static Future<void> signInWithFacebook(BuildContext context) async {
+  Future<void> signInWithFacebook(BuildContext context) async {
     try {
       final LoginResult result = await FacebookAuth.instance.login().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       if (result.status == LoginStatus.success) {
@@ -49,27 +53,23 @@ class SocialLoginService {
   }
 
   //Common For Every Login.
-  static Future<void> _signWithCredentials({required BuildContext context, required AuthCredential credential}) async {
+  Future<void> _signWithCredentials({required BuildContext context, required AuthCredential credential}) async {
     try {
       var userCredential = await _auth.signInWithCredential(credential);
       UserModel user = UserModel(
         uid: userCredential.user!.uid,
         name: userCredential.user!.displayName ?? '',
         email: userCredential.user!.email ?? '',
-        phone: userCredential.user!.phoneNumber ?? '',
         photo: userCredential.user!.photoURL ?? '',
-        gender: Gender.unknown.name.toLowerCase(),
+        phone: '',
+        country_code: '',
+        gender: '',
       );
       await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
-      LocalStorageManager.showLoginPage(false);
       if (userCredential.user?.emailVerified ?? false) {
         infoToast("Google Login Successfully");
         Navigator.popUntil(context, (route) => route.isFirst);
-        if (userCredential.additionalUserInfo!.isNewUser) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LocationPermissionPage()));
-        } else {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavigationPage()));
-        }
+        ref.read(splashProvider).redirections(context);
       } else {
         infoToast("We have sent you an email verification, please verify your email.");
         await _auth.currentUser?.sendEmailVerification();

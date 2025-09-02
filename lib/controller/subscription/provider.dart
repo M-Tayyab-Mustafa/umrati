@@ -6,15 +6,28 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   bool isLoading = true;
   bool isSubscribing = false;
   List<PlanModel> plans = [];
-  PlanModel? selectedPlan;
+  late PlanModel selectedPlan;
+  late UserModel user;
   final panelController = SlidingUpPanelController(value: SlidingUpPanelStatus.collapsed);
+
+  BuildContext? _context;
+  BuildContext get context => _context!;
+  set context(BuildContext value) => _context = value;
+
+  WidgetRef? _ref;
+  WidgetRef get ref => _ref!;
+  set ref(WidgetRef value) => _ref = value;
 
   void getSubscriptionPlans() async {
     try {
-      var region = await Helper.getUserRegion();
-      var plansDoc = await FirebaseFirestore.instance.collection(CollectionNames.settings.name).doc(CommonDoc.plans.name).get();
-      plans = List.from(plansDoc.get(region.name)).map((plan) => PlanModel.fromMap(plan)).toList()..insert(0, PlanModel(id: '0', duration: double.infinity, amount: 0));
-      selectedPlan = plans.first;
+      user = (await LocalStorageManager.getUser())!;
+      plans =
+          (await FirebaseFirestore.instance.collection(CollectionNames.plans.name).where(Filter.or(Filter('type', isEqualTo: PlanType.free.name), Filter('is_heigh_tier', isEqualTo: true))).get()).docs
+              .map((planDoc) => PlanModel.fromMap(planDoc.data()))
+              .toList();
+      plans.sort((a, b) => a.amount.compareTo(b.amount));
+      await Future.delayed(const Duration(milliseconds: 400));
+      selectedPlan = plans.firstWhere((e) => e.type == PlanType.free.name);
       isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -23,17 +36,12 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     }
   }
 
-  void subscribe(BuildContext context, WidgetRef ref) async {
+  void subscribe() async {
     isSubscribing = true;
     notifyListeners();
     try {
-      if (selectedPlan == plans.first) {
-        var user = await LocalStorageManager.getUser();
-        user = user!.copyWith(
-          subscription: SubscriptionModel(isFreeSubscribed: true, expire_at: Timestamp.fromMillisecondsSinceEpoch(Timestamp.now().toDate().add(Duration(days: 1)).millisecondsSinceEpoch)),
-        );
-        await LocalStorageManager.saveUser(user, subscription_created_at: FieldValue.serverTimestamp(), subscription_updated_at: FieldValue.serverTimestamp());
-        ref.read(splashProvider.notifier).redirections(context, false);
+      if (selectedPlan.type == PlanType.free.name) {
+        await _subscribePlan();
       } else {
         panelController.anchor();
         isSubscribing = false;
@@ -52,15 +60,33 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  FutureOr<void> onPaymentResult(Map<String, dynamic> result, BuildContext context, WidgetRef ref) async {
-    var user = await LocalStorageManager.getUser();
-    user = user!.copyWith(
-      subscription: SubscriptionModel(
-        isFreeSubscribed: true,
-        expire_at: Timestamp.fromMillisecondsSinceEpoch(Timestamp.now().toDate().add(Duration(days: selectedPlan!.duration == 3 ? 90 : 365)).millisecondsSinceEpoch),
-      ),
-    );
-    await LocalStorageManager.saveUser(user, subscription_created_at: FieldValue.serverTimestamp(), subscription_updated_at: FieldValue.serverTimestamp());
+  FutureOr<void> onPaymentResult(Map<String, dynamic> result) async {
+    await _subscribePlan();
+  }
+
+  _subscribePlan() async {
+    final query = FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).where(Filter('user_ids', arrayContains: user.uid)).limit(1);
+    DocumentReference<Map<String, dynamic>> doc;
+    if ((await query.get()).docs.isNotEmpty) {
+      doc = (await query.get()).docs.first.reference;
+      await doc.update({'expire_at': FieldValue.serverTimestamp(), 'updated_at': FieldValue.serverTimestamp()});
+      final expireAt = (await doc.get()).get('expire_at') as Timestamp;
+      await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: selectedPlan.duration)).millisecondsSinceEpoch)});
+      infoToast('Plan Updated Successfully');
+    } else {
+      doc = FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).doc();
+      doc.set(
+        SubscriptionModel(
+          uid: doc.id,
+          user_ids: [user.uid],
+          plan: selectedPlan,
+        ).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp(), expire_at: FieldValue.serverTimestamp()),
+      );
+      final expireAt = (await doc.get()).get('expire_at') as Timestamp;
+      await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: selectedPlan.duration)).millisecondsSinceEpoch)});
+    }
+    Helper.userSubscription = SubscriptionModel.fromMap((await doc.get()).data()!);
+    await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id));
     ref.read(splashProvider.notifier).redirections(context, false);
   }
 

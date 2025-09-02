@@ -5,20 +5,37 @@ import '../export.dart';
 
 class PlanModel {
   final String id;
-  final num duration;
   final num amount;
-  PlanModel({required this.id, required this.duration, required this.amount});
+  final int members;
+  final int duration;
+  final bool is_heigh_tier;
+  final String type;
+  PlanModel({required this.id, required this.amount, required this.members, required this.duration, required this.is_heigh_tier, required this.type});
 
-  PlanModel copyWith({String? id, num? duration, num? amount}) {
-    return PlanModel(id: id ?? this.id, duration: duration ?? this.duration, amount: amount ?? this.amount);
+  PlanModel copyWith({String? id, num? amount, int? members, int? duration, bool? is_heigh_tier, String? type}) {
+    return PlanModel(
+      id: id ?? this.id,
+      amount: amount ?? this.amount,
+      members: members ?? this.members,
+      duration: duration ?? this.duration,
+      is_heigh_tier: is_heigh_tier ?? this.is_heigh_tier,
+      type: type ?? this.type,
+    );
   }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{'id': id, 'duration': duration, 'amount': amount};
+    return <String, dynamic>{'id': id, 'amount': amount, 'members': members, 'duration': duration, 'is_heigh_tier': is_heigh_tier, 'type': type};
   }
 
   factory PlanModel.fromMap(Map<String, dynamic> map) {
-    return PlanModel(id: map['id'].toString(), duration: map['duration'], amount: map['amount']);
+    return PlanModel(
+      id: map['id'].toString(),
+      amount: map['amount'] as num,
+      members: int.tryParse(map['members'].toString()) ?? 1,
+      duration: int.tryParse(map['duration'].toString()) ?? 0,
+      is_heigh_tier: map['is_heigh_tier'] ?? false,
+      type: map['type'].toString(),
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -26,15 +43,19 @@ class PlanModel {
   factory PlanModel.fromJson(String source) => PlanModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'PlanModel(id: $id, duration: $duration, amount: $amount)';
+  String toString() {
+    return 'PlanModel(id: $id, amount: $amount, members: $members, duration: $duration, is_heigh_tier: $is_heigh_tier, type: $type)';
+  }
 
   @override
   bool operator ==(covariant PlanModel other) {
     if (identical(this, other)) return true;
 
-    return other.id == id && other.duration == duration && other.amount == amount;
+    return other.id == id && other.amount == amount && other.members == members && other.duration == duration && other.is_heigh_tier == is_heigh_tier && other.type == type;
   }
 
   @override
-  int get hashCode => id.hashCode ^ duration.hashCode ^ amount.hashCode;
+  int get hashCode {
+    return id.hashCode ^ amount.hashCode ^ members.hashCode ^ duration.hashCode ^ is_heigh_tier.hashCode ^ type.hashCode;
+  }
 }

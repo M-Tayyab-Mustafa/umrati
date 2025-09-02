@@ -10,24 +10,15 @@ enum ZiaratCities { mecca, medina, taif, other }
 
 enum ZiaratDestinationsCreationOptions { auto, manual }
 
-enum CollectionNames { users, settings }
+enum CollectionNames { users, settings, plans, subscriptions }
 
 enum MapMarkerId { userLocation, destination }
-
-enum Region {
-  highTier('high_tier'),
-  rest('rest');
-
-  final String name;
-
-  const Region(this.name);
-}
 
 enum CommonDoc {
   alKaba('al_kaba'),
   meeqaat('meeqaat'),
   constants('constants'),
-  plans('plans'),
+  highTierRegionCodes('high_tier_region_codes'),
   safaMarwa('safa_marwa'),
   safaMarwaRunningPoints('safa_marwa_running_points'),
   ziarat('ziarat');
@@ -37,12 +28,14 @@ enum CommonDoc {
   const CommonDoc(this.name);
 }
 
+enum PlanType { free, individual, group }
+
 enum CommonField {
   isInTawaf('isInTawaf'),
   points('points'),
   threeMonths('3_months'),
   oneYear('1_year'),
-  highTierRegionCodes('high_tier_region_codes'),
+  regions('regions'),
   googleMapKey('google_map_key'),
   startingPoint('startingPoint'),
   selectedZiarat('selected_ziarat');

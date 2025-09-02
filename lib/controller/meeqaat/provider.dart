@@ -28,7 +28,6 @@ class MeeqaatLocationFetchProviderNotifier extends ChangeNotifier {
   }
 
   void continueTab(BuildContext context) async {
-    LocalStorageManager.showMeeqaatPage(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatThreeTasksPage()));
   }
 }

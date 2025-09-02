@@ -3,8 +3,6 @@ import '../../export.dart';
 final locationPermissionProvider = ChangeNotifierProvider.autoDispose<LocationPermissionNotifier>((ref) => LocationPermissionNotifier());
 
 class LocationPermissionNotifier extends ChangeNotifier {
-  bool isConfirmingMeeqaat = false;
-
   void skip(BuildContext context, WidgetRef ref) async {
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
     if (result == false || result == null) {

@@ -5,6 +5,7 @@ class SelectGenderPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var provider = ref.watch(genderProvider);
+    ref.read(genderProvider).ref = ref;
     return Background(
       title: LocaleKeys.select_your_gender.tr(),
       backgroundType: BackgroundType.logoWithSkip,

@@ -15,7 +15,6 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
     }
     isSkipLoading = true;
     notifyListeners();
-    LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatPage()));
   }
 
@@ -24,7 +23,6 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
       errorToast(LocaleKeys.please_check_the_cleanliness_and_ihram_boxes.tr());
       return;
     }
-    LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatPage()));
   }
 

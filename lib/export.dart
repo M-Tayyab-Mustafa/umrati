@@ -37,19 +37,21 @@ export 'model/ziarat.dart';
 
 //* Controller
 export 'controller/splash/provider.dart';
+export 'controller/language/language_provider.dart';
+export 'controller/language/select_language_provider.dart';
+export 'controller/auth/login_provider.dart';
+export 'controller/auth/gender_provider.dart';
+export 'controller/auth/phone_no_provider.dart';
+export 'controller/subscription/provider.dart';
 export 'controller/nav/provider.dart';
 export 'controller/nav/umra/safa_marwa_provider.dart';
 export 'controller/nav/umra/umra_provider.dart';
 export 'controller/nav/ziarat/provider.dart';
 export 'controller/nav/ziarat/map_provider.dart';
 export 'controller/meeqaat/provider.dart';
-export 'controller/meeqaat/permission_provider.dart';
+export 'controller/location_permission/permission_provider.dart';
 export 'controller/meeqaat/three_tasks_provider.dart';
 export 'controller/meeqaat/two_tasks_provider.dart';
-export 'controller/language/language_provider.dart';
-export 'controller/language/select_language_provider.dart';
-export 'controller/auth/gender_provider.dart';
-export 'controller/auth/login_provider.dart';
 
 //* Widgets
 export 'widgets/custom_image.dart';
@@ -71,6 +73,8 @@ export 'widgets/dialog/reach_your_destination.dart';
 export 'widgets/dialog/ziarat_reading_detail_dialog.dart';
 export 'widgets/dialog/skip_confirmation.dart';
 export 'widgets/dialog/umra_start_confirmation.dart';
+export 'widgets/subscription_payment_sheet.dart';
+export 'widgets/subscription_plan.dart';
 
 //* Other Exports
 export 'package:dlibphonenumber/phone_number_util.dart';

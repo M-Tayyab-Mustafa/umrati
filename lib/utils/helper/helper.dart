@@ -8,19 +8,19 @@ class Helper {
   static String timeoutError = LocaleKeys.timeout_error.tr();
   static const int timeOutTime = 30; // in seconds
 
-  static Future<Region> getUserRegion() async {
+  static SubscriptionModel? userSubscription;
+
+  static Future<bool> isHighTierRegion() async {
     try {
-      Position position = await Geolocator.getCurrentPosition();
-      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-      String countryCode = placemarks.first.isoCountryCode ?? "OTHER";
-      var plansDoc = await FirebaseFirestore.instance.collection(CollectionNames.settings.name).doc(CommonDoc.plans.name).get();
-      var highTierRegionCodes = List.from(await plansDoc.get(CommonField.highTierRegionCodes.name));
-      return highTierRegionCodes.contains(countryCode) ? Region.highTier : Region.rest;
+      var user = (await LocalStorageManager.getUser(fromFirebase: false))!;
+      String countryCode = countryDialCodes.containsKey(user.country_code) ? countryDialCodes[user.country_code]! : "OTHER";
+      var highTierRegionCodes = (await FirebaseFirestore.instance.collection(CollectionNames.settings.name).doc(CommonDoc.highTierRegionCodes.name).get()).get(CommonField.regions.name);
+      return highTierRegionCodes.contains(countryCode);
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
-    return Region.highTier;
+    return true;
   }
 
   static Future<Map<String, dynamic>?> getRouteLeg({required LatLng startPoint, required LatLng endPoint}) async {

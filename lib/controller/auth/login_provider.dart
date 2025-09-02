@@ -1,6 +1,5 @@
 import '../../export.dart';
 import '../../view/auth/otp.dart';
-import '../../view/meeqaat/permission.dart';
 
 final loginProvider = ChangeNotifierProvider.autoDispose<LoginNotifier>((ref) => LoginNotifier());
 
@@ -10,10 +9,19 @@ class LoginNotifier extends ChangeNotifier {
   var phoneNumberUtil = PhoneNumberUtil.instance;
   bool isSkipping = false;
 
+  BuildContext? _context;
+  BuildContext get context => _context!;
+  set context(BuildContext value) => _context = value;
+
+  WidgetRef? _ref;
+  WidgetRef get ref => _ref!;
+  set ref(WidgetRef value) => _ref = value;
+
+  void _codeAutoRetrievalTimeout(verificationId) => _verificationId = verificationId;
+
   //* Login Variables
   bool isSendingOTP = false;
   bool isSocialLogin = false;
-  BuildContext? context;
   var phoneNumberController = TextEditingController();
   CountryCode selectedCountry = CountryCode.fromDialCode('+92');
   int numberDigits = 10;
@@ -45,7 +53,7 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   //* Skip Login
-  Future<void> skip(BuildContext context) async {
+  Future<void> skip() async {
     try {
       var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
       if (result == false || result == null) return;
@@ -56,16 +64,16 @@ class LoginNotifier extends ChangeNotifier {
         uid: userCredential.user!.uid,
         name: userCredential.user!.displayName ?? '',
         email: userCredential.user!.email ?? '',
-        phone: userCredential.user!.phoneNumber ?? '',
         photo: userCredential.user!.photoURL ?? '',
-        gender: Gender.unknown.name.toLowerCase(),
+        phone: '',
+        country_code: '',
+        gender: '',
       );
       await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
-      LocalStorageManager.showLoginPage(false);
       isSkipping = false;
       notifyListeners();
       Navigator.popUntil(context, (route) => route.isFirst);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LocationPermissionPage()));
+      ref.read(splashProvider).redirections(context);
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -73,9 +81,8 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   //* Send OTP To Phone Number
-  Future<void> sendTheOTP(BuildContext context) async {
+  Future<void> sendTheOTP() async {
     try {
-      this.context = context;
       final phoneError = simpleFieldValidation(phoneNumberController.text, LocaleKeys.phone_number.tr(), context);
       if (phoneError != null) {
         errorToast(phoneError);
@@ -117,11 +124,11 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   //* Google Login
-  void googleLogin(BuildContext context) async {
+  void googleLogin() async {
     try {
       isSocialLogin = true;
       notifyListeners();
-      await SocialLoginService.signInWithGoogle(context);
+      await SocialLoginService.instance.signInWithGoogle(context);
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -132,11 +139,11 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   //* Facebook Login
-  void facebookLogin(BuildContext context) async {
+  void facebookLogin() async {
     try {
       isSocialLogin = true;
       notifyListeners();
-      await SocialLoginService.signInWithFacebook(context);
+      await SocialLoginService.instance.signInWithFacebook(context);
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -147,11 +154,11 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   //* Apple Login
-  void appleLogin(BuildContext context) async {
+  void appleLogin() async {
     try {
       isSocialLogin = true;
       notifyListeners();
-      await SocialLoginService.signInWithApple(context);
+      await SocialLoginService.instance.signInWithApple(context);
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -197,7 +204,7 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   //* OTP Verified
-  void verifyOTP(BuildContext context, WidgetRef ref) async {
+  void verifyOTP(WidgetRef ref) async {
     var otpError = simpleFieldValidation(LocaleKeys.otp_verification.tr(), otpController.text, context);
     if (otpError != null) {
       errorToast(otpError);
@@ -214,28 +221,23 @@ class LoginNotifier extends ChangeNotifier {
           name: userCredential.user!.displayName ?? '',
           email: userCredential.user!.email ?? '',
           phone: userCredential.user!.phoneNumber ?? '',
+          country_code: selectedCountry.dialCode ?? '',
           photo: userCredential.user!.photoURL ?? '',
-          gender: Gender.unknown.name.toLowerCase(),
+          gender: '',
         );
         await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
-        await LocalStorageManager.showLoginPage(false);
         //* Disable Loading
         isVerifyingOTP = false;
         notifyListeners();
         Navigator.popUntil(context, (route) => route.isFirst);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LocationPermissionPage()));
+        ref.read(splashProvider.notifier).redirections(context);
       } else {
         await LocalStorageManager.saveUser(UserModel.fromMap((await userCollection.doc(userCredential.user!.uid).get()).data()!), toFirebase: false);
-        await LocalStorageManager.showLoginPage(false);
         //* Disable Loading
         isVerifyingOTP = false;
         notifyListeners();
-        await LocalStorageManager.showGenderPage(false);
-        await LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
-        await LocalStorageManager.showMeeqaatPage(false);
-        await LocalStorageManager.showMeeqaatThreeTasksPage(false);
         Navigator.popUntil(context, (route) => route.isFirst);
-        ref.read(splashProvider.notifier).redirections(context, false);
+        ref.read(splashProvider.notifier).redirections(context);
       }
     } on FirebaseAuthException catch (e) {
       isVerifyingOTP = false;
@@ -266,16 +268,14 @@ class LoginNotifier extends ChangeNotifier {
   void _onCodeSent(verificationId, forceResendingToken) async {
     _verificationId = verificationId;
     _forceResendingToken = forceResendingToken;
-    if (isSendingOTP && context != null) {
+    if (isSendingOTP) {
       _startBounceTimer();
-      await Navigator.push(context!, MaterialPageRoute(builder: (_) => OTPPage()));
+      await Navigator.push(context, MaterialPageRoute(builder: (_) => OTPPage()));
       _resetOTPPage();
     }
   }
 
   void _verificationCompleted(phoneAuthCredential) {}
-
-  void _codeAutoRetrievalTimeout(verificationId) => _verificationId = verificationId;
 
   @override
   void dispose() {

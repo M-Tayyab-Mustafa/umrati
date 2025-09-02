@@ -1,11 +1,9 @@
 import '../../export.dart';
 import '../../view/auth/gender.dart';
 import '../../view/auth/login.dart';
+import '../../view/auth/phone_no.dart';
 import '../../view/language/select_language.dart';
-import '../../view/meeqaat/page.dart';
-import '../../view/meeqaat/three_tasks.dart';
 import '../../view/meeqaat/permission.dart';
-import '../../view/meeqaat/two_tasks.dart';
 import '../../view/nav/page.dart';
 import '../../view/subscription/page.dart';
 
@@ -19,26 +17,32 @@ class SplashNotifier extends ChangeNotifier {
   }
 
   Future<void> redirections(BuildContext context, [showPermissionPage = true]) async {
-    final user = await LocalStorageManager.getUser();
-    final isExpired = user?.subscription?.expire_at?.toDate().isBefore(DateTime.now());
+    final user = await LocalStorageManager.getUser(fromFirebase: true);
+    bool isExpired = true;
+    if (user != null && user.subscription_id != null && user.subscription_id!.isNotEmpty) {
+      var doc = (await FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).doc(user.subscription_id).get());
+      Helper.userSubscription = SubscriptionModel.fromMap(doc.data()!);
+      final expireAt = doc.get('expire_at');
+      if (expireAt.runtimeType == Timestamp) {
+        isExpired = DateTime.now().isAfter(expireAt.toDate());
+      } else {
+        isExpired = Timestamp.fromMillisecondsSinceEpoch(expireAt).toDate().isAfter(expireAt.toDate());
+      }
+      if (isExpired && Helper.userSubscription?.plan.type != PlanType.free.name) errorToast(LocaleKeys.subscription_expire_msg.tr());
+    }
     final permissionStatus = await Geolocator.checkPermission();
     if (await LocalStorageManager.getSelectLanguagePage()) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectLanguagePage()));
-    } else if (await LocalStorageManager.getLoginPage()) {
+    } else if (user == null) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
     } else if ((permissionStatus == LocationPermission.deniedForever || permissionStatus == LocationPermission.denied) && showPermissionPage) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LocationPermissionPage()));
-    } else if (isExpired == null || isExpired == true) {
-      if (user!.subscription?.isFreeSubscribed == false) errorToast(LocaleKeys.subscription_expire_msg.tr());
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage()));
-    } else if (await LocalStorageManager.getGenderPage()) {
+    } else if (user.gender.isEmpty) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectGenderPage()));
-    } else if (await LocalStorageManager.getTwoTasksBeforeMeeqaatPage()) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MeeqaatTwoTasksPage()));
-    } else if (await LocalStorageManager.getMeeqaatPage()) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MeeqaatPage()));
-    } else if (await LocalStorageManager.getMeeqaatThreeTasksPage()) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MeeqaatThreeTasksPage()));
+    } else if (user.country_code.isEmpty || user.phone.isEmpty) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PhoneNoPage()));
+    } else if (isExpired == true) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage()));
     } else {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavigationPage()));
     }

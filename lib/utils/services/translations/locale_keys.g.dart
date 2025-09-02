@@ -38,6 +38,9 @@ abstract class  LocaleKeys {
   static const duration = 'duration';
   static const subscribe = 'subscribe';
   static const unlimited = 'unlimited';
+  static const individual = 'individual';
+  static const group = 'group';
+  static const phone_mandatory = 'phone_mandatory';
   static const subscription_expire_msg = 'subscription_expire_msg';
   static const umra_start_detail = 'umra_start_detail';
   static const distance_from_meeqaat = 'distance_from_meeqaat';
