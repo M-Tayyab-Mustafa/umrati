@@ -14,7 +14,7 @@ class PlanWidget extends ConsumerWidget {
       margin: EdgeInsets.only(bottom: 32),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [if (plan.duration.isNegative) Text(LocaleKeys.unlimited.tr()) else Text('${plan.duration} ${LocaleKeys.months.tr()}'), Text('\$${plan.amount} ${LocaleKeys.price.tr()}')],
+        children: [Text(plan.type == PlanType.free.name ? LocaleKeys.unlimited.tr() : '${plan.duration} ${LocaleKeys.months.tr()}'), Text('\$${plan.amount} ${LocaleKeys.price.tr()}')],
       ),
     );
   }

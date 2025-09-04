@@ -1,4 +1,4 @@
-import '../../export.dart';
+import '../../../../export.dart';
 
 class MeeqaatPage extends ConsumerStatefulWidget {
   const MeeqaatPage({super.key});
@@ -17,6 +17,8 @@ class _MeeqaatPageState extends ConsumerState<MeeqaatPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(locationFetchProvider);
+    ref.read(locationFetchProvider.notifier).context = context;
+    ref.read(locationFetchProvider.notifier).ref = ref;
     return Background(
       backgroundType: BackgroundType.logo,
       title: '${LocaleKeys.distance_from_meeqaat.tr()}:',
@@ -28,7 +30,7 @@ class _MeeqaatPageState extends ConsumerState<MeeqaatPage> {
           Padding(padding: const EdgeInsets.only(top: 10, bottom: 20), child: TimeLine(items: [(provider.distance ?? '0 Km'), (provider.time ?? '0 min')])),
           Text('${LocaleKeys.your_current_location.tr()}:', style: CTextStyle.w500(fontSize: 22)),
           Padding(padding: const EdgeInsets.only(top: 10, bottom: 30), child: Text(provider.location, style: CTextStyle.w500())),
-          CButton(title: LocaleKeys.continue_your_remaining_3_tasks.tr(), fontSize: 14, onTap: () => provider.continueTab(context)),
+          CButton(isLoading: provider.isLoading, title: LocaleKeys.continue_your_remaining_3_tasks.tr(), fontSize: 14, onTap: ref.read(locationFetchProvider.notifier).onContinueYourRemainingTasks),
         ],
       ),
     );

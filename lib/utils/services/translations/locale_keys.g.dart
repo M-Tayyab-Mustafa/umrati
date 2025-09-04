@@ -32,6 +32,8 @@ abstract class  LocaleKeys {
   static const intention_niyyah = 'intention_niyyah';
   static const talbiyah = 'talbiyah';
   static const tasks_done = 'tasks_done';
+  static const yes = 'yes';
+  static const no = 'no';
   static const cleanliness = 'cleanliness';
   static const months = 'months';
   static const price = 'price';
@@ -126,6 +128,7 @@ abstract class  LocaleKeys {
   static const shave_the_head = 'shave_the_head';
   static const go_to_home_screen = 'go_to_home_screen';
   static const congratulations = 'congratulations';
+  static const meeqaat_task_confirmation = 'meeqaat_task_confirmation';
   static const your_umra_has_been_completed = 'your_umra_has_been_completed';
   static const may_allah_accept_your_umra_ameen = 'may_allah_accept_your_umra_ameen';
   static const shave_the_head_description = 'shave_the_head_description';

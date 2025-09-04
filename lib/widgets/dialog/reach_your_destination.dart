@@ -1,11 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import '../../utils/helper/constants.dart';
-import '../../utils/services/translations/locale_keys.g.dart';
-import '../../utils/theme/colors.dart';
-import '../../utils/theme/text_style.dart';
-import '../button.dart';
-import '../custom_image.dart';
+import '../../export.dart';
 
 class ReachYourDestinationDialog extends StatelessWidget {
   const ReachYourDestinationDialog({super.key});

@@ -5,40 +5,32 @@ import '../../../export.dart' hide LatLng;
 final safaMarwaProvider = ChangeNotifierProvider.autoDispose<SafaMarwaNotifier>((ref) => SafaMarwaNotifier());
 
 class SafaMarwaNotifier extends ChangeNotifier {
-  WidgetRef? _ref;
   BuildContext? _context;
-
-  WidgetRef get ref => _ref!;
   BuildContext get context => _context!;
+  set context(BuildContext value) => _context = value;
 
+  WidgetRef? _ref;
+  WidgetRef get ref => _ref!;
+  set ref(WidgetRef value) => _ref = value;
+
+  late HistoryModel umraModel;
   StreamSubscription<Position>? positionStreamSubscription;
-
-  // Controller for scrolling animation during Safa-Marwa run
-  ScrollController? scrollController;
-
-  // Percentage completion of one side of Safa-Marwa run (0.0 to 1.0)
+  ScrollController scrollController = ScrollController();
   double oneSideRunCompletionPercent = 0.0;
-
-  // Flag to track if one side of the run is complete
   bool isRunComplete = false;
-
-  // Counter for completed rounds between Safa and Marwa
   int saiRoundCount = 0;
 
-  // Initialization method to request location permissions
-  initialization(WidgetRef ref, BuildContext context) async {
-    _ref = ref;
-    _context = context;
-    _cancelPositionStreamSubscription();
-    isRunComplete = ref.read(tawafProvider).user!.isOneSideSaiRunCompleted;
-    saiRoundCount = ref.read(tawafProvider).user!.saiRoundCount;
+  Future<void> initialization() async {
+    umraModel = ref.read(umraProvider.notifier).umraModel!;
+    isRunComplete = umraModel.is_one_side_sai_run_completed;
+    saiRoundCount = umraModel.sai_round_count;
     notifyListeners();
-
-    var safaMarwaModel = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
-    var safaLatLng = LatLng(double.parse(safaMarwaModel.safaLat), double.parse(safaMarwaModel.safaLng));
-    var marwaLatLng = LatLng(double.parse(safaMarwaModel.marwaLat), double.parse(safaMarwaModel.marwaLng));
-    var safaMarwaDistance = num.parse(safaMarwaModel.distance);
-    var threshold = num.parse(safaMarwaModel.threshold);
+    _cancelPositionStreamSubscription();
+    final safaMarwaModel = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
+    final safaLatLng = LatLng(double.parse(safaMarwaModel.safaLat), double.parse(safaMarwaModel.safaLng));
+    final marwaLatLng = LatLng(double.parse(safaMarwaModel.marwaLat), double.parse(safaMarwaModel.marwaLng));
+    final safaMarwaDistance = num.parse(safaMarwaModel.distance);
+    final threshold = num.parse(safaMarwaModel.threshold);
     try {
       positionStreamSubscription = Geolocator.getPositionStream(
         locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
@@ -51,11 +43,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   // Method to update location and track progress between Safa and Marwa
   void _updateLocation(Position position, LatLng safaLatLng, LatLng marwaLatLng, num safaMarwaDistance, num threshold) {
-    if (!ref.read(tawafProvider).isInTawaf) {
-      _cancelPositionStreamSubscription();
-      return;
-    }
-
+    if (!umraModel.is_doing) return _cancelPositionStreamSubscription();
     if (isRunComplete) {
       var safaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, safaLatLng.latitude, safaLatLng.longitude).abs();
       if (safaDistance > (safaMarwaDistance + threshold)) return;
@@ -67,7 +55,8 @@ class SafaMarwaNotifier extends ChangeNotifier {
     } else {
       var marwaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, marwaLatLng.latitude, marwaLatLng.longitude).abs();
       if (marwaDistance <= threshold) {
-        LocalStorageManager.saveUser(ref.read(tawafProvider).user!.copyWith(isOneSideSaiRunCompleted: true));
+        umraModel = umraModel.copyWith(is_one_side_sai_run_completed: true);
+        ref.read(umraProvider.notifier).updateUmraModel(umraModel);
         isRunComplete = true;
       } else {
         if (marwaDistance > (safaMarwaDistance + threshold)) return;
@@ -75,31 +64,30 @@ class SafaMarwaNotifier extends ChangeNotifier {
       }
     }
     notifyListeners();
-    if (scrollController!.hasClients) {
-      var position = scrollController!.position.maxScrollExtent * (1 - oneSideRunCompletionPercent);
-      scrollController!.animateTo(position, duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
+    if (scrollController.hasClients) {
+      var position = scrollController.position.maxScrollExtent * (1 - oneSideRunCompletionPercent);
+      scrollController.animateTo(position, duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
     }
   }
 
   _updateRoundCount() async {
     isRunComplete = false;
     saiRoundCount++;
-    if (await Vibration.hasVibrator()) {
-      Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
-    }
+    if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
     oneSideRunCompletionPercent = 0.0;
     notifyListeners();
-    LocalStorageManager.saveUser(ref.read(tawafProvider).user!.copyWith(saiRoundCount: saiRoundCount, isOneSideSaiRunCompleted: false));
+    umraModel = umraModel.copyWith(sai_round_count: saiRoundCount, is_one_side_sai_run_completed: false);
+    ref.read(umraProvider.notifier).updateUmraModel(umraModel);
     if (saiRoundCount == 7) {
       _cancelPositionStreamSubscription();
       saiRoundCount = 0;
       notifyListeners();
       await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => TawafCompletionDialog());
-      ref.read(tawafProvider).isSafaMarwaCompleted();
+      ref.read(umraProvider).safaMarwaCompleted();
     }
   }
 
-  _cancelPositionStreamSubscription() {
+  void _cancelPositionStreamSubscription() {
     positionStreamSubscription?.cancel();
     positionStreamSubscription = null;
   }
@@ -107,6 +95,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
   @override
   void dispose() {
     _cancelPositionStreamSubscription();
+    scrollController.dispose();
     super.dispose();
   }
 }

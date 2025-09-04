@@ -1,32 +1,46 @@
-import '../../export.dart';
-import '../../view/meeqaat/page.dart';
+import '../../../export.dart';
 
 final meeqaatTwoTasksProvider = ChangeNotifierProvider.autoDispose<MeeqaatTwoTasksNotifier>((ref) => MeeqaatTwoTasksNotifier());
 
 class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   bool isCleanlinessChecked = false;
   bool isIhramChecked = false;
-  bool isSkipLoading = false;
 
-  void skip(BuildContext context) async {
+  bool isLoading = false;
+
+  BuildContext? _context;
+  BuildContext get context => _context!;
+  set context(BuildContext value) => _context = value;
+
+  WidgetRef? _ref;
+  WidgetRef get ref => _ref!;
+  set ref(WidgetRef value) => _ref = value;
+
+  void skip() async {
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
     if (result == false || result == null) {
       return;
     }
-    isSkipLoading = true;
-    notifyListeners();
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatPage()));
+    isLoading = true;
+    if (context.mounted) notifyListeners();
+    await ref.read(umraProvider.notifier).updateHasDoneBeforeMeeqaatTasks();
+    isLoading = false;
+    if (context.mounted) notifyListeners();
   }
 
-  void moveToThreeOtherTasks(BuildContext context) {
+  void moveToThreeOtherTasks() async {
     if (!(isCleanlinessChecked && isIhramChecked)) {
       errorToast(LocaleKeys.please_check_the_cleanliness_and_ihram_boxes.tr());
       return;
     }
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeeqaatPage()));
+    isLoading = true;
+    if (context.mounted) notifyListeners();
+    await ref.read(umraProvider.notifier).updateHasDoneBeforeMeeqaatTasks();
+    isLoading = false;
+    if (context.mounted) notifyListeners();
   }
 
-  void showIhramTutorial(BuildContext context) async {
+  void showIhramTutorial() async {
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => IhramTutorialDialog());
     if (result == true) {
       isIhramChecked = true;
@@ -41,6 +55,11 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
 
   updateIhramChecked() {
     isIhramChecked = !isIhramChecked;
+    notifyListeners();
+  }
+
+  void updateLoading(bool bool) {
+    isLoading = bool;
     notifyListeners();
   }
 }

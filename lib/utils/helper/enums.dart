@@ -10,9 +10,11 @@ enum ZiaratCities { mecca, medina, taif, other }
 
 enum ZiaratDestinationsCreationOptions { auto, manual }
 
-enum CollectionNames { users, settings, plans, subscriptions }
+enum CollectionNames { users, settings, plans, subscriptions, histories }
 
 enum MapMarkerId { userLocation, destination }
+
+enum UmraType { tawaf, umra }
 
 enum CommonDoc {
   alKaba('al_kaba'),

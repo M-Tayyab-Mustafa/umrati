@@ -10,35 +10,40 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            card(
-              constraints: constraints,
-              onTap: () => ref.read(homeProvider).onUmraTap(context: context, ref: ref),
-              title: LocaleKeys.umra.tr(),
-              description: LocaleKeys.start_your_umra_from_here.tr(),
-              image: 'assets/png/home/umrah.png',
-            ),
-            card(
-              constraints: constraints,
-              onTap: () => ref.read(homeProvider).onTawafTap(context: context, ref: ref),
-              title: LocaleKeys.tawaf.tr(),
-              description: LocaleKeys.start_your_tawaf_from_here.tr(),
-              image: 'assets/png/home/tawaf.png',
-            ),
-            card(
-              constraints: constraints,
-              onTap: () => ref.read(homeProvider).onZiaratTap(context: context, ref: ref),
-              title: LocaleKeys.ziarat.tr(),
-              description: LocaleKeys.start_your_ziarat_from_here.tr(),
-              image: 'assets/png/home/ziarat.png',
-            ),
-          ],
-        );
-      },
+    return Background(
+      showEmblem: false,
+      backgroundType: BackgroundType.empty,
+      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: 85),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              card(
+                constraints: constraints,
+                onTap: () => ref.read(homeProvider).onUmraTap(context: context, ref: ref),
+                title: LocaleKeys.umra.tr(),
+                description: LocaleKeys.start_your_umra_from_here.tr(),
+                image: 'assets/png/home/umrah.png',
+              ),
+              card(
+                constraints: constraints,
+                onTap: () => ref.read(homeProvider).onTawafTap(context: context, ref: ref),
+                title: LocaleKeys.tawaf.tr(),
+                description: LocaleKeys.start_your_tawaf_from_here.tr(),
+                image: 'assets/png/home/tawaf.png',
+              ),
+              card(
+                constraints: constraints,
+                onTap: () => ref.read(homeProvider).onZiaratTap(context: context, ref: ref),
+                title: LocaleKeys.ziarat.tr(),
+                description: LocaleKeys.start_your_ziarat_from_here.tr(),
+                image: 'assets/png/home/ziarat.png',
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 

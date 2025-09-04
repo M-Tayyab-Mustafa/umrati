@@ -34,6 +34,7 @@ export 'model/user.dart';
 export 'model/plan.dart';
 export 'model/subscription.dart';
 export 'model/ziarat.dart';
+export 'model/history.dart';
 
 //* Controller
 export 'controller/splash/provider.dart';
@@ -48,10 +49,10 @@ export 'controller/nav/umra/safa_marwa_provider.dart';
 export 'controller/nav/umra/umra_provider.dart';
 export 'controller/nav/ziarat/provider.dart';
 export 'controller/nav/ziarat/map_provider.dart';
-export 'controller/meeqaat/provider.dart';
+export 'controller/nav/meeqaat/provider.dart';
 export 'controller/location_permission/permission_provider.dart';
-export 'controller/meeqaat/three_tasks_provider.dart';
-export 'controller/meeqaat/two_tasks_provider.dart';
+export 'controller/nav/meeqaat/three_tasks_provider.dart';
+export 'controller/nav/meeqaat/two_tasks_provider.dart';
 
 //* Widgets
 export 'widgets/custom_image.dart';
@@ -67,6 +68,7 @@ export 'widgets/marker.dart';
 export 'widgets/pin_input.dart';
 export 'widgets/text_field.dart';
 export 'widgets/dialog/tawaf_completed_dialog.dart';
+export 'widgets/dialog/tawaf_confirmation_dialog.dart';
 export 'widgets/dialog/already_dialog.dart';
 export 'widgets/dialog/ziarat_complete_dialog.dart';
 export 'widgets/dialog/reach_your_destination.dart';

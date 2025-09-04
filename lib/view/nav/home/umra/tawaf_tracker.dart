@@ -1,0 +1,207 @@
+import '../../../../export.dart';
+
+part '../../../../widgets/dashes_circle.dart';
+
+class TawafTrackerPage extends ConsumerWidget {
+  const TawafTrackerPage({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var provider = ref.watch(umraProvider);
+    return Background(
+      logoAlign: Alignment.center,
+      backgroundType: BackgroundType.logo,
+      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: 85),
+      showEmblem: false,
+      child: Column(
+        children: [
+          Visibility(
+            visible: provider.tawafCircleCount != 7,
+            child: CButton(
+              shadows: [],
+              height: 50,
+              margin: EdgeInsets.symmetric(vertical: 30),
+              onTap: provider.startAndStopTawaf,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CustomImage(path: provider.umraModel != null ? 'assets/svg/pause.svg' : 'assets/svg/play.svg', imageType: ImageType.svg, height: 16),
+                  Padding(
+                    padding: EdgeInsets.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
+                    child: Text(provider.umraModel != null ? LocaleKeys.off_tracker.tr() : LocaleKeys.start_tawaf.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final size = constraints.maxWidth * 0.8;
+                final trackingIndicatorSize = size * 0.14;
+                final tawafCounterSize = size * 0.3;
+                final centralContentSize = size * 0.77;
+                final center = Offset(size / 2, size / 2);
+                final radius = size / 2;
+                final angle = -2 * pi * provider.tawafCircleCompletionPercent + pi;
+                final trackerDX = center.dx + radius * cos(angle);
+                final trackerDY = center.dy + radius * sin(angle);
+                final tawafCountAngle = -2 * pi * 0 + pi;
+                final tawafCountDX = center.dx + radius * cos(tawafCountAngle);
+                final tawafCountDY = center.dy + radius * sin(tawafCountAngle);
+
+                return Stack(
+                  children: [
+                    Center(child: CustomPaint(size: Size(size, size), painter: DashedCirclePainter(primaryColor: CColors.primary, gradientRadiusFactor: provider.tawafCircleCompletionPercent))),
+                    if ((provider.tawafCircleCount != 0 || provider.umraModel != null) && provider.tawafCircleCount < 7)
+                      Positioned(
+                        left: (constraints.maxWidth - size) / 2 + trackerDX - (trackingIndicatorSize / 2),
+                        top: (constraints.maxHeight - size) / 2 + trackerDY - (trackingIndicatorSize / 2),
+                        child: Container(
+                          width: trackingIndicatorSize,
+                          height: trackingIndicatorSize,
+                          decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
+                          child: Padding(padding: const EdgeInsets.only(left: 5), child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: 20)),
+                        ),
+                      ),
+                    if (provider.tawafCircleCount > 0 && provider.tawafCircleCount < 7)
+                      Positioned(
+                        left: (constraints.maxWidth - size) / 2 + tawafCountDX - (tawafCounterSize / 2),
+                        top: (constraints.maxHeight - size) / 2 + tawafCountDY - (tawafCounterSize / 2),
+                        child: SizedBox(
+                          width: tawafCounterSize,
+                          height: tawafCounterSize,
+                          child: Stack(
+                            children: [
+                              Center(child: CustomImage(width: tawafCounterSize, height: tawafCounterSize, path: 'assets/svg/tawaf_counter_bg.svg', imageType: ImageType.svg, fit: BoxFit.fill)),
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 3),
+                                  child: Text(provider.tawafCircleCount.toString(), style: CTextStyle.w900(fontSize: 16, color: CColors.primary)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    Center(
+                      child: switch (provider.tawafCircleCount) {
+                        7 => Container(
+                          height: size * 0.9,
+                          width: size * 0.9,
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all((size * 0.9) * 0.03),
+                          decoration: BoxDecoration(
+                            gradient: CColors.trackingGradient,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: CColors.primary),
+                            boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
+                          ),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CustomImage(path: 'assets/svg/complete_check.svg', imageType: ImageType.svg, height: size * 0.33, width: size * 0.33, margin: EdgeInsets.only(bottom: 8)),
+                                Text(LocaleKeys.seven_rounds_completed.tr(), style: CTextStyle.w800(fontSize: 18, color: Colors.white), textAlign: TextAlign.center),
+                              ],
+                            ),
+                          ),
+                        ),
+                        _ => _buildTrackerWidget(size: centralContentSize, isRoundCompleted: provider.isRoundCompleted, provider: provider, context: context),
+                      },
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          _buildDuaWidget(context: context, provider: provider),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTrackerWidget({required BuildContext context, required double size, required bool isRoundCompleted, required UmraNotifier provider}) {
+    return GestureDetector(
+      onTap: (provider.isRoundCompleted) ? provider.startNextRound : null,
+      child: Container(
+        height: size,
+        width: size,
+        padding: EdgeInsets.all(size * 0.03),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          gradient: CColors.trackingGradient,
+          shape: BoxShape.circle,
+          boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
+        ),
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(gradient: CColors.trackingSecondaryGradient, shape: BoxShape.circle),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CustomImage(path: isRoundCompleted ? 'assets/svg/istilaam_time.svg' : 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: size * 0.25, margin: EdgeInsets.only(bottom: 12)),
+              Text(isRoundCompleted ? LocaleKeys.istilaam_time.tr() : LocaleKeys.tawaf_tracker.tr(), style: CTextStyle.w900(fontSize: isLTR(context) ? 14 : 22)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDuaWidget({required BuildContext context, required UmraNotifier provider}) {
+    switch (provider.tawafCircleCount) {
+      case 7:
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CheckBoxCard(
+              margin: EdgeInsets.only(top: 16),
+              title: LocaleKeys.now_perform_2_rakats_salah.tr(),
+              isSelected: provider.isPerformed2RakatsSalah,
+              onTap: provider.perform2RakatsSalah,
+              child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 14, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular')),
+            ),
+            CheckBoxCard(margin: EdgeInsets.symmetric(vertical: 10), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
+            CButton(margin: EdgeInsets.only(bottom: 16, top: 25), onTap: provider.moveToSafaMarwa, titleWithIcon: true, title: LocaleKeys.continued.tr()),
+          ],
+        );
+      default:
+        {
+          String duaTitle = switch (provider.tawafCircleCount) {
+            0 => LocaleKeys.dua_during_1st_round.tr(),
+            1 => LocaleKeys.dua_during_2nd_round.tr(),
+            2 => LocaleKeys.dua_during_3rd_round.tr(),
+            3 => LocaleKeys.dua_during_4th_round.tr(),
+            4 => LocaleKeys.dua_during_5th_round.tr(),
+            5 => LocaleKeys.dua_during_6th_round.tr(),
+            _ => LocaleKeys.dua_during_7th_round.tr(),
+          };
+          String dua = switch (provider.tawafCircleCount) {
+            0 => Dua.round1.dua,
+            1 => Dua.round2.dua,
+            2 => Dua.round3.dua,
+            3 => Dua.round4.dua,
+            4 => Dua.round5.dua,
+            5 => Dua.round6.dua,
+            _ => Dua.round7.dua,
+          };
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('$duaTitle${provider.user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}', style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal)),
+              BasicCard(
+                margin: EdgeInsets.symmetric(vertical: 14),
+                backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
+                child: Text(dua, style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center, textDirection: TextDirection.rtl),
+              ),
+            ],
+          );
+        }
+    }
+  }
+}

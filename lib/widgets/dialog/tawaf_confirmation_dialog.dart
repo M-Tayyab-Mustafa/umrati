@@ -1,9 +1,7 @@
 import '../../export.dart';
 
-class AlreadyDialog extends StatelessWidget {
-  const AlreadyDialog({super.key, required this.isDoingUmra});
-  final bool isDoingUmra;
-
+class TawafConfirmationDialog extends StatelessWidget {
+  const TawafConfirmationDialog({super.key});
   @override
   Widget build(BuildContext dialogContext) {
     return Scaffold(
@@ -27,22 +25,9 @@ class AlreadyDialog extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(top: screenSize.height * 0.05, left: screenSize.width * 0.1, right: screenSize.width * 0.1),
-                      child: Center(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Text(
-                                isDoingUmra ? LocaleKeys.already_in_umra.tr() : LocaleKeys.already_in_ziarats.tr(),
-                                style: CTextStyle.w900(fontSize: 16, color: CColors.deepTeal),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      child: Center(child: Text(LocaleKeys.meeqaat_task_confirmation.tr(), style: CTextStyle.w900(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center)),
                     ),
                   ),
-
                   Row(
                     children: [
                       Expanded(
@@ -50,7 +35,7 @@ class AlreadyDialog extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 16, right: 8),
                           child: CButton(
                             height: 50,
-                            title: LocaleKeys.start_new.tr(),
+                            title: LocaleKeys.no.tr(),
                             onTap: () => Navigator.pop(dialogContext, false),
                             margin: EdgeInsets.only(bottom: 30),
                             style: CTextStyle.w400(fontSize: 12, color: Colors.white),
@@ -62,7 +47,7 @@ class AlreadyDialog extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 8, right: 16),
                           child: CButton(
                             height: 50,
-                            title: LocaleKeys.continued.tr(),
+                            title: LocaleKeys.yes.tr(),
                             onTap: () => Navigator.pop(dialogContext, true),
                             margin: EdgeInsets.only(bottom: 30),
                             style: CTextStyle.w400(fontSize: 12, color: Colors.white),

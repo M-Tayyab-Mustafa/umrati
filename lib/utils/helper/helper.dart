@@ -44,6 +44,8 @@ class Helper {
       } else {
         log(body.toString());
       }
+    } on ClientException catch (e) {
+      if (kDebugMode) log(e.toString());
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());

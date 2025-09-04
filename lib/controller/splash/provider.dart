@@ -3,7 +3,7 @@ import '../../view/auth/gender.dart';
 import '../../view/auth/login.dart';
 import '../../view/auth/phone_no.dart';
 import '../../view/language/select_language.dart';
-import '../../view/meeqaat/permission.dart';
+import '../../view/location_permission/page.dart';
 import '../../view/nav/page.dart';
 import '../../view/subscription/page.dart';
 
