@@ -1,8 +1,19 @@
 import '../../export.dart';
 
 class Helper {
+  static double degreesToRadians(double degrees) => degrees * pi / 180;
+  static const double earthRadiusInMeters = 6371000;
   static String formatePhoneNumber(String phoneNumber, String dialCode) {
     return '$dialCode${phoneNumber.replaceAll(' ', '')}';
+  }
+
+  static Future<void> getCurrencySymbol() async {
+    try {
+      currencySymbol = (await FirebaseFirestore.instance.collection(CollectionNames.settings.name).doc(CommonDoc.currency.name).get()).get(CommonField.symbol.name);
+    } catch (e) {
+      if (kDebugMode) log(e.toString());
+      errorToast(e.toString());
+    }
   }
 
   static String timeoutError = LocaleKeys.timeout_error.tr();
@@ -51,6 +62,34 @@ class Helper {
       errorToast(e.toString());
     }
     return null;
+  }
+
+  static bool isUserInBetweenAlHajarAndMataf(double x1, double y1, double x2, double y2, double px, double py, double minimumDistance) {
+    final distance = distanceFromPointToLine(startLat: x1, startLng: y1, endLat: x2, endLng: y2, pointLat: px, pointLng: py);
+    return distance <= minimumDistance;
+  }
+
+  static double distanceFromPointToLine({required double startLat, required double startLng, required double endLat, required double endLng, required double pointLat, required double pointLng}) {
+    double lat1 = degreesToRadians(startLat);
+    double lon1 = degreesToRadians(startLng);
+    double lat2 = degreesToRadians(endLat);
+    double lon2 = degreesToRadians(endLng);
+    double lat0 = degreesToRadians(pointLat);
+    double lon0 = degreesToRadians(pointLng);
+    double x1 = earthRadiusInMeters * lon1 * cos((lat1 + lat2) / 2);
+    double y1 = earthRadiusInMeters * lat1;
+
+    double x2 = earthRadiusInMeters * lon2 * cos((lat1 + lat2) / 2);
+    double y2 = earthRadiusInMeters * lat2;
+
+    double x0 = earthRadiusInMeters * lon0 * cos((lat1 + lat2) / 2);
+    double y0 = earthRadiusInMeters * lat0;
+
+    double A = y2 - y1;
+    double B = x1 - x2;
+    double C = x2 * y1 - x1 * y2;
+
+    return (A * x0 + B * y0 + C).abs() / sqrt(A * A + B * B);
   }
 }
 

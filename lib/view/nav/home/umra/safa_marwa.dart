@@ -86,6 +86,14 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
                                       painter: _VerticalDashedAreaPainter(lineSpacing: lineSpacing, dashWidth: 15, dashHeight: 4, lineColor: Colors.black, fillColor: Colors.transparent),
                                     ),
 
+                                    Align(
+                                      alignment: provider.startingRunAlign,
+                                      child: CustomImage(path: 'assets/svg/area_to_run_fast.svg', imageType: ImageType.svg, width: screenSize.width * 0.5, height: screenSize.height * 0.068),
+                                    ),
+                                    Align(
+                                      alignment: provider.endingRunAlign,
+                                      child: CustomImage(path: 'assets/svg/area_to_slow_down.svg', imageType: ImageType.svg, width: screenSize.width * 0.5, height: screenSize.height * 0.068),
+                                    ),
                                     Column(
                                       children: [
                                         Padding(padding: const EdgeInsets.only(top: 10), child: Text(LocaleKeys.marwa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 18))),
@@ -136,18 +144,36 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
   }
 
   _buildDuaWidget({required BuildContext context, required SafaMarwaNotifier provider}) {
+    String duaTitle = switch (provider.saiRoundCount) {
+      0 => LocaleKeys.dua_during_1st_round.tr(),
+      1 => LocaleKeys.dua_during_2nd_round.tr(),
+      2 => LocaleKeys.dua_during_3rd_round.tr(),
+      3 => LocaleKeys.dua_during_4th_round.tr(),
+      4 => LocaleKeys.dua_during_5th_round.tr(),
+      5 => LocaleKeys.dua_during_6th_round.tr(),
+      _ => LocaleKeys.dua_during_7th_round.tr(),
+    };
+    String dua = switch (provider.saiRoundCount) {
+      0 => Dua.round1.dua,
+      1 => Dua.round2.dua,
+      2 => Dua.round3.dua,
+      3 => Dua.round4.dua,
+      4 => Dua.round5.dua,
+      5 => Dua.round6.dua,
+      _ => LocaleKeys.ask_legitimate_needs.tr(),
+    };
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '${provider.isRunComplete ? LocaleKeys.going_to_safa.tr() : LocaleKeys.going_to_marwa.tr()}${ref.read(umraProvider.notifier).user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}',
+          '$duaTitle${ref.read(umraProvider.notifier).user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}',
           style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal),
         ),
         BasicCard(
           margin: EdgeInsets.only(top: 8, bottom: 8),
           backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
           child: Text(
-            provider.isRunComplete ? Dua.goingToSafa.dua : Dua.goingToMarwa.dua,
+            dua,
             style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular'),
             textAlign: TextAlign.center,
             textDirection: TextDirection.rtl,

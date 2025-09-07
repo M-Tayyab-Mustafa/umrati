@@ -25,43 +25,67 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
       child:
           provider.isLoading
               ? Loading()
-              : Padding(
-                padding: const EdgeInsets.only(top: kToolbarHeight / 2),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Stack(
-                      children: [
-                        SizedBox(
-                          height: constraints.maxHeight,
-                          width: constraints.maxWidth,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 16, right: 16, top: 32, bottom: 16),
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    shrinkWrap: true,
-                                    itemCount: provider.plans.length,
-                                    itemBuilder: (context, index) => PlanWidget(plan: provider.plans[index], isSelected: provider.selectedPlan == provider.plans[index]),
-                                  ),
+              : LayoutBuilder(
+                builder: (context, constraints) {
+                  var plans = <PlanModel>[];
+                  if (provider.showThreeMonthPlans) {
+                    plans = provider.plans.where((element) => element.duration == 90).toList();
+                  } else {
+                    plans = provider.plans.where((element) => element.duration != 90).toList();
+                  }
+                  return Stack(
+                    children: [
+                      SizedBox(
+                        height: constraints.maxHeight,
+                        width: constraints.maxWidth,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16, right: 16, top: 32, bottom: 16),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 32),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('3 ${LocaleKeys.months.tr()}', style: CTextStyle.w500(fontSize: 16, color: Colors.black)),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                                      child: SizedBox(
+                                        height: 30,
+                                        child: FittedBox(
+                                          child: Switch(
+                                            value: provider.showThreeMonthPlans,
+                                            thumbColor: WidgetStatePropertyAll(CColors.deepTeal),
+                                            overlayColor: WidgetStatePropertyAll(CColors.deepTeal),
+                                            activeColor: CColors.deepTeal,
+                                            trackColor: WidgetStatePropertyAll(CColors.primary.withValues(alpha: 0.1)),
+                                            onChanged: provider.togglePlans,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text('1 ${LocaleKeys.year.tr()}', style: CTextStyle.w500(fontSize: 16, color: Colors.black)),
+                                  ],
                                 ),
-                                CButton(
-                                  isLoading: provider.isSubscribing,
-                                  onTap: provider.subscribe,
-                                  margin: EdgeInsets.only(top: 16, bottom: 48),
-                                  title: LocaleKeys.subscribe.tr(),
-                                  titleWithIcon: true,
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  itemCount: plans.length,
+                                  itemBuilder: (context, index) {
+                                    return PlanWidget(onSubscribe: provider.subscribe, plan: plans[index], isSelected: provider.selectedPlan == plans[index]);
+                                  },
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                        SlidingUpPanelWidget(controlHeight: 0, anchor: 0.15, panelController: provider.panelController, child: PaymentSheet()),
-                      ],
-                    );
-                  },
-                ),
+                      ),
+                      SlidingUpPanelWidget(controlHeight: 0, anchor: 0.15, panelController: provider.panelController, child: PaymentSheet()),
+                    ],
+                  );
+                },
               ),
     );
   }

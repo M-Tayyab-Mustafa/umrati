@@ -10,6 +10,7 @@ class CButton extends StatelessWidget {
     this.width,
     this.height,
     this.fontSize,
+    this.iconSize,
     this.style,
     this.borderRadius,
     this.borderColor,
@@ -29,6 +30,7 @@ class CButton extends StatelessWidget {
   final double? width;
   final double? height;
   final double? fontSize;
+  final double? iconSize;
   final BorderRadiusGeometry? borderRadius;
   final String? title;
   final Widget? child;
@@ -73,7 +75,7 @@ class CButton extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(title!, style: CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 17), maxLines: 1),
-                            CustomImage(margin: EdgeInsets.only(left: 16), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: 35),
+                            CustomImage(margin: EdgeInsets.only(left: 16), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: iconSize ?? 35),
                           ],
                         ),
                       )

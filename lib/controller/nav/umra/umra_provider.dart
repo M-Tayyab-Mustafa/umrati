@@ -13,9 +13,10 @@ class UmraNotifier extends ChangeNotifier {
   WidgetRef? _ref;
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
+
   // Flag to track if user is currently performing Tawaf
   bool isFromTawaf = false;
-  bool isLoading = true;
+  bool isLoading = false;
 
   HistoryModel? umraModel;
 
@@ -76,7 +77,6 @@ class UmraNotifier extends ChangeNotifier {
     }
 
     if (umraModel != null && hasDoneBeforeMeeqaatTasks && hasReachedMeeqaat && hasDoneAfterMeeqaatTasks && tawafCircleCount < 7) await _startTawaf();
-
     ref.read(meeqaatTwoTasksProvider.notifier).updateLoading(false);
   }
 
@@ -119,16 +119,36 @@ class UmraNotifier extends ChangeNotifier {
   }
 
   void _stopTawaf() async {
+    isLoading = true;
+    notifyListeners();
     showSafaMarwa = false;
     isSafaMarwaComplete = false;
     await updateUmraModel(umraModel!.copyWith(is_doing: false));
     umraModel = null;
+    isPerformed2RakatsSalah = false;
+    isDrinkZamzam = false;
     _resetTawafData();
+    ref.read(safaMarwaProvider.notifier).positionStreamSubscription?.cancel();
     _cancelPositionStreamSubscription();
+    isLoading = false;
+    notifyListeners();
   }
 
   Future<void> _startTawaf() async {
-    await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => UmraStartConfirmationDialog());
+    startingPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
+    var constantsDoc = await settingsCollection.doc(CommonDoc.constants.name).get();
+    var alHajarAlAswadLatLng = LatLng(constantsDoc.get(CommonField.alHajarAlAswad.name)!['lat'], constantsDoc.get(CommonField.alHajarAlAswad.name)!['lng']);
+    var matafGreenLightLatLng = LatLng(constantsDoc.get(CommonField.matafGreenLight.name)!['lat'], constantsDoc.get(CommonField.matafGreenLight.name)!['lng']);
+    var isUserInBetweenAlHajarAndMataf = Helper.isUserInBetweenAlHajarAndMataf(
+      alHajarAlAswadLatLng.latitude,
+      alHajarAlAswadLatLng.longitude,
+      matafGreenLightLatLng.latitude,
+      matafGreenLightLatLng.longitude,
+      startingPosition!.latitude,
+      startingPosition!.longitude,
+      num.parse(constantsDoc.get(CommonField.alHajarToMatafThreshold.name).toString()).toDouble(),
+    );
+    if (!isUserInBetweenAlHajarAndMataf) await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => UmraStartConfirmationDialog());
     tawafCircleCompletionPercent = 0;
     notifyListeners();
     try {
@@ -142,7 +162,7 @@ class UmraNotifier extends ChangeNotifier {
   // Method to request location permissions and initialize Tawaf
   Future<void> _initializeTawafLocationTracking() async {
     try {
-      startingPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
+      positionStreamSubscription?.cancel();
       var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
       var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
       // Start listening to position updates

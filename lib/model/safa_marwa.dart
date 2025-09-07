@@ -5,13 +5,13 @@ class SafaMarwaModel {
   final String distance;
   final String unit;
   final String threshold;
-  final String safaLat;
-  final String safaLng;
-  final String marwaLat;
-  final String marwaLng;
+  final double safaLat;
+  final double safaLng;
+  final double marwaLat;
+  final double marwaLng;
   SafaMarwaModel({required this.distance, required this.unit, required this.threshold, required this.safaLat, required this.safaLng, required this.marwaLat, required this.marwaLng});
 
-  SafaMarwaModel copyWith({String? distance, String? unit, String? threshold, String? safaLat, String? safaLng, String? marwaLat, String? marwaLng}) {
+  SafaMarwaModel copyWith({String? distance, String? unit, String? threshold, double? safaLat, double? safaLng, double? marwaLat, double? marwaLng}) {
     return SafaMarwaModel(
       distance: distance ?? this.distance,
       unit: unit ?? this.unit,
@@ -32,10 +32,10 @@ class SafaMarwaModel {
       distance: map['distance']?.toString() ?? '',
       unit: map['unit']?.toString() ?? '',
       threshold: map['threshold']?.toString() ?? '',
-      safaLat: map['safaLat']?.toString() ?? '',
-      safaLng: map['safaLng']?.toString() ?? '',
-      marwaLat: map['marwaLat']?.toString() ?? '',
-      marwaLng: map['marwaLng']?.toString() ?? '',
+      safaLat: map['safaLat'],
+      safaLng: map['safaLng'],
+      marwaLat: map['marwaLat'],
+      marwaLng: map['marwaLng'],
     );
   }
 

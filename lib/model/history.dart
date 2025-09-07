@@ -73,6 +73,7 @@ class HistoryModel {
       'has_done_after_meeqaat_tasks': has_done_after_meeqaat_tasks,
       'tawaf_circle_count': tawaf_circle_count,
       'sai_round_count': sai_round_count,
+      'can_start_sai': can_start_sai,
       'is_one_side_sai_run_completed': is_one_side_sai_run_completed,
       'created_at': created_at ?? this.created_at?.millisecondsSinceEpoch,
       'updated_at': updated_at ?? this.updated_at?.millisecondsSinceEpoch,

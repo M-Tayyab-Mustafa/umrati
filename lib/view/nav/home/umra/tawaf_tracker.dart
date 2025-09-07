@@ -20,6 +20,7 @@ class TawafTrackerPage extends ConsumerWidget {
             child: CButton(
               shadows: [],
               height: 50,
+              isLoading: provider.isLoading,
               margin: EdgeInsets.symmetric(vertical: 30),
               onTap: provider.startAndStopTawaf,
               child: Row(
@@ -172,35 +173,54 @@ class TawafTrackerPage extends ConsumerWidget {
         );
       default:
         {
-          String duaTitle = switch (provider.tawafCircleCount) {
-            0 => LocaleKeys.dua_during_1st_round.tr(),
-            1 => LocaleKeys.dua_during_2nd_round.tr(),
-            2 => LocaleKeys.dua_during_3rd_round.tr(),
-            3 => LocaleKeys.dua_during_4th_round.tr(),
-            4 => LocaleKeys.dua_during_5th_round.tr(),
-            5 => LocaleKeys.dua_during_6th_round.tr(),
-            _ => LocaleKeys.dua_during_7th_round.tr(),
-          };
-          String dua = switch (provider.tawafCircleCount) {
-            0 => Dua.round1.dua,
-            1 => Dua.round2.dua,
-            2 => Dua.round3.dua,
-            3 => Dua.round4.dua,
-            4 => Dua.round5.dua,
-            5 => Dua.round6.dua,
-            _ => Dua.round7.dua,
-          };
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('$duaTitle${provider.user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}', style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal)),
-              BasicCard(
-                margin: EdgeInsets.symmetric(vertical: 14),
-                backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
-                child: Text(dua, style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center, textDirection: TextDirection.rtl),
-              ),
-            ],
-          );
+          if (provider.isRoundCompleted) {
+            String dua = switch (provider.tawafCircleCount) {
+              1 => IstilaamDua.round1.dua,
+              _ => IstilaamDua.otherRounds.dua,
+            };
+            return BasicCard(
+              margin: EdgeInsets.symmetric(vertical: 14),
+              backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
+              child: Center(child: Text(dua, style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center, textDirection: TextDirection.rtl)),
+            );
+          } else {
+            String duaTitle = switch (provider.tawafCircleCount) {
+              0 => LocaleKeys.dua_during_1st_round.tr(),
+              1 => LocaleKeys.dua_during_2nd_round.tr(),
+              2 => LocaleKeys.dua_during_3rd_round.tr(),
+              3 => LocaleKeys.dua_during_4th_round.tr(),
+              4 => LocaleKeys.dua_during_5th_round.tr(),
+              5 => LocaleKeys.dua_during_6th_round.tr(),
+              _ => LocaleKeys.dua_during_7th_round.tr(),
+            };
+            String dua = switch (provider.tawafCircleCount) {
+              0 => Dua.round1.dua,
+              1 => Dua.round2.dua,
+              2 => Dua.round3.dua,
+              3 => Dua.round4.dua,
+              4 => Dua.round5.dua,
+              5 => Dua.round6.dua,
+              _ => LocaleKeys.ask_legitimate_needs.tr(),
+            };
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('$duaTitle${provider.user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}', style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal)),
+                BasicCard(
+                  margin: EdgeInsets.symmetric(vertical: 14),
+                  backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
+                  child: Center(
+                    child: Text(
+                      dua,
+                      style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular'),
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.rtl,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
         }
     }
   }

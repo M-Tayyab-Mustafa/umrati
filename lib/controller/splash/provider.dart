@@ -18,6 +18,7 @@ class SplashNotifier extends ChangeNotifier {
 
   Future<void> redirections(BuildContext context, [showPermissionPage = true]) async {
     final user = await LocalStorageManager.getUser(fromFirebase: true);
+    await Helper.getCurrencySymbol();
     bool isExpired = true;
     if (user != null && user.subscription_id != null && user.subscription_id!.isNotEmpty) {
       var doc = (await FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).doc(user.subscription_id).get());

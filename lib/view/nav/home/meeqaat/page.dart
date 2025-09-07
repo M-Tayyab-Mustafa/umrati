@@ -20,6 +20,7 @@ class _MeeqaatPageState extends ConsumerState<MeeqaatPage> {
     ref.read(locationFetchProvider.notifier).context = context;
     ref.read(locationFetchProvider.notifier).ref = ref;
     return Background(
+      showEmblem: false,
       backgroundType: BackgroundType.logo,
       title: '${LocaleKeys.distance_from_meeqaat.tr()}:',
       titleMargin: EdgeInsets.only(top: 60, bottom: 20),

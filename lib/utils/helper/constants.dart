@@ -3,6 +3,7 @@ part 'enums.dart';
 
 late Size screenSize;
 int distanceFilter = 10;
+String currencySymbol = '\$';
 
 final primaryShadows = [BoxShadow(color: CColors.shadow, blurRadius: 10, blurStyle: BlurStyle.outer)];
 final greyShadows = [BoxShadow(color: CColors.grey, blurRadius: 10, blurStyle: BlurStyle.outer)];

@@ -14,7 +14,7 @@ class PaymentSheet extends ConsumerWidget {
           children: [
             GooglePayButton(
               onPaymentResult: ref.read(subscriptionProvider.notifier).onPaymentResult,
-              paymentItems: [PaymentItem(amount: provider.selectedPlan.amount.toString(), label: '${provider.selectedPlan.duration} ${LocaleKeys.months.tr()}')],
+              paymentItems: [PaymentItem(amount: provider.selectedPlan.amount.toString(), label: '${(provider.selectedPlan.duration / 30).toInt().clamp(1, 12)} ${LocaleKeys.months.tr()}')],
               totalPrice: provider.selectedPlan.amount.toString(),
               merchantId: '',
               merchantName: '',

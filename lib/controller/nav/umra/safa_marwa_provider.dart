@@ -20,17 +20,22 @@ class SafaMarwaNotifier extends ChangeNotifier {
   bool isRunComplete = false;
   int saiRoundCount = 0;
 
+  double distanceBetweenSafaAndMarwa = 0;
+  Alignment startingRunAlign = Alignment(0, 0.34);
+  Alignment endingRunAlign = Alignment(0, -0.34);
+
   Future<void> initialization() async {
     umraModel = ref.read(umraProvider.notifier).umraModel!;
     isRunComplete = umraModel.is_one_side_sai_run_completed;
     saiRoundCount = umraModel.sai_round_count;
-    notifyListeners();
+    _updateRunLocations();
     _cancelPositionStreamSubscription();
     final safaMarwaModel = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
-    final safaLatLng = LatLng(double.parse(safaMarwaModel.safaLat), double.parse(safaMarwaModel.safaLng));
-    final marwaLatLng = LatLng(double.parse(safaMarwaModel.marwaLat), double.parse(safaMarwaModel.marwaLng));
+    final safaLatLng = LatLng(safaMarwaModel.safaLat, safaMarwaModel.safaLng);
+    final marwaLatLng = LatLng(safaMarwaModel.marwaLat, safaMarwaModel.marwaLng);
     final safaMarwaDistance = num.parse(safaMarwaModel.distance);
     final threshold = num.parse(safaMarwaModel.threshold);
+    distanceBetweenSafaAndMarwa = Geolocator.distanceBetween(safaLatLng.latitude, safaLatLng.longitude, marwaLatLng.latitude, marwaLatLng.longitude);
     try {
       positionStreamSubscription = Geolocator.getPositionStream(
         locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
@@ -42,13 +47,14 @@ class SafaMarwaNotifier extends ChangeNotifier {
   }
 
   // Method to update location and track progress between Safa and Marwa
-  void _updateLocation(Position position, LatLng safaLatLng, LatLng marwaLatLng, num safaMarwaDistance, num threshold) {
+  void _updateLocation(Position position, LatLng safaLatLng, LatLng marwaLatLng, num safaMarwaDistance, num threshold) async {
     if (!umraModel.is_doing) return _cancelPositionStreamSubscription();
     if (isRunComplete) {
       var safaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, safaLatLng.latitude, safaLatLng.longitude).abs();
       if (safaDistance > (safaMarwaDistance + threshold)) return;
       if (safaDistance <= threshold) {
-        _updateRoundCount();
+        await _updateRoundCount();
+        _updateRunLocations();
       } else {
         oneSideRunCompletionPercent = (safaDistance / safaMarwaDistance).clamp(0, 1);
       }
@@ -58,6 +64,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
         umraModel = umraModel.copyWith(is_one_side_sai_run_completed: true);
         ref.read(umraProvider.notifier).updateUmraModel(umraModel);
         isRunComplete = true;
+        _updateRunLocations();
       } else {
         if (marwaDistance > (safaMarwaDistance + threshold)) return;
         oneSideRunCompletionPercent = (marwaDistance / safaMarwaDistance).clamp(0, 1);
@@ -70,7 +77,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
     }
   }
 
-  _updateRoundCount() async {
+  Future<void> _updateRoundCount() async {
     isRunComplete = false;
     saiRoundCount++;
     if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
@@ -85,6 +92,17 @@ class SafaMarwaNotifier extends ChangeNotifier {
       await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => TawafCompletionDialog());
       ref.read(umraProvider).safaMarwaCompleted();
     }
+  }
+
+  void _updateRunLocations() {
+    if (isRunComplete) {
+      endingRunAlign = Alignment(0, 0.34);
+      startingRunAlign = Alignment(0, -0.34);
+    } else {
+      startingRunAlign = Alignment(0, 0.34);
+      endingRunAlign = Alignment(0, -0.34);
+    }
+    notifyListeners();
   }
 
   void _cancelPositionStreamSubscription() {

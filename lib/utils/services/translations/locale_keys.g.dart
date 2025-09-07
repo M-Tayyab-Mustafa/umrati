@@ -25,6 +25,7 @@ abstract class  LocaleKeys {
   static const send_the_otp = 'send_the_otp';
   static const english = 'english';
   static const urdu = 'urdu';
+  static const ask_legitimate_needs = 'ask_legitimate_needs';
   static const two_before_meeqaat = 'two_before_meeqaat';
   static const three_tasks_at_meeqaat = 'three_tasks_at_meeqaat';
   static const these_3_tasks_can_be_done_even_before_meeqaat = 'these_3_tasks_can_be_done_even_before_meeqaat';
@@ -32,6 +33,7 @@ abstract class  LocaleKeys {
   static const intention_niyyah = 'intention_niyyah';
   static const talbiyah = 'talbiyah';
   static const tasks_done = 'tasks_done';
+  static const year = 'year';
   static const yes = 'yes';
   static const no = 'no';
   static const cleanliness = 'cleanliness';

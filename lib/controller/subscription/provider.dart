@@ -16,13 +16,19 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
 
   WidgetRef? _ref;
   WidgetRef get ref => _ref!;
+
+  bool showThreeMonthPlans = false;
   set ref(WidgetRef value) => _ref = value;
 
   void getSubscriptionPlans() async {
     try {
       user = (await LocalStorageManager.getUser())!;
       plans =
-          (await FirebaseFirestore.instance.collection(CollectionNames.plans.name).where(Filter.or(Filter('type', isEqualTo: PlanType.free.name), Filter('is_heigh_tier', isEqualTo: true))).get()).docs
+          (await FirebaseFirestore.instance
+                  .collection(CollectionNames.plans.name)
+                  .where(Filter.or(Filter('type', isEqualTo: PlanType.free.name), Filter('is_heigh_tier', isEqualTo: await Helper.isHighTierRegion())))
+                  .get())
+              .docs
               .map((planDoc) => PlanModel.fromMap(planDoc.data()))
               .toList();
       plans.sort((a, b) => a.amount.compareTo(b.amount));
@@ -64,6 +70,18 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     await _subscribePlan();
   }
 
+  FutureOr<void> togglePlans(bool value) async {
+    showThreeMonthPlans = value;
+    var data = <PlanModel>[];
+    if (showThreeMonthPlans) {
+      data = plans.where((element) => element.duration == 90).toList();
+    } else {
+      data = plans.where((element) => element.duration != 90).toList();
+    }
+    if (data.isNotEmpty) selectedPlan = data.first;
+    notifyListeners();
+  }
+
   _subscribePlan() async {
     final query = FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).where(Filter('user_ids', arrayContains: user.uid)).limit(1);
     DocumentReference<Map<String, dynamic>> doc;
@@ -75,7 +93,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       infoToast('Plan Updated Successfully');
     } else {
       doc = FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).doc();
-      doc.set(
+      await doc.set(
         SubscriptionModel(
           uid: doc.id,
           user_ids: [user.uid],
@@ -84,6 +102,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       );
       final expireAt = (await doc.get()).get('expire_at') as Timestamp;
       await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: selectedPlan.duration)).millisecondsSinceEpoch)});
+      infoToast('Plan Subscribed Successfully');
     }
     Helper.userSubscription = SubscriptionModel.fromMap((await doc.get()).data()!);
     await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id));

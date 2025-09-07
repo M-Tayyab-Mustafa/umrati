@@ -47,6 +47,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/svg/
+    - assets/svg/settings/
     - assets/svg/gender/
     - assets/svg/ziarat/
     - assets/svg/bottom_nav/
