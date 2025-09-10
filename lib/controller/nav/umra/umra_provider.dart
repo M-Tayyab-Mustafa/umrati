@@ -1,5 +1,4 @@
-import 'package:latlong2/latlong.dart';
-import '../../../export.dart' hide LatLng;
+import '../../../export.dart';
 part '../../../utils/helper/tawaf.dart';
 
 // Provider for TawafNotifier using ChangeNotifier
@@ -137,17 +136,11 @@ class UmraNotifier extends ChangeNotifier {
   Future<void> _startTawaf() async {
     startingPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
     var constantsDoc = await settingsCollection.doc(CommonDoc.constants.name).get();
-    var alHajarAlAswadLatLng = LatLng(constantsDoc.get(CommonField.alHajarAlAswad.name)!['lat'], constantsDoc.get(CommonField.alHajarAlAswad.name)!['lng']);
-    var matafGreenLightLatLng = LatLng(constantsDoc.get(CommonField.matafGreenLight.name)!['lat'], constantsDoc.get(CommonField.matafGreenLight.name)!['lng']);
-    var isUserInBetweenAlHajarAndMataf = Helper.isUserInBetweenAlHajarAndMataf(
-      alHajarAlAswadLatLng.latitude,
-      alHajarAlAswadLatLng.longitude,
-      matafGreenLightLatLng.latitude,
-      matafGreenLightLatLng.longitude,
-      startingPosition!.latitude,
-      startingPosition!.longitude,
-      num.parse(constantsDoc.get(CommonField.alHajarToMatafThreshold.name).toString()).toDouble(),
-    );
+    LatLng alHajarAlAswadLatLng = LatLng(constantsDoc.get(CommonField.alHajarAlAswad.name)!['lat'], constantsDoc.get(CommonField.alHajarAlAswad.name)!['lng']);
+    LatLng matafGreenLightLatLng = LatLng(constantsDoc.get(CommonField.matafGreenLight.name)!['lat'], constantsDoc.get(CommonField.matafGreenLight.name)!['lng']);
+    var isUserInBetweenAlHajarAndMataf =
+        Helper.distanceToVector(alHajarAlAswadLatLng, matafGreenLightLatLng, LatLng(startingPosition!.latitude, startingPosition!.longitude)) <=
+        num.parse(constantsDoc.get(CommonField.alHajarToMatafThreshold.name).toString()).toDouble();
     if (!isUserInBetweenAlHajarAndMataf) await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => UmraStartConfirmationDialog());
     tawafCircleCompletionPercent = 0;
     notifyListeners();

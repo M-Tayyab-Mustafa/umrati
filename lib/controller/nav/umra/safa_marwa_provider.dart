@@ -1,5 +1,4 @@
-import 'package:latlong2/latlong.dart';
-import '../../../export.dart' hide LatLng;
+import '../../../export.dart';
 
 // Provider for SafaMarwaNotifier using ChangeNotifier
 final safaMarwaProvider = ChangeNotifierProvider.autoDispose<SafaMarwaNotifier>((ref) => SafaMarwaNotifier());

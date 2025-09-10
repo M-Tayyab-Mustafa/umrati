@@ -1,8 +1,10 @@
-import '../../export.dart';
+import '../../../export.dart';
 
 class Helper {
   static double degreesToRadians(double degrees) => degrees * pi / 180;
+
   static const double earthRadiusInMeters = 6371000;
+
   static String formatePhoneNumber(String phoneNumber, String dialCode) {
     return '$dialCode${phoneNumber.replaceAll(' ', '')}';
   }
@@ -17,6 +19,7 @@ class Helper {
   }
 
   static String timeoutError = LocaleKeys.timeout_error.tr();
+
   static const int timeOutTime = 30; // in seconds
 
   static SubscriptionModel? userSubscription;
@@ -64,32 +67,94 @@ class Helper {
     return null;
   }
 
-  static bool isUserInBetweenAlHajarAndMataf(double x1, double y1, double x2, double y2, double px, double py, double minimumDistance) {
-    final distance = distanceFromPointToLine(startLat: x1, startLng: y1, endLat: x2, endLng: y2, pointLat: px, pointLng: py);
-    return distance <= minimumDistance;
+  // Find the intersection point where a perpendicular line from point C meets the vector from A in direction of B
+  static LatLng findIntersectionPoint(LatLng pointA, LatLng directionB, LatLng pointC) {
+    // Convert points to Cartesian coordinates on unit sphere
+    List<double> aCart = _latLngToCartesian(pointA);
+    List<double> bCart = _latLngToCartesian(directionB);
+    List<double> cCart = _latLngToCartesian(pointC);
+
+    // Calculate the vector from A to B (direction vector)
+    List<double> abVector = _subtractVectors(bCart, aCart);
+
+    // Calculate the vector from A to C
+    List<double> acVector = _subtractVectors(cCart, aCart);
+
+    // Project AC onto AB to find the scalar projection
+    double projectionScalar = _dotProduct(acVector, abVector) / _dotProduct(abVector, abVector);
+
+    // Calculate the projection point on the vector
+    List<double> projectionCart = [aCart[0] + projectionScalar * abVector[0], aCart[1] + projectionScalar * abVector[1], aCart[2] + projectionScalar * abVector[2]];
+
+    // Normalize the projection point to lie on the unit sphere
+    projectionCart = _normalizeVector(projectionCart);
+
+    // Convert back to geographic coordinates
+    return _cartesianToLatLng(projectionCart);
   }
 
-  static double distanceFromPointToLine({required double startLat, required double startLng, required double endLat, required double endLng, required double pointLat, required double pointLng}) {
-    double lat1 = degreesToRadians(startLat);
-    double lon1 = degreesToRadians(startLng);
-    double lat2 = degreesToRadians(endLat);
-    double lon2 = degreesToRadians(endLng);
-    double lat0 = degreesToRadians(pointLat);
-    double lon0 = degreesToRadians(pointLng);
-    double x1 = earthRadiusInMeters * lon1 * cos((lat1 + lat2) / 2);
-    double y1 = earthRadiusInMeters * lat1;
+  // Calculate distance between point C and its projection on the vector
+  static double distanceToVector(LatLng pointA, LatLng directionB, LatLng pointC) {
+    LatLng intersection = findIntersectionPoint(pointA, directionB, pointC);
+    log('pointA: $pointA, directionB: $directionB, pointC: $pointC, intersection: $intersection');
+    return distance(pointC, intersection);
+  }
 
-    double x2 = earthRadiusInMeters * lon2 * cos((lat1 + lat2) / 2);
-    double y2 = earthRadiusInMeters * lat2;
+  // Convert LatLng to Cartesian coordinates on unit sphere
+  static List<double> _latLngToCartesian(LatLng coord) {
+    double lat = coord.latitude * pi / 180;
+    double lon = coord.longitude * pi / 180;
 
-    double x0 = earthRadiusInMeters * lon0 * cos((lat1 + lat2) / 2);
-    double y0 = earthRadiusInMeters * lat0;
+    double x = cos(lat) * cos(lon);
+    double y = cos(lat) * sin(lon);
+    double z = sin(lat);
 
-    double A = y2 - y1;
-    double B = x1 - x2;
-    double C = x2 * y1 - x1 * y2;
+    return [x, y, z];
+  }
 
-    return (A * x0 + B * y0 + C).abs() / sqrt(A * A + B * B);
+  // Convert Cartesian coordinates to LatLng
+  static LatLng _cartesianToLatLng(List<double> cartesian) {
+    double x = cartesian[0];
+    double y = cartesian[1];
+    double z = cartesian[2];
+
+    double lon = atan2(y, x);
+    double hyp = sqrt(x * x + y * y);
+    double lat = atan2(z, hyp);
+
+    return LatLng(lat * 180 / pi, lon * 180 / pi);
+  }
+
+  // Subtract two vectors
+  static List<double> _subtractVectors(List<double> a, List<double> b) {
+    return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  }
+
+  // Calculate dot product of two vectors
+  static double _dotProduct(List<double> a, List<double> b) {
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  }
+
+  // Normalize a vector
+  static List<double> _normalizeVector(List<double> vector) {
+    double length = sqrt(vector[0] * vector[0] + vector[1] * vector[1] + vector[2] * vector[2]);
+    return [vector[0] / length, vector[1] / length, vector[2] / length];
+  }
+
+  // Calculate distance between two points using Haversine formula
+  static double distance(LatLng p1, LatLng p2) {
+    double lat1 = p1.latitude * pi / 180;
+    double lon1 = p1.longitude * pi / 180;
+    double lat2 = p2.latitude * pi / 180;
+    double lon2 = p2.longitude * pi / 180;
+
+    double dLat = lat2 - lat1;
+    double dLon = lon2 - lon1;
+
+    double a = sin(dLat / 2) * sin(dLat / 2) + cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    log('${earthRadiusInMeters * c}');
+    return earthRadiusInMeters * c;
   }
 }
 

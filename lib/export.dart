@@ -13,7 +13,6 @@ export 'package:flutter/material.dart';
 export 'package:flutter/cupertino.dart' hide Flow, ErrorWidget, RefreshCallback;
 export 'package:flutter/foundation.dart';
 export 'package:flutter/gestures.dart';
-
 export '../firebase_options.dart';
 
 //* Utils
@@ -99,3 +98,4 @@ export 'package:vibration/vibration.dart';
 export 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 export 'package:flutter_tts/flutter_tts.dart';
 export 'package:flutter_pay_buttons/flutter_pay_buttons.dart';
+export 'package:vector_math/vector_math.dart' hide Matrix4, Colors;
