@@ -1,16 +1,27 @@
 import '../../export.dart';
 
-class SelectGenderPage extends ConsumerWidget {
+class SelectGenderPage extends ConsumerStatefulWidget {
   const SelectGenderPage({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _SelectGenderPageState();
+}
+
+class _SelectGenderPageState extends ConsumerState<SelectGenderPage> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(genderProvider.notifier).ref = ref;
+    ref.read(genderProvider.notifier).context = context;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var provider = ref.watch(genderProvider);
-    ref.read(genderProvider).ref = ref;
     return Background(
       title: LocaleKeys.select_your_gender.tr(),
       backgroundType: BackgroundType.logoWithSkip,
       isSkipLoading: provider.isUpdatingGender,
-      onSkipTap: () => provider.skip(context),
+      onSkipTap: provider.skip,
       titleMargin: EdgeInsets.only(top: 60, bottom: 40),
       titleAlignment: Alignment.center,
       child: Column(
@@ -40,7 +51,7 @@ class SelectGenderPage extends ConsumerWidget {
               ),
             ],
           ),
-          CButton(isLoading: provider.isUpdatingGender, onTap: () => provider.continueTap(context), margin: EdgeInsets.only(top: 40), title: LocaleKeys.continued.tr(), titleWithIcon: true),
+          CButton(isLoading: provider.isUpdatingGender, onTap: provider.continueTap, margin: EdgeInsets.only(top: 40), title: LocaleKeys.continued.tr(), titleWithIcon: true),
         ],
       ),
     );

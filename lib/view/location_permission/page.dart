@@ -1,19 +1,30 @@
 import '../../export.dart';
 
-class LocationPermissionPage extends ConsumerWidget {
+class LocationPermissionPage extends ConsumerStatefulWidget {
   const LocationPermissionPage({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var provider = ref.watch(locationPermissionProvider);
+  ConsumerState<ConsumerStatefulWidget> createState() => _LocationPermissionPageState();
+}
+
+class _LocationPermissionPageState extends ConsumerState<LocationPermissionPage> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(locationPermissionProvider.notifier).context = context;
+    ref.read(locationPermissionProvider.notifier).ref = ref;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Background(
       backgroundType: BackgroundType.logoWithSkip,
       titleAlignment: Alignment.center,
-      onSkipTap: () => provider.skip(context, ref),
+      onSkipTap: ref.read(locationPermissionProvider.notifier).skip,
       titleMargin: EdgeInsets.only(top: 60, bottom: 40),
       child: Column(
         children: [
           Padding(padding: const EdgeInsets.only(top: 32), child: FormattedText(rawText: LocaleKeys.permission_request_message.tr())),
-          CButton(margin: EdgeInsets.only(top: 48), title: LocaleKeys.turn_on_location.tr(), fontSize: 14, onTap: () => provider.continueTab(context, ref)),
+          CButton(margin: EdgeInsets.only(top: 48), title: LocaleKeys.turn_on_location.tr(), fontSize: 14, onTap: ref.read(locationPermissionProvider.notifier).continueTab),
         ],
       ),
     );

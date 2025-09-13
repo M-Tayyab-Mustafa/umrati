@@ -12,13 +12,13 @@ class _MeeqaatPageState extends ConsumerState<MeeqaatPage> {
     super.initState();
     final provider = ref.read(locationFetchProvider.notifier);
     WidgetsBinding.instance.addPostFrameCallback((_) => provider.getLocation());
+    provider.context = context;
+    provider.ref = ref;
   }
 
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(locationFetchProvider);
-    ref.read(locationFetchProvider.notifier).context = context;
-    ref.read(locationFetchProvider.notifier).ref = ref;
     return Background(
       showEmblem: false,
       backgroundType: BackgroundType.logo,

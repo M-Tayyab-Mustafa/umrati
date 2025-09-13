@@ -1,15 +1,11 @@
 import '../../../controller/nav/home/provider.dart';
 import '../../../export.dart';
 
-class HomePage extends ConsumerStatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
-}
 
-class _HomePageState extends ConsumerState<HomePage> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Background(
       showEmblem: false,
       backgroundType: BackgroundType.empty,
@@ -19,22 +15,22 @@ class _HomePageState extends ConsumerState<HomePage> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              card(
-                constraints: constraints,
+              _Card(
+                maxHeight: constraints.maxHeight * 0.25,
                 onTap: () => ref.read(homeProvider).onUmraTap(context: context, ref: ref),
                 title: LocaleKeys.umra.tr(),
                 description: LocaleKeys.start_your_umra_from_here.tr(),
                 image: 'assets/png/home/umrah.png',
               ),
-              card(
-                constraints: constraints,
+              _Card(
+                maxHeight: constraints.maxHeight * 0.25,
                 onTap: () => ref.read(homeProvider).onTawafTap(context: context, ref: ref),
                 title: LocaleKeys.tawaf.tr(),
                 description: LocaleKeys.start_your_tawaf_from_here.tr(),
                 image: 'assets/png/home/tawaf.png',
               ),
-              card(
-                constraints: constraints,
+              _Card(
+                maxHeight: constraints.maxHeight * 0.25,
                 onTap: () => ref.read(homeProvider).onZiaratTap(context: context, ref: ref),
                 title: LocaleKeys.ziarat.tr(),
                 description: LocaleKeys.start_your_ziarat_from_here.tr(),
@@ -46,12 +42,22 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
     );
   }
+}
 
-  Widget card({required BoxConstraints constraints, required VoidCallback onTap, required String title, required String description, required String image}) {
+class _Card extends ConsumerWidget {
+  const _Card({required this.maxHeight, required this.onTap, required this.title, required this.description, required this.image});
+  final double maxHeight;
+  final VoidCallback onTap;
+  final String title;
+  final String description;
+  final String image;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return BasicCard(
       onTap: onTap,
       padding: EdgeInsets.only(top: 16, bottom: 16, right: 16),
-      height: constraints.maxHeight * 0.25,
+      height: maxHeight,
       borderColor: CColors.grey,
       boxShadow: greyShadows,
       child: Row(

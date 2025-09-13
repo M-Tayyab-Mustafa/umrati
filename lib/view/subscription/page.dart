@@ -11,13 +11,13 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
   void initState() {
     super.initState();
     ref.read(subscriptionProvider.notifier).getSubscriptionPlans();
+    ref.read(subscriptionProvider).context = context;
+    ref.read(subscriptionProvider).ref = ref;
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = ref.watch(subscriptionProvider);
-    ref.read(subscriptionProvider).context = context;
-    ref.read(subscriptionProvider).ref = ref;
     return Background(
       backgroundType: BackgroundType.logo,
       margin: EdgeInsets.only(top: kToolbarHeight / 2),

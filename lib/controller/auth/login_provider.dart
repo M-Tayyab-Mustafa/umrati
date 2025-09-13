@@ -1,13 +1,13 @@
 import '../../export.dart';
 import '../../view/auth/otp.dart';
 
-final loginProvider = ChangeNotifierProvider.autoDispose<LoginNotifier>((ref) => LoginNotifier());
+final loginProvider = ChangeNotifierProvider<LoginNotifier>((ref) => LoginNotifier());
 
 class LoginNotifier extends ChangeNotifier {
   //* Instances
   final FirebaseAuth _auth = FirebaseAuth.instance;
   var phoneNumberUtil = PhoneNumberUtil.instance;
-  bool isSkipping = false;
+  // bool isSkipping = false;
 
   BuildContext? _context;
   BuildContext get context => _context!;
@@ -25,6 +25,8 @@ class LoginNotifier extends ChangeNotifier {
   var phoneNumberController = TextEditingController();
   CountryCode selectedCountry = CountryCode.fromDialCode('+92');
   int numberDigits = 10;
+
+  bool isLinkingAccount = false;
 
   //* OTP Time Out Duration
   static const int _otpTimeOutDuration = 90;
@@ -53,36 +55,37 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   //* Skip Login
-  Future<void> skip() async {
-    try {
-      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
-      if (result == false || result == null) return;
-      isSkipping = true;
-      notifyListeners();
-      var userCredential = await _auth.signInAnonymously().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      UserModel user = UserModel(
-        uid: userCredential.user!.uid,
-        name: userCredential.user!.displayName ?? '',
-        email: userCredential.user!.email ?? '',
-        photo: userCredential.user!.photoURL ?? '',
-        phone: '',
-        country_code: '',
-        gender: '',
-      );
-      await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
-      isSkipping = false;
-      notifyListeners();
-      Navigator.popUntil(context, (route) => route.isFirst);
-      ref.read(splashProvider).redirections(context);
-    } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
-    }
-  }
+  // Future<void> skip() async {
+  //   try {
+  //     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
+  //     if (result == false || result == null) return;
+  //     isSkipping = true;
+  //     notifyListeners();
+  //     var userCredential = await _auth.signInAnonymously().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+  //     UserModel user = UserModel(
+  //       uid: userCredential.user!.uid,
+  //       name: userCredential.user!.displayName ?? '',
+  //       email: userCredential.user!.email ?? '',
+  //       photo: userCredential.user!.photoURL ?? '',
+  //       phone: '',
+  //       country_code: '',
+  //       gender: '',
+  //     );
+  //     await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
+  //     isSkipping = false;
+  //     notifyListeners();
+  //     Navigator.popUntil(context, (route) => route.isFirst);
+  //     ref.read(splashProvider).redirections(context);
+  //   } catch (e) {
+  //     if (kDebugMode) log(e.toString());
+  //     errorToast(e.toString());
+  //   }
+  // }
 
   //* Send OTP To Phone Number
-  Future<void> sendTheOTP() async {
+  Future<void> sendTheOTP([bool isLinkingAccount = false]) async {
     try {
+      this.isLinkingAccount = isLinkingAccount;
       final phoneError = simpleFieldValidation(phoneNumberController.text, LocaleKeys.phone_number.tr(), context);
       if (phoneError != null) {
         errorToast(phoneError);
@@ -204,7 +207,7 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   //* OTP Verified
-  void verifyOTP(WidgetRef ref) async {
+  void verifyOTP() async {
     var otpError = simpleFieldValidation(LocaleKeys.otp_verification.tr(), otpController.text, context);
     if (otpError != null) {
       errorToast(otpError);
@@ -214,30 +217,38 @@ class LoginNotifier extends ChangeNotifier {
     notifyListeners();
     try {
       final credential = PhoneAuthProvider.credential(verificationId: _verificationId!, smsCode: otpController.text);
-      var userCredential = await _auth.signInWithCredential(credential).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      if (userCredential.additionalUserInfo!.isNewUser) {
-        UserModel user = UserModel(
-          uid: userCredential.user!.uid,
-          name: userCredential.user!.displayName ?? '',
-          email: userCredential.user!.email ?? '',
-          phone: userCredential.user!.phoneNumber ?? '',
-          country_code: selectedCountry.dialCode ?? '',
-          photo: userCredential.user!.photoURL ?? '',
-          gender: '',
-        );
-        await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
-        //* Disable Loading
-        isVerifyingOTP = false;
-        notifyListeners();
-        Navigator.popUntil(context, (route) => route.isFirst);
+      if (isLinkingAccount) {
+        await FirebaseAuth.instance.currentUser?.linkWithCredential(credential);
+        await LocalStorageManager.saveUser((await LocalStorageManager.getUser(fromFirebase: true))!.copyWith(phone: phoneNumberController.text.trim(), country_code: selectedCountry.dialCode ?? ''));
+        infoToast('Account linked successfully');
         ref.read(splashProvider.notifier).redirections(context);
       } else {
-        await LocalStorageManager.saveUser(UserModel.fromMap((await userCollection.doc(userCredential.user!.uid).get()).data()!), toFirebase: false);
-        //* Disable Loading
-        isVerifyingOTP = false;
-        notifyListeners();
-        Navigator.popUntil(context, (route) => route.isFirst);
-        ref.read(splashProvider.notifier).redirections(context);
+        var userCredential = await _auth.signInWithCredential(credential).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          UserModel user = UserModel(
+            uid: userCredential.user!.uid,
+            phone: userCredential.user!.phoneNumber ?? '',
+            country_code: selectedCountry.dialCode ?? '',
+            name: '',
+            email: '',
+            photo: '',
+            password: Helper.generateRandomId(),
+            gender: '',
+          );
+          await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
+          //* Disable Loading
+          isVerifyingOTP = false;
+          notifyListeners();
+          Navigator.popUntil(context, (route) => route.isFirst);
+          ref.read(splashProvider.notifier).redirections(context);
+        } else {
+          await LocalStorageManager.saveUser(UserModel.fromMap((await userCollection.doc(userCredential.user!.uid).get()).data()!), toFirebase: false);
+          //* Disable Loading
+          isVerifyingOTP = false;
+          notifyListeners();
+          Navigator.popUntil(context, (route) => route.isFirst);
+          ref.read(splashProvider.notifier).redirections(context);
+        }
       }
     } on FirebaseAuthException catch (e) {
       isVerifyingOTP = false;

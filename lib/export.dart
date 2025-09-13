@@ -41,7 +41,6 @@ export 'controller/language/language_provider.dart';
 export 'controller/language/select_language_provider.dart';
 export 'controller/auth/login_provider.dart';
 export 'controller/auth/gender_provider.dart';
-export 'controller/auth/phone_no_provider.dart';
 export 'controller/subscription/provider.dart';
 export 'controller/nav/provider.dart';
 export 'controller/nav/umra/safa_marwa_provider.dart';
@@ -52,6 +51,7 @@ export 'controller/nav/meeqaat/provider.dart';
 export 'controller/location_permission/permission_provider.dart';
 export 'controller/nav/meeqaat/three_tasks_provider.dart';
 export 'controller/nav/meeqaat/two_tasks_provider.dart';
+export 'controller/auth/email_or_phone_linking_provider.dart';
 
 //* Widgets
 export 'widgets/custom_image.dart';

@@ -9,6 +9,9 @@ abstract class  LocaleKeys {
   static const continued = 'continued';
   static const skip = 'skip';
   static const log_in_to_your_account = 'log_in_to_your_account';
+  static const link_account = 'link_account';
+  static const please_enter_your_email = 'please_enter_your_email';
+  static const link_your_email_to_secure_your_account = 'link_your_email_to_secure_your_account';
   static const number = 'number';
   static const name = 'name';
   static const email = 'email';
@@ -40,6 +43,12 @@ abstract class  LocaleKeys {
   static const months = 'months';
   static const price = 'price';
   static const duration = 'duration';
+  static const give_feedback = 'give_feedback';
+  static const history = 'history';
+  static const buy_premium = 'buy_premium';
+  static const ads_free_journey = 'ads_free_journey';
+  static const more_ziarat_destinations = 'more_ziarat_destinations';
+  static const unlimited_history = 'unlimited_history';
   static const subscribe = 'subscribe';
   static const unlimited = 'unlimited';
   static const individual = 'individual';

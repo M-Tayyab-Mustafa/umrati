@@ -1,16 +1,11 @@
 import '../../export.dart';
 
-class OTPPage extends ConsumerStatefulWidget {
+class OTPPage extends ConsumerWidget {
   const OTPPage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _OTPPageState();
-}
-
-class _OTPPageState extends ConsumerState<OTPPage> {
-  @override
-  Widget build(BuildContext context) {
-    var provider = ref.watch(loginProvider.notifier);
+  Widget build(BuildContext context, WidgetRef ref) {
+    var provider = ref.watch(loginProvider);
     return Background(
       backgroundType: BackgroundType.logo,
       title: LocaleKeys.otp_verification.tr(),
@@ -29,7 +24,7 @@ class _OTPPageState extends ConsumerState<OTPPage> {
             ],
           ),
           Directionality(textDirection: TextDirection.ltr, child: PinInput(controller: provider.otpController, margin: EdgeInsets.symmetric(vertical: 50))),
-          CButton(isLoading: provider.isVerifyingOTP, onTap: () => provider.verifyOTP(ref), title: LocaleKeys.verify_the_otp.tr(), titleWithIcon: true),
+          CButton(isLoading: provider.isVerifyingOTP, onTap: provider.verifyOTP, title: LocaleKeys.verify_the_otp.tr(), titleWithIcon: true),
 
           if (provider.bounceTimer != null)
             Padding(

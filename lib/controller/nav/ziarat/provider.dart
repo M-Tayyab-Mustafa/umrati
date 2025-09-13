@@ -5,10 +5,15 @@ import '../../../view/nav/home/ziarat/page.dart';
 final ziaratProvider = ChangeNotifierProvider.autoDispose<ZiaratNotifier>((ref) => ZiaratNotifier());
 
 class ZiaratNotifier extends ChangeNotifier {
-  ZiaratCities? selectedCity;
-  WidgetRef? _ref;
   BuildContext? _context;
-  get context => _context!;
+  BuildContext get context => _context!;
+  set context(BuildContext value) => _context = value;
+
+  WidgetRef? _ref;
+  WidgetRef get ref => _ref!;
+  set ref(WidgetRef value) => _ref = value;
+
+  ZiaratCities? selectedCity;
   List<ZiaratModel> selectedZiarat = [];
   List<ZiaratModel> ziarats = [];
   List<ZiaratModel> sortedZiarats = [];
@@ -27,9 +32,7 @@ class ZiaratNotifier extends ChangeNotifier {
   UserModel? user;
   bool canPop = false;
 
-  initialization(BuildContext context, WidgetRef ref) async {
-    _ref = ref;
-    _context = context;
+  initialization() async {
     try {
       user = await LocalStorageManager.getUser();
       checkAlreadyDoingZiarat();
@@ -105,7 +108,7 @@ class ZiaratNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void generateZiarat(BuildContext context) async {
+  void generateZiarat() async {
     try {
       isLoading = true;
       notifyListeners();
@@ -163,7 +166,7 @@ class ZiaratNotifier extends ChangeNotifier {
     }
   }
 
-  void createZiaratRoute(BuildContext context) async {
+  void createZiaratRoute() async {
     isLoading = true;
     notifyListeners();
     var user = await LocalStorageManager.getUser();

@@ -10,13 +10,17 @@ class GenderNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
 
+  BuildContext? _context;
+  BuildContext get context => _context!;
+  set context(BuildContext value) => _context = value;
+
   void updateGender(Gender gender) {
     if (selectedGender == gender) return;
     selectedGender = gender;
     notifyListeners();
   }
 
-  void skip(BuildContext context) async {
+  void skip() async {
     try {
       var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
       if (result == false || result == null) {
@@ -35,7 +39,7 @@ class GenderNotifier extends ChangeNotifier {
     }
   }
 
-  void continueTap(BuildContext context) async {
+  void continueTap() async {
     try {
       isUpdatingGender = true;
       notifyListeners();

@@ -80,7 +80,7 @@ class _BottomSheet extends ConsumerWidget {
                     : CrossAxisAlignment.start,
             children: [
               Center(child: CustomImage(path: 'assets/svg/arrow_up.svg', imageType: ImageType.svg, height: 30, width: 30)),
-              ziaratDetailCard(
+              _ZiaratDetailCard(
                 title: languageDirection(context) == TextDirection.ltr ? provider.activeZiarat?.title_en ?? '' : provider.activeZiarat?.title_ur ?? '',
                 time: provider.activeZiarat?.time ?? '0 m',
                 distance: '${provider.activeZiarat?.distance.split(' ').first ?? 0}',
@@ -92,7 +92,7 @@ class _BottomSheet extends ConsumerWidget {
                     itemCount: provider.destinations.sublist(1).length,
                     itemBuilder: (context, index) {
                       var ziarat = provider.destinations.sublist(1)[index];
-                      return ziaratDetailCard(
+                      return _ZiaratDetailCard(
                         title: languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur,
                         time: '',
                         distance: ziarat.distance.split(' ').first,
@@ -107,8 +107,16 @@ class _BottomSheet extends ConsumerWidget {
       ),
     );
   }
+}
 
-  Widget ziaratDetailCard({required String title, required String time, required String distance, int index = 0}) {
+class _ZiaratDetailCard extends ConsumerWidget {
+  const _ZiaratDetailCard({required this.title, required this.time, required this.distance, this.index = 0});
+  final String title;
+  final String time;
+  final String distance;
+  final int index;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return Directionality(
       textDirection: getTextDirection(title),
       child: Padding(

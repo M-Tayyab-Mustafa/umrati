@@ -8,15 +8,18 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   @override
-  Widget build(BuildContext context) {
-    var provider = ref.watch(loginProvider);
+  void initState() {
+    super.initState();
     ref.read(loginProvider).context = context;
     ref.read(loginProvider).ref = ref;
     SocialLoginService.instance.ref = ref;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var provider = ref.watch(loginProvider);
     return Background(
-      backgroundType: BackgroundType.logoWithSkip,
-      isSkipLoading: provider.isSendingOTP || provider.isSkipping || provider.isSocialLogin,
-      onSkipTap: provider.skip,
+      backgroundType: BackgroundType.logo,
       title: LocaleKeys.log_in_to_your_account.tr(),
       child: SingleChildScrollView(
         child: Column(
@@ -53,7 +56,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
             ),
             CButton(
-              isLoading: provider.isSendingOTP || provider.isSkipping || provider.isSocialLogin,
+              isLoading: provider.isSendingOTP || provider.isSocialLogin,
               onTap: provider.sendTheOTP,
               margin: const EdgeInsets.only(top: 35),
               titleWithIcon: true,

@@ -157,20 +157,25 @@ class TawafTrackerPage extends ConsumerWidget {
   Widget _buildDuaWidget({required BuildContext context, required UmraNotifier provider}) {
     switch (provider.tawafCircleCount) {
       case 7:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CheckBoxCard(
-              margin: EdgeInsets.only(top: 16),
-              title: LocaleKeys.now_perform_2_rakats_salah.tr(),
-              isSelected: provider.isPerformed2RakatsSalah,
-              onTap: provider.perform2RakatsSalah,
-              child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 14, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular')),
-            ),
-            CheckBoxCard(margin: EdgeInsets.symmetric(vertical: 10), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
-            CButton(margin: EdgeInsets.only(bottom: 16, top: 25), onTap: provider.moveToSafaMarwa, titleWithIcon: true, title: LocaleKeys.continued.tr()),
-          ],
-        );
+        return provider.isFromTawaf
+            ? Padding(
+              padding: const EdgeInsets.only(bottom: kToolbarHeight),
+              child: Consumer(builder: (context, ref, child) => CButton(onTap: provider.moveToSafaMarwa, title: LocaleKeys.go_to_home_screen.tr(), titleWithIcon: true)),
+            )
+            : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CheckBoxCard(
+                  margin: EdgeInsets.only(top: 16),
+                  title: LocaleKeys.now_perform_2_rakats_salah.tr(),
+                  isSelected: provider.isPerformed2RakatsSalah,
+                  onTap: provider.perform2RakatsSalah,
+                  child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 14, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular')),
+                ),
+                CheckBoxCard(margin: EdgeInsets.symmetric(vertical: 10), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
+                CButton(margin: EdgeInsets.only(bottom: 16, top: 25), onTap: provider.moveToSafaMarwa, titleWithIcon: true, title: LocaleKeys.continued.tr()),
+              ],
+            );
       default:
         {
           if (provider.isRoundCompleted) {
@@ -178,10 +183,16 @@ class TawafTrackerPage extends ConsumerWidget {
               1 => IstilaamDua.round1.dua,
               _ => IstilaamDua.otherRounds.dua,
             };
-            return BasicCard(
-              margin: EdgeInsets.symmetric(vertical: 14),
-              backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
-              child: Center(child: Text(dua, style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center, textDirection: TextDirection.rtl)),
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(provider.user?.gender == Gender.female.name ? LocaleKeys.in_low_voice.tr() : '', style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal)),
+                BasicCard(
+                  margin: EdgeInsets.symmetric(vertical: 14),
+                  backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
+                  child: Center(child: Text(dua, style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center, textDirection: TextDirection.rtl)),
+                ),
+              ],
             );
           } else {
             String duaTitle = switch (provider.tawafCircleCount) {

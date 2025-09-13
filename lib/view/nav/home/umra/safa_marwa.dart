@@ -10,6 +10,8 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
   @override
   void initState() {
     super.initState();
+    ref.read(safaMarwaProvider.notifier).context = context;
+    ref.read(safaMarwaProvider.notifier).ref = ref;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final provider = ref.read(safaMarwaProvider.notifier);
       await provider.initialization();
@@ -22,8 +24,6 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(safaMarwaProvider);
-    ref.read(safaMarwaProvider.notifier).context = context;
-    ref.read(safaMarwaProvider.notifier).ref = ref;
     return Background(
       logoAlign: Alignment.center,
       backgroundType: BackgroundType.logo,

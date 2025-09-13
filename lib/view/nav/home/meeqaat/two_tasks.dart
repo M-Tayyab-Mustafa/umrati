@@ -1,12 +1,22 @@
 import '../../../../export.dart';
 
-class MeeqaatTwoTasksPage extends ConsumerWidget {
+class MeeqaatTwoTasksPage extends ConsumerStatefulWidget {
   const MeeqaatTwoTasksPage({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var provider = ref.watch(meeqaatTwoTasksProvider);
+  ConsumerState<ConsumerStatefulWidget> createState() => _MeeqaatTwoTasksPageState();
+}
+
+class _MeeqaatTwoTasksPageState extends ConsumerState<MeeqaatTwoTasksPage> {
+  @override
+  void initState() {
+    super.initState();
     ref.read(meeqaatTwoTasksProvider.notifier).context = context;
     ref.read(meeqaatTwoTasksProvider.notifier).ref = ref;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var provider = ref.watch(meeqaatTwoTasksProvider);
     return Background(
       title: LocaleKeys.do_these_5_ihram_related_tasks.tr(),
       backgroundType: BackgroundType.logoWithSkip,

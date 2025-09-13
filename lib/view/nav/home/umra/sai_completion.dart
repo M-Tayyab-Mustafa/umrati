@@ -45,10 +45,13 @@ class SaiCompletionPage extends ConsumerWidget {
                 ),
               ),
               CheckBoxCard(
-                title: LocaleKeys.shave_the_head.tr(),
+                title: provider.user?.gender == Gender.female.name ? LocaleKeys.in_low_voice.tr() : LocaleKeys.shave_the_head.tr(),
                 isSelected: provider.isShavedHead,
                 onTap: provider.toggleShaveTheHead,
-                child: Text(LocaleKeys.shave_the_head_description.tr(), style: CTextStyle.w400(color: CColors.primary, height: 1.2)),
+                child: Text(
+                  provider.user?.gender == Gender.female.name ? LocaleKeys.in_low_voice.tr() : LocaleKeys.shave_the_head_description.tr(),
+                  style: CTextStyle.w400(color: CColors.primary, height: 1.2),
+                ),
               ),
               CButton(isLoading: provider.isLoading, title: LocaleKeys.continued.tr(), titleWithIcon: true, onTap: ref.read(umraProvider).umraCompleted),
             ],

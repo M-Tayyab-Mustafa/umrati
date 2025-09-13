@@ -1,5 +1,5 @@
-import '../../../controller/nav/profile/profile_provider.dart';
 import '../../../export.dart';
+import '../../language/select_language.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
@@ -15,14 +15,17 @@ class ProfilePage extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CButton(margin: EdgeInsets.only(bottom: 16), isLoading: ref.watch(profileProvider).isLoading, title: 'Set Safa Marwa Running Start Point', onTap: ref.read(profileProvider).setLocation),
-            CButton(margin: EdgeInsets.only(bottom: 16), isLoading: ref.watch(profileProvider).isLoading, title: 'Clear All Points and Restart', onTap: ref.read(profileProvider).clear),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: ref.watch(profileProvider).locations.length,
-              itemBuilder: (context, index) {
-                var location = ref.watch(profileProvider).locations[index];
-                return ListTile(leading: Text(location.pointType), title: Text('${location.latitude}, ${location.longitude}'));
+            CButton(
+              title: 'LogOut',
+              onTap: () async {
+                try {
+                  await LocalStorageManager.clearStorage();
+                  await FirebaseAuth.instance.signOut();
+                } catch (e) {
+                  if (kDebugMode) log(e.toString());
+                  errorToast(e.toString());
+                }
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SelectLanguagePage()));
               },
             ),
           ],

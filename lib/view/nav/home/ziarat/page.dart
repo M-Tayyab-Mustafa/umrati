@@ -13,9 +13,9 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(ziaratProvider).initialization(context, ref);
-    });
+    ref.read(ziaratProvider.notifier).initialization();
+    ref.read(ziaratProvider.notifier).ref = ref;
+    ref.read(ziaratProvider.notifier).context = context;
   }
 
   @override

@@ -8,6 +8,7 @@ class UserModel {
   final String phone;
   final String photo;
   final String gender;
+  final String password;
   final bool is_doing_ziarat;
   final String? subscription_id;
   final Timestamp? created_at;
@@ -21,6 +22,7 @@ class UserModel {
     required this.phone,
     required this.photo,
     required this.gender,
+    required this.password,
     this.is_doing_ziarat = false,
     this.subscription_id,
     this.created_at,
@@ -35,6 +37,7 @@ class UserModel {
     String? phone,
     String? photo,
     String? gender,
+    String? password,
     bool? is_doing_ziarat,
     String? subscription_id,
     Timestamp? created_at,
@@ -48,6 +51,7 @@ class UserModel {
       phone: phone ?? this.phone,
       photo: photo ?? this.photo,
       gender: gender ?? this.gender,
+      password: password ?? this.password,
       is_doing_ziarat: is_doing_ziarat ?? this.is_doing_ziarat,
       subscription_id: subscription_id ?? this.subscription_id,
       created_at: created_at ?? this.created_at,
@@ -64,6 +68,7 @@ class UserModel {
       'phone': phone,
       'photo': photo,
       'gender': gender,
+      'password': password,
       'is_doing_ziarat': is_doing_ziarat,
       'subscription_id': subscription_id,
       'created_at': created_at ?? this.created_at?.millisecondsSinceEpoch,
@@ -80,6 +85,7 @@ class UserModel {
       country_code: map['country_code']?.toString() ?? '',
       photo: map['photo']?.toString() ?? '',
       gender: map['gender']?.toString() ?? '',
+      password: map['password']?.toString() ?? '',
       is_doing_ziarat: map['is_doing_ziarat'] ?? false,
       subscription_id: map['subscription_id']?.toString() ?? '',
       created_at: map['created_at'].runtimeType == int ? Timestamp.fromMillisecondsSinceEpoch(map['created_at']) : map['created_at'],
@@ -93,7 +99,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, email: $email, phone: $phone, country_code: $country_code, photo: $photo, gender: $gender, subscription_id: $subscription_id is_doing_ziarat: $is_doing_ziarat, created_at: $created_at, updated_at: $updated_at)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, password: $password, phone: $phone, country_code: $country_code, photo: $photo, gender: $gender, subscription_id: $subscription_id is_doing_ziarat: $is_doing_ziarat, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -107,6 +113,7 @@ class UserModel {
         other.country_code == country_code &&
         other.photo == photo &&
         other.gender == gender &&
+        other.password == password &&
         other.subscription_id == subscription_id &&
         other.is_doing_ziarat == is_doing_ziarat &&
         other.created_at == created_at &&
@@ -122,6 +129,7 @@ class UserModel {
         country_code.hashCode ^
         photo.hashCode ^
         gender.hashCode ^
+        password.hashCode ^
         subscription_id.hashCode ^
         is_doing_ziarat.hashCode ^
         created_at.hashCode ^

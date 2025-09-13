@@ -52,6 +52,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
       var safaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, safaLatLng.latitude, safaLatLng.longitude).abs();
       if (safaDistance > (safaMarwaDistance + threshold)) return;
       if (safaDistance <= threshold) {
+        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => TawafCompletionDialog());
         await _updateRoundCount();
         _updateRunLocations();
       } else {
@@ -61,6 +62,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
       var marwaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, marwaLatLng.latitude, marwaLatLng.longitude).abs();
       if (marwaDistance <= threshold) {
         umraModel = umraModel.copyWith(is_one_side_sai_run_completed: true);
+        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => TawafCompletionDialog());
         ref.read(umraProvider.notifier).updateUmraModel(umraModel);
         isRunComplete = true;
         _updateRunLocations();
@@ -88,7 +90,6 @@ class SafaMarwaNotifier extends ChangeNotifier {
       _cancelPositionStreamSubscription();
       saiRoundCount = 0;
       notifyListeners();
-      await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => TawafCompletionDialog());
       ref.read(umraProvider).safaMarwaCompleted();
     }
   }

@@ -80,32 +80,30 @@ class UmraNotifier extends ChangeNotifier {
   }
 
   _fromTawaf() async {
-    var fromTawafDialogResult = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => TawafConfirmationDialog());
-    if (fromTawafDialogResult != false) {
-      hasDoneBeforeMeeqaatTasks = true;
-      hasReachedMeeqaat = true;
-      hasDoneAfterMeeqaatTasks = true;
-      if (umraModel != null) {
-        await updateUmraModel(umraModel!.copyWith(has_done_before_meeqaat_tasks: true, has_reached_meeqaat: true, has_done_after_meeqaat_tasks: true));
-      } else {
-        await setUmraModel(
-          HistoryModel(
-            uid: '',
-            user_id: user!.uid,
-            type: UmraType.tawaf.name,
-            is_doing: true,
-            has_done_before_meeqaat_tasks: true,
-            has_reached_meeqaat: true,
-            has_done_after_meeqaat_tasks: true,
-            can_start_sai: false,
-            tawaf_circle_count: 0,
-            sai_round_count: 0,
-            is_one_side_sai_run_completed: false,
-          ),
-        );
-      }
-      notifyListeners();
+    hasDoneBeforeMeeqaatTasks = true;
+    hasReachedMeeqaat = true;
+    hasDoneAfterMeeqaatTasks = true;
+    notifyListeners();
+    if (umraModel != null) {
+      await updateUmraModel(umraModel!.copyWith(has_done_before_meeqaat_tasks: true, has_reached_meeqaat: true, has_done_after_meeqaat_tasks: true));
+    } else {
+      await setUmraModel(
+        HistoryModel(
+          uid: '',
+          user_id: user!.uid,
+          type: UmraType.tawaf.name,
+          is_doing: true,
+          has_done_before_meeqaat_tasks: true,
+          has_reached_meeqaat: true,
+          has_done_after_meeqaat_tasks: true,
+          can_start_sai: false,
+          tawaf_circle_count: 0,
+          sai_round_count: 0,
+          is_one_side_sai_run_completed: false,
+        ),
+      );
     }
+    notifyListeners();
   }
 
   // Method to start or stop Tawaf
@@ -207,17 +205,18 @@ class UmraNotifier extends ChangeNotifier {
 
   /// Moves user to Safa-Marwa section after completing Tawaf
   void moveToSafaMarwa() {
+    if (isFromTawaf) {
+      _resetTawafData();
+      infoToast(LocaleKeys.your_tawaf_has_been_successfully_completed.tr());
+      return;
+    }
     // Ensure prerequisites for Safa-Marwa are met
     if (!isPerformed2RakatsSalah || !isDrinkZamzam) {
       errorToast(LocaleKeys.please_offer_two_rakat_of_salah_and_drink_zamzam.tr());
       return;
     }
     updateUmraModel(umraModel!.copyWith(can_start_sai: true));
-    if (isFromTawaf) {
-      _resetTawafData();
-      infoToast(LocaleKeys.your_tawaf_has_been_successfully_completed.tr());
-      return;
-    }
+
     showSafaMarwa = true;
     isSafaMarwaComplete = false;
     notifyListeners();

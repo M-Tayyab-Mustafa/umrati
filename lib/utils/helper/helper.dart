@@ -156,6 +156,12 @@ class Helper {
     log('${earthRadiusInMeters * c}');
     return earthRadiusInMeters * c;
   }
+
+  static String generateRandomId([int length = 12]) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    final rand = Random.secure();
+    return List.generate(length, (index) => chars[rand.nextInt(chars.length)]).join();
+  }
 }
 
 class UsPhoneNumberFormatter extends TextInputFormatter {
