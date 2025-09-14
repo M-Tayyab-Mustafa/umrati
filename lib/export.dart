@@ -73,6 +73,7 @@ export 'widgets/dialog/ziarat_complete_dialog.dart';
 export 'widgets/dialog/reach_your_destination.dart';
 export 'widgets/dialog/ziarat_reading_detail_dialog.dart';
 export 'widgets/dialog/skip_confirmation.dart';
+export 'widgets/dialog/plan_key_dialog.dart';
 export 'widgets/dialog/umra_start_confirmation.dart';
 export 'widgets/subscription_payment_sheet.dart';
 export 'widgets/subscription_plan.dart';

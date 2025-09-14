@@ -13,22 +13,16 @@ class SplashNotifier extends ChangeNotifier {
   void initialization(BuildContext context) async {
     await Future.delayed(const Duration(seconds: 2));
     screenSize = MediaQuery.sizeOf(context);
-    await Helper.getCurrencySymbol();
     await redirections(context);
   }
 
   Future<void> redirections(BuildContext context, [showPermissionPage = true]) async {
     final user = await LocalStorageManager.getUser(fromFirebase: true);
+    await Helper.getCurrencySymbol();
     bool isExpired = true;
     if (user != null && user.subscription_id != null && user.subscription_id!.isNotEmpty) {
-      var doc = (await FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).doc(user.subscription_id).get());
-      Helper.userSubscription = SubscriptionModel.fromMap(doc.data()!);
-      final expireAt = doc.get('expire_at');
-      if (expireAt.runtimeType == Timestamp) {
-        isExpired = DateTime.now().isAfter(expireAt.toDate());
-      } else {
-        isExpired = Timestamp.fromMillisecondsSinceEpoch(expireAt).toDate().isAfter(expireAt.toDate());
-      }
+      Helper.userSubscription = SubscriptionModel.fromMap((await FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).doc(user.subscription_id).get()).data()!);
+      isExpired = DateTime.now().isAfter(Helper.userSubscription!.expire_at!.toDate());
       if (isExpired && Helper.userSubscription?.plan.type != PlanType.free.name) errorToast(LocaleKeys.subscription_expire_msg.tr());
     }
     final permissionStatus = await Geolocator.checkPermission();

@@ -11,7 +11,7 @@ class Helper {
 
   static Future<void> getCurrencySymbol() async {
     try {
-      currencySymbol = (await FirebaseFirestore.instance.collection(CollectionNames.settings.name).doc(CommonDoc.currency.name).get()).get(CommonField.symbol.name);
+      currencySymbol = (await settingsCollection.doc(CommonDoc.constants.name).get()).data()?[CommonField.symbols.name][await userRegion()] ?? '\$';
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -20,21 +20,22 @@ class Helper {
 
   static String timeoutError = LocaleKeys.timeout_error.tr();
 
+  static get mapsApiKey async => (await settingsCollection.doc(CommonDoc.constants.name).get()).get(CommonField.googleMapKey.name);
+
+  static Future<Map<String, dynamic>> get regions async => (await settingsCollection.doc(CommonDoc.constants.name).get()).get(CommonField.regions.name) as Map<String, dynamic>;
+
   static const int timeOutTime = 30; // in seconds
 
   static SubscriptionModel? userSubscription;
 
-  static Future<bool> isHighTierRegion() async {
+  static Future<String> userRegion() async {
     try {
-      var user = (await LocalStorageManager.getUser(fromFirebase: false))!;
-      String countryCode = countryDialCodes.containsKey(user.country_code) ? countryDialCodes[user.country_code]! : "OTHER";
-      var highTierRegionCodes = (await FirebaseFirestore.instance.collection(CollectionNames.settings.name).doc(CommonDoc.highTierRegionCodes.name).get()).get(CommonField.regions.name);
-      return highTierRegionCodes.contains(countryCode);
+      return (await regions)[(await LocalStorageManager.getUser(fromFirebase: true))?.country_code ?? '+1'];
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
-    return true;
+    return "US";
   }
 
   static Future<Map<String, dynamic>?> getRouteLeg({required LatLng startPoint, required LatLng endPoint}) async {

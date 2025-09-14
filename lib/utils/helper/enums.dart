@@ -20,9 +20,7 @@ enum CommonDoc {
   alKaba('al_kaba'),
   meeqaat('meeqaat'),
   constants('constants'),
-  highTierRegionCodes('high_tier_region_codes'),
   safaMarwa('safa_marwa'),
-  currency('currency'),
   safaMarwaRunningPoints('safa_marwa_running_points'),
   ziarat('ziarat');
 
@@ -42,7 +40,8 @@ enum CommonField {
   alHajarToMatafThreshold('al_hajar_to_mataf_threshold'),
   oneYear('1_year'),
   regions('regions'),
-  symbol('symbol'),
+  symbols('symbols'),
+  planRegions('plan_regions'),
   googleMapKey('google_map_key'),
   startingPoint('startingPoint'),
   selectedZiarat('selected_ziarat');

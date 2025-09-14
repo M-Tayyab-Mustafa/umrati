@@ -20,7 +20,7 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
     final provider = ref.watch(subscriptionProvider);
     return Background(
       backgroundType: BackgroundType.logo,
-      margin: EdgeInsets.only(top: kToolbarHeight / 2),
+      margin: EdgeInsets.only(top: kToolbarHeight / 2, left: 16, right: 16),
       logoAlign: Alignment.topCenter,
       child:
           provider.isLoading
@@ -29,9 +29,9 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                 builder: (context, constraints) {
                   var plans = <PlanModel>[];
                   if (provider.showThreeMonthPlans) {
-                    plans = provider.plans.where((element) => element.duration == 90).toList();
+                    plans = provider.plans.where((element) => element.duration == 90 || element.type == PlanType.free.name).toList();
                   } else {
-                    plans = provider.plans.where((element) => element.duration != 90).toList();
+                    plans = provider.plans.where((element) => element.duration != 90 && element.type != PlanType.free.name).toList();
                   }
                   return Stack(
                     children: [
@@ -39,7 +39,7 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                         height: constraints.maxHeight,
                         width: constraints.maxWidth,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 16, right: 16, top: 32, bottom: 16),
+                          padding: const EdgeInsets.only(top: 32, bottom: 16),
                           child: Column(
                             children: [
                               Padding(
@@ -54,7 +54,7 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                                         height: 30,
                                         child: FittedBox(
                                           child: Switch(
-                                            value: provider.showThreeMonthPlans,
+                                            value: !provider.showThreeMonthPlans,
                                             thumbColor: WidgetStatePropertyAll(CColors.deepTeal),
                                             overlayColor: WidgetStatePropertyAll(CColors.deepTeal),
                                             activeColor: CColors.deepTeal,
@@ -77,6 +77,11 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                                     return PlanWidget(onSubscribe: provider.subscribe, plan: plans[index], isSelected: provider.selectedPlan == plans[index]);
                                   },
                                 ),
+                              ),
+                              BasicCard(
+                                onTap: provider.enterKeyDialog,
+                                backgroundColor: CColors.duaBackground,
+                                child: Text(LocaleKeys.enter_access_key_prompt.tr(), style: CTextStyle.w500(color: CColors.primary)),
                               ),
                             ],
                           ),

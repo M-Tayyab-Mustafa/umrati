@@ -17,6 +17,11 @@ abstract class  LocaleKeys {
   static const email = 'email';
   static const otp_verification = 'otp_verification';
   static const phone_number = 'phone_number';
+  static const enter_access_key_prompt = 'enter_access_key_prompt';
+  static const please_enter_valid_key = 'please_enter_valid_key';
+  static const invalid_key = 'invalid_key';
+  static const key_limit_reached = 'key_limit_reached';
+  static const key = 'key';
   static const verify_the_otp = 'verify_the_otp';
   static const resend_the_otp = 'resend_the_otp';
   static const resend_the_otp_in = 'resend_the_otp_in';

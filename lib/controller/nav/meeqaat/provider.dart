@@ -35,7 +35,7 @@ class MeeqaatLocationFetchProviderNotifier extends ChangeNotifier {
     Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
     location = '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
     if (context.mounted) notifyListeners();
-    var meeqaatDoc = await FirebaseFirestore.instance.collection(CollectionNames.settings.name).doc(CommonDoc.meeqaat.name).get();
+    var meeqaatDoc = await settingsCollection.doc(CommonDoc.meeqaat.name).get();
     final leg = await Helper.getRouteLeg(startPoint: LatLng(position.latitude, position.longitude), endPoint: LatLng(meeqaatDoc.get('lat'), meeqaatDoc.get('lng')));
     if (leg != null) {
       distance = leg['distance']['text'];

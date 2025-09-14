@@ -1,6 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import '../export.dart';
 
 class PlanModel {
@@ -11,9 +8,10 @@ class PlanModel {
   final int members;
   final String member_count_label;
   final int duration;
-  final bool is_heigh_tier;
+  final List<String> regions;
   final String type;
   final bool has_discount;
+
   PlanModel({
     required this.id,
     required this.amount,
@@ -22,12 +20,12 @@ class PlanModel {
     required this.members,
     required this.member_count_label,
     required this.duration,
-    required this.is_heigh_tier,
+    required this.regions,
     required this.type,
     required this.has_discount,
   });
 
-  PlanModel copyWith({String? id, num? amount, num? discount_amount, String? name, int? members, String? member_count_label, int? duration, bool? is_heigh_tier, String? type, bool? has_discount}) {
+  PlanModel copyWith({String? id, num? amount, num? discount_amount, String? name, int? members, String? member_count_label, int? duration, List<String>? regions, String? type, bool? has_discount}) {
     return PlanModel(
       id: id ?? this.id,
       amount: amount ?? this.amount,
@@ -36,7 +34,7 @@ class PlanModel {
       members: members ?? this.members,
       member_count_label: member_count_label ?? this.member_count_label,
       duration: duration ?? this.duration,
-      is_heigh_tier: is_heigh_tier ?? this.is_heigh_tier,
+      regions: regions ?? this.regions,
       type: type ?? this.type,
       has_discount: has_discount ?? this.has_discount,
     );
@@ -51,7 +49,7 @@ class PlanModel {
       'members': members,
       'member_count_label': member_count_label,
       'duration': duration,
-      'is_heigh_tier': is_heigh_tier,
+      'regions': regions,
       'type': type,
       'has_discount': has_discount,
     };
@@ -66,7 +64,7 @@ class PlanModel {
       members: int.tryParse(map['members'].toString()) ?? 1,
       member_count_label: map['member_count_label']?.toString() ?? '',
       duration: int.tryParse(map['duration'].toString()) ?? 0,
-      is_heigh_tier: map['is_heigh_tier'] ?? false,
+      regions: List<String>.from(map['regions']),
       type: map['type']?.toString() ?? 'individual',
       has_discount: map['has_discount'] ?? false,
     );
@@ -78,7 +76,7 @@ class PlanModel {
 
   @override
   String toString() {
-    return 'PlanModel(id: $id, amount: $amount, discount_amount: $discount_amount, name: $name, members: $members, member_count_label: $member_count_label, duration: $duration, is_heigh_tier: $is_heigh_tier, type: $type, has_discount: $has_discount)';
+    return 'PlanModel(id: $id, amount: $amount, discount_amount: $discount_amount, name: $name, members: $members, member_count_label: $member_count_label, duration: $duration, regions: $regions, type: $type, has_discount: $has_discount)';
   }
 
   @override
@@ -92,7 +90,7 @@ class PlanModel {
         other.members == members &&
         other.member_count_label == member_count_label &&
         other.duration == duration &&
-        other.is_heigh_tier == is_heigh_tier &&
+        other.regions == regions &&
         other.type == type &&
         other.has_discount == has_discount;
   }
@@ -106,7 +104,7 @@ class PlanModel {
         members.hashCode ^
         member_count_label.hashCode ^
         duration.hashCode ^
-        is_heigh_tier.hashCode ^
+        regions.hashCode ^
         type.hashCode ^
         has_discount.hashCode;
   }
