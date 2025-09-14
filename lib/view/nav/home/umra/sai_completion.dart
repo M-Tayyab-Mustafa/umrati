@@ -45,11 +45,11 @@ class SaiCompletionPage extends ConsumerWidget {
                 ),
               ),
               CheckBoxCard(
-                title: provider.user?.gender == Gender.female.name ? LocaleKeys.in_low_voice.tr() : LocaleKeys.shave_the_head.tr(),
+                title: provider.user?.gender == Gender.female.name ? LocaleKeys.perform_taqsir.tr() : LocaleKeys.shave_the_head.tr(),
                 isSelected: provider.isShavedHead,
                 onTap: provider.toggleShaveTheHead,
                 child: Text(
-                  provider.user?.gender == Gender.female.name ? LocaleKeys.in_low_voice.tr() : LocaleKeys.shave_the_head_description.tr(),
+                  provider.user?.gender == Gender.female.name ? LocaleKeys.trim_a_small_portion.tr() : LocaleKeys.shave_the_head_description.tr(),
                   style: CTextStyle.w400(color: CColors.primary, height: 1.2),
                 ),
               ),

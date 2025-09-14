@@ -12,6 +12,9 @@ class _MeeqaatTwoTasksPageState extends ConsumerState<MeeqaatTwoTasksPage> {
     super.initState();
     ref.read(meeqaatTwoTasksProvider.notifier).context = context;
     ref.read(meeqaatTwoTasksProvider.notifier).ref = ref;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(meeqaatTwoTasksProvider.notifier).initialization();
+    });
   }
 
   @override
@@ -33,23 +36,32 @@ class _MeeqaatTwoTasksPageState extends ConsumerState<MeeqaatTwoTasksPage> {
               onTap: ref.read(meeqaatTwoTasksProvider).updateCleanlinessChecked,
               margin: EdgeInsets.only(top: 20),
               title: LocaleKeys.cleanliness.tr(),
-              isSelected: ref.watch(meeqaatTwoTasksProvider).isCleanlinessChecked,
+              isSelected: provider.isCleanlinessChecked,
             ),
             CheckBoxCard(
               margin: EdgeInsets.only(top: 20, bottom: 40),
-              title: LocaleKeys.ihram.tr(),
-              isSelected: ref.watch(meeqaatTwoTasksProvider).isIhramChecked,
+              title: provider.user?.gender == Gender.male.name ? LocaleKeys.ihram.tr() : LocaleKeys.wear_abaya.tr(),
+              isSelected: provider.isIhramChecked,
               onTap: ref.read(meeqaatTwoTasksProvider).updateIhramChecked,
               child: Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(text: '${LocaleKeys.take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram.tr()}\n', style: CTextStyle.w600(fontSize: 14, color: CColors.deepTeal)),
+                      TextSpan(
+                        text:
+                            provider.user?.gender == Gender.male.name
+                                ? '${LocaleKeys.take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram.tr()}\n'
+                                : '${LocaleKeys.take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_abaya.tr()}\n',
+                        style: CTextStyle.w600(fontSize: 14, color: CColors.deepTeal),
+                      ),
                       WidgetSpan(
                         child: GestureDetector(
                           onTap: provider.showIhramTutorial,
-                          child: Text(LocaleKeys.ihram_tutorial_pics.tr(), style: CTextStyle.w600(fontSize: 14, color: CColors.primary, decoration: TextDecoration.underline, height: 0.8)),
+                          child: Text(
+                            provider.user?.gender == Gender.male.name ? LocaleKeys.ihram_tutorial_pics.tr() : LocaleKeys.abaya_tutorial_pics.tr(),
+                            style: CTextStyle.w600(fontSize: 14, color: CColors.primary, decoration: TextDecoration.underline, height: 0.8),
+                          ),
                         ),
                       ),
                     ],

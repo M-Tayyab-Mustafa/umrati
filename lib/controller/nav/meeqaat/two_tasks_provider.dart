@@ -5,8 +5,9 @@ final meeqaatTwoTasksProvider = ChangeNotifierProvider.autoDispose<MeeqaatTwoTas
 class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   bool isCleanlinessChecked = false;
   bool isIhramChecked = false;
+  UserModel? user;
 
-  bool isLoading = false;
+  bool isLoading = true;
 
   BuildContext? _context;
   BuildContext get context => _context!;
@@ -15,6 +16,12 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   WidgetRef? _ref;
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
+
+  initialization() async {
+    user = await LocalStorageManager.getUser(fromFirebase: true);
+    isLoading = false;
+    notifyListeners();
+  }
 
   void skip() async {
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
@@ -41,7 +48,7 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   }
 
   void showIhramTutorial() async {
-    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => IhramTutorialDialog());
+    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => IhramTutorialDialog(gender: user!.gender));
     if (result == true) {
       isIhramChecked = true;
       notifyListeners();
@@ -65,7 +72,8 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
 }
 
 class IhramTutorialDialog extends StatelessWidget {
-  const IhramTutorialDialog({super.key});
+  const IhramTutorialDialog({super.key, required this.gender});
+  final String gender;
 
   @override
   Widget build(BuildContext context) {
@@ -96,19 +104,28 @@ class IhramTutorialDialog extends StatelessWidget {
                     ),
                     Container(
                       margin: EdgeInsets.only(top: screenSize.height * 0.07),
+                      padding: EdgeInsets.only(top: 20, bottom: 20),
                       decoration: BoxDecoration(
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: CColors.primary, width: 2),
                         boxShadow: primaryShadows.map((e) => e.copyWith(blurRadius: 30)).toList(),
                       ),
-                      child: CustomImage(
-                        path: 'assets/png/ihram_tutorial.png',
-                        imageType: ImageType.png,
-                        enableBorder: true,
-                        height: 500,
-                        width: screenSize.width * 0.85,
-                        borderRadius: BorderRadius.circular(20),
-                        fit: BoxFit.fill,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (gender == Gender.female.name)
+                            Padding(padding: const EdgeInsets.only(bottom: 20), child: Text(LocaleKeys.no_face_veil_or_gloves.tr(), style: CTextStyle.w600(color: CColors.primary))),
+                          CustomImage(
+                            path: gender == Gender.male.name ? 'assets/png/ihram_tutorial.png' : 'assets/png/abaya_tutorial.png',
+                            imageType: ImageType.png,
+                            enableBorder: true,
+                            height: 500,
+                            width: screenSize.width * 0.85,
+                            borderRadius: BorderRadius.circular(20),
+                            fit: BoxFit.scaleDown,
+                          ),
+                        ],
                       ),
                     ),
                   ],

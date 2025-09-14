@@ -76,7 +76,7 @@ class UmraNotifier extends ChangeNotifier {
     }
 
     if (umraModel != null && hasDoneBeforeMeeqaatTasks && hasReachedMeeqaat && hasDoneAfterMeeqaatTasks && tawafCircleCount < 7) await _startTawaf();
-    ref.read(meeqaatTwoTasksProvider.notifier).updateLoading(false);
+    if (context.mounted) ref.read(meeqaatTwoTasksProvider.notifier).updateLoading(false);
   }
 
   _fromTawaf() async {
@@ -262,6 +262,7 @@ class UmraNotifier extends ChangeNotifier {
     isUmraCompleted = false;
     isSafaMarwaComplete = false;
     _resetTawafData();
+    Navigator.pop(context);
   }
 
   void toggleShaveTheHead() {

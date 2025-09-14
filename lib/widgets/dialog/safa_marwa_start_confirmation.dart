@@ -1,7 +1,7 @@
 import '../../export.dart';
 
-class UmraStartConfirmationDialog extends StatelessWidget {
-  const UmraStartConfirmationDialog({super.key});
+class SafaMarwaStartConfirmationDialog extends StatelessWidget {
+  const SafaMarwaStartConfirmationDialog({super.key});
 
   @override
   Widget build(BuildContext dialogContext) {
@@ -12,10 +12,10 @@ class UmraStartConfirmationDialog extends StatelessWidget {
           Center(child: Container(decoration: BoxDecoration(color: Colors.black26))),
           Center(
             child: Container(
-              height: screenSize.height * 0.6,
+              height: screenSize.height * 0.5,
               margin: EdgeInsets.symmetric(horizontal: screenSize.width * 0.08),
               decoration: BoxDecoration(
-                color: CColors.secondaryBackground,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: CColors.primary, width: 2),
                 boxShadow: primaryShadows.map((e) => e.copyWith(blurRadius: 30)).toList(),
@@ -31,12 +31,7 @@ class UmraStartConfirmationDialog extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(LocaleKeys.umra_start_detail.tr(), style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center),
-                              CustomImage(
-                                margin: EdgeInsets.only(top: screenSize.height * 0.03, bottom: screenSize.height * 0.03),
-                                path: 'assets/png/home/green_light.png',
-                                imageType: ImageType.png,
-                                height: screenSize.height * 0.3,
-                              ),
+                              CustomImage(path: 'assets/png/home/safa_marwa.png', imageType: ImageType.png, height: screenSize.height * 0.25),
                             ],
                           ),
                         ),

@@ -15,96 +15,46 @@ class BottomNavigationPage extends ConsumerWidget {
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SizedBox(
-                  height: 85,
-                  child: Stack(
+                child: Container(
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+                    border: Border.all(color: CColors.primary),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                            border: Border.all(color: CColors.primary),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Expanded(
-                                      child: BottomNavItem(
-                                        onTap: () => provider.onBottomNavTap.call(BottomNavTabs.profile),
-                                        isSelected: BottomNavTabs.profile == provider.selectedTab,
-                                        icon: 'assets/svg/bottom_nav/profile.svg',
-                                        title: LocaleKeys.profile.tr(),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: BottomNavItem(
-                                        onTap: () => provider.onBottomNavTap.call(BottomNavTabs.umra),
-                                        isSelected: BottomNavTabs.umra == provider.selectedTab,
-                                        icon: 'assets/svg/bottom_nav/supplications.svg',
-                                        title: LocaleKeys.umra.tr(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Spacer(),
-                              Expanded(
-                                flex: 2,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Expanded(
-                                      child: BottomNavItem(
-                                        onTap: () => provider.onBottomNavTap.call(BottomNavTabs.ziarat),
-                                        isSelected: BottomNavTabs.ziarat == provider.selectedTab,
-                                        icon: 'assets/svg/bottom_nav/ziarat.svg',
-                                        title: LocaleKeys.ziarat.tr(),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: BottomNavItem(
-                                        onTap: () => provider.onBottomNavTap.call(BottomNavTabs.settings),
-                                        isSelected: BottomNavTabs.settings == provider.selectedTab,
-                                        icon: 'assets/svg/bottom_nav/settings.svg',
-                                        title: LocaleKeys.settings.tr(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                      Expanded(
+                        child: BottomNavItem(
+                          onTap: () => provider.onBottomNavTap.call(BottomNavTabs.home),
+                          isSelected: BottomNavTabs.home == provider.selectedTab,
+                          icon: 'assets/svg/bottom_nav/home.svg',
+                          title: LocaleKeys.home.tr(),
                         ),
                       ),
-                      Center(
-                        child: CButton(
-                          onTap: () => provider.onBottomNavTap.call(BottomNavTabs.home),
-                          padding: EdgeInsets.zero,
-                          margin: EdgeInsets.only(bottom: 15),
-                          height: 70,
-                          width: 70,
-                          borderColor: Colors.transparent,
-                          shadows: [],
-                          gradient: CColors.solidButtonGradient,
-                          borderRadius: BorderRadius.circular(9999),
-                          child: Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CustomImage(path: 'assets/svg/bottom_nav/home.svg', imageType: ImageType.svg, height: 25, width: 25, fit: BoxFit.fill),
-                                Text(LocaleKeys.home.tr(), style: CTextStyle.w500(color: Colors.white, fontSize: 13)),
-                              ],
-                            ),
-                          ),
+                      Expanded(
+                        child: BottomNavItem(
+                          onTap: () => provider.onBottomNavTap.call(BottomNavTabs.profile),
+                          isSelected: BottomNavTabs.profile == provider.selectedTab,
+                          icon: 'assets/svg/bottom_nav/profile.svg',
+                          title: LocaleKeys.profile.tr(),
+                        ),
+                      ),
+                      Expanded(
+                        child: BottomNavItem(
+                          onTap: () => provider.onBottomNavTap.call(BottomNavTabs.askMufti),
+                          isSelected: BottomNavTabs.askMufti == provider.selectedTab,
+                          icon: 'assets/svg/bottom_nav/ask_mufti.svg',
+                          title: LocaleKeys.ask_mufti.tr(),
+                        ),
+                      ),
+                      Expanded(
+                        child: BottomNavItem(
+                          onTap: () => provider.onBottomNavTap.call(BottomNavTabs.settings),
+                          isSelected: BottomNavTabs.settings == provider.selectedTab,
+                          icon: 'assets/svg/bottom_nav/settings.svg',
+                          title: LocaleKeys.settings.tr(),
                         ),
                       ),
                     ],

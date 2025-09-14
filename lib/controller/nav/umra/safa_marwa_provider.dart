@@ -1,4 +1,5 @@
 import '../../../export.dart';
+import '../../../widgets/dialog/safa_marwa_start_confirmation.dart';
 
 // Provider for SafaMarwaNotifier using ChangeNotifier
 final safaMarwaProvider = ChangeNotifierProvider.autoDispose<SafaMarwaNotifier>((ref) => SafaMarwaNotifier());
@@ -36,6 +37,10 @@ class SafaMarwaNotifier extends ChangeNotifier {
     final threshold = num.parse(safaMarwaModel.threshold);
     distanceBetweenSafaAndMarwa = Geolocator.distanceBetween(safaLatLng.latitude, safaLatLng.longitude, marwaLatLng.latitude, marwaLatLng.longitude);
     try {
+      var currentPosition = await Geolocator.getCurrentPosition();
+      var distanceFromSafa = Geolocator.distanceBetween(currentPosition.latitude, currentPosition.longitude, safaLatLng.latitude, safaLatLng.longitude).abs();
+      if (!context.mounted) return;
+      if (!(distanceFromSafa <= threshold)) await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => SafaMarwaStartConfirmationDialog());
       positionStreamSubscription = Geolocator.getPositionStream(
         locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
       ).listen((position) => _updateLocation(position, safaLatLng, marwaLatLng, safaMarwaDistance, threshold));

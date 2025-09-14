@@ -1,11 +1,22 @@
 import '../../../controller/nav/home/provider.dart';
 import '../../../export.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(homeProvider.notifier).context = context;
+    ref.read(homeProvider.notifier).ref = ref;
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Background(
       showEmblem: false,
       backgroundType: BackgroundType.empty,
@@ -17,21 +28,21 @@ class HomePage extends ConsumerWidget {
             children: [
               _Card(
                 maxHeight: constraints.maxHeight * 0.25,
-                onTap: () => ref.read(homeProvider).onUmraTap(context: context, ref: ref),
+                onTap: ref.read(homeProvider).onUmraTap,
                 title: LocaleKeys.umra.tr(),
                 description: LocaleKeys.start_your_umra_from_here.tr(),
                 image: 'assets/png/home/umrah.png',
               ),
               _Card(
                 maxHeight: constraints.maxHeight * 0.25,
-                onTap: () => ref.read(homeProvider).onTawafTap(context: context, ref: ref),
+                onTap: ref.read(homeProvider).onTawafTap,
                 title: LocaleKeys.tawaf.tr(),
                 description: LocaleKeys.start_your_tawaf_from_here.tr(),
                 image: 'assets/png/home/tawaf.png',
               ),
               _Card(
                 maxHeight: constraints.maxHeight * 0.25,
-                onTap: () => ref.read(homeProvider).onZiaratTap(context: context, ref: ref),
+                onTap: ref.read(homeProvider).onZiaratTap,
                 title: LocaleKeys.ziarat.tr(),
                 description: LocaleKeys.start_your_ziarat_from_here.tr(),
                 image: 'assets/png/home/ziarat.png',

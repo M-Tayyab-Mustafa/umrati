@@ -22,6 +22,7 @@ abstract class  LocaleKeys {
   static const invalid_key = 'invalid_key';
   static const key_limit_reached = 'key_limit_reached';
   static const key = 'key';
+  static const ask_mufti = 'ask_mufti';
   static const verify_the_otp = 'verify_the_otp';
   static const resend_the_otp = 'resend_the_otp';
   static const resend_the_otp_in = 'resend_the_otp_in';
@@ -61,6 +62,13 @@ abstract class  LocaleKeys {
   static const phone_mandatory = 'phone_mandatory';
   static const subscription_expire_msg = 'subscription_expire_msg';
   static const umra_start_detail = 'umra_start_detail';
+  static const yes_i_have_reached = 'yes_i_have_reached';
+  static const wear_abaya = 'wear_abaya';
+  static const abaya_tutorial_pics = 'abaya_tutorial_pics';
+  static const no_face_veil_or_gloves = 'no_face_veil_or_gloves';
+  static const perform_taqsir = 'perform_taqsir';
+  static const trim_a_small_portion = 'trim_a_small_portion';
+  static const take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_abaya = 'take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_abaya';
   static const distance_from_meeqaat = 'distance_from_meeqaat';
   static const permission_request_message = 'permission_request_message';
   static const your_current_location = 'your_current_location';

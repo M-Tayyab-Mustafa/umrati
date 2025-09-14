@@ -20,10 +20,10 @@ class MeeqaatLocationFetchProviderNotifier extends ChangeNotifier {
   getLocation() async {
     try {
       isLoading = true;
-      notifyListeners();
+      if (context.mounted) notifyListeners();
       await _updateLocation(await Geolocator.getCurrentPosition());
       isLoading = false;
-      notifyListeners();
+      if (context.mounted) notifyListeners();
       positionStreamSubscription = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation)).listen(_updateLocation);
     } catch (e) {
       if (kDebugMode) log(e.toString());

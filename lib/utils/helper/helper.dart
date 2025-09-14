@@ -97,7 +97,6 @@ class Helper {
   // Calculate distance between point C and its projection on the vector
   static double distanceToVector(LatLng pointA, LatLng directionB, LatLng pointC) {
     LatLng intersection = findIntersectionPoint(pointA, directionB, pointC);
-    log('pointA: $pointA, directionB: $directionB, pointC: $pointC, intersection: $intersection');
     return distance(pointC, intersection);
   }
 
@@ -154,7 +153,6 @@ class Helper {
 
     double a = sin(dLat / 2) * sin(dLat / 2) + cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    log('${earthRadiusInMeters * c}');
     return earthRadiusInMeters * c;
   }
 

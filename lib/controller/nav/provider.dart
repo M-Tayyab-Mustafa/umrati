@@ -1,9 +1,8 @@
 import '../../export.dart';
 import '../../view/nav/home/page.dart';
-import '../../view/nav/home/umra/page.dart';
-import '../../view/nav/home/ziarat/page.dart';
 import '../../view/nav/profile/page.dart';
 import '../../view/nav/settings/page.dart';
+import 'ask_mufti/page.dart';
 
 final bottomNavProvider = ChangeNotifierProvider.autoDispose<BottomNavNotifier>((ref) => BottomNavNotifier());
 
@@ -17,17 +16,14 @@ class BottomNavNotifier extends ChangeNotifier {
     logoAlign = Alignment.center;
     selectedTab = selectedOption;
     switch (selectedOption) {
-      case BottomNavTabs.profile:
-        child = const ProfilePage();
-        break;
-      case BottomNavTabs.umra:
-        child = const UmraPage();
-        break;
       case BottomNavTabs.home:
         child = const HomePage();
         break;
-      case BottomNavTabs.ziarat:
-        child = const ZiaratPage();
+      case BottomNavTabs.profile:
+        child = const ProfilePage();
+        break;
+      case BottomNavTabs.askMufti:
+        child = AskMuftiPage();
         break;
       default:
         child = const SettingsPage();
