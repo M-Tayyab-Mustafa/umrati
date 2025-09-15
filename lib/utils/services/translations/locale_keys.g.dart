@@ -59,6 +59,12 @@ abstract class  LocaleKeys {
   static const unlimited = 'unlimited';
   static const individual = 'individual';
   static const group = 'group';
+  static const premium = 'premium';
+  static const delete_account = 'delete_account';
+  static const logout = 'logout';
+  static const are_you_sure_you_want_to_log_out = 'are_you_sure_you_want_to_log_out';
+  static const are_you_sure_you_want_to_delete_account = 'are_you_sure_you_want_to_delete_account';
+  static const number_of_umra_done = 'number_of_umra_done';
   static const phone_mandatory = 'phone_mandatory';
   static const subscription_expire_msg = 'subscription_expire_msg';
   static const umra_start_detail = 'umra_start_detail';

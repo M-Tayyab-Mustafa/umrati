@@ -1,7 +1,7 @@
 import '../../export.dart';
 
-class ConfirmationDialog extends StatelessWidget {
-  const ConfirmationDialog({super.key});
+class SkipConfirmationDialog extends StatelessWidget {
+  const SkipConfirmationDialog({super.key});
 
   @override
   Widget build(BuildContext dialogContext) {

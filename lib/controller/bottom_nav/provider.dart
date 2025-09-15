@@ -1,7 +1,7 @@
 import '../../export.dart';
-import '../../view/nav/home/page.dart';
-import '../../view/nav/profile/page.dart';
-import '../../view/nav/settings/page.dart';
+import '../../view/bottom_nav/home/page.dart';
+import '../../view/bottom_nav/profile/page.dart';
+import '../../view/bottom_nav/settings/page.dart';
 import 'ask_mufti/page.dart';
 
 final bottomNavProvider = ChangeNotifierProvider.autoDispose<BottomNavNotifier>((ref) => BottomNavNotifier());

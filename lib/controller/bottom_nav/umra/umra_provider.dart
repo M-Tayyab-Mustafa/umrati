@@ -249,6 +249,8 @@ class UmraNotifier extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     umraModel = umraModel!.copyWith(is_doing: false);
+    user = user!.copyWith(total_umra_done: user!.total_umra_done + 1);
+    await LocalStorageManager.saveUser(user!);
     await updateUmraModel(umraModel!);
     umraModel = null;
     isLoading = false;

@@ -22,7 +22,7 @@ class GenderNotifier extends ChangeNotifier {
 
   void skip() async {
     try {
-      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
+      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => SkipConfirmationDialog());
       if (result == false || result == null) {
         return;
       }

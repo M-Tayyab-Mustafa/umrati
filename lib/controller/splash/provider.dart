@@ -4,7 +4,7 @@ import '../../view/auth/gender.dart';
 import '../../view/auth/login.dart';
 import '../../view/language/select_language.dart';
 import '../../view/location_permission/page.dart';
-import '../../view/nav/page.dart';
+import '../../view/bottom_nav/page.dart';
 import '../../view/subscription/page.dart';
 
 final splashProvider = ChangeNotifierProvider.autoDispose<SplashNotifier>((ref) => SplashNotifier());

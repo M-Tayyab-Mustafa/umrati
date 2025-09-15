@@ -11,6 +11,7 @@ class CColors {
   static final Color background = Color.fromARGB(255, 168, 255, 178).withValues(alpha: 0.4);
   static const Color darkIndigo = Color(0xFF181C2E);
   static const Color grey = Color(0xFF4B4B4B);
+  static const Color paleYellow = Color(0xFFFCFFA8);
   static final Color lightGrey = Color(0x73737300).withValues(alpha: 0.1);
   static const Color greyShade1 = Color.fromARGB(255, 117, 117, 117);
   static const Color greyShade2 = Color(0xFF4F4F4F);

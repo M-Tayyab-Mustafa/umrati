@@ -101,7 +101,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       infoToast('Plan Subscribed Successfully');
     }
     Helper.userSubscription = SubscriptionModel.fromMap((await doc.get()).data()!);
-    await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id));
+    await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id, is_premium: selectedPlan.type != PlanType.free.name));
     ref.read(splashProvider.notifier).redirections(context, false);
   }
 

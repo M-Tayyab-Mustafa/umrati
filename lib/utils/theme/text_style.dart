@@ -4,7 +4,7 @@ class CTextStyle {
   CTextStyle._();
   static BuildContext? _context;
   static set context(BuildContext context) => _context = context;
-  static TextStyle w100({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily}) => TextStyle(
+  static TextStyle w100({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w100,
     fontSize: fontSize ?? 12,
     fontFamily: fontFamily ?? (isLTR(_context) ? 'Roboto' : 'Jameel Noori Nastaleeq Kasheeda'),
@@ -12,8 +12,9 @@ class CTextStyle {
     decoration: decoration,
     decorationColor: color,
     height: height,
+    letterSpacing: letterSpacing,
   );
-  static TextStyle w200({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily}) => TextStyle(
+  static TextStyle w200({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w200,
     fontSize: fontSize ?? 12,
     fontFamily: fontFamily ?? (isLTR(_context) ? 'Roboto' : 'Jameel Noori Nastaleeq Kasheeda'),
@@ -21,8 +22,9 @@ class CTextStyle {
     decoration: decoration,
     decorationColor: color,
     height: height,
+    letterSpacing: letterSpacing,
   );
-  static TextStyle w300({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily}) => TextStyle(
+  static TextStyle w300({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w300,
     fontSize: fontSize ?? 14,
     fontFamily: fontFamily ?? (isLTR(_context) ? 'Roboto' : 'Jameel Noori Nastaleeq Kasheeda'),
@@ -30,8 +32,9 @@ class CTextStyle {
     decoration: decoration,
     decorationColor: color,
     height: height,
+    letterSpacing: letterSpacing,
   );
-  static TextStyle w400({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily}) => TextStyle(
+  static TextStyle w400({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: fontSize ?? 16,
     fontFamily: fontFamily ?? (isLTR(_context) ? 'Roboto' : 'Jameel Noori Nastaleeq Kasheeda'),
@@ -39,8 +42,9 @@ class CTextStyle {
     decoration: decoration,
     decorationColor: color,
     height: height,
+    letterSpacing: letterSpacing,
   );
-  static TextStyle w500({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily}) => TextStyle(
+  static TextStyle w500({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: fontSize ?? 16,
     fontFamily: fontFamily ?? fontFamily ?? (isLTR(_context) ? 'Roboto' : 'Jameel Noori Nastaleeq Kasheeda'),
@@ -48,8 +52,9 @@ class CTextStyle {
     decoration: decoration,
     decorationColor: color,
     height: height,
+    letterSpacing: letterSpacing,
   );
-  static TextStyle w600({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily}) => TextStyle(
+  static TextStyle w600({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: fontSize ?? 18,
     fontFamily: fontFamily ?? (isLTR(_context) ? 'Roboto' : 'Jameel Noori Nastaleeq Kasheeda'),
@@ -57,8 +62,9 @@ class CTextStyle {
     decoration: decoration,
     decorationColor: color,
     height: height,
+    letterSpacing: letterSpacing,
   );
-  static TextStyle w700({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily}) => TextStyle(
+  static TextStyle w700({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: fontSize ?? 20,
     fontFamily: fontFamily ?? (isLTR(_context) ? 'Roboto' : 'Jameel Noori Nastaleeq Kasheeda'),
@@ -66,8 +72,9 @@ class CTextStyle {
     decoration: decoration,
     decorationColor: color,
     height: height,
+    letterSpacing: letterSpacing,
   );
-  static TextStyle w800({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily}) => TextStyle(
+  static TextStyle w800({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w800,
     fontSize: fontSize ?? 24,
     fontFamily: fontFamily ?? (isLTR(_context) ? 'Roboto' : 'Jameel Noori Nastaleeq Kasheeda'),
@@ -75,8 +82,9 @@ class CTextStyle {
     decoration: decoration,
     decorationColor: color,
     height: height,
+    letterSpacing: letterSpacing,
   );
-  static TextStyle w900({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily}) => TextStyle(
+  static TextStyle w900({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: fontSize ?? 26,
     fontFamily: fontFamily ?? (isLTR(_context) ? 'Roboto' : 'Jameel Noori Nastaleeq Kasheeda'),
@@ -84,5 +92,6 @@ class CTextStyle {
     decoration: decoration,
     decorationColor: color,
     height: height,
+    letterSpacing: letterSpacing,
   );
 }

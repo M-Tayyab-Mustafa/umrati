@@ -1,4 +1,4 @@
-part of '../../controller/nav/umra/umra_provider.dart';
+part of '../../controller/bottom_nav/umra/umra_provider.dart';
 
 double calculateBearing(LatLng from, LatLng to) {
   double lat1 = _degToRad(from.latitude);

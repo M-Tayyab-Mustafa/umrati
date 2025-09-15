@@ -1,6 +1,6 @@
 import '../../../export.dart';
-import '../../../view/nav/home/umra/page.dart';
-import '../../../view/nav/home/ziarat/page.dart';
+import '../../../view/bottom_nav/home/umra/page.dart';
+import '../../../view/bottom_nav/home/ziarat/page.dart';
 
 final homeProvider = ChangeNotifierProvider.autoDispose<HomeNotifier>((ref) => HomeNotifier());
 

@@ -1,4 +1,4 @@
-import '../../../controller/nav/home/provider.dart';
+import '../../../controller/bottom_nav/home/provider.dart';
 import '../../../export.dart';
 
 class HomePage extends ConsumerStatefulWidget {
