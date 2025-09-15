@@ -24,13 +24,12 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     try {
       user = (await LocalStorageManager.getUser())!;
       var userRegion = await Helper.userRegion();
-      bool isPlanRegion = List.from((await settingsCollection.doc(CommonDoc.constants.name).get()).get(CommonField.planRegions.name)).contains(userRegion);
-      plans =
-          (await plansCollection.where(Filter.or(Filter('type', isEqualTo: PlanType.free.name), isPlanRegion ? Filter('regions', arrayContains: userRegion) : Filter('regions', isEqualTo: []))).get())
-              .docs
-              .map((planDoc) => PlanModel.fromMap(planDoc.data()))
-              .toList();
-      plans.sort((a, b) => a.amount.compareTo(b.amount));
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> docs;
+      docs = (await plansCollection.where(Filter.or(Filter('type', isEqualTo: PlanType.free.name), Filter('regions', arrayContains: userRegion))).get()).docs;
+      if (docs.length <= 1) {
+        docs = (await plansCollection.where(Filter.or(Filter('type', isEqualTo: PlanType.free.name), Filter('regions', isEqualTo: []))).get()).docs;
+      }
+      plans = docs.map((planDoc) => PlanModel.fromMap(planDoc.data())).toList()..sort((a, b) => a.amount.compareTo(b.amount));
       await Future.delayed(const Duration(milliseconds: 400));
       selectedPlan = plans.firstWhere((e) => e.type == PlanType.free.name);
       isLoading = false;

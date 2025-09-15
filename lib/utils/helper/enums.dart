@@ -41,7 +41,6 @@ enum CommonField {
   oneYear('1_year'),
   regions('regions'),
   symbols('symbols'),
-  planRegions('plan_regions'),
   googleMapKey('google_map_key'),
   startingPoint('startingPoint'),
   selectedZiarat('selected_ziarat');
