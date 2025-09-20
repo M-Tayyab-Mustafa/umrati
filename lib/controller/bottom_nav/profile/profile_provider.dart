@@ -15,8 +15,11 @@ class ProfileNotifier extends ChangeNotifier {
   final numberController = TextEditingController();
   final emailController = TextEditingController();
   final nameController = TextEditingController();
-  String? localImagePath;
+  String localImagePath = 'assets/png/profile/male_avatar.png';
   bool isLoading = true;
+  final ImagePicker picker = ImagePicker();
+  final ImageCropper cropper = ImageCropper();
+  final storageRef = FirebaseStorage.instance.refFromURL('gs://umrati-ec453.firebasestorage.app');
 
   Future<void> initialization() async {
     user = await LocalStorageManager.getUser(fromFirebase: true);
@@ -25,20 +28,32 @@ class ProfileNotifier extends ChangeNotifier {
       emailController.text = user!.email;
       nameController.text = user!.name.isEmpty ? user!.uid.substring(0, (user!.uid.length / 2).toInt()) : user!.name;
     }
-    if (user!.photo.isEmpty) {
-      if (user!.gender == Gender.male.name) {
-        user = user!.copyWith(photo: 'https://www.pngall.com/wp-content/uploads');
-      } else if (user!.gender == Gender.female.name) {
-        user = user!.copyWith(photo: 'https://www.pngall.com/wp-content/uploads');
-      } else {
-        user = user!.copyWith(photo: 'https://www.pngall.com/wp-content/uploads');
-      }
-    }
+    if (user!.photo.isEmpty && user!.gender == Gender.female.name) localImagePath = 'assets/png/profile/male_avatar.png';
     isLoading = false;
     notifyListeners();
   }
 
-  Future<void> onProfileImageTap() async {}
+  Future<void> onProfileImageTap() async {
+    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+    if (photo != null) {
+      var croppedFile = await cropper.cropImage(
+        sourcePath: photo.path,
+        compressFormat: ImageCompressFormat.png,
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+        uiSettings: [AndroidUiSettings(hideBottomControls: true, toolbarTitle: 'Cropper', toolbarColor: CColors.primary, toolbarWidgetColor: Colors.white, lockAspectRatio: true)],
+      );
+      if (croppedFile != null) {
+        infoToast(LocaleKeys.profile_image_uploading.tr());
+        var child = storageRef.child('/${StorageFolderNames.profileImages.name}/${user!.uid}');
+        await child.putFile(File(croppedFile.path));
+        var url = await child.getDownloadURL();
+        user = user!.copyWith(photo: url);
+        notifyListeners();
+        infoToast(LocaleKeys.profile_image_updated_successfully.tr());
+        await LocalStorageManager.saveUser(user!);
+      }
+    }
+  }
 
   Future<void> onLogoutTap() async {
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.are_you_sure_you_want_to_log_out.tr()));
@@ -69,6 +84,12 @@ class ProfileNotifier extends ChangeNotifier {
       await LocalStorageManager.clearStorage();
       ref.read(splashProvider.notifier).redirections(context, false);
     }
+  }
+
+  Future<void> updateGender(Gender gender) async {
+    user = user!.copyWith(gender: gender.name.toLowerCase());
+    notifyListeners();
+    await LocalStorageManager.saveUser(user!);
   }
 
   @override

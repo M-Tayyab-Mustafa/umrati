@@ -64,6 +64,8 @@ abstract class  LocaleKeys {
   static const logout = 'logout';
   static const are_you_sure_you_want_to_log_out = 'are_you_sure_you_want_to_log_out';
   static const are_you_sure_you_want_to_delete_account = 'are_you_sure_you_want_to_delete_account';
+  static const profile_image_uploading = 'profile_image_uploading';
+  static const profile_image_updated_successfully = 'profile_image_updated_successfully';
   static const number_of_umra_done = 'number_of_umra_done';
   static const phone_mandatory = 'phone_mandatory';
   static const subscription_expire_msg = 'subscription_expire_msg';

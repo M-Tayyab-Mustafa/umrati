@@ -12,6 +12,14 @@ enum ZiaratDestinationsCreationOptions { auto, manual }
 
 enum CollectionNames { users, settings, plans, subscriptions, histories }
 
+enum StorageFolderNames {
+  profileImages('profile_images');
+
+  final String name;
+
+  const StorageFolderNames(this.name);
+}
+
 enum MapMarkerId { userLocation, destination }
 
 enum UmraType { tawaf, umra }

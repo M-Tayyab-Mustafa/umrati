@@ -60,6 +60,8 @@
   "logout": "Logout",
   "are_you_sure_you_want_to_log_out":"Are you sure, you want to log out",
   "are_you_sure_you_want_to_delete_account": "Are you sure, you want to delete account",
+  "profile_image_uploading": "Profile image uploading",
+  "profile_image_updated_successfully": "Profile image updated successfully",
   "number_of_umra_done": "Number of Umra done",
   "phone_mandatory": "Phone number is required to continue. Without it, the app cannot function.",
   "subscription_expire_msg": "Your subscription has expired. Please renew it.",

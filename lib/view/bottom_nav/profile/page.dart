@@ -46,12 +46,15 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             borderRadius: BorderRadius.circular(160),
                             child: Stack(
                               children: [
-                                Container(
+                                CustomImage(
+                                  enableBorder: true,
+                                  border: Border.all(color: CColors.primary, width: 2),
+                                  borderRadius: BorderRadius.circular(160),
                                   height: 140,
                                   width: 140,
-                                  padding: EdgeInsets.all(25),
-                                  decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, border: Border.all(color: CColors.primary, width: 2)),
-                                  child: Center(child: CustomImage(path: provider.user!.photo, imageType: ImageType.network)),
+                                  path: provider.user!.photo.isNotEmpty ? provider.user!.photo : provider.localImagePath,
+                                  imageType: provider.user!.photo.isNotEmpty ? ImageType.network : ImageType.png,
+                                  fit: BoxFit.cover,
                                 ),
                                 Align(
                                   alignment: Alignment.bottomCenter,
@@ -81,7 +84,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         ),
                       ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 32),
+                      padding: const EdgeInsets.symmetric(vertical: 28),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -99,9 +102,35 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       readOnly: true,
                       suffixIcon: CustomImage(path: 'assets/svg/edit.svg', imageType: ImageType.svg, height: 25, width: 25),
                     ),
-
+                    Padding(padding: const EdgeInsets.only(top: 20), child: Text(LocaleKeys.select_your_gender.tr(), style: CTextStyle.w500(fontSize: 18))),
                     Padding(
-                      padding: const EdgeInsets.only(top: 48),
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: CustomImage(
+                              onTap: () => provider.updateGender(Gender.male),
+                              path: provider.user!.gender == Gender.male.name ? 'assets/svg/gender/selected_male.svg' : 'assets/svg/gender/un_selected_male.svg',
+                              imageType: ImageType.svg,
+                              fit: BoxFit.fill,
+                              height: 120,
+                            ),
+                          ),
+                          Expanded(
+                            child: CustomImage(
+                              onTap: () => provider.updateGender(Gender.female),
+                              path: provider.user!.gender == Gender.female.name ? 'assets/svg/gender/selected_female.svg' : 'assets/svg/gender/un_selected_female.svg',
+                              imageType: ImageType.svg,
+                              fit: BoxFit.fill,
+                              height: 120,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
                       child: GestureDetector(
                         onTap: ref.read(profileProvider.notifier).onDeleteAccountTap,
                         child: Row(

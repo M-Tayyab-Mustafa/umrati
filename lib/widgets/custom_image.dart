@@ -26,6 +26,7 @@ class CustomImage extends StatelessWidget {
     this.loadingHeight,
     this.loadingWidth,
     this.gradientBorder,
+    this.border,
   });
 
   final String path;
@@ -44,6 +45,7 @@ class CustomImage extends StatelessWidget {
   final EdgeInsets? margin;
   final GestureTapCallback? onTap;
   final bool enableBorder;
+  final Border? border;
   final Gradient? gradientBorder;
 
   @override
@@ -53,7 +55,7 @@ class CustomImage extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          decoration: BoxDecoration(borderRadius: borderRadius ?? BorderRadius.zero, border: enableBorder ? Border() : null),
+          decoration: BoxDecoration(borderRadius: borderRadius ?? BorderRadius.zero, border: enableBorder ? border ?? Border() : null),
           child: ClipRRect(
             borderRadius: borderRadius ?? BorderRadius.zero,
             clipper: clipper,
