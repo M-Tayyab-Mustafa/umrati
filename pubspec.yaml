@@ -56,6 +56,7 @@ flutter:
     - assets/svg/ziarat/
     - assets/svg/bottom_nav/
     - assets/png/
+    - assets/png/history/
     - assets/png/profile/
     - assets/png/home/
     - assets/png/flags/

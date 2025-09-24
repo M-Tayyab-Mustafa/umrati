@@ -28,7 +28,14 @@ class CListTile extends ConsumerWidget {
       child: switch (child) {
         null => Row(
           children: [
-            if (icon != null) CustomImage(margin: EdgeInsets.only(right: 10), path: icon!, imageType: iconType ?? ImageType.svg, size: iconSize ?? 25, color: CColors.deepTeal),
+            if (icon != null)
+              CustomImage(
+                margin: EdgeInsets.only(right: isLTR(context) ? 10 : 0, left: isLTR(context) ? 0 : 10),
+                path: icon!,
+                imageType: iconType ?? ImageType.svg,
+                size: iconSize ?? 25,
+                color: CColors.deepTeal,
+              ),
             Expanded(child: Text(title!, style: CTextStyle.w600(color: CColors.deepTeal, fontSize: 22))),
             if (trailing != null) trailing!,
           ],

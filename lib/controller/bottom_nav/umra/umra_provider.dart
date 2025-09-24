@@ -48,8 +48,7 @@ class UmraNotifier extends ChangeNotifier {
   Future<void> initialization() async {
     ref.read(meeqaatTwoTasksProvider.notifier).updateLoading(true);
     user = (await LocalStorageManager.getUser(fromFirebase: true))!;
-    final querySnapshot =
-        await FirebaseFirestore.instance.collection(CollectionNames.histories.name).where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('is_doing', isEqualTo: true))).get();
+    final querySnapshot = await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('is_doing', isEqualTo: true))).get();
     if (querySnapshot.docs.isNotEmpty) {
       final doc = querySnapshot.docs.first.reference;
       umraModel = HistoryModel.fromMap((await doc.get()).data()!);
@@ -330,13 +329,13 @@ class UmraNotifier extends ChangeNotifier {
   }
 
   Future<void> updateUmraModel(HistoryModel umra) async {
-    var doc = FirebaseFirestore.instance.collection(CollectionNames.histories.name).doc(umra.uid);
+    var doc = historyCollection.doc(umra.uid);
     await doc.update(umra.toMap(updated_at: FieldValue.serverTimestamp()));
     umraModel = HistoryModel.fromMap((await doc.get()).data()!);
   }
 
   Future<void> setUmraModel(HistoryModel umra) async {
-    var doc = FirebaseFirestore.instance.collection(CollectionNames.histories.name).doc();
+    var doc = historyCollection.doc();
     await doc.set(umra.copyWith(uid: doc.id).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp()));
     umraModel = HistoryModel.fromMap((await doc.get()).data()!);
   }

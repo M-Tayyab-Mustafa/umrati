@@ -46,7 +46,16 @@ class PlanWidget extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Transform.rotate(angle: pi / 2, child: CustomImage(path: 'assets/svg/go_forward.svg', imageType: ImageType.svg, color: CColors.deepTeal, size: 20)),
-                  CButton(isLoading: ref.watch(subscriptionProvider).isSubscribing, onTap: onSubscribe, margin: EdgeInsets.only(top: 24), titleWithIcon: true, title: 'Buy', width: 120, iconSize: 22),
+                  CButton(
+                    isLoading: ref.watch(subscriptionProvider).isSubscribing,
+                    onTap: onSubscribe,
+                    margin: EdgeInsets.only(top: 24),
+                    titleWithIcon: true,
+                    padding: isLTR(context) ? null : EdgeInsets.only(left: 16),
+                    title: LocaleKeys.buy.tr(),
+                    width: isLTR(context) ? 120 : 130,
+                    iconSize: 20,
+                  ),
                 ],
               ),
             ),

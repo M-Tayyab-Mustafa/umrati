@@ -1,4 +1,5 @@
 import '../../../export.dart';
+import '../../../view/subscription/page.dart';
 
 final profileProvider = ChangeNotifierProvider.autoDispose<ProfileNotifier>((ref) => ProfileNotifier());
 
@@ -12,14 +13,18 @@ class ProfileNotifier extends ChangeNotifier {
   set ref(WidgetRef value) => _ref = value;
 
   UserModel? user;
-  final numberController = TextEditingController();
-  final emailController = TextEditingController();
-  final nameController = TextEditingController();
   String localImagePath = 'assets/png/profile/male_avatar.png';
   bool isLoading = true;
   final ImagePicker picker = ImagePicker();
   final ImageCropper cropper = ImageCropper();
   final storageRef = FirebaseStorage.instance.refFromURL('gs://umrati-ec453.firebasestorage.app');
+
+  final numberController = TextEditingController();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final editNameController = TextEditingController();
+
+  int daysRemaining = -1;
 
   Future<void> initialization() async {
     user = await LocalStorageManager.getUser(fromFirebase: true);
@@ -29,6 +34,10 @@ class ProfileNotifier extends ChangeNotifier {
       nameController.text = user!.name.isEmpty ? user!.uid.substring(0, (user!.uid.length / 2).toInt()) : user!.name;
     }
     if (user!.photo.isEmpty && user!.gender == Gender.female.name) localImagePath = 'assets/png/profile/male_avatar.png';
+    var subscriptionDoc = await subscriptionCollection.doc(user!.subscription_id).get();
+    final subscription = SubscriptionModel.fromMap(subscriptionDoc.data()!);
+    final expireData = subscription.expire_at!.toDate();
+    daysRemaining = expireData.difference(DateTime.now()).inDays;
     isLoading = false;
     notifyListeners();
   }
@@ -90,6 +99,30 @@ class ProfileNotifier extends ChangeNotifier {
     user = user!.copyWith(gender: gender.name.toLowerCase());
     notifyListeners();
     await LocalStorageManager.saveUser(user!);
+  }
+
+  Future<void> updateName() async {
+    editNameController.text = nameController.text.trim();
+    await showGeneralDialog(
+      context: context,
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return EditNameDialog(
+          controller: editNameController,
+          onUpdate: () async {
+            user = user!.copyWith(name: editNameController.text.trim());
+            notifyListeners();
+            await LocalStorageManager.saveUser(user!);
+            nameController.text = editNameController.text.trim();
+            infoToast(LocaleKeys.name_updated_successfully.tr());
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> renew() async {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
+    initialization();
   }
 
   @override

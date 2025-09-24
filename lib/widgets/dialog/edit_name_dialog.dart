@@ -1,9 +1,16 @@
 import '../../export.dart';
 
-class PlanKeyDialog extends StatelessWidget {
-  const PlanKeyDialog({super.key, required this.controller});
+class EditNameDialog extends StatefulWidget {
+  const EditNameDialog({super.key, required this.controller, required this.onUpdate});
   final TextEditingController controller;
+  final Future<void> Function() onUpdate;
 
+  @override
+  State<EditNameDialog> createState() => _EditNameDialogState();
+}
+
+class _EditNameDialogState extends State<EditNameDialog> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext dialogContext) {
     return Scaffold(
@@ -28,22 +35,34 @@ class PlanKeyDialog extends StatelessWidget {
                   children: [
                     CTextField(
                       margin: EdgeInsets.only(top: screenSize.height * 0.04, bottom: screenSize.height * 0.03),
-                      controller: controller,
-                      keyboardType: TextInputType.text,
-                      labelText: LocaleKeys.key.tr(),
+                      controller: widget.controller,
+                      keyboardType: TextInputType.name,
+                      labelText: LocaleKeys.name.tr(),
                     ),
                     CButton(
+                      isLoading: isLoading,
                       margin: EdgeInsets.only(bottom: screenSize.height * 0.04),
                       height: 45,
                       shadows: [],
                       fontSize: 14,
-                      title: LocaleKeys.continued.tr(),
-                      onTap: () {
-                        if (controller.text.isEmpty) {
-                          errorToast(LocaleKeys.please_enter_valid_key.tr());
+                      title: LocaleKeys.update.tr(),
+                      onTap: () async {
+                        if (widget.controller.text.isEmpty) {
+                          errorToast(LocaleKeys.field_cant_be_empty.tr());
                           return;
                         }
-                        Navigator.pop(dialogContext, true);
+                        try {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await widget.onUpdate();
+                          Navigator.pop(dialogContext, true);
+                        } catch (e) {
+                          log(e.toString());
+                          setState(() {
+                            isLoading = false;
+                          });
+                        }
                       },
                       style: CTextStyle.w400(fontSize: 12, color: Colors.white),
                     ),

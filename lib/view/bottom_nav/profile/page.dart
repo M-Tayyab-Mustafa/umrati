@@ -76,11 +76,36 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     ),
                     if (provider.user!.is_premium)
                       Center(
-                        child: Container(
-                          margin: EdgeInsets.only(top: 16),
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                          decoration: BoxDecoration(color: CColors.paleYellow, borderRadius: BorderRadius.circular(32)),
-                          child: Text(LocaleKeys.premium.tr(), style: CTextStyle.w400(fontSize: 18, letterSpacing: 0.0)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(top: 16),
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                              decoration: BoxDecoration(color: CColors.paleYellow, borderRadius: BorderRadius.circular(32)),
+                              child: Text(LocaleKeys.premium.tr(), style: CTextStyle.w500(fontSize: 18)),
+                            ),
+                            if (provider.daysRemaining < 4)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      WidgetSpan(
+                                        alignment: PlaceholderAlignment.middle,
+                                        child: Text('${provider.daysRemaining} ${LocaleKeys.days_of_premium_remaining.tr()}  ', style: CTextStyle.w400(fontSize: 14)),
+                                      ),
+                                      WidgetSpan(
+                                        alignment: PlaceholderAlignment.middle,
+                                        child: GestureDetector(onTap: provider.renew, child: Text(LocaleKeys.renew.tr(), style: CTextStyle.w500(fontSize: 18))),
+                                      ),
+                                    ],
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                     Padding(
@@ -96,6 +121,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     CTextField(margin: EdgeInsets.only(top: 8), controller: provider.numberController, labelText: LocaleKeys.number.tr(), readOnly: true),
                     CTextField(margin: EdgeInsets.only(top: 32), controller: provider.emailController, labelText: LocaleKeys.email.tr(), readOnly: true),
                     CTextField(
+                      onTap: provider.updateName,
                       margin: EdgeInsets.only(top: 32),
                       controller: provider.nameController,
                       labelText: LocaleKeys.name.tr(),

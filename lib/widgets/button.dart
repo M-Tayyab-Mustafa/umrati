@@ -23,6 +23,7 @@ class CButton extends StatelessWidget {
     this.titleColor,
     this.shadows,
     this.backgroundColor,
+    this.textDirection,
   }) : assert((title != null) ^ (child != null), 'Must contain either title or child, but not both.');
 
   final Color? borderColor;
@@ -40,6 +41,7 @@ class CButton extends StatelessWidget {
   final bool isLoading;
   final bool titleWithIcon;
   final GestureTapCallback? onTap;
+  final TextDirection? textDirection;
   final bool isEnabled;
   final Gradient? gradient;
   final BoxShape? shape;
@@ -70,12 +72,15 @@ class CButton extends StatelessWidget {
                   : title != null
                   ? titleWithIcon
                       ? Directionality(
-                        textDirection: TextDirection.ltr,
+                        textDirection: textDirection ?? (isLTR(context) ? TextDirection.ltr : TextDirection.rtl),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(title!, style: CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 17), maxLines: 1),
-                            CustomImage(margin: EdgeInsets.only(left: 16), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: iconSize ?? 35),
+                            Transform.rotate(
+                              angle: isLTR(context) ? 0 : pi / 180 * 180,
+                              child: CustomImage(margin: EdgeInsets.only(left: 16), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: iconSize ?? 35),
+                            ),
                           ],
                         ),
                       )

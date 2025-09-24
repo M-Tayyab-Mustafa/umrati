@@ -16,6 +16,8 @@ class DefaultImages {
 
 var userCollection = FirebaseFirestore.instance.collection(CollectionNames.users.name);
 var settingsCollection = FirebaseFirestore.instance.collection(CollectionNames.settings.name);
+var historyCollection = FirebaseFirestore.instance.collection(CollectionNames.histories.name);
+var subscriptionCollection = FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name);
 var plansCollection = FirebaseFirestore.instance.collection(CollectionNames.plans.name);
 
 bool isLTR(context) => languageDirection(context) == TextDirection.ltr;

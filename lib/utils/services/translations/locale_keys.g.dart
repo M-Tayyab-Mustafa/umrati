@@ -7,6 +7,7 @@ abstract class  LocaleKeys {
   static const change_the_language = 'change_the_language';
   static const register_your_account = 'register_your_account';
   static const continued = 'continued';
+  static const field_cant_be_empty = 'field_cant_be_empty';
   static const skip = 'skip';
   static const log_in_to_your_account = 'log_in_to_your_account';
   static const link_account = 'link_account';
@@ -15,6 +16,12 @@ abstract class  LocaleKeys {
   static const number = 'number';
   static const name = 'name';
   static const email = 'email';
+  static const update = 'update';
+  static const name_updated_successfully = 'name_updated_successfully';
+  static const days_of_premium_remaining = 'days_of_premium_remaining';
+  static const renew = 'renew';
+  static const dark_mode = 'dark_mode';
+  static const coming_soon = 'coming_soon';
   static const otp_verification = 'otp_verification';
   static const phone_number = 'phone_number';
   static const enter_access_key_prompt = 'enter_access_key_prompt';
@@ -45,6 +52,7 @@ abstract class  LocaleKeys {
   static const year = 'year';
   static const yes = 'yes';
   static const no = 'no';
+  static const see_history_of_your = 'see_history_of_your';
   static const cleanliness = 'cleanliness';
   static const months = 'months';
   static const price = 'price';
@@ -52,6 +60,7 @@ abstract class  LocaleKeys {
   static const give_feedback = 'give_feedback';
   static const history = 'history';
   static const buy_premium = 'buy_premium';
+  static const buy = 'buy';
   static const ads_free_journey = 'ads_free_journey';
   static const more_ziarat_destinations = 'more_ziarat_destinations';
   static const unlimited_history = 'unlimited_history';
@@ -70,6 +79,8 @@ abstract class  LocaleKeys {
   static const phone_mandatory = 'phone_mandatory';
   static const subscription_expire_msg = 'subscription_expire_msg';
   static const umra_start_detail = 'umra_start_detail';
+  static const please_reach_safa_start_point = 'please_reach_safa_start_point';
+  static const account_linked_successfully = 'account_linked_successfully';
   static const yes_i_have_reached = 'yes_i_have_reached';
   static const wear_abaya = 'wear_abaya';
   static const abaya_tutorial_pics = 'abaya_tutorial_pics';

@@ -2,7 +2,7 @@ part of 'constants.dart';
 
 enum Gender { male, female, unknown }
 
-enum BackgroundType { empty, logo, logoWithBackButton, logoWithSkip }
+enum BackgroundType { empty, logo, logoWithBackButton, logoWithSkip, titleWithBackButton }
 
 enum BottomNavTabs { home, profile, askMufti, settings }
 

@@ -1,7 +1,8 @@
 import '../../export.dart';
 
 class SubscriptionPlansPage extends ConsumerStatefulWidget {
-  const SubscriptionPlansPage({super.key});
+  const SubscriptionPlansPage({super.key, this.isRenewingPlan = false});
+  final bool isRenewingPlan;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SubscriptionPlansPageState();
 }
@@ -13,13 +14,14 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
     ref.read(subscriptionProvider.notifier).getSubscriptionPlans();
     ref.read(subscriptionProvider).context = context;
     ref.read(subscriptionProvider).ref = ref;
+    ref.read(subscriptionProvider).isRenewingPlan = widget.isRenewingPlan;
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = ref.watch(subscriptionProvider);
     return Background(
-      backgroundType: BackgroundType.logo,
+      backgroundType: provider.isRenewingPlan ? BackgroundType.logoWithBackButton : BackgroundType.logo,
       margin: EdgeInsets.only(top: kToolbarHeight / 2, left: 16, right: 16),
       logoAlign: Alignment.topCenter,
       child:
@@ -78,11 +80,12 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                                   },
                                 ),
                               ),
-                              BasicCard(
-                                onTap: provider.enterKeyDialog,
-                                backgroundColor: CColors.duaBackground,
-                                child: Text(LocaleKeys.enter_access_key_prompt.tr(), style: CTextStyle.w500(color: CColors.primary)),
-                              ),
+                              if (!provider.isRenewingPlan)
+                                BasicCard(
+                                  onTap: provider.enterKeyDialog,
+                                  backgroundColor: CColors.duaBackground,
+                                  child: Text(LocaleKeys.enter_access_key_prompt.tr(), style: CTextStyle.w500(color: CColors.primary)),
+                                ),
                             ],
                           ),
                         ),

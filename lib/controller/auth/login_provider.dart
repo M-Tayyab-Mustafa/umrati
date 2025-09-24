@@ -220,7 +220,7 @@ class LoginNotifier extends ChangeNotifier {
       if (isLinkingAccount) {
         await FirebaseAuth.instance.currentUser?.linkWithCredential(credential);
         await LocalStorageManager.saveUser((await LocalStorageManager.getUser(fromFirebase: true))!.copyWith(phone: phoneNumberController.text.trim(), country_code: selectedCountry.dialCode ?? ''));
-        infoToast('Account linked successfully');
+        infoToast(LocaleKeys.account_linked_successfully.tr());
         ref.read(splashProvider.notifier).redirections(context);
       } else {
         var userCredential = await _auth.signInWithCredential(credential).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);

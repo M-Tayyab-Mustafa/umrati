@@ -41,7 +41,7 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
         final credential = EmailAuthProvider.credential(email: emailController.text.trim(), password: user!.password);
         await FirebaseAuth.instance.currentUser?.linkWithCredential(credential);
         await LocalStorageManager.saveUser(user!.copyWith(email: emailController.text.trim()));
-        infoToast('Account linked successfully');
+        infoToast(LocaleKeys.account_linked_successfully.tr());
         ref.read(splashProvider.notifier).redirections(context);
       } on FirebaseAuthException catch (e) {
         if (kDebugMode) log(e.toString());

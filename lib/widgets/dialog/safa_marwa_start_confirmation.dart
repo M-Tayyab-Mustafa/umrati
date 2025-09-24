@@ -30,7 +30,7 @@ class SafaMarwaStartConfirmationDialog extends StatelessWidget {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(LocaleKeys.umra_start_detail.tr(), style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center),
+                              Text(LocaleKeys.please_reach_safa_start_point.tr(), style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center),
                               CustomImage(path: 'assets/png/home/safa_marwa.png', imageType: ImageType.png, height: screenSize.height * 0.25),
                             ],
                           ),

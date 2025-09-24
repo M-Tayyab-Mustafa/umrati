@@ -11,6 +11,8 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
 
+  bool isRenewingPlan = false;
+
   bool isLoading = true;
   bool isSubscribing = false;
   List<PlanModel> plans = [];
@@ -26,12 +28,18 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       var userRegion = await Helper.userRegion();
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs;
       docs = (await plansCollection.where(Filter.or(Filter('type', isEqualTo: PlanType.free.name), Filter('regions', arrayContains: userRegion))).get()).docs;
-      if (docs.length <= 1) {
+      if (docs.isEmpty) {
         docs = (await plansCollection.where(Filter.or(Filter('type', isEqualTo: PlanType.free.name), Filter('regions', isEqualTo: []))).get()).docs;
       }
       plans = docs.map((planDoc) => PlanModel.fromMap(planDoc.data())).toList()..sort((a, b) => a.amount.compareTo(b.amount));
+
       await Future.delayed(const Duration(milliseconds: 400));
-      selectedPlan = plans.firstWhere((e) => e.type == PlanType.free.name);
+      if (isRenewingPlan) {
+        plans = plans.where((e) => e.type != PlanType.free.name).toList();
+        selectedPlan = plans.first;
+      } else {
+        selectedPlan = plans.firstWhere((e) => e.type == PlanType.free.name);
+      }
       isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -79,7 +87,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   }
 
   Future<void> _subscribePlan() async {
-    final query = FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).where(Filter('user_ids', arrayContains: user.uid)).limit(1);
+    final query = subscriptionCollection.where(Filter('user_ids', arrayContains: user.uid)).limit(1);
     DocumentReference<Map<String, dynamic>> doc;
     if ((await query.get()).docs.isNotEmpty) {
       doc = (await query.get()).docs.first.reference;
@@ -88,7 +96,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: selectedPlan.duration)).millisecondsSinceEpoch)});
       infoToast('Plan Updated Successfully');
     } else {
-      doc = FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).doc();
+      doc = subscriptionCollection.doc();
       await doc.set(
         SubscriptionModel(
           uid: doc.id,
@@ -112,7 +120,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     isSubscribing = true;
     notifyListeners();
     try {
-      final query = FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).where('uid', isEqualTo: keyController.text.trim());
+      final query = subscriptionCollection.where('uid', isEqualTo: keyController.text.trim());
       final docs = (await query.get()).docs;
       if (docs.isEmpty) {
         errorToast(LocaleKeys.invalid_key.tr());

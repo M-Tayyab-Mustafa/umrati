@@ -21,7 +21,7 @@ class SplashNotifier extends ChangeNotifier {
     await Helper.getCurrencySymbol();
     bool isExpired = true;
     if (user != null && user.subscription_id != null && user.subscription_id!.isNotEmpty) {
-      Helper.userSubscription = SubscriptionModel.fromMap((await FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name).doc(user.subscription_id).get()).data()!);
+      Helper.userSubscription = SubscriptionModel.fromMap((await subscriptionCollection.doc(user.subscription_id).get()).data()!);
       isExpired = DateTime.now().isAfter(Helper.userSubscription!.expire_at!.toDate());
       if (isExpired && Helper.userSubscription?.plan.type != PlanType.free.name) errorToast(LocaleKeys.subscription_expire_msg.tr());
     }

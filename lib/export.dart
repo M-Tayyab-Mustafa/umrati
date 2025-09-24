@@ -53,6 +53,8 @@ export 'controller/bottom_nav/meeqaat/three_tasks_provider.dart';
 export 'controller/bottom_nav/meeqaat/two_tasks_provider.dart';
 export 'controller/auth/email_or_phone_linking_provider.dart';
 export 'controller/bottom_nav/profile/profile_provider.dart';
+export 'controller/bottom_nav/settings/settings_provider.dart';
+export 'controller/bottom_nav/settings/history_provider.dart';
 
 //* Widgets
 export 'widgets/custom_image.dart';
@@ -77,9 +79,11 @@ export 'widgets/dialog/skip_confirmation.dart';
 export 'widgets/dialog/plan_key_dialog.dart';
 export 'widgets/dialog/confirmation_dialog.dart';
 export 'widgets/dialog/umra_start_confirmation.dart';
+export 'widgets/dialog/edit_name_dialog.dart';
 export 'widgets/subscription_payment_sheet.dart';
 export 'widgets/subscription_plan.dart';
 export 'widgets/list_tile.dart';
+export 'widgets/history_card.dart';
 
 //* Other Exports
 export 'package:dlibphonenumber/phone_number_util.dart';
