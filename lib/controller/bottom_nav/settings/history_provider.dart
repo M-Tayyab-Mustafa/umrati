@@ -13,20 +13,37 @@ class HistoryNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
   UserModel? user;
+  bool isLoading = true;
 
-  List<HistoryModel> umrahHistories = [];
-  List<HistoryModel> tawafHistories = [];
+  Map<DateTime, List<HistoryModel>> umrahHistories = {};
+  Map<DateTime, List<HistoryModel>> tawafHistories = {};
 
-  Future<void> initialization() async {
+  Future<void> initialization({bool fromUmrah = true}) async {
+    isLoading = true;
+    notifyListeners();
     user = await LocalStorageManager.getUser(fromFirebase: true);
-    umrahHistories =
-        (await historyCollection.where(Filter.or(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UmraType.umra.name))).get()).docs
-            .map((history) => HistoryModel.fromMap(history.data()))
-            .toList();
-    tawafHistories =
-        (await historyCollection.where(Filter.or(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UmraType.tawaf.name))).get()).docs
-            .map((history) => HistoryModel.fromMap(history.data()))
-            .toList();
+    if (fromUmrah) {
+      final umras =
+          (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UmraType.umra.name))).get()).docs
+              .map((history) => HistoryModel.fromMap(history.data()))
+              .toList();
+      umrahHistories = groupBy(umras, (history) {
+        var time = history.created_at!.toDate();
+        return DateTime(time.year, time.month, time.day);
+      });
+    } else {
+      final tawaf =
+          (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UmraType.tawaf.name))).get()).docs
+              .map((history) => HistoryModel.fromMap(history.data()))
+              .toList();
+      tawafHistories = groupBy(tawaf, (history) {
+        var time = history.created_at!.toDate();
+        return DateTime(time.year, time.month, time.day);
+      });
+    }
+
+    isLoading = false;
+    notifyListeners();
   }
 
   void onUmraTap() => Navigator.push(context, MaterialPageRoute(builder: (context) => const UmrahHistoryPage()));

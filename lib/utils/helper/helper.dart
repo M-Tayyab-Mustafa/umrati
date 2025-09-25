@@ -28,6 +28,11 @@ class Helper {
 
   static SubscriptionModel? userSubscription;
 
+  static bool isToday(DateTime date) {
+    final now = DateTime.now();
+    return date.year == now.year && date.month == now.month && date.day == now.day;
+  }
+
   static Future<String> userRegion() async {
     try {
       return (await regions)[(await LocalStorageManager.getUser(fromFirebase: true))?.country_code ?? '+1'];

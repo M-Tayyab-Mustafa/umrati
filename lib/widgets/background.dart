@@ -68,22 +68,22 @@ class Background extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (backgroundType == BackgroundType.titleWithBackButton)
-                      Directionality(
-                        textDirection: isLTR(context) ? TextDirection.ltr : TextDirection.rtl,
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () => Navigator.pop(context),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => Navigator.pop(context),
+                            child: Transform.rotate(
+                              angle: isLTR(context) ? 0 : -(pi / 180 * 180),
                               child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: 30, margin: EdgeInsets.only(right: 24)),
                             ),
-                            Expanded(
-                              child: Align(
-                                alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
-                                child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
-                              ),
+                          ),
+                          Expanded(
+                            child: Align(
+                              alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
+                              child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       )
                     else
                       Column(

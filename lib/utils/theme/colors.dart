@@ -19,6 +19,8 @@ class CColors {
   static const Color greyShade4 = Color(0xFF565454);
   static const Color deepTeal = Color(0xFF1D4C4F);
   static const Color tackingRadiusColor = Color(0xFFBDCDBB);
+  static const Color softMintGreen = Color(0xFFDDFFDF);
+  static const Color emeraldGreen = Color(0xFF28B67E);
   static final Color tackingSecondaryRadiusColor = Color(0xFFBBBABC).withValues(alpha: 0.25);
 
   static final LinearGradient planCardBackgroundGradient = LinearGradient(colors: [Color(0xFFFFFFFF), Color(0xFFE5F7E6)], begin: Alignment.topLeft, end: Alignment.bottomRight);

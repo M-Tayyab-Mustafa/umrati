@@ -12,9 +12,6 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
     super.initState();
     ref.read(historyProvider.notifier).context = context;
     ref.read(historyProvider.notifier).ref = ref;
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(historyProvider.notifier).initialization();
-    });
   }
 
   @override
@@ -28,21 +25,21 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
         padding: const EdgeInsets.only(top: 24),
         child: Column(
           children: [
-            HistoryCard(
+            HistoryMenuCard(
               margin: EdgeInsets.only(bottom: 24),
               onTap: ref.read(historyProvider.notifier).onUmraTap,
               image: 'assets/png/history/umrah.png',
               title: LocaleKeys.umra.tr(),
               description: '${LocaleKeys.see_history_of_your.tr()} ${LocaleKeys.umra.tr()}',
             ),
-            HistoryCard(
+            HistoryMenuCard(
               margin: EdgeInsets.only(bottom: 24),
               onTap: ref.read(historyProvider.notifier).onTawafTap,
               image: 'assets/png/history/tawaf.png',
               title: LocaleKeys.tawaf.tr(),
               description: '${LocaleKeys.see_history_of_your.tr()} ${LocaleKeys.tawaf.tr()}',
             ),
-            HistoryCard(
+            HistoryMenuCard(
               margin: EdgeInsets.only(bottom: 24),
               onTap: ref.read(historyProvider.notifier).onZiaratTap,
               image: 'assets/png/history/ziarat.png',
