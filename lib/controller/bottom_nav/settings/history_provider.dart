@@ -2,6 +2,7 @@ import '../../../export.dart';
 import '../../../view/bottom_nav/settings/history/tawaf.dart';
 import '../../../view/bottom_nav/settings/history/umrah.dart';
 import '../../../view/bottom_nav/settings/history/ziarat.dart';
+import '../../../view/bottom_nav/settings/history/ziarat_detail.dart';
 
 final historyProvider = ChangeNotifierProvider.autoDispose<HistoryNotifier>((ref) => HistoryNotifier());
 
@@ -58,4 +59,6 @@ class HistoryNotifier extends ChangeNotifier {
   void onTawafTap() => Navigator.push(context, MaterialPageRoute(builder: (context) => const TawafHistoryPage()));
 
   void onZiaratTap() => Navigator.push(context, MaterialPageRoute(builder: (context) => const ZiaratHistoryPage()));
+
+  void onViewZiaratTap(ZiaratHistoryModel history) => Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratDetailPage(ziaratHistory: history)));
 }

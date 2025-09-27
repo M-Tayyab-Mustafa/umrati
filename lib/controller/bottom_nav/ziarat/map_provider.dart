@@ -34,22 +34,27 @@ class MapPageNotifier extends ChangeNotifier {
 
   CameraPosition initialCameraPosition = CameraPosition(target: LatLng(30.17271735209673, 71.45729802421867), zoom: 20);
 
-  Future<void> initialization() async {
+  Future<void> initialization({ZiaratHistoryModel? ziaratHistory}) async {
     try {
       var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
       initialCameraPosition = CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude), zoom: 20);
       markers.add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: initialCameraPosition.target, icon: await _loadCustomIcon('assets/png/map/user.png')));
       _controller?.animateCamera(CameraUpdate.newLatLng(initialCameraPosition.target));
       user = await LocalStorageManager.getUser();
-      var query = await historyCollection
-          .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziarat.name), Filter('is_completed', isEqualTo: false)))
-          .get()
-          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      if (query.docs.isEmpty) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ZiaratPage()));
-        return;
+      if (ziaratHistory == null) {
+        var query = await historyCollection
+            .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziarat.name), Filter('is_completed', isEqualTo: false)))
+            .get()
+            .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+        if (query.docs.isEmpty) {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ZiaratPage()));
+          return;
+        }
+        history = ZiaratHistoryModel.fromMap(query.docs.first.data());
+      } else {
+        history = ziaratHistory;
       }
-      history = ZiaratHistoryModel.fromMap(query.docs.first.data());
+
       destinations = history!.remainingZiarats;
       activeZiarat = history!.remainingZiarats.first;
       markers.add(
@@ -105,7 +110,7 @@ class MapPageNotifier extends ChangeNotifier {
           );
     }
     await _getRoutePolyline(LatLng(position.latitude + 0.000007, position.longitude), LatLng(activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble()));
-    notifyListeners();
+    if (context.mounted) notifyListeners();
   }
 
   Future<AssetMapBitmap> _loadCustomIcon(String icon) async => await BitmapDescriptor.asset(ImageConfiguration(size: Size(25, 25)), icon);

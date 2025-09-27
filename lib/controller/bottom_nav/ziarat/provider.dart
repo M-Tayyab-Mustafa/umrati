@@ -19,19 +19,15 @@ class ZiaratNotifier extends ChangeNotifier {
   List<ZiaratModel> sortedZiarats = [];
   StreamSubscription<Position>? positionStream;
   bool isLoading = false;
-
   String myCurrentLocation = '';
-
-  //* Creating Class Level Variables
   ZiaratDestinationsCreationOptions? selectedDestinationsCreationOption;
-
   UserModel? user;
 
   initialization() async {
     try {
       user = await LocalStorageManager.getUser();
+      myCurrentLocation = await Helper.getLocation(context);
       checkAlreadyDoingZiarat();
-      myCurrentLocation = await getLocation();
       if (context.mounted) notifyListeners();
     } catch (e) {
       if (kDebugMode) log(e.toString());
@@ -121,18 +117,6 @@ class ZiaratNotifier extends ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners();
-    }
-  }
-
-  Future<String> getLocation() async {
-    try {
-      var position = await Geolocator.getCurrentPosition().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
-      return '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
-    } catch (e) {
-      if (kDebugMode) log(e.toString());
-      if (context.mounted) errorToast(e.toString());
-      return '';
     }
   }
 

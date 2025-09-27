@@ -166,6 +166,27 @@ class Helper {
     final rand = Random.secure();
     return List.generate(length, (index) => chars[rand.nextInt(chars.length)]).join();
   }
+
+  static String generateTitle(String text) {
+    text = text.trim();
+    if (text.isEmpty) return '';
+    if (text.contains(' ')) {
+      return text.split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
+    }
+    return text.substring(0, 1).toUpperCase() + text.substring(1);
+  }
+
+  static Future<String> getLocation(BuildContext context) async {
+    try {
+      var position = await Geolocator.getCurrentPosition().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
+      return '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
+    } catch (e) {
+      if (kDebugMode) log(e.toString());
+      if (context.mounted) errorToast(e.toString());
+      return '';
+    }
+  }
 }
 
 class UsPhoneNumberFormatter extends TextInputFormatter {

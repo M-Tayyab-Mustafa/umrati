@@ -56,6 +56,7 @@ export 'controller/auth/email_or_phone_linking_provider.dart';
 export 'controller/bottom_nav/profile/profile_provider.dart';
 export 'controller/bottom_nav/settings/settings_provider.dart';
 export 'controller/bottom_nav/settings/history_provider.dart';
+export 'controller/bottom_nav/settings/ziarat_detail_provider.dart';
 
 //* Widgets
 export 'widgets/custom_image.dart';

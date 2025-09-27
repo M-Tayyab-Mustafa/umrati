@@ -56,6 +56,8 @@ abstract class  LocaleKeys {
   static const today = 'today';
   static const from = 'from';
   static const to = 'to';
+  static const view = 'view';
+  static const resume_ziarat = 'resume_ziarat';
   static const cleanliness = 'cleanliness';
   static const months = 'months';
   static const price = 'price';

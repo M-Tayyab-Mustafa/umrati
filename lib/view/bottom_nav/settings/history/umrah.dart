@@ -10,6 +10,8 @@ class _UmrahHistoryPageState extends ConsumerState<UmrahHistoryPage> {
   @override
   void initState() {
     super.initState();
+    ref.read(historyProvider.notifier).context = context;
+    ref.read(historyProvider.notifier).ref = ref;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(historyProvider.notifier).initialization();
     });

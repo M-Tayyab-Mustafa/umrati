@@ -1,7 +1,8 @@
 import '../../../../export.dart';
 
 class ZiaratMapPage extends ConsumerStatefulWidget {
-  const ZiaratMapPage({super.key});
+  const ZiaratMapPage({super.key, this.ziaratHistory});
+  final ZiaratHistoryModel? ziaratHistory;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ZiaratMapPageState();
 }
@@ -12,7 +13,9 @@ class _ZiaratMapPageState extends ConsumerState<ZiaratMapPage> {
     super.initState();
     ref.read(mapPageProvider.notifier).context = context;
     ref.read(mapPageProvider.notifier).ref = ref;
-    ref.read(mapPageProvider.notifier).initialization();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(mapPageProvider.notifier).initialization(ziaratHistory: widget.ziaratHistory);
+    });
   }
 
   @override

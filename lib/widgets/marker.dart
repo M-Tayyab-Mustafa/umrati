@@ -18,8 +18,8 @@ class CMarker extends StatelessWidget {
           width: 20,
           child: Stack(
             children: [
-              Center(child: Container(width: 2, decoration: BoxDecoration(color: CColors.primary))),
-              Center(child: Container(width: 15, decoration: BoxDecoration(color: CColors.primary, shape: BoxShape.circle))),
+              Center(child: Container(width: 2, decoration: BoxDecoration(color: color ?? CColors.primary))),
+              Center(child: Container(width: 15, decoration: BoxDecoration(color: color ?? CColors.primary, shape: BoxShape.circle))),
             ],
           ),
         ),
