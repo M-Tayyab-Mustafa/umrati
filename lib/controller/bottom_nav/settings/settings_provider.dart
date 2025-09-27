@@ -23,11 +23,7 @@ class SettingsNotifier extends ChangeNotifier {
 
   Future<void> onHistoryTap() async => Navigator.push(context, MaterialPageRoute(builder: (context) => const HistoryPage()));
 
-  Future<void> onZiaratTap() async {}
-
-  Future<void> onChangeTheLanguageTap() async {
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => const LanguagePage(isUpdatingLanguage: true)));
-  }
+  Future<void> onChangeTheLanguageTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const LanguagePage(isUpdatingLanguage: true)));
 
   Future<void> onGiveFeedbackTap() async {}
 

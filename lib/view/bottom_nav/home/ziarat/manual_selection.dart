@@ -7,7 +7,7 @@ class ManualSelection extends ConsumerWidget {
     var provider = ref.watch(ziaratProvider);
     return Background(
       showEmblem: false,
-      margin: EdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
+      margin: EdgeInsets.only(top: kToolbarHeight / 2, left: 16, right: 16),
       child: Column(
         children: [
           Directionality(
@@ -23,6 +23,7 @@ class ManualSelection extends ConsumerWidget {
           ),
           Expanded(
             child: ListView.builder(
+              padding: const EdgeInsets.only(top: 20),
               itemCount: provider.ziarats.length,
               itemBuilder: (context, index) {
                 var ziarat = provider.ziarats[index];

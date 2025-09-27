@@ -96,6 +96,7 @@ abstract class  LocaleKeys {
   static const distance_from_meeqaat = 'distance_from_meeqaat';
   static const permission_request_message = 'permission_request_message';
   static const your_current_location = 'your_current_location';
+  static const no_history_found = 'no_history_found';
   static const dhul_huayfah = 'dhul_huayfah';
   static const turn_on_location = 'turn_on_location';
   static const ihram = 'ihram';

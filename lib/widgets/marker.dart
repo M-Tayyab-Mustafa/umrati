@@ -1,11 +1,12 @@
 import '../export.dart';
 
 class CMarker extends StatelessWidget {
-  const CMarker({super.key, this.size = 50, required this.title, this.distance, this.color, this.titleColor, this.textDirection});
+  const CMarker({super.key, this.size = 50, required this.title, this.distance, this.color, this.indicatorColor, this.titleColor, this.textDirection});
   final double size;
   final String title;
   final String? distance;
   final Color? color;
+  final Color? indicatorColor;
   final Color? titleColor;
   final TextDirection? textDirection;
 
@@ -18,8 +19,8 @@ class CMarker extends StatelessWidget {
           width: 20,
           child: Stack(
             children: [
-              Center(child: Container(width: 2, decoration: BoxDecoration(color: color ?? CColors.primary))),
-              Center(child: Container(width: 15, decoration: BoxDecoration(color: color ?? CColors.primary, shape: BoxShape.circle))),
+              Center(child: Container(width: 2, decoration: BoxDecoration(color: indicatorColor ?? CColors.primary))),
+              Center(child: Container(width: 15, decoration: BoxDecoration(color: indicatorColor ?? CColors.primary, shape: BoxShape.circle))),
             ],
           ),
         ),

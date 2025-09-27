@@ -39,7 +39,7 @@ class ProfileNotifier extends ChangeNotifier {
     final expireData = subscription.expire_at!.toDate();
     daysRemaining = expireData.difference(DateTime.now()).inDays;
     isLoading = false;
-    notifyListeners();
+    if (context.mounted) notifyListeners();
   }
 
   Future<void> onProfileImageTap() async {

@@ -17,8 +17,7 @@
   "days_of_premium_remaining":"days of premium remaining",
   "renew":"Renew",
   "dark_mode": "Dark mode",
-  "coming_soon": "Coming_soon",
-
+  "coming_soon": "Coming soon",
   "otp_verification": "OTP Verification",
   "phone_number": "Phone Number",
   "enter_access_key_prompt": "Have an access key? Click here to enter it.",
@@ -93,6 +92,7 @@
   "distance_from_meeqaat": "Distance from Meeqaat",
   "permission_request_message": "# Why we need your location:\nThis app uses your location to guide and assist you during your Umrah and Ziarat journey. Without location access, the app cannot:* Track your movement during **Tawaf** or **Sa’i (Safa–Marwa)** runs.* Show your **current distance from Meeqaat** to help you prepare for wearing Ihram correctly.* Provide accurate **navigation and Ziarat tracking**.\n\n📍 **Important:** If you do not grant location permission, the app will not function properly and you wont be able to use its core features.",
   "your_current_location": "Your current location",
+  "no_history_found": "No history found",
   "dhul_huayfah": "Dhu'l-Hulayfah",
   "turn_on_location": "Please turn on your location",
   "ihram": "Ihram",

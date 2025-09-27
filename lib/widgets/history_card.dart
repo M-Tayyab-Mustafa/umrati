@@ -51,10 +51,12 @@ class HistoryCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (Helper.isToday(time)) Text(LocaleKeys.today.tr(), style: CTextStyle.w600(color: CColors.deepTeal, fontSize: 20)),
           Padding(
             padding: const EdgeInsets.only(left: 16),
-            child: Text(DateFormat('EEEE${isLTR(context) ? ',' : '،'} dd MMMM yyyy', context.locale.languageCode).format(time), style: CTextStyle.w600(color: CColors.deepTeal, fontSize: 22)),
+            child: Text(
+              (Helper.isToday(time)) ? LocaleKeys.today.tr() : DateFormat('EEEE${isLTR(context) ? ',' : '،'} dd MMMM yyyy', context.locale.languageCode).format(time),
+              style: CTextStyle.w600(color: CColors.deepTeal, fontSize: 22),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),

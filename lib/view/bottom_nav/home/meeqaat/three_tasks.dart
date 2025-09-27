@@ -18,6 +18,7 @@ class _MeeqaatThreeTasksPageState extends ConsumerState<MeeqaatThreeTasksPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(meeqaatThreeTasksProvider);
     return Background(
+      titleType: TitleType.backArrow,
       title: LocaleKeys.do_these_5_ihram_related_tasks.tr(),
       backgroundType: BackgroundType.logoWithSkip,
       isSkipLoading: provider.isLoading,

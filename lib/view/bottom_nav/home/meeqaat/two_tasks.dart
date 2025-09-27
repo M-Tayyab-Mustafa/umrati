@@ -25,6 +25,7 @@ class _MeeqaatTwoTasksPageState extends ConsumerState<MeeqaatTwoTasksPage> {
       backgroundType: BackgroundType.logoWithSkip,
       isSkipLoading: provider.isLoading,
       titleMargin: EdgeInsets.only(top: 50, bottom: 40),
+      titleType: TitleType.backArrow,
       showEmblem: false,
       margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: 85),
       onSkipTap: provider.skip,

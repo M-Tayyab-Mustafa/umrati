@@ -22,6 +22,7 @@ class _MeeqaatPageState extends ConsumerState<MeeqaatPage> {
     return Background(
       showEmblem: false,
       backgroundType: BackgroundType.logo,
+      titleType: TitleType.backArrow,
       title: '${LocaleKeys.distance_from_meeqaat.tr()}:',
       titleMargin: EdgeInsets.only(top: 60, bottom: 20),
       child: Column(

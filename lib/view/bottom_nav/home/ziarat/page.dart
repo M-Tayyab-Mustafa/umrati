@@ -23,7 +23,7 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
     var provider = ref.watch(ziaratProvider);
     return Background(
       showEmblem: false,
-      backgroundType: BackgroundType.logo,
+      backgroundType: BackgroundType.logoWithBackButton,
       logoAlign: Alignment.center,
       margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
       child: Column(

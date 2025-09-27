@@ -29,44 +29,44 @@ class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: Text('${LocaleKeys.your_current_location.tr()}:', style: CTextStyle.w500(fontSize: 22)),
-          ),
+          Padding(padding: const EdgeInsets.only(top: 16), child: Text('${LocaleKeys.your_current_location.tr()}:', style: CTextStyle.w500(fontSize: 22))),
           Text(provider.myCurrentLocation, style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal)),
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: Text(LocaleKeys.your_ziarat_destinations.tr(), style: CTextStyle.w500(fontSize: 20)),
-          ),
+          Padding(padding: const EdgeInsets.only(top: 16), child: Text(LocaleKeys.your_ziarat_destinations.tr(), style: CTextStyle.w500(fontSize: 20))),
           Expanded(
-            child: provider.isLoading
-                ? Loading()
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          itemCount: provider.ziaratHistory!.completedZiarats.length,
-                          itemBuilder: (context, index) {
-                            var ziarat = provider.ziaratHistory!.completedZiarats[index];
-                            return CMarker(color: CColors.emeraldGreen, title: languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur, distance: ziarat.distance);
-                          },
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          padding: EdgeInsets.zero,
-                          itemCount: provider.ziaratHistory!.remainingZiarats.length,
-                          itemBuilder: (context, index) {
-                            var ziarat = provider.ziaratHistory!.remainingZiarats[index];
-                            return CMarker(title: languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur, distance: ziarat.distance);
-                          },
-                        ),
-                      ],
+            child:
+                provider.isLoading
+                    ? Loading()
+                    : SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            itemCount: provider.ziaratHistory!.completedZiarats.length,
+                            itemBuilder: (context, index) {
+                              var ziarat = provider.ziaratHistory!.completedZiarats[index];
+                              return CMarker(
+                                color: CColors.emeraldGreen,
+                                indicatorColor: CColors.emeraldGreen,
+                                title: languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur,
+                                distance: ziarat.distance,
+                              );
+                            },
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            itemCount: provider.ziaratHistory!.remainingZiarats.length,
+                            itemBuilder: (context, index) {
+                              var ziarat = provider.ziaratHistory!.remainingZiarats[index];
+                              return CMarker(title: languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur, distance: ziarat.distance);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
           ),
           if (!provider.isLoading)
             Padding(

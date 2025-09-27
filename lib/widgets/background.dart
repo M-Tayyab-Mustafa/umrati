@@ -5,6 +5,7 @@ class Background extends StatelessWidget {
     super.key,
     required this.child,
     this.backgroundType = BackgroundType.empty,
+    this.titleType = TitleType.empty,
     this.margin,
     this.title,
     this.titleAlignment,
@@ -17,6 +18,7 @@ class Background extends StatelessWidget {
   });
   final Widget child;
   final BackgroundType backgroundType;
+  final TitleType titleType;
   final String? title;
   final Alignment? titleAlignment;
   final Alignment? logoAlign;
@@ -130,7 +132,26 @@ class Background extends StatelessWidget {
                               alignment: titleAlignment ?? (languageDirection(context) == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight),
                               child: Padding(
                                 padding: titleMargin ?? const EdgeInsets.only(top: 20),
-                                child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
+                                child: switch (titleType) {
+                                  TitleType.empty => Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
+                                  TitleType.backArrow => Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => Navigator.pop(context),
+                                        child: Transform.rotate(
+                                          angle: isLTR(context) ? 0 : pi / 180 * 180,
+                                          child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: 30),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: isLTR(context) ? 16 : 0, right: isLTR(context) ? 0 : 16),
+                                          child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                },
                               ),
                             ),
                         ],
