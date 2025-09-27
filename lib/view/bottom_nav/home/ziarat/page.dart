@@ -24,7 +24,7 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
     return Background(
       showEmblem: false,
       backgroundType: BackgroundType.logo,
-      logoAlign: ref.watch(bottomNavProvider).logoAlign,
+      logoAlign: Alignment.center,
       margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
       child: Column(
         children: [

@@ -1,17 +1,17 @@
 import '../../../../export.dart';
 
-class TawafHistoryPage extends ConsumerStatefulWidget {
-  const TawafHistoryPage({super.key});
+class ZiaratHistoryPage extends ConsumerStatefulWidget {
+  const ZiaratHistoryPage({super.key});
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _TawafHistoryPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ZiaratHistoryPageState();
 }
 
-class _TawafHistoryPageState extends ConsumerState<TawafHistoryPage> {
+class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(historyProvider.notifier).initialization(historyType: HistoryType.tawaf);
+      ref.read(historyProvider.notifier).initialization();
     });
   }
 
@@ -22,18 +22,17 @@ class _TawafHistoryPageState extends ConsumerState<TawafHistoryPage> {
       margin: EdgeInsets.only(top: kToolbarHeight / 2, left: 16, right: 16, bottom: kToolbarHeight / 2),
       backgroundType: BackgroundType.titleWithBackButton,
       logoAlign: Alignment.center,
-      title: LocaleKeys.tawaf.tr(),
+      title: LocaleKeys.ziarat.tr(),
       child:
           provider.isLoading
               ? Loading()
               : Padding(
                 padding: const EdgeInsets.only(top: 24),
-                child: ListView.builder(
-                  itemCount: provider.tawafHistories.length,
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                  itemCount: provider.ziaratHistories.length,
                   itemBuilder: (context, index) {
-                    var histories = provider.tawafHistories.values.toList()[index];
-                    var time = provider.tawafHistories.keys.toList()[index];
-                    return HistoryCard(histories: histories, time: time);
+                    return BasicCard(child: Column(children: [Text('data')]));
                   },
                 ),
               ),

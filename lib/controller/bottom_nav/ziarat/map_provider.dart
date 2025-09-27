@@ -1,8 +1,17 @@
 import '../../../export.dart';
+import '../../../view/bottom_nav/home/ziarat/page.dart';
 
 final mapPageProvider = ChangeNotifierProvider.autoDispose<MapPageNotifier>((ref) => MapPageNotifier());
 
 class MapPageNotifier extends ChangeNotifier {
+  BuildContext? _context;
+  BuildContext get context => _context!;
+  set context(BuildContext value) => _context = value;
+
+  WidgetRef? _ref;
+  WidgetRef get ref => _ref!;
+  set ref(WidgetRef value) => _ref = value;
+
   GoogleMapController? _controller;
   StreamSubscription<Position>? _positionStream;
   Set<Marker> markers = {};
@@ -12,12 +21,11 @@ class MapPageNotifier extends ChangeNotifier {
   OverlayEntry? overlayEntry;
   final FlutterTts flutterTts = FlutterTts();
   bool isListening = false;
-
   var bottomSheetSize = screenSize.height * 0.13;
-
   ZiaratModel? activeZiarat;
-  //* Destinations
   List<ZiaratModel> destinations = [];
+  ZiaratHistoryModel? history;
+  get panelController => SlidingUpPanelController();
 
   set mapController(GoogleMapController? controller) {
     _controller = controller;
@@ -26,20 +34,24 @@ class MapPageNotifier extends ChangeNotifier {
 
   CameraPosition initialCameraPosition = CameraPosition(target: LatLng(30.17271735209673, 71.45729802421867), zoom: 20);
 
-  get panelController => SlidingUpPanelController();
-
-  initialization(BuildContext context, WidgetRef ref) async {
+  Future<void> initialization() async {
     try {
       var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
       initialCameraPosition = CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude), zoom: 20);
       markers.add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: initialCameraPosition.target, icon: await _loadCustomIcon('assets/png/map/user.png')));
       _controller?.animateCamera(CameraUpdate.newLatLng(initialCameraPosition.target));
-      //* Fetch Destinations
       user = await LocalStorageManager.getUser();
-      var data = (await userCollection.doc(user!.uid).get()).data()!;
-      destinations = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
-      activeZiarat = destinations.first;
-      //* First Destination Marker
+      var query = await historyCollection
+          .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziarat.name), Filter('is_completed', isEqualTo: false)))
+          .get()
+          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      if (query.docs.isEmpty) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ZiaratPage()));
+        return;
+      }
+      history = ZiaratHistoryModel.fromMap(query.docs.first.data());
+      destinations = history!.remainingZiarats;
+      activeZiarat = history!.remainingZiarats.first;
       markers.add(
         Marker(
           markerId: MarkerId(MapMarkerId.destination.name),
@@ -52,14 +64,14 @@ class MapPageNotifier extends ChangeNotifier {
       _positionStream?.cancel();
       _positionStream = Geolocator.getPositionStream(
         locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter),
-      ).listen((position) => _updateLocation(position, context, ref));
+      ).listen((position) => _updateLocation(position));
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
   }
 
-  _updateLocation(Position position, BuildContext context, WidgetRef ref) async {
+  Future<void> _updateLocation(Position position) async {
     markers =
         markers.where((e) => e.markerId.value != MapMarkerId.userLocation.name).toSet()
           ..add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: LatLng(position.latitude, position.longitude), icon: await _loadCustomIcon('assets/png/map/user.png')));
@@ -68,20 +80,20 @@ class MapPageNotifier extends ChangeNotifier {
       _positionStream?.cancel();
       await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ReachYourDestinationDialog());
       destinations.removeAt(0);
-      await userCollection.doc(user!.uid).set({CommonField.selectedZiarat.name: destinations.map((e) => e.toMap()).toList()}, SetOptions(merge: true));
+      history = history!.copyWith(remainingZiarats: destinations, completedZiarats: [...history!.completedZiarats, activeZiarat!]);
+      await historyCollection.doc(history!.uid).update(history!.toMap(updatedAt: FieldValue.serverTimestamp()));
       if (destinations.isEmpty) {
         _positionStream?.cancel();
         markers = markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet();
         notifyListeners();
         await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ZiaratCompleteDialog());
         Navigator.pop(context);
-        ref.read(ziaratProvider).reset();
-        return;
+        return ref.read(ziaratProvider.notifier).reset();
       } else {
+        activeZiarat = destinations.first;
         _positionStream = Geolocator.getPositionStream(
           locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter),
-        ).listen((position) => _updateLocation(position, context, ref));
-        activeZiarat = destinations.first;
+        ).listen((position) => _updateLocation(position));
       }
       markers =
           markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet()..add(
@@ -96,9 +108,7 @@ class MapPageNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<AssetMapBitmap> _loadCustomIcon(String icon) async {
-    return await BitmapDescriptor.asset(ImageConfiguration(size: Size(25, 25)), icon);
-  }
+  Future<AssetMapBitmap> _loadCustomIcon(String icon) async => await BitmapDescriptor.asset(ImageConfiguration(size: Size(25, 25)), icon);
 
   Future<void> _getRoutePolyline(LatLng startPoint, LatLng endPoint) async {
     final leg = await Helper.getRouteLeg(startPoint: startPoint, endPoint: endPoint);
@@ -219,9 +229,10 @@ class MapPageNotifier extends ChangeNotifier {
   }
 
   void startListing(String detail) async {
-    await flutterTts.speak(detail);
-    isListening = true;
-    notifyListeners();
+    //Todo:: In Next Version
+    // await flutterTts.speak(detail);
+    // isListening = true;
+    // notifyListeners();
   }
 
   void stopListing() async {

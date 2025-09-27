@@ -157,7 +157,7 @@ class TawafTrackerPage extends ConsumerWidget {
   Widget _buildDuaWidget({required BuildContext context, required UmraNotifier provider}) {
     switch (provider.tawafCircleCount) {
       case 7:
-        return provider.isFromTawaf
+        return provider.userActivityType == UserActivityType.tawaf
             ? Padding(
               padding: const EdgeInsets.only(bottom: kToolbarHeight),
               child: Consumer(builder: (context, ref, child) => CButton(onTap: provider.moveToSafaMarwa, title: LocaleKeys.go_to_home_screen.tr(), titleWithIcon: true)),

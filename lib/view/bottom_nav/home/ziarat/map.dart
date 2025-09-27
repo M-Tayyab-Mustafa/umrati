@@ -10,7 +10,9 @@ class _ZiaratMapPageState extends ConsumerState<ZiaratMapPage> {
   @override
   void initState() {
     super.initState();
-    ref.read(mapPageProvider).initialization(context, ref);
+    ref.read(mapPageProvider.notifier).context = context;
+    ref.read(mapPageProvider.notifier).ref = ref;
+    ref.read(mapPageProvider.notifier).initialization();
   }
 
   @override

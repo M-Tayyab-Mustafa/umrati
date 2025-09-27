@@ -10,10 +10,7 @@ class BottomNavNotifier extends ChangeNotifier {
   BottomNavTabs selectedTab = BottomNavTabs.home;
   Widget child = const HomePage();
 
-  var logoAlign = Alignment.center;
-
   void onBottomNavTap(BottomNavTabs selectedOption) {
-    logoAlign = Alignment.center;
     selectedTab = selectedOption;
     switch (selectedOption) {
       case BottomNavTabs.home:
@@ -33,11 +30,6 @@ class BottomNavNotifier extends ChangeNotifier {
 
   void updateChild(Widget child) {
     this.child = child;
-    notifyListeners();
-  }
-
-  void updateLogoAlign(Alignment align) {
-    logoAlign = align;
     notifyListeners();
   }
 }

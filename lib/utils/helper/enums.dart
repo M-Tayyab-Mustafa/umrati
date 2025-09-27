@@ -22,7 +22,7 @@ enum StorageFolderNames {
 
 enum MapMarkerId { userLocation, destination }
 
-enum UmraType { tawaf, umra }
+enum UserActivityType { tawaf, umra, ziarat }
 
 enum CommonDoc {
   alKaba('al_kaba'),
@@ -85,3 +85,5 @@ enum IstilaamDua {
 
   const IstilaamDua(this.dua);
 }
+
+enum HistoryType { umra, tawaf, ziarat }

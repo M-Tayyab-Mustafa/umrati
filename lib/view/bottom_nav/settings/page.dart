@@ -27,92 +27,80 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       margin: EdgeInsets.only(top: kToolbarHeight * 0.5, bottom: 60),
       child: Padding(
         padding: const EdgeInsets.only(top: kToolbarHeight * 0.5),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              CListTile(onTap: provider.onHistoryTap, title: LocaleKeys.history.tr(), icon: 'assets/svg/settings/history.svg'),
-              CListTile(onTap: provider.onZiaratTap, title: LocaleKeys.ziarat.tr(), icon: 'assets/svg/settings/ziarat.svg'),
-              CListTile(onTap: provider.onChangeTheLanguageTap, title: LocaleKeys.change_the_language.tr(), icon: 'assets/svg/settings/language.svg'),
-              CListTile(
-                title: LocaleKeys.dark_mode.tr(),
-                icon: 'assets/svg/settings/theme.svg',
-                trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.deepTeal)),
-                // Padding(
-                // padding: const EdgeInsets.symmetric(horizontal: 8),
-                // child: SizedBox(
-                //   height: 30,
-                //   child: FittedBox(
-                //     child: Switch(
-                //       value: false,
-                //       thumbColor: WidgetStatePropertyAll(CColors.deepTeal),
-                //       overlayColor: WidgetStatePropertyAll(CColors.deepTeal),
-                //       activeColor: CColors.deepTeal,
-                //       trackColor: WidgetStatePropertyAll(CColors.primary.withValues(alpha: 0.1)),
-                //       onChanged: (value) {},
-                //     ),
-                //   ),
-                // ),
-                // ),
-              ),
-              CListTile(
-                onTap: provider.onGiveFeedbackTap,
-                title: LocaleKeys.give_feedback.tr(),
-                icon: 'assets/svg/settings/feed_back.svg',
-                trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.deepTeal)),
-              ),
-              if (provider.user != null && (provider.user!.subscription_id == null || provider.user!.subscription_id!.isNotEmpty))
-                CListTile(
-                  onTap: ref.read(settingsProvider.notifier).onBuyPremiumTap,
-                  borderRadius: 25,
-                  margin: EdgeInsets.only(bottom: 30, top: screenSize.height * 0.11, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(LocaleKeys.buy_premium.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.primary)),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CustomImage(margin: EdgeInsets.only(bottom: 10), path: 'assets/svg/settings/kaba_no_ads.png', height: 50, imageType: ImageType.png, fit: BoxFit.fill),
-                                  Text(LocaleKeys.ads_free_journey.tr(), style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CustomImage(margin: EdgeInsets.only(bottom: 10), path: 'assets/svg/settings/more_ziarats.png', height: 50, imageType: ImageType.png, fit: BoxFit.fill),
-                                  Text(LocaleKeys.more_ziarat_destinations.tr(), style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CustomImage(margin: EdgeInsets.only(bottom: 10), path: 'assets/svg/settings/unlimited_history.png', height: 50, imageType: ImageType.png, fit: BoxFit.fill),
-                                  Text(LocaleKeys.unlimited_history.tr(), style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CListTile(onTap: provider.onHistoryTap, title: LocaleKeys.history.tr(), icon: 'assets/svg/settings/history.svg'),
+                    CListTile(onTap: provider.onChangeTheLanguageTap, title: LocaleKeys.change_the_language.tr(), icon: 'assets/svg/settings/language.svg'),
+                    CListTile(
+                      title: LocaleKeys.dark_mode.tr(),
+                      icon: 'assets/svg/settings/theme.svg',
+                      trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.deepTeal)),
+                    ),
+                    CListTile(
+                      onTap: provider.onGiveFeedbackTap,
+                      title: LocaleKeys.give_feedback.tr(),
+                      icon: 'assets/svg/settings/feed_back.svg',
+                      trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.deepTeal)),
+                    ),
+                  ],
                 ),
-            ],
-          ),
+              ),
+            ),
+            if (provider.user != null && (provider.user!.subscription_id == null || provider.user!.subscription_id!.isNotEmpty))
+              CListTile(
+                onTap: ref.read(settingsProvider.notifier).onBuyPremiumTap,
+                borderRadius: 25,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(LocaleKeys.buy_premium.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.primary)),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CustomImage(margin: EdgeInsets.only(bottom: 10), path: 'assets/svg/settings/kaba_no_ads.png', height: 50, imageType: ImageType.png, fit: BoxFit.fill),
+                                Text(LocaleKeys.ads_free_journey.tr(), style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CustomImage(margin: EdgeInsets.only(bottom: 10), path: 'assets/svg/settings/more_ziarats.png', height: 50, imageType: ImageType.png, fit: BoxFit.fill),
+                                Text(LocaleKeys.more_ziarat_destinations.tr(), style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CustomImage(margin: EdgeInsets.only(bottom: 10), path: 'assets/svg/settings/unlimited_history.png', height: 50, imageType: ImageType.png, fit: BoxFit.fill),
+                                Text(LocaleKeys.unlimited_history.tr(), style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
         ),
       ),
     );

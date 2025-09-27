@@ -14,7 +14,7 @@ class UmraNotifier extends ChangeNotifier {
   set ref(WidgetRef value) => _ref = value;
 
   // Flag to track if user is currently performing Tawaf
-  bool isFromTawaf = false;
+  UserActivityType userActivityType = UserActivityType.umra;
   bool isLoading = false;
 
   HistoryModel? umraModel;
@@ -68,10 +68,10 @@ class UmraNotifier extends ChangeNotifier {
         await updateUmraModel(umraModel!.copyWith(is_doing: false));
         umraModel = null;
         _resetTawafData();
-        if (isFromTawaf) _fromTawaf();
+        if (userActivityType == UserActivityType.tawaf) _fromTawaf();
       }
     } else {
-      if (isFromTawaf) _fromTawaf();
+      if (userActivityType == UserActivityType.tawaf) _fromTawaf();
     }
 
     if (umraModel != null && hasDoneBeforeMeeqaatTasks && hasReachedMeeqaat && hasDoneAfterMeeqaatTasks && tawafCircleCount < 7) await _startTawaf();
@@ -90,7 +90,7 @@ class UmraNotifier extends ChangeNotifier {
         HistoryModel(
           uid: '',
           user_id: user!.uid,
-          type: UmraType.tawaf.name,
+          type: UserActivityType.tawaf.name,
           is_doing: true,
           has_done_before_meeqaat_tasks: true,
           has_reached_meeqaat: true,
@@ -204,7 +204,7 @@ class UmraNotifier extends ChangeNotifier {
 
   /// Moves user to Safa-Marwa section after completing Tawaf
   void moveToSafaMarwa() {
-    if (isFromTawaf) {
+    if (userActivityType == UserActivityType.tawaf) {
       _resetTawafData();
       infoToast(LocaleKeys.your_tawaf_has_been_successfully_completed.tr());
       return;
@@ -286,7 +286,7 @@ class UmraNotifier extends ChangeNotifier {
       HistoryModel(
         uid: '',
         user_id: user!.uid,
-        type: isFromTawaf ? UmraType.tawaf.name : UmraType.umra.name,
+        type: userActivityType.name,
         is_doing: true,
         has_done_before_meeqaat_tasks: true,
         has_reached_meeqaat: false,

@@ -1,6 +1,7 @@
 import '../../../export.dart';
 import '../../../view/bottom_nav/settings/history/tawaf.dart';
 import '../../../view/bottom_nav/settings/history/umrah.dart';
+import '../../../view/bottom_nav/settings/history/ziarat.dart';
 
 final historyProvider = ChangeNotifierProvider.autoDispose<HistoryNotifier>((ref) => HistoryNotifier());
 
@@ -17,31 +18,37 @@ class HistoryNotifier extends ChangeNotifier {
 
   Map<DateTime, List<HistoryModel>> umrahHistories = {};
   Map<DateTime, List<HistoryModel>> tawafHistories = {};
+  List<ZiaratHistoryModel> ziaratHistories = [];
 
-  Future<void> initialization({bool fromUmrah = true}) async {
+  Future<void> initialization({HistoryType historyType = HistoryType.umra}) async {
     isLoading = true;
     notifyListeners();
-    user = await LocalStorageManager.getUser(fromFirebase: true);
-    if (fromUmrah) {
-      final umras =
-          (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UmraType.umra.name))).get()).docs
+    user = await LocalStorageManager.getUser();
+    if (historyType == HistoryType.umra) {
+      final query =
+          (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.umra.name))).get()).docs
               .map((history) => HistoryModel.fromMap(history.data()))
               .toList();
-      umrahHistories = groupBy(umras, (history) {
+      umrahHistories = groupBy(query, (history) {
+        var time = history.created_at!.toDate();
+        return DateTime(time.year, time.month, time.day);
+      });
+    } else if (historyType == HistoryType.tawaf) {
+      final query =
+          (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.tawaf.name))).get()).docs
+              .map((history) => HistoryModel.fromMap(history.data()))
+              .toList();
+      tawafHistories = groupBy(query, (history) {
         var time = history.created_at!.toDate();
         return DateTime(time.year, time.month, time.day);
       });
     } else {
-      final tawaf =
-          (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UmraType.tawaf.name))).get()).docs
-              .map((history) => HistoryModel.fromMap(history.data()))
-              .toList();
-      tawafHistories = groupBy(tawaf, (history) {
-        var time = history.created_at!.toDate();
-        return DateTime(time.year, time.month, time.day);
-      });
+      var query = await historyCollection
+          .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziarat.name)))
+          .get()
+          .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      ziaratHistories = query.docs.map((history) => ZiaratHistoryModel.fromMap(history.data())).toList();
     }
-
     isLoading = false;
     notifyListeners();
   }
@@ -50,5 +57,5 @@ class HistoryNotifier extends ChangeNotifier {
 
   void onTawafTap() => Navigator.push(context, MaterialPageRoute(builder: (context) => const TawafHistoryPage()));
 
-  void onZiaratTap() {}
+  void onZiaratTap() => Navigator.push(context, MaterialPageRoute(builder: (context) => const ZiaratHistoryPage()));
 }

@@ -11,7 +11,6 @@ class UserModel {
   final String password;
   final num total_umra_done;
   final bool is_premium;
-  final bool is_doing_ziarat;
   final String? subscription_id;
   final Timestamp? created_at;
   final Timestamp? updated_at;
@@ -27,7 +26,6 @@ class UserModel {
     required this.password,
     this.is_premium = false,
     this.total_umra_done = 0,
-    this.is_doing_ziarat = false,
     this.subscription_id,
     this.created_at,
     this.updated_at,
@@ -43,7 +41,6 @@ class UserModel {
     String? gender,
     String? password,
     bool? is_premium,
-    bool? is_doing_ziarat,
     num? total_umra_done,
     String? subscription_id,
     Timestamp? created_at,
@@ -60,7 +57,6 @@ class UserModel {
       gender: gender ?? this.gender,
       password: password ?? this.password,
       total_umra_done: total_umra_done ?? this.total_umra_done,
-      is_doing_ziarat: is_doing_ziarat ?? this.is_doing_ziarat,
       subscription_id: subscription_id ?? this.subscription_id,
       created_at: created_at ?? this.created_at,
       updated_at: updated_at ?? this.updated_at,
@@ -79,7 +75,6 @@ class UserModel {
       'gender': gender,
       'password': password,
       'total_umra_done': total_umra_done,
-      'is_doing_ziarat': is_doing_ziarat,
       'subscription_id': subscription_id,
       'created_at': created_at ?? this.created_at?.millisecondsSinceEpoch,
       'updated_at': updated_at ?? this.updated_at?.millisecondsSinceEpoch,
@@ -97,7 +92,6 @@ class UserModel {
       photo: map['photo']?.toString() ?? '',
       gender: map['gender']?.toString() ?? '',
       password: map['password']?.toString() ?? '',
-      is_doing_ziarat: map['is_doing_ziarat'] ?? false,
       total_umra_done: map['total_umra_done'] ?? 0,
       subscription_id: map['subscription_id']?.toString() ?? '',
       created_at: map['created_at'].runtimeType == int ? Timestamp.fromMillisecondsSinceEpoch(map['created_at']) : map['created_at'],
@@ -111,7 +105,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, email: $email, is_premium: $is_premium, password: $password, phone: $phone, country_code: $country_code, photo: $photo, gender: $gender, total_umra_done: $total_umra_done, subscription_id: $subscription_id is_doing_ziarat: $is_doing_ziarat, created_at: $created_at, updated_at: $updated_at)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, is_premium: $is_premium, password: $password, phone: $phone, country_code: $country_code, photo: $photo, gender: $gender, total_umra_done: $total_umra_done, subscription_id: $subscription_id, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -129,7 +123,6 @@ class UserModel {
         other.password == password &&
         other.total_umra_done == total_umra_done &&
         other.subscription_id == subscription_id &&
-        other.is_doing_ziarat == is_doing_ziarat &&
         other.created_at == created_at &&
         other.updated_at == updated_at;
   }
@@ -147,7 +140,6 @@ class UserModel {
         password.hashCode ^
         total_umra_done.hashCode ^
         subscription_id.hashCode ^
-        is_doing_ziarat.hashCode ^
         created_at.hashCode ^
         updated_at.hashCode;
   }

@@ -78,9 +78,12 @@ class Background extends StatelessWidget {
                             ),
                           ),
                           Expanded(
-                            child: Align(
-                              alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
-                              child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 50),
+                              child: Align(
+                                alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
+                                child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
+                              ),
                             ),
                           ),
                         ],

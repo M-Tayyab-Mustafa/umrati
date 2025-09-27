@@ -34,6 +34,7 @@ export 'model/plan.dart';
 export 'model/subscription.dart';
 export 'model/ziarat.dart';
 export 'model/history.dart';
+export 'model/ziarat_history.dart';
 
 //* Controller
 export 'controller/splash/provider.dart';
@@ -109,4 +110,4 @@ export 'package:vector_math/vector_math.dart' hide Matrix4, Colors;
 export 'package:image_picker/image_picker.dart';
 export 'package:image_cropper/image_cropper.dart';
 export 'package:firebase_storage/firebase_storage.dart';
-export 'package:collection/collection.dart' show groupBy;
+export 'package:collection/collection.dart' show groupBy, DeepCollectionEquality;
