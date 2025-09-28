@@ -19,6 +19,7 @@ class ZiaratNotifier extends ChangeNotifier {
   List<ZiaratModel> sortedZiarats = [];
   StreamSubscription<Position>? positionStream;
   bool isLoading = false;
+  bool isGeneratingAutoZiarats = true;
   String myCurrentLocation = '';
   ZiaratDestinationsCreationOptions? selectedDestinationsCreationOption;
   UserModel? user;
@@ -122,6 +123,17 @@ class ZiaratNotifier extends ChangeNotifier {
 
   Future<void> getDistance() async {
     try {
+      sortedZiarats.clear();
+      isGeneratingAutoZiarats = true;
+      if (context.mounted) notifyListeners();
+      var position = await Geolocator.getCurrentPosition();
+      sortedZiarats =
+          ziarats.map<ZiaratModel>((ziarat) {
+            var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziarat.lat.toDouble(), ziarat.lng.toDouble());
+            return ziarat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
+          }).toList();
+      sortedZiarats.sort((a, b) => int.parse(a.distance).compareTo(int.parse(b.distance)));
+      if (context.mounted) notifyListeners();
       positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation)).listen((position) async {
         if (!context.mounted) return positionStream?.cancel();
         sortedZiarats =
@@ -130,12 +142,14 @@ class ZiaratNotifier extends ChangeNotifier {
               return ziarat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
             }).toList();
         sortedZiarats.sort((a, b) => int.parse(a.distance).compareTo(int.parse(b.distance)));
-        notifyListeners();
+        if (context.mounted) notifyListeners();
       });
     } catch (e) {
       if (kDebugMode) log(e.toString());
       if (context.mounted) errorToast(e.toString());
     }
+    isGeneratingAutoZiarats = false;
+    if (context.mounted) notifyListeners();
   }
 
   void createZiaratRoute() async {

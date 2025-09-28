@@ -58,11 +58,15 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
                                   _ => 'assets/svg/ziarat/medina.svg',
                                 },
                               ),
-                              Text(Helper.generateTitle(history.ziaratCity), style: CTextStyle.w500(fontSize: 16, color: CColors.primary), textAlign: TextAlign.center),
+                              Text(
+                                isLTR(context) ? Helper.generateTitle(history.ziaratCity) : generateTitle(history.ziaratCity),
+                                style: CTextStyle.w500(fontSize: isLTR(context) ? 16 : 20, color: CColors.primary),
+                                textAlign: TextAlign.center,
+                              ),
                             ],
                           ),
                           Expanded(
-                            child: Center(
+                            child: FittedBox(
                               child: Text.rich(
                                 TextSpan(
                                   children: [
@@ -100,6 +104,18 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
       return ZiaratCities.other;
     } else {
       return ZiaratCities.mecca;
+    }
+  }
+
+  String generateTitle(String city) {
+    if (city == ZiaratCities.medina.name) {
+      return LocaleKeys.medina.tr();
+    } else if (city == ZiaratCities.taif.name) {
+      return LocaleKeys.taif.tr();
+    } else if (city == ZiaratCities.other.name) {
+      return LocaleKeys.others.tr();
+    } else {
+      return LocaleKeys.Mecca.tr();
     }
   }
 }

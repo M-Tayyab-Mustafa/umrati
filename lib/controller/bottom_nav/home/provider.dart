@@ -13,15 +13,9 @@ class HomeNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
 
-  void onUmraTap() async {
-    ref.read(umraProvider.notifier).userActivityType = UserActivityType.umra;
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const UmraPage()));
-  }
+  void onUmraTap() async => Navigator.push(context, MaterialPageRoute(builder: (context) => const UmraPage()));
 
-  void onTawafTap() async {
-    ref.read(umraProvider.notifier).userActivityType = UserActivityType.tawaf;
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const UmraPage()));
-  }
+  void onTawafTap() async => Navigator.push(context, MaterialPageRoute(builder: (context) => const UmraPage(userActivityType: UserActivityType.tawaf)));
 
   void onZiaratTap() async {
     Navigator.push(context, MaterialPageRoute(builder: (context) => const ZiaratPage()));

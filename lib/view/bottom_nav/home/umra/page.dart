@@ -8,7 +8,8 @@ import 'tawaf_tracker.dart';
 import 'umra_completed.dart';
 
 class UmraPage extends ConsumerStatefulWidget {
-  const UmraPage({super.key});
+  const UmraPage({super.key, this.userActivityType = UserActivityType.umra});
+  final UserActivityType userActivityType;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _StartTawafPageState();
 }
@@ -20,7 +21,7 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
     ref.read(umraProvider.notifier).context = context;
     ref.read(umraProvider.notifier).ref = ref;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(umraProvider.notifier).initialization();
+      await ref.read(umraProvider.notifier).initialization(widget.userActivityType);
     });
   }
 

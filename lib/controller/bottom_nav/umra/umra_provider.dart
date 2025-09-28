@@ -45,30 +45,31 @@ class UmraNotifier extends ChangeNotifier {
   UserModel? user;
 
   // Initialize TawafNotifier
-  Future<void> initialization() async {
+  Future<void> initialization(UserActivityType userActivityType) async {
     ref.read(meeqaatTwoTasksProvider.notifier).updateLoading(true);
     user = (await LocalStorageManager.getUser(fromFirebase: true))!;
-    final querySnapshot = await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('is_doing', isEqualTo: true))).get();
-    if (querySnapshot.docs.isNotEmpty) {
-      final doc = querySnapshot.docs.first.reference;
-      umraModel = HistoryModel.fromMap((await doc.get()).data()!);
-      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmra: true));
-      if (result == true) {
-        hasDoneBeforeMeeqaatTasks = umraModel!.has_done_before_meeqaat_tasks;
-        hasReachedMeeqaat = umraModel!.has_reached_meeqaat;
-        hasDoneAfterMeeqaatTasks = umraModel!.has_done_after_meeqaat_tasks;
-        tawafCircleCount = umraModel!.tawaf_circle_count;
-        if (umraModel!.sai_round_count == 7) {
-          safaMarwaCompleted();
+    if (userActivityType == UserActivityType.umra) {
+      final querySnapshot = await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('is_doing', isEqualTo: true))).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        final doc = querySnapshot.docs.first.reference;
+        umraModel = HistoryModel.fromMap((await doc.get()).data()!);
+        var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmra: true));
+        if (result == true) {
+          hasDoneBeforeMeeqaatTasks = umraModel!.has_done_before_meeqaat_tasks;
+          hasReachedMeeqaat = umraModel!.has_reached_meeqaat;
+          hasDoneAfterMeeqaatTasks = umraModel!.has_done_after_meeqaat_tasks;
+          tawafCircleCount = umraModel!.tawaf_circle_count;
+          if (umraModel!.sai_round_count == 7) {
+            safaMarwaCompleted();
+          } else {
+            if (umraModel!.can_start_sai) showSafaMarwa = true;
+          }
+          if (context.mounted) notifyListeners();
         } else {
-          if (umraModel!.can_start_sai) showSafaMarwa = true;
+          await updateUmraModel(umraModel!.copyWith(is_doing: false));
+          umraModel = null;
+          _resetTawafData();
         }
-        if (context.mounted) notifyListeners();
-      } else {
-        await updateUmraModel(umraModel!.copyWith(is_doing: false));
-        umraModel = null;
-        _resetTawafData();
-        if (userActivityType == UserActivityType.tawaf) _fromTawaf();
       }
     } else {
       if (userActivityType == UserActivityType.tawaf) _fromTawaf();

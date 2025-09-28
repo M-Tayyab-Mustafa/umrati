@@ -11,21 +11,12 @@ class ChooseDestinations extends ConsumerWidget {
       showEmblem: false,
       backgroundType: BackgroundType.logo,
       logoAlign: Alignment.center,
+      title: LocaleKeys.please_select_one_option_to_continue_your_ziarat.tr(),
+      titleType: TitleType.backArrow,
+      titleMargin: const EdgeInsets.only(top: 30),
       margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Directionality(
-              textDirection: TextDirection.ltr,
-              child: Row(
-                children: [
-                  CustomImage(onTap: provider.goBackToSelectCity, path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, height: 40, width: 30, margin: EdgeInsets.only(right: 20)),
-                  Expanded(child: Center(child: Text(LocaleKeys.please_select_one_option_to_continue_your_ziarat.tr(), textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24)))),
-                ],
-              ),
-            ),
-          ),
           Expanded(
             child: SingleChildScrollView(
               child: Column(

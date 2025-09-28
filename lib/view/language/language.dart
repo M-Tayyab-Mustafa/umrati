@@ -25,7 +25,8 @@ class _LanguagePageState extends ConsumerState<LanguagePage> {
     final provider = ref.watch(languageProvider);
     return Background(
       title: LocaleKeys.change_the_language.tr(),
-      backgroundType: provider.isUpdatingLanguage ? BackgroundType.logoWithBackButton : BackgroundType.logo,
+      titleType: TitleType.backArrow,
+      backgroundType: BackgroundType.logo,
       logoAlign: provider.isUpdatingLanguage ? Alignment.center : Alignment.centerLeft,
       margin: EdgeInsets.only(left: 32, right: 32, top: kToolbarHeight, bottom: kToolbarHeight),
       titleMargin: EdgeInsets.only(top: kToolbarHeight, bottom: kToolbarHeight / 2),

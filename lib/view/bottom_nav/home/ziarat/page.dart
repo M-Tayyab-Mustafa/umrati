@@ -23,12 +23,14 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
     var provider = ref.watch(ziaratProvider);
     return Background(
       showEmblem: false,
-      backgroundType: BackgroundType.logoWithBackButton,
+      backgroundType: BackgroundType.logo,
       logoAlign: Alignment.center,
+      title: LocaleKeys.select_ziarat_cities.tr(),
+      titleType: TitleType.backArrow,
+      titleMargin: const EdgeInsets.only(top: 30, bottom: 20),
       margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
       child: Column(
         children: [
-          Padding(padding: const EdgeInsets.only(top: 30, bottom: 20), child: Text(LocaleKeys.select_ziarat_cities.tr(), textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24))),
           GridView.count(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),

@@ -81,7 +81,7 @@ class Background extends StatelessWidget {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 50),
+                              padding: EdgeInsets.only(right: isLTR(context) ? 50 : 0, left: isLTR(context) ? 0 : 50),
                               child: Align(
                                 alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
                                 child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
@@ -103,7 +103,7 @@ class Background extends StatelessWidget {
                                       : TextDirection.rtl,
                               child: Row(
                                 children: [
-                                  if (backgroundType == BackgroundType.logoWithBackButton)
+                                  if (backgroundType == BackgroundType.logoWithBackButton && isLTR(context))
                                     GestureDetector(onTap: () => Navigator.pop(context), child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: 30)),
                                   Expanded(
                                     child: Align(
@@ -116,7 +116,12 @@ class Background extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  if (backgroundType == BackgroundType.logoWithSkip)
+                                  if (backgroundType == BackgroundType.logoWithBackButton && !isLTR(context))
+                                    GestureDetector(
+                                      onTap: () => Navigator.pop(context),
+                                      child: Transform.rotate(angle: -(pi / 180 * 180), child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: 30)),
+                                    )
+                                  else if (backgroundType == BackgroundType.logoWithSkip)
                                     if (isSkipLoading)
                                       SizedBox.shrink()
                                     else

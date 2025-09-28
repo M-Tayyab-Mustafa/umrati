@@ -51,7 +51,7 @@ class PlanWidget extends ConsumerWidget {
                     onTap: onSubscribe,
                     margin: EdgeInsets.only(top: 24),
                     titleWithIcon: true,
-                    padding: isLTR(context) ? null : EdgeInsets.only(left: 16),
+                    padding: isLTR(context) ? null : EdgeInsets.only(right: 16),
                     title: LocaleKeys.buy.tr(),
                     width: isLTR(context) ? 120 : 130,
                     iconSize: 20,

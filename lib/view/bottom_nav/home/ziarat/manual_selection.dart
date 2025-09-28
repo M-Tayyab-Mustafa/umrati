@@ -7,20 +7,11 @@ class ManualSelection extends ConsumerWidget {
     var provider = ref.watch(ziaratProvider);
     return Background(
       showEmblem: false,
+      title: '${_cityName(provider.selectedCity!)} ${LocaleKeys.top_ziarat_destination_of.tr()}',
+      titleType: TitleType.backArrow,
       margin: EdgeInsets.only(top: kToolbarHeight / 2, left: 16, right: 16),
       child: Column(
         children: [
-          Directionality(
-            textDirection: TextDirection.ltr,
-            child: Row(
-              children: [
-                CustomImage(onTap: () => Navigator.pop(context), path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, height: 40, width: 30, margin: EdgeInsets.only(right: 20)),
-                Expanded(
-                  child: Center(child: Text('${_cityName(provider.selectedCity!)} ${LocaleKeys.top_ziarat_destination_of.tr()}', textAlign: TextAlign.center, style: CTextStyle.w500(fontSize: 24))),
-                ),
-              ],
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.only(top: 20),
