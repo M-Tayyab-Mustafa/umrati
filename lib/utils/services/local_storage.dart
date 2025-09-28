@@ -43,7 +43,7 @@ class LocalStorageManager {
       if (json == null) return null;
       var user = UserModel.fromJson(json);
       if (fromFirebase) {
-        var doc = await userCollection.doc(user.uid).get();
+        var doc = await userCollection.doc(user.uid).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
         if (doc.exists) {
           var updatedUser = UserModel.fromMap(doc.data() as Map<String, dynamic>);
           await saveUser(updatedUser, toFirebase: false);

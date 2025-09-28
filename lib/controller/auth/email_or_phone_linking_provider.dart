@@ -45,7 +45,7 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
         ref.read(splashProvider.notifier).redirections(context);
       } on FirebaseAuthException catch (e) {
         if (kDebugMode) log(e.toString());
-        errorToast(e.message ?? 'Something went wrong. Please try again later.');
+        errorToast(e.message ?? LocaleKeys.something_went_wrong_please_try_again_later.tr());
       } catch (e) {
         if (kDebugMode) log(e.toString());
         errorToast(e.toString());
@@ -55,13 +55,18 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
     } else {
       isLinkingAccount = true;
       notifyListeners();
-      final provider = ref.read(loginProvider.notifier);
-      provider.context = context;
-      provider.ref = ref;
-      provider.phoneNumberController.text = phoneNumberController.text.trim();
-      provider.selectedCountry = selectedCountry;
-      provider.numberDigits = numberDigits;
-      provider.sendTheOTP(true);
+      try {
+        final provider = ref.read(loginProvider.notifier);
+        provider.context = context;
+        provider.ref = ref;
+        provider.phoneNumberController.text = phoneNumberController.text.trim();
+        provider.selectedCountry = selectedCountry;
+        provider.numberDigits = numberDigits;
+        await provider.sendTheOTP(true);
+      } catch (e) {
+        if (kDebugMode) log(e.toString());
+        errorToast(e.toString());
+      }
       isLinkingAccount = false;
       notifyListeners();
     }

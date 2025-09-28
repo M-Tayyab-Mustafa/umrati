@@ -26,10 +26,20 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
+    signingConfigs {
+        create("release") {
+            keyAlias = project.findProperty("MY_KEY_ALIAS") as String
+            keyPassword = project.findProperty("MY_KEY_PASSWORD") as String
+            storeFile = file(project.findProperty("MY_STORE_FILE") as String)
+            storePassword = project.findProperty("MY_KEYSTORE_PASSWORD") as String
+        }
+    }
 
     buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("debug")
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }

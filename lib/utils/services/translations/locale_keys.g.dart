@@ -12,6 +12,7 @@ abstract class  LocaleKeys {
   static const log_in_to_your_account = 'log_in_to_your_account';
   static const link_account = 'link_account';
   static const please_enter_your_email = 'please_enter_your_email';
+  static const please_enter_your_phone = 'please_enter_your_phone';
   static const link_your_email_to_secure_your_account = 'link_your_email_to_secure_your_account';
   static const number = 'number';
   static const name = 'name';

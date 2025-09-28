@@ -11,10 +11,10 @@ class Helper {
 
   static Future<void> getCurrencySymbol() async {
     try {
-      currencySymbol = (await settingsCollection.doc(CommonDoc.constants.name).get()).data()?[CommonField.symbols.name][await userRegion()] ?? '\$';
+      currencySymbol = (await settingsCollection.doc(CommonDoc.constants.name).get()).data()?[CommonField.symbols.name][(await userRegion())] ?? '\$';
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      if (kDebugMode) log('[Currency symbol]:: ${e.toString()}');
+      errorToast('[Currency symbol]:: ${e.toString()}');
     }
   }
 
@@ -22,7 +22,7 @@ class Helper {
 
   static get mapsApiKey async => (await settingsCollection.doc(CommonDoc.constants.name).get()).get(CommonField.googleMapKey.name);
 
-  static Future<Map<String, dynamic>> get regions async => (await settingsCollection.doc(CommonDoc.constants.name).get()).get(CommonField.regions.name) as Map<String, dynamic>;
+  static Future<Map<String, dynamic>> regions() async => (await settingsCollection.doc(CommonDoc.constants.name).get()).get(CommonField.regions.name) as Map<String, dynamic>;
 
   static const int timeOutTime = 30; // in seconds
 
@@ -35,12 +35,13 @@ class Helper {
 
   static Future<String> userRegion() async {
     try {
-      return (await regions)[(await LocalStorageManager.getUser(fromFirebase: true))?.country_code ?? '+1'];
+      var code = (await LocalStorageManager.getUser(fromFirebase: true))?.country_code ?? '+1';
+      return (await regions())[code.isNotEmpty ? code : '+1'];
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      if (kDebugMode) log('[User region]:: ${e.toString()}');
+      errorToast('[User region]:: ${e.toString()}');
+      return 'US';
     }
-    return "US";
   }
 
   static Future<Map<String, dynamic>?> getRouteLeg({required LatLng startPoint, required LatLng endPoint}) async {
