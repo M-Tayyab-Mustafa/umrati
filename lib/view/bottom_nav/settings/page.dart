@@ -40,12 +40,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       icon: 'assets/svg/settings/theme.svg',
                       trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.deepTeal, fontSize: 18)),
                     ),
-                    CListTile(
-                      onTap: provider.onGiveFeedbackTap,
-                      title: LocaleKeys.give_feedback.tr(),
-                      icon: 'assets/svg/settings/feed_back.svg',
-                      trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.deepTeal, fontSize: 18)),
-                    ),
+                    CListTile(onTap: provider.onGiveFeedbackTap, title: LocaleKeys.give_feedback.tr(), icon: 'assets/svg/settings/feed_back.svg'),
                   ],
                 ),
               ),

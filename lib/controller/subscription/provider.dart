@@ -21,11 +21,12 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   final panelController = SlidingUpPanelController(value: SlidingUpPanelStatus.collapsed);
   bool showThreeMonthPlans = true;
   final TextEditingController keyController = TextEditingController();
+  String userRegion = 'US';
 
   Future<void> getSubscriptionPlans() async {
     try {
       user = (await LocalStorageManager.getUser())!;
-      var userRegion = await Helper.userRegion();
+      userRegion = await Helper.userRegion();
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs;
       docs = (await plansCollection.where(Filter.or(Filter('type', isEqualTo: PlanType.free.name), Filter('regions', arrayContains: userRegion))).get()).docs;
       if (docs.isEmpty) {
@@ -154,6 +155,42 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       isSubscribing = false;
       notifyListeners();
     }
+  }
+
+  Future<void> onJazzCashTap() async {
+    PaymentInitializationResult response = await PaymobPakistan.instance.initializePayment(currency: userRegion, amountInCents: selectedPlan.amount.toString());
+    String authToken = response.authToken;
+    int orderID = response.orderID;
+    PaymobPakistan.instance.makePayment(
+      context,
+      currency: userRegion,
+      amountInCents: selectedPlan.amount.toString(),
+      paymentType: PaymentType.jazzcash,
+      authToken: authToken,
+      orderID: orderID,
+      onPayment: (response) {
+        if (kDebugMode) log('[Payment Response] ${response.toString()}');
+        if (response.success) _subscribePlan();
+      },
+    );
+  }
+
+  Future<void> onEasyPaisaTap() async {
+    PaymentInitializationResult response = await PaymobPakistan.instance.initializePayment(currency: userRegion, amountInCents: selectedPlan.amount.toString());
+    String authToken = response.authToken;
+    int orderID = response.orderID;
+    PaymobPakistan.instance.makePayment(
+      context,
+      currency: userRegion,
+      amountInCents: selectedPlan.amount.toString(),
+      paymentType: PaymentType.easypaisa,
+      authToken: authToken,
+      orderID: orderID,
+      onPayment: (response) {
+        if (kDebugMode) log('[Payment Response] ${response.toString()}');
+        if (response.success) _subscribePlan();
+      },
+    );
   }
 
   @override

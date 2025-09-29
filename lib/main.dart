@@ -7,6 +7,7 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  await PaymobPakistan.instance.initialize(apiKey: "{YOUR API KEY HERE}", integrationID: 123456, iFrameID: 123456, jazzcashIntegrationId: 123456, easypaisaIntegrationID: 123456);
   runApp(
     ProviderScope(
       child: EasyLocalization(

@@ -9,7 +9,9 @@ class SaiCompletionPage extends ConsumerWidget {
     return Background(
       logoAlign: Alignment.center,
       backgroundType: BackgroundType.logo,
-      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: 85),
+      title: '',
+      titleType: TitleType.backArrow,
+      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: kToolbarHeight * 0.5),
       showEmblem: false,
       child: LayoutBuilder(
         builder: (context, constraints) {

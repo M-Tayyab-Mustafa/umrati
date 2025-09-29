@@ -1,9 +1,21 @@
 import '../../export.dart';
 
-class BottomNavigationPage extends ConsumerWidget {
+class BottomNavigationPage extends ConsumerStatefulWidget {
   const BottomNavigationPage({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _BottomNavigationPageState();
+}
+
+class _BottomNavigationPageState extends ConsumerState<BottomNavigationPage> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(bottomNavProvider.notifier).context = context;
+    ref.read(bottomNavProvider.notifier).ref = ref;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var provider = ref.watch(bottomNavProvider);
     return Scaffold(
       body: SafeArea(

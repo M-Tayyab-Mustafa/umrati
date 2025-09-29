@@ -20,7 +20,7 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   initialization() async {
     user = await LocalStorageManager.getUser(fromFirebase: true);
     isLoading = false;
-    notifyListeners();
+    if (context.mounted) notifyListeners();
   }
 
   void skip() async {

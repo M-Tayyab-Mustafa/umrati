@@ -2,7 +2,7 @@ part of 'constants.dart';
 
 enum Gender { male, female, unknown }
 
-enum BackgroundType { empty, logo, logoWithBackButton, logoWithSkip, titleWithBackButton }
+enum BackgroundType { empty, logo, logoWithSkip, titleWithBackButton }
 
 enum TitleType { empty, backArrow }
 
@@ -12,7 +12,7 @@ enum ZiaratCities { mecca, medina, taif, other }
 
 enum ZiaratDestinationsCreationOptions { auto, manual }
 
-enum CollectionNames { users, settings, plans, subscriptions, histories }
+enum CollectionNames { users, settings, plans, subscriptions, histories, messages }
 
 enum StorageFolderNames {
   profileImages('profile_images');

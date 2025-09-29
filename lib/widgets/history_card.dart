@@ -80,9 +80,9 @@ class HistoryCard extends StatelessWidget {
                         children:
                             isLTR(context)
                                 ? [
-                                  TextSpan(text: LocaleKeys.from.tr()),
+                                  TextSpan(text: '${LocaleKeys.from.tr()} '),
                                   TextSpan(text: DateFormat.jms().format(history.created_at!.toDate())),
-                                  TextSpan(text: LocaleKeys.to.tr()),
+                                  TextSpan(text: '  ${LocaleKeys.to.tr()} '),
                                   TextSpan(text: DateFormat.jms().format(history.updated_at!.toDate())),
                                 ]
                                 : [

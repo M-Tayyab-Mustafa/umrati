@@ -2,15 +2,23 @@ import '../../export.dart';
 import '../../view/bottom_nav/home/page.dart';
 import '../../view/bottom_nav/profile/page.dart';
 import '../../view/bottom_nav/settings/page.dart';
-import 'ask_mufti/page.dart';
+import '../../view/bottom_nav/ask_mufti/page.dart';
 
 final bottomNavProvider = ChangeNotifierProvider.autoDispose<BottomNavNotifier>((ref) => BottomNavNotifier());
 
 class BottomNavNotifier extends ChangeNotifier {
+  BuildContext? _context;
+  BuildContext get context => _context!;
+  set context(BuildContext value) => _context = value;
+
+  WidgetRef? _ref;
+  WidgetRef get ref => _ref!;
+  set ref(WidgetRef value) => _ref = value;
   BottomNavTabs selectedTab = BottomNavTabs.home;
   Widget child = const HomePage();
 
-  void onBottomNavTap(BottomNavTabs selectedOption) {
+  void onBottomNavTap(BottomNavTabs selectedOption) async {
+    var previousTab = selectedTab;
     selectedTab = selectedOption;
     switch (selectedOption) {
       case BottomNavTabs.home:
@@ -20,8 +28,11 @@ class BottomNavNotifier extends ChangeNotifier {
         child = const ProfilePage();
         break;
       case BottomNavTabs.askMufti:
-        child = AskMuftiPage();
+        child = const SizedBox.shrink();
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => const AskMuftiPage()));
+        onBottomNavTap(previousTab);
         break;
+
       default:
         child = const SettingsPage();
     }

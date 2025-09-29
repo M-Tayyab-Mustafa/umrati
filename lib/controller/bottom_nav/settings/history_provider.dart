@@ -14,8 +14,8 @@ class HistoryNotifier extends ChangeNotifier {
   WidgetRef? _ref;
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
-  UserModel? user;
   bool isLoading = true;
+  UserModel? user;
 
   Map<DateTime, List<HistoryModel>> umrahHistories = {};
   Map<DateTime, List<HistoryModel>> tawafHistories = {};

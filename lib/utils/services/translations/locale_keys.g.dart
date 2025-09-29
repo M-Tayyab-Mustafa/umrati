@@ -56,6 +56,16 @@ abstract class  LocaleKeys {
   static const see_history_of_your = 'see_history_of_your';
   static const today = 'today';
   static const from = 'from';
+  static const subject = 'subject';
+  static const your_email_here = 'your_email_here';
+  static const your_number_here = 'your_number_here';
+  static const what_your_feedback_is_about = 'what_your_feedback_is_about';
+  static const your_name_here = 'your_name_here';
+  static const type_your_feedback_here = 'type_your_feedback_here';
+  static const submit = 'submit';
+  static const type_your_problem_here = 'type_your_problem_here';
+  static const bot_is_typing = 'bot_is_typing';
+  static const copied_to_clipboard = 'copied_to_clipboard';
   static const to = 'to';
   static const view = 'view';
   static const resume_ziarat = 'resume_ziarat';

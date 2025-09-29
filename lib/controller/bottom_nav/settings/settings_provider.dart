@@ -1,4 +1,5 @@
 import '../../../export.dart';
+import '../../../view/bottom_nav/settings/give_feedback.dart';
 import '../../../view/bottom_nav/settings/history/page.dart';
 import '../../../view/language/language.dart';
 import '../../../view/subscription/page.dart';
@@ -21,11 +22,11 @@ class SettingsNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> onHistoryTap() async => Navigator.push(context, MaterialPageRoute(builder: (context) => const HistoryPage()));
+  Future<void> onHistoryTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const HistoryPage()));
 
   Future<void> onChangeTheLanguageTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const LanguagePage(isUpdatingLanguage: true)));
 
-  Future<void> onGiveFeedbackTap() async {}
+  Future<void> onGiveFeedbackTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const GiveFeedbackPage()));
 
   Future<void> onBuyPremiumTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
 }

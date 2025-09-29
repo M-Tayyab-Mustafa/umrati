@@ -21,8 +21,33 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
   Widget build(BuildContext context) {
     final provider = ref.watch(subscriptionProvider);
     return Background(
-      backgroundType: provider.isRenewingPlan ? BackgroundType.logoWithBackButton : BackgroundType.logo,
-      margin: EdgeInsets.only(top: kToolbarHeight / 2, left: 16, right: 16),
+      backgroundType: BackgroundType.logo,
+      titleWidget: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('3 ${LocaleKeys.months.tr()}', style: CTextStyle.w500(fontSize: 16, color: Colors.black)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: SizedBox(
+              height: 30,
+              child: FittedBox(
+                child: Switch(
+                  value: !provider.showThreeMonthPlans,
+                  thumbColor: WidgetStatePropertyAll(CColors.deepTeal),
+                  overlayColor: WidgetStatePropertyAll(CColors.deepTeal),
+                  activeColor: CColors.deepTeal,
+                  trackColor: WidgetStatePropertyAll(CColors.primary.withValues(alpha: 0.1)),
+                  onChanged: provider.togglePlans,
+                ),
+              ),
+            ),
+          ),
+          Text('1 ${LocaleKeys.year.tr()}', style: CTextStyle.w500(fontSize: 16, color: Colors.black)),
+        ],
+      ),
+      titleType: provider.isRenewingPlan ? TitleType.backArrow : TitleType.empty,
+      titleMargin: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+      margin: EdgeInsets.only(top: kToolbarHeight / 2),
       logoAlign: Alignment.topCenter,
       child:
           provider.isLoading
@@ -41,35 +66,9 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                         height: constraints.maxHeight,
                         width: constraints.maxWidth,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 32, bottom: 16),
+                          padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
                           child: Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 32),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('3 ${LocaleKeys.months.tr()}', style: CTextStyle.w500(fontSize: 16, color: Colors.black)),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                                      child: SizedBox(
-                                        height: 30,
-                                        child: FittedBox(
-                                          child: Switch(
-                                            value: !provider.showThreeMonthPlans,
-                                            thumbColor: WidgetStatePropertyAll(CColors.deepTeal),
-                                            overlayColor: WidgetStatePropertyAll(CColors.deepTeal),
-                                            activeColor: CColors.deepTeal,
-                                            trackColor: WidgetStatePropertyAll(CColors.primary.withValues(alpha: 0.1)),
-                                            onChanged: provider.togglePlans,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Text('1 ${LocaleKeys.year.tr()}', style: CTextStyle.w500(fontSize: 16, color: Colors.black)),
-                                  ],
-                                ),
-                              ),
                               Expanded(
                                 child: ListView.builder(
                                   padding: EdgeInsets.zero,
@@ -90,7 +89,7 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                           ),
                         ),
                       ),
-                      SlidingUpPanelWidget(controlHeight: 0, anchor: 0.15, panelController: provider.panelController, child: PaymentSheet()),
+                      SlidingUpPanelWidget(controlHeight: 0, anchor: 0.4, panelController: provider.panelController, child: PaymentSheet()),
                     ],
                   );
                 },

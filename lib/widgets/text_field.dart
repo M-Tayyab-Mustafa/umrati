@@ -1,12 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import '../utils/helper/constants.dart';
 import '../utils/theme/colors.dart';
 import '../utils/theme/text_style.dart';
 
 class CTextField extends StatelessWidget {
   const CTextField({
-    super.key,
+    Key? key,
     this.controller,
     this.margin,
     this.hintText = '',
@@ -16,6 +18,7 @@ class CTextField extends StatelessWidget {
     this.maxLength,
     this.validator,
     this.onChanged,
+    this.onFieldSubmitted,
     this.keyboardType = TextInputType.name,
     this.obscureText = false,
     this.enabled,
@@ -28,17 +31,17 @@ class CTextField extends StatelessWidget {
     this.prefixIcon,
     this.prefixMargin,
     this.suffixIcon,
-    this.onFieldSubmitted,
     this.suffixMargin,
     this.counterText,
     this.borderRadius,
+    this.inputFormatters,
     this.onPrefixTap,
     this.onSuffixTap,
-    this.inputFormatters,
-    this.border,
+    this.borderColor,
+    this.boxShadow,
     this.focusNode,
     this.textDirection,
-  });
+  }) : super(key: key);
 
   final TextEditingController? controller;
   final EdgeInsets? margin;
@@ -68,7 +71,8 @@ class CTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final GestureTapCallback? onPrefixTap;
   final GestureTapCallback? onSuffixTap;
-  final BoxBorder? border;
+  final Color? borderColor;
+  final List<BoxShadow>? boxShadow;
   final FocusNode? focusNode;
   final TextDirection? textDirection;
 
@@ -76,7 +80,7 @@ class CTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: margin ?? EdgeInsets.zero,
-      decoration: BoxDecoration(boxShadow: primaryShadows, borderRadius: BorderRadius.circular(borderRadius ?? 10.0)),
+      decoration: BoxDecoration(boxShadow: boxShadow ?? primaryShadows, borderRadius: BorderRadius.circular(borderRadius ?? 10.0)),
       child: TextFormField(
         textDirection: textDirection,
         focusNode: focusNode,
@@ -93,11 +97,11 @@ class CTextField extends StatelessWidget {
         readOnly: readOnly ?? false,
         onTap: onTap,
         inputFormatters: inputFormatters,
-        style: style ?? CTextStyle.w500(fontSize: 14),
+        style: style ?? CTextStyle.w500(fontSize: MediaQuery.textScalerOf(context).scale(14)),
         decoration: InputDecoration(
           filled: true,
           hintText: hintText,
-          labelText: '$labelText -',
+          labelText: labelText == null || labelText!.isEmpty ? null : '$labelText -',
           labelStyle: labelStyle ?? CTextStyle.w500(color: CColors.primary, fontSize: 20),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           counterText: counterText ?? '',
@@ -105,12 +109,12 @@ class CTextField extends StatelessWidget {
           hintStyle: hintStyle ?? CTextStyle.w400(color: CColors.grey),
           isDense: isDense,
           fillColor: fillColor ?? Colors.transparent,
-          enabledBorder: _getBorder(Colors.transparent, borderRadius),
-          focusedBorder: _getBorder(Colors.transparent, borderRadius),
-          disabledBorder: _getBorder(Colors.transparent, borderRadius),
-          errorBorder: _getBorder(Colors.transparent, borderRadius),
-          focusedErrorBorder: _getBorder(Colors.transparent, borderRadius),
-          border: _getBorder(Colors.transparent, borderRadius),
+          enabledBorder: _getBorder(borderColor, borderRadius),
+          focusedBorder: _getBorder(borderColor, borderRadius),
+          disabledBorder: _getBorder(borderColor, borderRadius),
+          errorBorder: _getBorder(borderColor, borderRadius),
+          focusedErrorBorder: _getBorder(borderColor, borderRadius),
+          border: _getBorder(borderColor ?? Colors.transparent, borderRadius),
           prefixIcon: prefixIcon != null ? Padding(padding: prefixMargin ?? EdgeInsets.zero, child: GestureDetector(onTap: onPrefixTap, child: prefixIcon)) : null,
           suffixIcon: suffixIcon != null ? Padding(padding: suffixMargin ?? EdgeInsets.zero, child: GestureDetector(onTap: onSuffixTap, child: suffixIcon)) : null,
         ),
@@ -118,7 +122,7 @@ class CTextField extends StatelessWidget {
     );
   }
 
-  OutlineInputBorder _getBorder(Color color, double? borderRadius) {
-    return OutlineInputBorder(borderRadius: BorderRadius.circular(borderRadius ?? 10.0), borderSide: const BorderSide(color: CColors.primary, width: 2.0));
+  OutlineInputBorder _getBorder(Color? color, double? borderRadius) {
+    return OutlineInputBorder(borderRadius: BorderRadius.circular(borderRadius ?? 10.0), borderSide: BorderSide(color: color ?? CColors.primary, width: 2.0));
   }
 }

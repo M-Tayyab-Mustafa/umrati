@@ -1,5 +1,4 @@
 import '../../../../export.dart';
-
 part '../../../../widgets/dashes_circle.dart';
 
 class TawafTrackerPage extends ConsumerWidget {
@@ -10,8 +9,10 @@ class TawafTrackerPage extends ConsumerWidget {
     var provider = ref.watch(umraProvider);
     return Background(
       logoAlign: Alignment.center,
-      backgroundType: BackgroundType.logoWithBackButton,
-      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: 85),
+      backgroundType: BackgroundType.logo,
+      title: '',
+      titleType: TitleType.backArrow,
+      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: kToolbarHeight * 0.5),
       showEmblem: false,
       child: Column(
         children: [

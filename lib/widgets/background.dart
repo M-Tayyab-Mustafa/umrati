@@ -15,11 +15,14 @@ class Background extends StatelessWidget {
     this.titleStyle,
     this.showEmblem = true,
     this.isSkipLoading = false,
+    this.titleWidget,
+    this.resizeToAvoidBottomInset = false,
   });
   final Widget child;
   final BackgroundType backgroundType;
   final TitleType titleType;
   final String? title;
+  final Widget? titleWidget;
   final Alignment? titleAlignment;
   final Alignment? logoAlign;
   final VoidCallback? onSkipTap;
@@ -28,10 +31,11 @@ class Background extends StatelessWidget {
   final TextStyle? titleStyle;
   final bool showEmblem;
   final bool isSkipLoading;
+  final bool resizeToAvoidBottomInset;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       body: Stack(
         children: [
           Opacity(opacity: 0.1, child: CustomImage(path: 'assets/png/background.png', imageType: ImageType.png, height: screenSize.height, width: screenSize.width, fit: BoxFit.fill)),
@@ -93,52 +97,37 @@ class Background extends StatelessWidget {
                     else
                       Column(
                         children: [
-                          if (backgroundType == BackgroundType.logo || backgroundType == BackgroundType.logoWithSkip || backgroundType == BackgroundType.logoWithBackButton)
-                            Directionality(
-                              textDirection:
-                                  backgroundType == BackgroundType.logoWithBackButton
-                                      ? TextDirection.ltr
-                                      : isLTR(context)
-                                      ? TextDirection.ltr
-                                      : TextDirection.rtl,
-                              child: Row(
-                                children: [
-                                  if (backgroundType == BackgroundType.logoWithBackButton && isLTR(context))
-                                    GestureDetector(onTap: () => Navigator.pop(context), child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: 30)),
-                                  Expanded(
-                                    child: Align(
-                                      alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
-                                      child: CustomImage(
-                                        margin: logoAlign != Alignment.center ? EdgeInsets.only(left: 16) : EdgeInsets.zero,
-                                        path: DefaultImages.logoWithName,
-                                        imageType: ImageType.svg,
-                                        width: screenSize.width * 0.4,
-                                      ),
+                          if (backgroundType == BackgroundType.logo || backgroundType == BackgroundType.logoWithSkip)
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Align(
+                                    alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
+                                    child: CustomImage(
+                                      margin: logoAlign != Alignment.center ? EdgeInsets.only(left: 16) : EdgeInsets.zero,
+                                      path: DefaultImages.logoWithName,
+                                      imageType: ImageType.svg,
+                                      width: screenSize.width * 0.4,
                                     ),
                                   ),
-                                  if (backgroundType == BackgroundType.logoWithBackButton && !isLTR(context))
+                                ),
+                                if (backgroundType == BackgroundType.logoWithSkip)
+                                  if (isSkipLoading)
+                                    SizedBox.shrink()
+                                  else
                                     GestureDetector(
-                                      onTap: () => Navigator.pop(context),
-                                      child: Transform.rotate(angle: -(pi / 180 * 180), child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: 30)),
-                                    )
-                                  else if (backgroundType == BackgroundType.logoWithSkip)
-                                    if (isSkipLoading)
-                                      SizedBox.shrink()
-                                    else
-                                      GestureDetector(
-                                        onTap: onSkipTap,
-                                        child: Text(LocaleKeys.skip.tr(), style: CTextStyle.w400(fontSize: 22, color: CColors.primary, decoration: TextDecoration.underline)),
-                                      ),
-                                ],
-                              ),
+                                      onTap: onSkipTap,
+                                      child: Text(LocaleKeys.skip.tr(), style: CTextStyle.w400(fontSize: 22, color: CColors.primary, decoration: TextDecoration.underline)),
+                                    ),
+                              ],
                             ),
-                          if (title != null)
+                          if (title != null || titleWidget != null)
                             Align(
                               alignment: titleAlignment ?? (languageDirection(context) == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight),
                               child: Padding(
                                 padding: titleMargin ?? const EdgeInsets.only(top: 20),
                                 child: switch (titleType) {
-                                  TitleType.empty => Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
+                                  TitleType.empty => titleWidget ?? Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
                                   TitleType.backArrow => Row(
                                     children: [
                                       GestureDetector(
@@ -151,7 +140,7 @@ class Background extends StatelessWidget {
                                       Expanded(
                                         child: Padding(
                                           padding: EdgeInsets.only(left: isLTR(context) ? 16 : 0, right: isLTR(context) ? 0 : 16),
-                                          child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
+                                          child: titleWidget ?? Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 22)),
                                         ),
                                       ),
                                     ],

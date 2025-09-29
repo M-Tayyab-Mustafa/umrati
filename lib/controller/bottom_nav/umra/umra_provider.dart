@@ -2,7 +2,13 @@ import '../../../export.dart';
 part '../../../utils/helper/tawaf.dart';
 
 // Provider for TawafNotifier using ChangeNotifier
-final umraProvider = ChangeNotifierProvider.autoDispose<UmraNotifier>((ref) => UmraNotifier());
+final umraProvider = ChangeNotifierProvider.autoDispose<UmraNotifier>((ref) {
+  final notifier = UmraNotifier();
+  ref.onDispose(() {
+    if (notifier.userActivityType == UserActivityType.tawaf) notifier.updateUmraModel(notifier.umraModel!.copyWith(is_doing: false));
+  });
+  return notifier;
+});
 
 class UmraNotifier extends ChangeNotifier {
   BuildContext? _context;
@@ -29,6 +35,7 @@ class UmraNotifier extends ChangeNotifier {
   bool hasDoneBeforeMeeqaatTasks = false;
   bool hasReachedMeeqaat = false;
   bool hasDoneAfterMeeqaatTasks = false;
+  bool hasDoneHalfCircle = false;
   double tawafCircleCompletionPercent = 0;
   bool isRoundCompleted = false;
   int tawafCircleCount = 0;
@@ -46,10 +53,12 @@ class UmraNotifier extends ChangeNotifier {
 
   // Initialize TawafNotifier
   Future<void> initialization(UserActivityType userActivityType) async {
+    this.userActivityType = userActivityType;
     ref.read(meeqaatTwoTasksProvider.notifier).updateLoading(true);
     user = (await LocalStorageManager.getUser(fromFirebase: true))!;
     if (userActivityType == UserActivityType.umra) {
-      final querySnapshot = await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('is_doing', isEqualTo: true))).get();
+      final querySnapshot =
+          await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('is_doing', isEqualTo: true), Filter('type', isEqualTo: UserActivityType.umra.name))).get();
       if (querySnapshot.docs.isNotEmpty) {
         final doc = querySnapshot.docs.first.reference;
         umraModel = HistoryModel.fromMap((await doc.get()).data()!);
@@ -72,14 +81,14 @@ class UmraNotifier extends ChangeNotifier {
         }
       }
     } else {
-      if (userActivityType == UserActivityType.tawaf) _fromTawaf();
+      await _fromTawaf();
     }
 
     if (umraModel != null && hasDoneBeforeMeeqaatTasks && hasReachedMeeqaat && hasDoneAfterMeeqaatTasks && tawafCircleCount < 7) await _startTawaf();
     if (context.mounted) ref.read(meeqaatTwoTasksProvider.notifier).updateLoading(false);
   }
 
-  _fromTawaf() async {
+  Future<void> _fromTawaf() async {
     hasDoneBeforeMeeqaatTasks = true;
     hasReachedMeeqaat = true;
     hasDoneAfterMeeqaatTasks = true;
@@ -187,8 +196,11 @@ class UmraNotifier extends ChangeNotifier {
     // Calculate progress angle in anti-clockwise direction
     double progressAngle = antiClockwiseDelta(startBearing, currentBearing);
     if (!isRoundCompleted) tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
-    if (tawafCircleCompletionPercent >= 0.975) {
+    if (tawafCircleCompletionPercent >= 0.5 && tawafCircleCompletionPercent <= 0.7) hasDoneHalfCircle = true;
+    if (tawafCircleCompletionPercent >= 0.975 && !hasDoneHalfCircle) tawafCircleCompletionPercent = 0;
+    if (tawafCircleCompletionPercent >= 0.975 && hasDoneHalfCircle) {
       isRoundCompleted = true;
+      hasDoneHalfCircle = false;
       tawafCircleCount++;
       if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
       updateUmraModel(umraModel!.copyWith(tawaf_circle_count: tawafCircleCount));
