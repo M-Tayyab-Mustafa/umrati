@@ -14,18 +14,20 @@ class MessageCard extends StatelessWidget {
       children: [
         Align(
           alignment: Alignment.centerRight,
-          child: Container(
-            width: MediaQuery.sizeOf(context).width * 0.6,
-            padding: EdgeInsets.all(MediaQuery.textScalerOf(context).scale(16)),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
-                topRight: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
-                bottomLeft: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.6),
+            child: Container(
+              padding: EdgeInsets.all(MediaQuery.textScalerOf(context).scale(16)),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
+                  topRight: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
+                  bottomLeft: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
+                ),
+                color: CColors.primary,
               ),
-              color: CColors.primary,
+              child: Text(message.question, style: CTextStyle.w400(color: Colors.white)),
             ),
-            child: Text(message.question, style: CTextStyle.w400(color: Colors.white)),
           ),
         ),
         Align(
