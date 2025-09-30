@@ -30,13 +30,15 @@ class PaymentSheet extends ConsumerWidget {
                 merchantId: '',
                 merchantName: '',
               ),
-              PaymentButton(isLoading: provider.isLoadingJazzCashPaymentMethod, margin: EdgeInsets.zero, onTap: ref.read(subscriptionProvider.notifier).onJazzCashTap, title: 'Jazz Cash'),
-              PaymentButton(
-                isLoading: provider.isLoadingEasyPaisaPaymentMethod,
-                margin: EdgeInsets.symmetric(vertical: 16),
-                onTap: ref.read(subscriptionProvider.notifier).onEasyPaisaTap,
-                title: 'Easy Paisa',
-              ),
+              if (provider.userRegion == 'PK')
+                PaymentButton(isLoading: provider.isLoadingJazzCashPaymentMethod, margin: EdgeInsets.zero, onTap: ref.read(subscriptionProvider.notifier).onJazzCashTap, title: 'Jazz Cash'),
+              if (provider.userRegion == 'PK')
+                PaymentButton(
+                  isLoading: provider.isLoadingEasyPaisaPaymentMethod,
+                  margin: EdgeInsets.symmetric(vertical: 16),
+                  onTap: ref.read(subscriptionProvider.notifier).onEasyPaisaTap,
+                  title: 'Easy Paisa',
+                ),
               PaymentButton(isLoading: provider.isLoadingStripePaymentMethod, margin: EdgeInsets.zero, onTap: ref.read(subscriptionProvider.notifier).onCardTab, title: 'Credit Card Payment'),
             ],
           ),
