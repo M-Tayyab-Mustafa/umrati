@@ -65,6 +65,7 @@ abstract class  LocaleKeys {
   static const submit = 'submit';
   static const type_your_problem_here = 'type_your_problem_here';
   static const bot_is_typing = 'bot_is_typing';
+  static const how_can_i_help_you = 'how_can_i_help_you';
   static const copied_to_clipboard = 'copied_to_clipboard';
   static const to = 'to';
   static const view = 'view';

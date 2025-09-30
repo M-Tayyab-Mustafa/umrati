@@ -22,9 +22,10 @@ class AskMuftiNotifier extends ChangeNotifier {
     if (context.mounted) notifyListeners();
     user = await LocalStorageManager.getUser(fromFirebase: true);
     var doc = await messagesCollection.doc(user!.uid).get();
-    if (doc.exists) messages = List.from(doc.get('messages')).map((message) => MessageModel.fromMap(message)).toList();
+    if (doc.exists) messages = List.from(doc.data()?[CommonField.messages.name] ?? []).map((message) => MessageModel.fromMap(message)).toList();
     isLoading = false;
     if (context.mounted) notifyListeners();
+    await Future.delayed(const Duration(milliseconds: 100));
     if (scrollController.hasClients) scrollController.animateTo(scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 
@@ -33,7 +34,18 @@ class AskMuftiNotifier extends ChangeNotifier {
       errorToast(LocaleKeys.field_cant_be_empty.tr());
       return;
     }
-    final newMessage = MessageModel(id: Uuid().v4(), question: queryController.text, answer: LocaleKeys.bot_is_typing.tr(), isLiked: false, isGeneratingAnswer: true);
+    final newMessage = MessageModel(
+      id: Uuid().v4(),
+      question: queryController.text,
+      answer: LocaleKeys.bot_is_typing.tr(),
+      isLiked: false,
+      isGeneratingAnswer: true,
+      gender: user!.gender,
+      gender_required: false,
+      gender_specific: false,
+      send_to_mufti: false,
+      source_found: false,
+    );
     messages.add(newMessage);
     queryController.clear();
     notifyListeners();
@@ -62,16 +74,24 @@ class AskMuftiNotifier extends ChangeNotifier {
       Uri uri = Uri.parse('https://automate.robustcraft.io/webhook/pdf-rag');
       final body = {'gender': user!.gender, 'question': message.question};
       final response = await post(uri, body: jsonEncode(body), headers: {'content-type': 'application/json'});
+      final responseBody = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        log(response.body);
+        messages.last = MessageModel.fromMap(responseBody['output']).copyWith(id: message.id, created_at: Timestamp.now(), updated_at: Timestamp.now());
+        await messagesCollection.doc(user!.uid).set({CommonField.messages.name: messages.map((message) => message.toMap()).toList()}, SetOptions(merge: true));
       } else {
-        messages.last = message.copyWith(answer: response.body, isGeneratingAnswer: false);
-        notifyListeners();
+        throw Exception(LocaleKeys.something_went_wrong_please_try_again_later.tr());
       }
-    } catch (e) {
-      messages.last = message.copyWith(answer: e.toString(), isGeneratingAnswer: false);
-      notifyListeners();
-      log(e.toString());
+      if (kDebugMode) log(responseBody.toString());
+      if (context.mounted) notifyListeners();
+    } catch (exception) {
+      if (context.mounted) notifyListeners();
+      if (kDebugMode) log(exception.toString());
+      messages.last = message.copyWith(answer: exception.toString(), isGeneratingAnswer: false);
     }
+  }
+
+  void onFieldTap() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    if (scrollController.hasClients) scrollController.animateTo(scrollController.position.maxScrollExtent, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 }

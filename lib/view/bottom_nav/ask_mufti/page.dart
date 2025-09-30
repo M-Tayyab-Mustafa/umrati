@@ -32,24 +32,30 @@ class _AskMuftiPageState extends ConsumerState<AskMuftiPage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.only(top: 16),
-                controller: provider.scrollController,
-                itemCount: provider.messages.length,
-                itemBuilder: (context, index) {
-                  var message = provider.messages[index];
-                  return MessageCard(
-                    message: message,
-                    onCopyTap: () => provider.onCopyTap(message: message),
-                    onLikeTap: () => provider.onLikeTap(message: message, index: index),
-                    onSpeakTap: () => provider.onSpeakTap(message: message),
-                  );
-                },
-              ),
+              child:
+                  provider.isLoading
+                      ? Loading()
+                      : provider.messages.isEmpty
+                      ? Center(child: Text(LocaleKeys.how_can_i_help_you.tr(), style: CTextStyle.w500(fontSize: MediaQuery.textScalerOf(context).scale(25), color: CColors.primary)))
+                      : ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.only(top: 16),
+                        controller: provider.scrollController,
+                        itemCount: provider.messages.length,
+                        itemBuilder: (context, index) {
+                          var message = provider.messages[index];
+                          return MessageCard(
+                            message: message,
+                            onCopyTap: () => provider.onCopyTap(message: message),
+                            onLikeTap: () => provider.onLikeTap(message: message, index: index),
+                            onSpeakTap: () => provider.onSpeakTap(message: message),
+                          );
+                        },
+                      ),
             ),
           ),
           CTextField(
+            onTap: provider.onFieldTap,
             controller: provider.queryController,
             boxShadow: [],
             borderColor: CColors.charcoalBlack,

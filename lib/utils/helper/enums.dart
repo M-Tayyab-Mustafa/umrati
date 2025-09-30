@@ -52,6 +52,7 @@ enum CommonField {
   oneYear('1_year'),
   regions('regions'),
   symbols('symbols'),
+  messages('messages'),
   currencyCode('currency_code'),
   googleMapKey('google_map_key'),
   startingPoint('startingPoint'),
