@@ -21,7 +21,8 @@ class AskMuftiNotifier extends ChangeNotifier {
     isLoading = true;
     if (context.mounted) notifyListeners();
     user = await LocalStorageManager.getUser(fromFirebase: true);
-    var doc = await messagesCollection.doc(user!.uid).get();
+    var doc = await messagesCollection.doc(user!.uid).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+    ;
     if (doc.exists) messages = List.from(doc.data()?[CommonField.messages.name] ?? []).map((message) => MessageModel.fromMap(message)).toList();
     isLoading = false;
     if (context.mounted) notifyListeners();
@@ -64,6 +65,10 @@ class AskMuftiNotifier extends ChangeNotifier {
   Future<void> onLikeTap({required MessageModel message, required int index}) async {
     messages[index] = message.copyWith(isLiked: !message.isLiked);
     notifyListeners();
+    await messagesCollection
+        .doc(user!.uid)
+        .set({CommonField.messages.name: messages.map((message) => message.toMap()).toList()}, SetOptions(merge: true))
+        .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
   }
 
   Future<void> onSpeakTap({required MessageModel message}) async {}
@@ -73,11 +78,20 @@ class AskMuftiNotifier extends ChangeNotifier {
     try {
       Uri uri = Uri.parse('https://automate.robustcraft.io/webhook/pdf-rag');
       final body = {'gender': user!.gender, 'question': message.question};
-      final response = await post(uri, body: jsonEncode(body), headers: {'content-type': 'application/json'});
+      final response = await post(
+        uri,
+        body: jsonEncode(body),
+        headers: {'content-type': 'application/json'},
+      ).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      ;
       final responseBody = jsonDecode(response.body);
       if (response.statusCode == 200) {
         messages.last = MessageModel.fromMap(responseBody['output']).copyWith(id: message.id, created_at: Timestamp.now(), updated_at: Timestamp.now());
-        await messagesCollection.doc(user!.uid).set({CommonField.messages.name: messages.map((message) => message.toMap()).toList()}, SetOptions(merge: true));
+        await messagesCollection
+            .doc(user!.uid)
+            .set({CommonField.messages.name: messages.map((message) => message.toMap()).toList()}, SetOptions(merge: true))
+            .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+        ;
       } else {
         throw Exception(LocaleKeys.something_went_wrong_please_try_again_later.tr());
       }
