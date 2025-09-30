@@ -16,6 +16,8 @@ class BottomNavNotifier extends ChangeNotifier {
   set ref(WidgetRef value) => _ref = value;
   BottomNavTabs selectedTab = BottomNavTabs.home;
   Widget child = const HomePage();
+  bool canPop = false;
+  Timer? bounceTimer;
 
   void onBottomNavTap(BottomNavTabs selectedOption) async {
     var previousTab = selectedTab;
@@ -42,6 +44,19 @@ class BottomNavNotifier extends ChangeNotifier {
   void updateChild(Widget child) {
     this.child = child;
     notifyListeners();
+  }
+
+  void onPopInvokedWithResult(bool didPop, result) {
+    if (canPop) {
+      exit(0);
+    } else {
+      canPop = true;
+      infoToast('Press again to exit');
+      bounceTimer?.cancel();
+      bounceTimer = Timer(const Duration(seconds: 2), () {
+        canPop = false;
+      });
+    }
   }
 }
 

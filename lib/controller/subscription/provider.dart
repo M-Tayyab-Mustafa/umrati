@@ -15,6 +15,11 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
 
   bool isLoading = true;
   bool isSubscribing = false;
+
+  bool isLoadingJazzCashPaymentMethod = false;
+  bool isLoadingEasyPaisaPaymentMethod = false;
+  bool isLoadingStripePaymentMethod = false;
+
   List<PlanModel> plans = [];
   late PlanModel selectedPlan;
   late UserModel user;
@@ -88,11 +93,20 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   }
 
   Future<void> _subscribePlan() async {
+    isSubscribing = true;
+    notifyListeners();
     final query = subscriptionCollection.where(Filter('user_ids', arrayContains: user.uid)).limit(1);
     DocumentReference<Map<String, dynamic>> doc;
     if ((await query.get()).docs.isNotEmpty) {
       doc = (await query.get()).docs.first.reference;
-      await doc.update({'expire_at': FieldValue.serverTimestamp(), 'updated_at': FieldValue.serverTimestamp()});
+      var userIds = List<String>.from((await doc.get()).get('user_ids'));
+      await doc.set(
+        SubscriptionModel(
+          uid: doc.id,
+          user_ids: userIds,
+          plan: selectedPlan,
+        ).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp(), expire_at: FieldValue.serverTimestamp()),
+      );
       final expireAt = (await doc.get()).get('expire_at') as Timestamp;
       await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: selectedPlan.duration)).millisecondsSinceEpoch)});
       infoToast('Plan Updated Successfully');
@@ -111,6 +125,9 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     }
     Helper.userSubscription = SubscriptionModel.fromMap((await doc.get()).data()!);
     await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id, is_premium: selectedPlan.type != PlanType.free.name));
+    isSubscribing = false;
+    notifyListeners();
+    Navigator.popUntil(context, (route) => route.isFirst);
     ref.read(splashProvider.notifier).redirections(context, false);
   }
 
@@ -158,39 +175,30 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   }
 
   Future<void> onJazzCashTap() async {
-    PaymentInitializationResult response = await PaymobPakistan.instance.initializePayment(currency: userRegion, amountInCents: selectedPlan.amount.toString());
-    String authToken = response.authToken;
-    int orderID = response.orderID;
-    PaymobPakistan.instance.makePayment(
-      context,
-      currency: userRegion,
-      amountInCents: selectedPlan.amount.toString(),
-      paymentType: PaymentType.jazzcash,
-      authToken: authToken,
-      orderID: orderID,
-      onPayment: (response) {
-        if (kDebugMode) log('[Payment Response] ${response.toString()}');
-        if (response.success) _subscribePlan();
-      },
-    );
+    isLoadingJazzCashPaymentMethod = true;
+    notifyListeners();
+    await Payment.instance.makePaymentByJazzCash(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+    panelController.collapse();
+    isLoadingJazzCashPaymentMethod = false;
+    notifyListeners();
   }
 
   Future<void> onEasyPaisaTap() async {
-    PaymentInitializationResult response = await PaymobPakistan.instance.initializePayment(currency: userRegion, amountInCents: selectedPlan.amount.toString());
-    String authToken = response.authToken;
-    int orderID = response.orderID;
-    PaymobPakistan.instance.makePayment(
-      context,
-      currency: userRegion,
-      amountInCents: selectedPlan.amount.toString(),
-      paymentType: PaymentType.easypaisa,
-      authToken: authToken,
-      orderID: orderID,
-      onPayment: (response) {
-        if (kDebugMode) log('[Payment Response] ${response.toString()}');
-        if (response.success) _subscribePlan();
-      },
-    );
+    isLoadingEasyPaisaPaymentMethod = true;
+    notifyListeners();
+    await Payment.instance.makePaymentByEasyPaisa(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+    panelController.collapse();
+    isLoadingEasyPaisaPaymentMethod = false;
+    notifyListeners();
+  }
+
+  Future<void> onCardTab() async {
+    isLoadingStripePaymentMethod = true;
+    notifyListeners();
+    await Payment.instance.makeStripePayment(userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+    panelController.collapse();
+    isLoadingStripePaymentMethod = false;
+    notifyListeners();
   }
 
   @override

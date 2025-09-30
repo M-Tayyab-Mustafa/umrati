@@ -29,6 +29,7 @@ enum UserActivityType { tawaf, umra, ziarat }
 enum CommonDoc {
   alKaba('al_kaba'),
   meeqaat('meeqaat'),
+  keys('keys'),
   constants('constants'),
   safaMarwa('safa_marwa'),
   safaMarwaRunningPoints('safa_marwa_running_points'),
@@ -51,8 +52,11 @@ enum CommonField {
   oneYear('1_year'),
   regions('regions'),
   symbols('symbols'),
+  currencyCode('currency_code'),
   googleMapKey('google_map_key'),
   startingPoint('startingPoint'),
+  stripePublishableKey('stripe_publishable_key'),
+  stripeSecretKey('stripe_secret_key'),
   selectedZiarat('selected_ziarat');
 
   final String name;

@@ -25,6 +25,7 @@ export 'utils/services/translations/locale_keys.g.dart';
 export 'utils/services/local_storage.dart';
 export 'utils/services/social_login.dart';
 export 'utils/services/toast.dart';
+export 'utils/services/payment.dart';
 export 'utils/services/validation.dart';
 
 //* Models
@@ -117,5 +118,6 @@ export 'package:image_picker/image_picker.dart';
 export 'package:image_cropper/image_cropper.dart';
 export 'package:firebase_storage/firebase_storage.dart';
 export 'package:collection/collection.dart' show groupBy, DeepCollectionEquality;
-export 'package:paymob_pakistan/paymob_payment.dart';
 export 'package:uuid_plus/uuid_plus.dart';
+export 'package:flutter_stripe/flutter_stripe.dart' hide Card, ApplePayButtonType, ApplePayButtonStyle;
+export 'package:webview_flutter/webview_flutter.dart' hide X509Certificate;
