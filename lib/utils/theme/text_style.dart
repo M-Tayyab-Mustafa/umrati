@@ -3,7 +3,8 @@ import '../../export.dart';
 class CTextStyle {
   CTextStyle._();
   static BuildContext? _context;
-  static set context(BuildContext context) => _context = context;
+  static init(BuildContext context) => _context = context;
+
   static TextStyle w100({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w100,
     fontSize: fontSize ?? 12,

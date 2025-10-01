@@ -44,7 +44,8 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    CTextStyle.context = context;
+    CTextStyle.init(context);
+    SizeConfig.init(context);
     return MaterialApp(
       locale: context.locale,
       supportedLocales: context.supportedLocales,

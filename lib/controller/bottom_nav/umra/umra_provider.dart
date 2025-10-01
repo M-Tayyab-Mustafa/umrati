@@ -1,5 +1,4 @@
 import '../../../export.dart';
-part '../../../utils/helper/tawaf.dart';
 
 // Provider for TawafNotifier using ChangeNotifier
 final umraProvider = ChangeNotifierProvider.autoDispose<UmraNotifier>((ref) {
@@ -190,11 +189,11 @@ class UmraNotifier extends ChangeNotifier {
     final startingLatLng = LatLng(startingPosition.latitude, startingPosition.longitude);
 
     // Calculate bearings from Kaaba to starting and current positions
-    double startBearing = calculateBearing(kabaLatLng, startingLatLng);
-    double currentBearing = calculateBearing(kabaLatLng, currentLatLng);
+    double startBearing = Helper.calculateBearing(kabaLatLng, startingLatLng);
+    double currentBearing = Helper.calculateBearing(kabaLatLng, currentLatLng);
 
     // Calculate progress angle in anti-clockwise direction
-    double progressAngle = antiClockwiseDelta(startBearing, currentBearing);
+    double progressAngle = Helper.antiClockwiseDelta(startBearing, currentBearing);
     if (!isRoundCompleted) tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
     if (tawafCircleCompletionPercent >= 0.5 && tawafCircleCompletionPercent <= 0.7) hasDoneHalfCircle = true;
     if (tawafCircleCompletionPercent >= 0.975 && !hasDoneHalfCircle) tawafCircleCompletionPercent = 0;

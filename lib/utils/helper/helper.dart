@@ -1,7 +1,8 @@
 import '../../../export.dart';
 
 class Helper {
-  static double degreesToRadians(double degrees) => degrees * pi / 180;
+  static double degToRad(double degrees) => degrees * pi / 180;
+  static double radToDeg(double rad) => rad * 180 / pi;
 
   static const double earthRadiusInMeters = 6371000;
 
@@ -187,6 +188,27 @@ class Helper {
       if (context.mounted) errorToast(e.toString());
       return '';
     }
+  }
+
+  static double calculateBearing(LatLng from, LatLng to) {
+    double lat1 = degToRad(from.latitude);
+    double lon1 = degToRad(from.longitude);
+    double lat2 = degToRad(to.latitude);
+    double lon2 = degToRad(to.longitude);
+
+    double dLon = lon2 - lon1;
+
+    double y = sin(dLon) * cos(lat2);
+    double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
+
+    double bearing = atan2(y, x);
+    return (radToDeg(bearing) + 360) % 360;
+  }
+
+  static double antiClockwiseDelta(double from, double to) {
+    double delta = from - to;
+    if (delta < 0) delta += 360;
+    return delta;
   }
 }
 

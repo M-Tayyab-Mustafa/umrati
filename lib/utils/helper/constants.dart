@@ -1,5 +1,6 @@
 import '../../export.dart';
 part 'enums.dart';
+part 'size_config.dart';
 
 late Size screenSize;
 int distanceFilter = 10;

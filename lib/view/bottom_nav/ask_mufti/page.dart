@@ -36,7 +36,7 @@ class _AskMuftiPageState extends ConsumerState<AskMuftiPage> {
                   provider.isLoading
                       ? Loading()
                       : provider.messages.isEmpty
-                      ? Center(child: Text(LocaleKeys.how_can_i_help_you.tr(), style: CTextStyle.w500(fontSize: MediaQuery.textScalerOf(context).scale(25), color: CColors.primary)))
+                      ? Center(child: Text(LocaleKeys.how_can_i_help_you.tr(), style: CTextStyle.w500(fontSize: 25, color: CColors.primary)))
                       : ListView.builder(
                         shrinkWrap: true,
                         padding: EdgeInsets.only(top: 16),
@@ -62,10 +62,7 @@ class _AskMuftiPageState extends ConsumerState<AskMuftiPage> {
             borderRadius: 20,
             hintText: LocaleKeys.type_your_problem_here.tr(),
             onSuffixTap: provider.send,
-            suffixIcon: Transform.rotate(
-              angle: isLTR(context) ? 0 : pi / 180 * 180,
-              child: CustomImage(path: 'assets/svg/send.svg', imageType: ImageType.svg, size: MediaQuery.textScalerOf(context).scale(25), color: CColors.primary),
-            ),
+            suffixIcon: Transform.rotate(angle: isLTR(context) ? 0 : pi / 180 * 180, child: CustomImage(path: 'assets/svg/send.svg', imageType: ImageType.svg, size: 25, color: CColors.primary)),
           ),
         ],
       ),
