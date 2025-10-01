@@ -17,15 +17,8 @@ class MessageCard extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.6),
             child: Container(
-              padding: EdgeInsets.all(MediaQuery.textScalerOf(context).scale(16)),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
-                  topRight: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
-                  bottomLeft: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
-                ),
-                color: CColors.primary,
-              ),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12), bottomLeft: Radius.circular(12)), color: CColors.primary),
               child: Text(message.question, style: CTextStyle.w400(color: Colors.white)),
             ),
           ),
@@ -34,16 +27,9 @@ class MessageCard extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Container(
             width: MediaQuery.sizeOf(context).width * 0.7,
-            margin: EdgeInsets.symmetric(vertical: MediaQuery.textScalerOf(context).scale(16)),
-            padding: EdgeInsets.all(MediaQuery.textScalerOf(context).scale(16)),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
-                bottomRight: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
-                topLeft: Radius.circular(MediaQuery.textScalerOf(context).scale(12)),
-              ),
-              color: Colors.white,
-            ),
+            margin: EdgeInsets.symmetric(vertical: 16),
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(borderRadius: BorderRadius.only(topRight: Radius.circular(12), bottomRight: Radius.circular(12), topLeft: Radius.circular(12)), color: Colors.white),
             child: Column(
               children: [
                 Align(alignment: isLTR(context) ? Alignment.centerLeft : Alignment.centerRight, child: Text(message.answer, style: CTextStyle.w400())),
@@ -51,27 +37,27 @@ class MessageCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: EdgeInsets.only(top: MediaQuery.textScalerOf(context).scale(16)),
+                      padding: EdgeInsets.only(top: 16),
                       child: Directionality(
                         textDirection: TextDirection.ltr,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            CustomImage(onTap: onCopyTap, path: 'assets/svg/copy.svg', imageType: ImageType.svg, size: MediaQuery.textScalerOf(context).scale(25), color: CColors.charcoalBlack),
+                            CustomImage(onTap: onCopyTap, path: 'assets/svg/copy.svg', imageType: ImageType.svg, size: 25, color: CColors.charcoalBlack),
                             // CustomImage(
-                            //   margin: EdgeInsets.symmetric(horizontal: MediaQuery.textScalerOf(context).scale(16)),
+                            //   margin: EdgeInsets.symmetric(horizontal: 16),
                             //   path: 'assets/svg/speaker.svg',
                             //   onTap: onSpeakTap,
                             //   imageType: ImageType.svg,
-                            //   size: MediaQuery.textScalerOf(context).scale(25),
+                            //   size: 25,
                             //   color: CColors.charcoalBlack,
                             // ),
                             CustomImage(
-                              margin: EdgeInsets.symmetric(horizontal: MediaQuery.textScalerOf(context).scale(16)),
+                              margin: EdgeInsets.symmetric(horizontal: 16),
                               onTap: onLikeTap,
                               path: message.isLiked ? 'assets/svg/liked.svg' : 'assets/svg/un_liked.svg',
                               imageType: ImageType.svg,
-                              size: MediaQuery.textScalerOf(context).scale(25),
+                              size: 25,
                               color: message.isLiked ? CColors.primary : CColors.charcoalBlack,
                             ),
                           ],

@@ -97,7 +97,7 @@ class CTextField extends StatelessWidget {
         readOnly: readOnly ?? false,
         onTap: onTap,
         inputFormatters: inputFormatters,
-        style: style ?? CTextStyle.w500(fontSize: MediaQuery.textScalerOf(context).scale(14)),
+        style: style ?? CTextStyle.w500(fontSize: 14),
         decoration: InputDecoration(
           filled: true,
           hintText: hintText,
