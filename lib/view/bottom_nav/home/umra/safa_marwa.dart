@@ -38,14 +38,14 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
             height: 45,
             isLoading: uProvider.isLoading,
             margin: SizeConfig.only(right: isLTR(context) ? 40 : 0, left: isLTR(context) ? 0 : 40),
-            onTap: ref.read(umraProvider.notifier).startAndStopTawaf,
+            onTap: ref.read(umraProvider.notifier).pauseAndResumeTracker,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CustomImage(path: uProvider.umraModel != null ? 'assets/svg/pause.svg' : 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.h(16)),
+                CustomImage(path: uProvider.isTrackerPaused ? 'assets/svg/pause.svg' : 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.h(16)),
                 Padding(
                   padding: SizeConfig.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
-                  child: Text(uProvider.umraModel != null ? LocaleKeys.off_tracker.tr() : LocaleKeys.start_tawaf.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
+                  child: Text(uProvider.umraModel != null ? LocaleKeys.pause_tracker.tr() : LocaleKeys.start_tracker.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
                 ),
               ],
             ),

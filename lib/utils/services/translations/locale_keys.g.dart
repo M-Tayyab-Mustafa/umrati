@@ -18,6 +18,7 @@ abstract class  LocaleKeys {
   static const name = 'name';
   static const email = 'email';
   static const update = 'update';
+  static const are_you_sure_you_want_to_pause_tracking = 'are_you_sure_you_want_to_pause_tracking';
   static const name_updated_successfully = 'name_updated_successfully';
   static const days_of_premium_remaining = 'days_of_premium_remaining';
   static const renew = 'renew';
@@ -150,7 +151,8 @@ abstract class  LocaleKeys {
   static const home = 'home';
   static const prayer = 'prayer';
   static const supplications = 'supplications';
-  static const off_tracker = 'off_tracker';
+  static const pause_tracker = 'pause_tracker';
+  static const start_tracker = 'start_tracker';
   static const tawaf_tracker = 'tawaf_tracker';
   static const istilaam_time = 'istilaam_time';
   static const start_tawaf = 'start_tawaf';

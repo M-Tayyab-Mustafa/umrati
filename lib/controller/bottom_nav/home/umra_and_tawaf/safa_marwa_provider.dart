@@ -22,36 +22,51 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   double distanceBetweenSafaAndMarwa = 0;
   Alignment startingRunAlign = Alignment(0, 0.34);
+  SafaMarwaModel? safaMarwaModel;
 
   Future<void> initialization() async {
     umraModel = ref.read(umraProvider.notifier).umraModel!;
     isRunComplete = umraModel.is_one_side_sai_run_completed;
     saiRoundCount = umraModel.sai_round_count;
     _updateRunLocations();
-    _cancelPositionStreamSubscription();
-    final safaMarwaModel = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
-    final safaLatLng = LatLng(safaMarwaModel.safaLat, safaMarwaModel.safaLng);
-    final marwaLatLng = LatLng(safaMarwaModel.marwaLat, safaMarwaModel.marwaLng);
-    final safaMarwaDistance = num.parse(safaMarwaModel.distance);
-    final threshold = num.parse(safaMarwaModel.threshold);
+    cancelPositionStreamSubscription();
+    safaMarwaModel = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
+    final safaLatLng = LatLng(safaMarwaModel!.safaLat, safaMarwaModel!.safaLng);
+    final marwaLatLng = LatLng(safaMarwaModel!.marwaLat, safaMarwaModel!.marwaLng);
     distanceBetweenSafaAndMarwa = Geolocator.distanceBetween(safaLatLng.latitude, safaLatLng.longitude, marwaLatLng.latitude, marwaLatLng.longitude);
     try {
       var currentPosition = await Geolocator.getCurrentPosition();
       var distanceFromSafa = Geolocator.distanceBetween(currentPosition.latitude, currentPosition.longitude, safaLatLng.latitude, safaLatLng.longitude).abs();
       if (!context.mounted) return;
-      if (!(distanceFromSafa <= threshold)) await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => SafaMarwaStartConfirmationDialog());
-      positionStreamSubscription = Geolocator.getPositionStream(
-        locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
-      ).listen((position) => _updateLocation(position, safaLatLng, marwaLatLng, safaMarwaDistance, threshold));
+      if (!(distanceFromSafa <= num.parse(safaMarwaModel!.threshold))) {
+        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => SafaMarwaStartConfirmationDialog());
+      }
+    } catch (e) {
+      if (kDebugMode) log(e.toString());
+      errorToast(e.toString());
+    }
+    try {
+      await initializeSafaMarwaLocationTracking();
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
   }
 
+  Future<void> initializeSafaMarwaLocationTracking() async {
+    final safaLatLng = LatLng(safaMarwaModel!.safaLat, safaMarwaModel!.safaLng);
+    final marwaLatLng = LatLng(safaMarwaModel!.marwaLat, safaMarwaModel!.marwaLng);
+    final safaMarwaDistance = num.parse(safaMarwaModel!.distance);
+    var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
+    _updateLocation(currentPosition, safaLatLng, marwaLatLng, safaMarwaDistance, num.parse(safaMarwaModel!.threshold));
+    positionStreamSubscription = Geolocator.getPositionStream(
+      locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
+    ).listen((position) => _updateLocation(position, safaLatLng, marwaLatLng, safaMarwaDistance, num.parse(safaMarwaModel!.threshold)));
+  }
+
   // Method to update location and track progress between Safa and Marwa
   void _updateLocation(Position position, LatLng safaLatLng, LatLng marwaLatLng, num safaMarwaDistance, num threshold) async {
-    if (!umraModel.is_doing) return _cancelPositionStreamSubscription();
+    if (!umraModel.is_doing) return cancelPositionStreamSubscription();
     if (isRunComplete) {
       var safaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, safaLatLng.latitude, safaLatLng.longitude).abs();
       if (safaDistance > (safaMarwaDistance + threshold)) return;
@@ -91,7 +106,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
     umraModel = umraModel.copyWith(sai_round_count: saiRoundCount, is_one_side_sai_run_completed: false);
     ref.read(umraProvider.notifier).updateUmraModel(umraModel);
     if (saiRoundCount == 7) {
-      _cancelPositionStreamSubscription();
+      cancelPositionStreamSubscription();
       saiRoundCount = 0;
       notifyListeners();
       ref.read(umraProvider).safaMarwaCompleted();
@@ -107,14 +122,14 @@ class SafaMarwaNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _cancelPositionStreamSubscription() {
+  void cancelPositionStreamSubscription() {
     positionStreamSubscription?.cancel();
     positionStreamSubscription = null;
   }
 
   @override
   void dispose() {
-    _cancelPositionStreamSubscription();
+    cancelPositionStreamSubscription();
     scrollController.dispose();
     super.dispose();
   }

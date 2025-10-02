@@ -39,6 +39,8 @@ class UmraNotifier extends ChangeNotifier {
   bool isRoundCompleted = false;
   int tawafCircleCount = 0;
 
+  bool isTrackerPaused = false;
+
   // Completion flags for different stages
   bool showSafaMarwa = false;
   bool isSafaMarwaComplete = false;
@@ -115,26 +117,35 @@ class UmraNotifier extends ChangeNotifier {
   }
 
   // Method to start or stop Tawaf
-  Future<void> startAndStopTawaf() async {
-    if (umraModel != null) {
-      _stopTawaf();
+  Future<void> pauseAndResumeTracker() async {
+    if (isTrackerPaused) {
+      _pauseTracker();
     } else {
-      await _startTawaf();
+      _resumeTracker();
     }
   }
 
-  void _stopTawaf() async {
+  void _pauseTracker() async {
     isLoading = true;
     notifyListeners();
-    showSafaMarwa = false;
-    isSafaMarwaComplete = false;
-    await updateUmraModel(umraModel!.copyWith(is_doing: false));
-    umraModel = null;
-    isPerformed2RakatsSalah = false;
-    isDrinkZamzam = false;
-    _resetTawafData();
-    ref.read(safaMarwaProvider.notifier).positionStreamSubscription?.cancel();
+    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.are_you_sure_you_want_to_pause_tracking.tr()));
+    if (result != true) return;
+    ref.read(safaMarwaProvider.notifier).cancelPositionStreamSubscription();
     _cancelPositionStreamSubscription();
+    isTrackerPaused = true;
+    isLoading = false;
+    notifyListeners();
+  }
+
+  void _resumeTracker() async {
+    isLoading = true;
+    notifyListeners();
+    if (umraModel != null && umraModel!.can_start_sai) {
+      ref.read(safaMarwaProvider.notifier).initializeSafaMarwaLocationTracking();
+    } else {
+      _initializeTawafLocationTracking();
+    }
+    isTrackerPaused = false;
     isLoading = false;
     notifyListeners();
   }
@@ -154,7 +165,7 @@ class UmraNotifier extends ChangeNotifier {
       await _initializeTawafLocationTracking();
     } catch (e, stack) {
       debugPrint('Error requesting permission: $e\n$stack');
-      _stopTawaf();
+      _pauseTracker();
     }
   }
 
