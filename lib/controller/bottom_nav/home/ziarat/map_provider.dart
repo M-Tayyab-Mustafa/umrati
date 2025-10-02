@@ -82,7 +82,10 @@ class MapPageNotifier extends ChangeNotifier {
     var distance = Geolocator.distanceBetween(position.latitude, position.longitude, activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble());
     if (distance < 20) {
       _positionStream?.cancel();
-      await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ReachYourDestinationDialog());
+      await showGeneralDialog(
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.ziarat_completion_message.tr(), withContinueButton: true),
+      );
       destinations.removeAt(0);
       history = history!.copyWith(remainingZiarats: destinations, completedZiarats: [...history!.completedZiarats, activeZiarat!]);
       await historyCollection.doc(history!.uid).update(history!.toMap(updatedAt: FieldValue.serverTimestamp()));
@@ -90,7 +93,7 @@ class MapPageNotifier extends ChangeNotifier {
         _positionStream?.cancel();
         markers = markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet();
         notifyListeners();
-        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ZiaratCompleteDialog());
+        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.complete_ziarats.tr(), withContinueButton: true));
         Navigator.pop(context);
         return ref.read(ziaratProvider.notifier).reset();
       } else {

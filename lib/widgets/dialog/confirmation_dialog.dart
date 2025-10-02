@@ -14,9 +14,9 @@ class ConfirmationDialog extends StatelessWidget {
           Center(child: Container(decoration: BoxDecoration(color: Colors.black26))),
           Center(
             child: Container(
-              height: SizeConfig.h(SizeConfig.screenHeight * 0.25),
-              padding: SizeConfig.symmetric(vertical: SizeConfig.screenHeight * 0.0),
-              margin: SizeConfig.symmetric(horizontal: SizeConfig.screenWidth * 0.08),
+              height: SizeConfig.h(230),
+              padding: SizeConfig.only(top: SizeConfig.h(30)),
+              margin: SizeConfig.symmetric(horizontal: 32),
               decoration: BoxDecoration(
                 color: CColors.secondaryBackground,
                 borderRadius: BorderRadius.circular(SizeConfig.r(20)),
@@ -25,11 +25,9 @@ class ConfirmationDialog extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Spacer(),
                   Expanded(
-                    flex: 2,
                     child: Padding(
-                      padding: SizeConfig.symmetric(horizontal: SizeConfig.screenWidth * 0.1),
+                      padding: SizeConfig.symmetric(horizontal: 24),
                       child: Center(child: Text(title, style: CTextStyle.w900(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center)),
                     ),
                   ),
@@ -68,11 +66,7 @@ class ConfirmationDialog extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: SizeConfig.h(SizeConfig.screenHeight * 0.375),
-            left: SizeConfig.w(SizeConfig.screenWidth * 0.45),
-            child: CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: SizeConfig.w(70)),
-          ),
+          Positioned(left: 0, right: 0, top: 0, bottom: SizeConfig.h(230), child: IgnorePointer(child: CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: SizeConfig.w(70)))),
         ],
       ),
     );

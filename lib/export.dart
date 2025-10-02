@@ -76,8 +76,6 @@ export 'widgets/marker.dart';
 export 'widgets/pin_input.dart';
 export 'widgets/text_field.dart';
 export 'widgets/dialog/already_dialog.dart';
-export 'widgets/dialog/ziarat_complete_dialog.dart';
-export 'widgets/dialog/reach_your_destination.dart';
 export 'widgets/dialog/ziarat_reading_detail_dialog.dart';
 export 'widgets/dialog/plan_key_dialog.dart';
 export 'widgets/dialog/confirmation_dialog.dart';

@@ -120,7 +120,7 @@ class Background extends StatelessWidget {
                                       path: DefaultImages.logoWithName,
                                       imageType: ImageType.svg,
                                       fit: BoxFit.fitWidth,
-                                      width: SizeConfig.w(SizeConfig.screenWidth * 0.5),
+                                      width: SizeConfig.w(SizeConfig.screenWidth * 0.45),
                                     ),
                                   ),
                                 ),

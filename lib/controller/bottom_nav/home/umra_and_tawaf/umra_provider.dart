@@ -240,7 +240,7 @@ class UmraNotifier extends ChangeNotifier {
     if (userActivityType == UserActivityType.tawaf) {
       _resetTawafData();
       infoToast(LocaleKeys.your_tawaf_has_been_successfully_completed.tr());
-      return;
+      return Navigator.pop(context);
     }
     // Ensure prerequisites for Safa-Marwa are met
     if (!isPerformed2RakatsSalah || !isDrinkZamzam) {

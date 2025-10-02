@@ -40,18 +40,18 @@ class TawafTrackerPage extends ConsumerWidget {
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final size = SizeConfig.w(constraints.maxWidth * 0.8);
-                final centralContentSize = provider.tawafCircleCount < 7 ? size * 0.8 : size * 0.9;
-                final trackingIndicatorSize = size * 0.16;
-                final tawafCounterSize = size * 0.32;
-                final radius = size * 0.5;
-                final center = Offset(radius, radius);
-                final angle = -2 * pi * provider.tawafCircleCompletionPercent + pi;
-                final trackerDX = center.dx + radius * cos(angle);
-                final trackerDY = center.dy + radius * sin(angle);
-                final tawafCountAngle = -2 * pi * 0 + pi;
-                final tawafCountDX = center.dx + radius * cos(tawafCountAngle);
-                final tawafCountDY = center.dy + radius * sin(tawafCountAngle);
+                final double size = SizeConfig.w(290);
+                final double centralContentSize = size * 0.8;
+                final double trackingIndicatorSize = size * 0.16;
+                final double tawafCounterSize = size * 0.32;
+                final double radius = size * 0.5;
+                final Offset center = Offset(radius, radius);
+                final double angle = -2 * pi * provider.tawafCircleCompletionPercent + pi;
+                final double trackerDX = center.dx + radius * cos(angle);
+                final double trackerDY = center.dy + radius * sin(angle);
+                final double tawafCountAngle = -2 * pi * 0 + pi;
+                final double tawafCountDX = center.dx + radius * cos(tawafCountAngle);
+                final double tawafCountDY = center.dy + radius * sin(tawafCountAngle);
                 return Stack(
                   children: [
                     Center(child: CustomPaint(size: Size(size, size), painter: DashedCirclePainter(primaryColor: CColors.primary, gradientRadiusFactor: provider.tawafCircleCompletionPercent))),
@@ -86,10 +86,9 @@ class TawafTrackerPage extends ConsumerWidget {
                     Center(
                       child: switch (provider.tawafCircleCount) {
                         7 => Container(
-                          height: centralContentSize,
-                          width: centralContentSize,
+                          width: centralContentSize * 1.1,
+                          padding: SizeConfig.all(8),
                           alignment: Alignment.center,
-                          padding: SizeConfig.all(centralContentSize * 0.03),
                           decoration: BoxDecoration(
                             gradient: CColors.trackingGradient,
                             shape: BoxShape.circle,
@@ -109,7 +108,36 @@ class TawafTrackerPage extends ConsumerWidget {
                             ),
                           ),
                         ),
-                        _ => _buildTrackerWidget(size: centralContentSize, isRoundCompleted: provider.isRoundCompleted, provider: provider, context: context),
+                        _ => GestureDetector(
+                          onTap: (provider.isRoundCompleted) ? provider.startNextRound : null,
+                          child: Container(
+                            width: centralContentSize,
+                            padding: SizeConfig.all(8),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              gradient: CColors.trackingGradient,
+                              shape: BoxShape.circle,
+                              boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
+                            ),
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(gradient: CColors.trackingSecondaryGradient, shape: BoxShape.circle),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CustomImage(
+                                    path: provider.isRoundCompleted ? 'assets/svg/istilaam_time.svg' : 'assets/svg/kabaa.svg',
+                                    imageType: ImageType.svg,
+                                    height: SizeConfig.w(80),
+                                    margin: SizeConfig.only(bottom: 12),
+                                  ),
+                                  Text(provider.isRoundCompleted ? LocaleKeys.istilaam_time.tr() : LocaleKeys.tawaf_tracker.tr(), style: CTextStyle.w900(fontSize: 16)),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       },
                     ),
                   ],
@@ -119,40 +147,6 @@ class TawafTrackerPage extends ConsumerWidget {
           ),
           Padding(padding: SizeConfig.symmetric(horizontal: 16), child: _buildDuaWidget(context: context, provider: provider)),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTrackerWidget({required BuildContext context, required double size, required bool isRoundCompleted, required UmraNotifier provider}) {
-    return GestureDetector(
-      onTap: (provider.isRoundCompleted) ? provider.startNextRound : null,
-      child: Container(
-        height: size,
-        width: size,
-        padding: SizeConfig.all(size * 0.03),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          gradient: CColors.trackingGradient,
-          shape: BoxShape.circle,
-          boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
-        ),
-        child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(gradient: CColors.trackingSecondaryGradient, shape: BoxShape.circle),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CustomImage(
-                path: isRoundCompleted ? 'assets/svg/istilaam_time.svg' : 'assets/svg/kabaa.svg',
-                imageType: ImageType.svg,
-                height: SizeConfig.h(size * 0.25),
-                margin: SizeConfig.only(bottom: 12),
-              ),
-              Text(isRoundCompleted ? LocaleKeys.istilaam_time.tr() : LocaleKeys.tawaf_tracker.tr(), style: CTextStyle.w900(fontSize: 16)),
-            ],
-          ),
-        ),
       ),
     );
   }
