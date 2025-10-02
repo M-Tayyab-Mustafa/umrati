@@ -32,7 +32,7 @@ class GenderNotifier extends ChangeNotifier {
       await LocalStorageManager.saveUser(user).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       isUpdatingGender = false;
       notifyListeners();
-      ref.read(splashProvider.notifier).redirections(context, false);
+      ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -45,12 +45,12 @@ class GenderNotifier extends ChangeNotifier {
       notifyListeners();
       var user = (await LocalStorageManager.getUser())!.copyWith(gender: selectedGender.name.toLowerCase());
       await LocalStorageManager.saveUser(user).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      isUpdatingGender = false;
-      notifyListeners();
-      ref.read(splashProvider.notifier).redirections(context, false);
+      ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
+      isUpdatingGender = false;
+      notifyListeners();
     }
   }
 }

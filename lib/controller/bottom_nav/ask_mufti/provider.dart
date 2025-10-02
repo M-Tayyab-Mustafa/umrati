@@ -22,7 +22,6 @@ class AskMuftiNotifier extends ChangeNotifier {
     if (context.mounted) notifyListeners();
     user = await LocalStorageManager.getUser(fromFirebase: true);
     var doc = await messagesCollection.doc(user!.uid).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-    ;
     if (doc.exists) messages = List.from(doc.data()?[CommonField.messages.name] ?? []).map((message) => MessageModel.fromMap(message)).toList();
     isLoading = false;
     if (context.mounted) notifyListeners();
@@ -83,7 +82,6 @@ class AskMuftiNotifier extends ChangeNotifier {
         body: jsonEncode(body),
         headers: {'content-type': 'application/json'},
       ).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      ;
       final responseBody = jsonDecode(response.body);
       if (response.statusCode == 200) {
         messages.last = MessageModel.fromMap(responseBody['output']).copyWith(id: message.id, created_at: Timestamp.now(), updated_at: Timestamp.now());
@@ -91,7 +89,6 @@ class AskMuftiNotifier extends ChangeNotifier {
             .doc(user!.uid)
             .set({CommonField.messages.name: messages.map((message) => message.toMap()).toList()}, SetOptions(merge: true))
             .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-        ;
       } else {
         throw Exception(LocaleKeys.something_went_wrong_please_try_again_later.tr());
       }

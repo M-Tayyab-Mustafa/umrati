@@ -21,7 +21,7 @@ class _AskMuftiPageState extends ConsumerState<AskMuftiPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(askMuftiProvider);
     return Background(
-      margin: EdgeInsets.only(top: kToolbarHeight / 2, left: 16, right: 16, bottom: kToolbarHeight / 2),
+      margin: SizeConfig.zero,
       resizeToAvoidBottomInset: true,
       showEmblem: false,
       backgroundType: BackgroundType.titleWithBackButton,
@@ -30,31 +30,29 @@ class _AskMuftiPageState extends ConsumerState<AskMuftiPage> {
       child: Column(
         children: [
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child:
-                  provider.isLoading
-                      ? Loading()
-                      : provider.messages.isEmpty
-                      ? Center(child: Text(LocaleKeys.how_can_i_help_you.tr(), style: CTextStyle.w500(fontSize: 25, color: CColors.primary)))
-                      : ListView.builder(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.only(top: 16),
-                        controller: provider.scrollController,
-                        itemCount: provider.messages.length,
-                        itemBuilder: (context, index) {
-                          var message = provider.messages[index];
-                          return MessageCard(
-                            message: message,
-                            onCopyTap: () => provider.onCopyTap(message: message),
-                            onLikeTap: () => provider.onLikeTap(message: message, index: index),
-                            onSpeakTap: () => provider.onSpeakTap(message: message),
-                          );
-                        },
-                      ),
-            ),
+            child:
+                provider.isLoading
+                    ? Loading()
+                    : provider.messages.isEmpty
+                    ? Center(child: Text(LocaleKeys.how_can_i_help_you.tr(), style: CTextStyle.w500(fontSize: 25, color: CColors.primary)))
+                    : ListView.builder(
+                      shrinkWrap: true,
+                      padding: SizeConfig.symmetric(vertical: 16, horizontal: 16),
+                      controller: provider.scrollController,
+                      itemCount: provider.messages.length,
+                      itemBuilder: (context, index) {
+                        var message = provider.messages[index];
+                        return MessageCard(
+                          message: message,
+                          onCopyTap: () => provider.onCopyTap(message: message),
+                          onLikeTap: () => provider.onLikeTap(message: message, index: index),
+                          onSpeakTap: () => provider.onSpeakTap(message: message),
+                        );
+                      },
+                    ),
           ),
           CTextField(
+            margin: SizeConfig.only(left: 16, right: 16, bottom: 16),
             onTap: provider.onFieldTap,
             controller: provider.queryController,
             boxShadow: [],
@@ -62,7 +60,10 @@ class _AskMuftiPageState extends ConsumerState<AskMuftiPage> {
             borderRadius: 20,
             hintText: LocaleKeys.type_your_problem_here.tr(),
             onSuffixTap: provider.send,
-            suffixIcon: Transform.rotate(angle: isLTR(context) ? 0 : pi / 180 * 180, child: CustomImage(path: 'assets/svg/send.svg', imageType: ImageType.svg, size: 25, color: CColors.primary)),
+            suffixIcon: Transform.rotate(
+              angle: isLTR(context) ? 0 : pi / 180 * 180,
+              child: CustomImage(path: 'assets/svg/send.svg', imageType: ImageType.svg, size: SizeConfig.w(20), color: CColors.primary),
+            ),
           ),
         ],
       ),

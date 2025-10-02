@@ -16,7 +16,7 @@ class SplashNotifier extends ChangeNotifier {
     await redirections(context);
   }
 
-  Future<void> redirections(BuildContext context, [showPermissionPage = true]) async {
+  Future<void> redirections(BuildContext context, {showPermissionPage = true}) async {
     final user = await LocalStorageManager.getUser(fromFirebase: true);
     await Helper.getCurrencySymbol();
     bool isExpired = true;

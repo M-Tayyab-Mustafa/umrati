@@ -17,30 +17,30 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Background(
-      margin: EdgeInsets.only(top: kToolbarHeight / 2, left: 16, right: 16, bottom: kToolbarHeight / 2),
+      margin: SizeConfig.zero,
       logoAlign: Alignment.center,
       title: LocaleKeys.history.tr(),
       backgroundType: BackgroundType.titleWithBackButton,
       child: Padding(
-        padding: const EdgeInsets.only(top: 24),
+        padding: SizeConfig.only(top: 20, left: 16, right: 16),
         child: Column(
           children: [
             HistoryMenuCard(
-              margin: EdgeInsets.only(bottom: 24),
+              margin: SizeConfig.only(bottom: 24),
               onTap: ref.read(historyProvider.notifier).onUmraTap,
               image: 'assets/png/history/umrah.png',
               title: LocaleKeys.umra.tr(),
               description: '${LocaleKeys.see_history_of_your.tr()} ${LocaleKeys.umra.tr()}',
             ),
             HistoryMenuCard(
-              margin: EdgeInsets.only(bottom: 24),
+              margin: SizeConfig.only(bottom: 24),
               onTap: ref.read(historyProvider.notifier).onTawafTap,
               image: 'assets/png/history/tawaf.png',
               title: LocaleKeys.tawaf.tr(),
               description: '${LocaleKeys.see_history_of_your.tr()} ${LocaleKeys.tawaf.tr()}',
             ),
             HistoryMenuCard(
-              margin: EdgeInsets.only(bottom: 24),
+              margin: SizeConfig.only(bottom: 24),
               onTap: ref.read(historyProvider.notifier).onZiaratTap,
               image: 'assets/png/history/ziarat.png',
               title: LocaleKeys.ziarat.tr(),

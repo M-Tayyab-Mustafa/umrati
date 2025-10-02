@@ -20,11 +20,11 @@ class _LocationPermissionPageState extends ConsumerState<LocationPermissionPage>
       backgroundType: BackgroundType.logoWithSkip,
       titleAlignment: Alignment.center,
       onSkipTap: ref.read(locationPermissionProvider.notifier).skip,
-      titleMargin: EdgeInsets.only(top: 60, bottom: 40),
+      titleMargin: SizeConfig.only(top: 60, bottom: 40),
       child: Column(
         children: [
-          Padding(padding: const EdgeInsets.only(top: 32), child: FormattedText(rawText: LocaleKeys.permission_request_message.tr())),
-          CButton(margin: EdgeInsets.only(top: 48), title: LocaleKeys.turn_on_location.tr(), fontSize: 14, onTap: ref.read(locationPermissionProvider.notifier).continueTab),
+          Padding(padding: SizeConfig.only(top: 32), child: FormattedText(rawText: LocaleKeys.permission_request_message.tr())),
+          CButton(margin: SizeConfig.only(top: 48), title: LocaleKeys.turn_on_location.tr(), fontSize: 14, onTap: ref.read(locationPermissionProvider.notifier).continueTab),
         ],
       ),
     );

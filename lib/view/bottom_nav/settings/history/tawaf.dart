@@ -21,7 +21,7 @@ class _TawafHistoryPageState extends ConsumerState<TawafHistoryPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(historyProvider);
     return Background(
-      margin: EdgeInsets.only(top: kToolbarHeight / 2, left: 16, right: 16, bottom: kToolbarHeight / 2),
+      margin: SizeConfig.zero,
       backgroundType: BackgroundType.titleWithBackButton,
       logoAlign: Alignment.center,
       title: LocaleKeys.tawaf.tr(),
@@ -30,16 +30,14 @@ class _TawafHistoryPageState extends ConsumerState<TawafHistoryPage> {
               ? Loading()
               : provider.tawafHistories.isEmpty
               ? Center(child: Text(LocaleKeys.no_history_found.tr(), style: CTextStyle.w500(fontSize: 22)))
-              : Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: ListView.builder(
-                  itemCount: provider.tawafHistories.length,
-                  itemBuilder: (context, index) {
-                    var histories = provider.tawafHistories.values.toList()[index];
-                    var time = provider.tawafHistories.keys.toList()[index];
-                    return HistoryCard(histories: histories, time: time);
-                  },
-                ),
+              : ListView.builder(
+                padding: SizeConfig.zero,
+                itemCount: provider.tawafHistories.length,
+                itemBuilder: (context, index) {
+                  var histories = provider.tawafHistories.values.toList()[index];
+                  var time = provider.tawafHistories.keys.toList()[index];
+                  return HistoryCard(histories: histories, time: time);
+                },
               ),
     );
   }

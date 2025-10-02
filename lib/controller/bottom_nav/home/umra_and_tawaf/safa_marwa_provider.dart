@@ -1,5 +1,5 @@
-import '../../../export.dart';
-import '../../../widgets/dialog/safa_marwa_start_confirmation.dart';
+import '../../../../export.dart';
+import '../../../../widgets/dialog/safa_marwa_start_confirmation.dart';
 
 // Provider for SafaMarwaNotifier using ChangeNotifier
 final safaMarwaProvider = ChangeNotifierProvider.autoDispose<SafaMarwaNotifier>((ref) => SafaMarwaNotifier());
@@ -22,7 +22,6 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   double distanceBetweenSafaAndMarwa = 0;
   Alignment startingRunAlign = Alignment(0, 0.34);
-  Alignment endingRunAlign = Alignment(0, -0.34);
 
   Future<void> initialization() async {
     umraModel = ref.read(umraProvider.notifier).umraModel!;
@@ -101,11 +100,9 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   void _updateRunLocations() {
     if (isRunComplete) {
-      endingRunAlign = Alignment(0, 0.34);
       startingRunAlign = Alignment(0, -0.34);
     } else {
       startingRunAlign = Alignment(0, 0.34);
-      endingRunAlign = Alignment(0, -0.34);
     }
     notifyListeners();
   }

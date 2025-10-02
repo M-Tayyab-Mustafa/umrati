@@ -16,7 +16,7 @@ class LocationPermissionNotifier extends ChangeNotifier {
     if (result == false || result == null) {
       return;
     }
-    ref.read(splashProvider.notifier).redirections(context, false);
+    ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
   }
 
   void continueTab() async {
@@ -24,6 +24,6 @@ class LocationPermissionNotifier extends ChangeNotifier {
     if (result == LocationPermission.deniedForever) {
       await openAppSettings();
     }
-    ref.read(splashProvider.notifier).redirections(context, false);
+    ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
   }
 }

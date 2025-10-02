@@ -20,7 +20,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Background(
       showEmblem: false,
       backgroundType: BackgroundType.empty,
-      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: 85),
+      margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: 50),
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Column(
@@ -67,7 +67,8 @@ class _Card extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return BasicCard(
       onTap: onTap,
-      padding: EdgeInsets.only(top: 16, bottom: 16, right: 16),
+      margin: SizeConfig.symmetric(horizontal: 16),
+      padding: SizeConfig.only(top: 16, bottom: 16, right: 16),
       height: maxHeight,
       borderColor: CColors.grey,
       boxShadow: greyShadows,
@@ -75,23 +76,33 @@ class _Card extends ConsumerWidget {
         children: [
           Expanded(
             flex: 3,
-            child: LayoutBuilder(builder: (context, constraints) => CustomImage(width: constraints.maxWidth, height: constraints.maxHeight, path: image, fit: BoxFit.fill, imageType: ImageType.png)),
+            child: LayoutBuilder(
+              builder:
+                  (context, constraints) =>
+                      CustomImage(width: SizeConfig.w(constraints.maxWidth), height: SizeConfig.h(constraints.maxHeight), path: image, fit: BoxFit.fill, imageType: ImageType.png),
+            ),
           ),
           Expanded(
             flex: 7,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: SizeConfig.symmetric(horizontal: 16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      Text(title, style: CTextStyle.w600(fontSize: 26, color: CColors.deepTeal), maxLines: 1),
-                      Padding(padding: EdgeInsets.only(left: isLTR(context) ? 16 : 0, right: isLTR(context) ? 0 : 16), child: Icon(Icons.arrow_forward_rounded, size: 26, color: CColors.deepTeal)),
+                      Text(title, style: CTextStyle.w600(fontSize: 22, color: CColors.deepTeal), maxLines: 1),
+                      Padding(
+                        padding: SizeConfig.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
+                        child: Transform.rotate(
+                          angle: isLTR(context) ? 0 : pi / 180 * 180,
+                          child: CustomImage(path: DefaultImages.longArrowForward, size: SizeConfig.w(25), color: CColors.deepTeal, imageType: ImageType.svg),
+                        ),
+                      ),
                     ],
                   ),
-                  Text(description, style: CTextStyle.w600(color: CColors.deepTeal), maxLines: 2, textScaler: TextScaler.linear(0.85)),
+                  Text(description, style: CTextStyle.w600(color: CColors.deepTeal, fontSize: 14), maxLines: 2),
                 ],
               ),
             ),

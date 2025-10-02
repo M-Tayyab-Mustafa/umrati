@@ -1,4 +1,4 @@
-import '../../../export.dart';
+import '../../../../export.dart';
 
 final locationFetchProvider = ChangeNotifierProvider.autoDispose<MeeqaatLocationFetchProviderNotifier>((ref) => MeeqaatLocationFetchProviderNotifier());
 
@@ -33,7 +33,7 @@ class MeeqaatLocationFetchProviderNotifier extends ChangeNotifier {
 
   Future<void> _updateLocation(Position position) async {
     Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
-    location = '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
+    location = '${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
     if (context.mounted) notifyListeners();
     var meeqaatDoc = await settingsCollection.doc(CommonDoc.meeqaat.name).get();
     final leg = await Helper.getRouteLeg(startPoint: LatLng(position.latitude, position.longitude), endPoint: LatLng(meeqaatDoc.get('lat'), meeqaatDoc.get('lng')));

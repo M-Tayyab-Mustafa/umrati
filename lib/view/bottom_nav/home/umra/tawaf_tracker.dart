@@ -10,48 +10,49 @@ class TawafTrackerPage extends ConsumerWidget {
     return Background(
       logoAlign: Alignment.center,
       backgroundType: BackgroundType.logo,
-      title: '',
-      titleType: TitleType.backArrow,
-      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: kToolbarHeight * 0.5),
       showEmblem: false,
-      child: Column(
-        children: [
-          Visibility(
-            visible: provider.tawafCircleCount != 7,
-            child: CButton(
-              shadows: [],
-              height: 50,
-              isLoading: provider.isLoading,
-              margin: EdgeInsets.symmetric(vertical: 30),
-              onTap: provider.startAndStopTawaf,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CustomImage(path: provider.umraModel != null ? 'assets/svg/pause.svg' : 'assets/svg/play.svg', imageType: ImageType.svg, height: 16),
-                  Padding(
-                    padding: EdgeInsets.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
-                    child: Text(provider.umraModel != null ? LocaleKeys.off_tracker.tr() : LocaleKeys.start_tawaf.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
-                  ),
-                ],
-              ),
+      margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: kToolbarHeight * 0.5),
+      titleMargin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
+      titleWidget: Center(
+        child: Visibility(
+          visible: provider.tawafCircleCount != 7,
+          child: CButton(
+            shadows: [],
+            height: 45,
+            isLoading: provider.isLoading,
+            margin: SizeConfig.only(right: isLTR(context) ? 40 : 0, left: isLTR(context) ? 0 : 40),
+            onTap: provider.startAndStopTawaf,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomImage(path: provider.umraModel != null ? 'assets/svg/pause.svg' : 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.h(16)),
+                Padding(
+                  padding: SizeConfig.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
+                  child: Text(provider.umraModel != null ? LocaleKeys.off_tracker.tr() : LocaleKeys.start_tawaf.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
+                ),
+              ],
             ),
           ),
+        ),
+      ),
+      titleType: TitleType.backArrow,
+      child: Column(
+        children: [
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final size = constraints.maxWidth * 0.8;
-                final trackingIndicatorSize = size * 0.14;
-                final tawafCounterSize = size * 0.3;
-                final centralContentSize = size * 0.77;
+                final size = SizeConfig.w(constraints.maxWidth * 0.65);
+                final trackingIndicatorSize = SizeConfig.w(size * 0.1);
+                final tawafCounterSize = SizeConfig.w(size * 0.2);
+                final centralContentSize = SizeConfig.w(size * 0.7);
                 final center = Offset(size / 2, size / 2);
-                final radius = size / 2;
+                final radius = size * 0.5;
                 final angle = -2 * pi * provider.tawafCircleCompletionPercent + pi;
                 final trackerDX = center.dx + radius * cos(angle);
                 final trackerDY = center.dy + radius * sin(angle);
                 final tawafCountAngle = -2 * pi * 0 + pi;
                 final tawafCountDX = center.dx + radius * cos(tawafCountAngle);
                 final tawafCountDY = center.dy + radius * sin(tawafCountAngle);
-
                 return Stack(
                   children: [
                     Center(child: CustomPaint(size: Size(size, size), painter: DashedCirclePainter(primaryColor: CColors.primary, gradientRadiusFactor: provider.tawafCircleCompletionPercent))),
@@ -63,7 +64,7 @@ class TawafTrackerPage extends ConsumerWidget {
                           width: trackingIndicatorSize,
                           height: trackingIndicatorSize,
                           decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
-                          child: Padding(padding: const EdgeInsets.only(left: 5), child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: 20)),
+                          child: Padding(padding: SizeConfig.only(left: 5), child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.w(20))),
                         ),
                       ),
                     if (provider.tawafCircleCount > 0 && provider.tawafCircleCount < 7)
@@ -77,10 +78,7 @@ class TawafTrackerPage extends ConsumerWidget {
                             children: [
                               Center(child: CustomImage(width: tawafCounterSize, height: tawafCounterSize, path: 'assets/svg/tawaf_counter_bg.svg', imageType: ImageType.svg, fit: BoxFit.fill)),
                               Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(bottom: 3),
-                                  child: Text(provider.tawafCircleCount.toString(), style: CTextStyle.w900(fontSize: 16, color: CColors.primary)),
-                                ),
+                                child: Padding(padding: SizeConfig.only(bottom: 3), child: Text(provider.tawafCircleCount.toString(), style: CTextStyle.w900(fontSize: 20, color: CColors.primary))),
                               ),
                             ],
                           ),
@@ -89,10 +87,10 @@ class TawafTrackerPage extends ConsumerWidget {
                     Center(
                       child: switch (provider.tawafCircleCount) {
                         7 => Container(
-                          height: size * 0.9,
-                          width: size * 0.9,
+                          height: centralContentSize,
+                          width: centralContentSize,
                           alignment: Alignment.center,
-                          padding: EdgeInsets.all((size * 0.9) * 0.03),
+                          padding: SizeConfig.all(centralContentSize * 0.03),
                           decoration: BoxDecoration(
                             gradient: CColors.trackingGradient,
                             shape: BoxShape.circle,
@@ -106,8 +104,8 @@ class TawafTrackerPage extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                CustomImage(path: 'assets/svg/complete_check.svg', imageType: ImageType.svg, height: size * 0.33, width: size * 0.33, margin: EdgeInsets.only(bottom: 8)),
-                                Text(LocaleKeys.seven_rounds_completed.tr(), style: CTextStyle.w800(fontSize: 18, color: Colors.white), textAlign: TextAlign.center),
+                                CustomImage(path: 'assets/svg/complete_check.svg', imageType: ImageType.svg, size: SizeConfig.w(size * 0.25), margin: SizeConfig.only(bottom: 8)),
+                                Text(LocaleKeys.seven_rounds_completed.tr(), style: CTextStyle.w800(fontSize: 20, color: Colors.white), textAlign: TextAlign.center),
                               ],
                             ),
                           ),
@@ -120,7 +118,7 @@ class TawafTrackerPage extends ConsumerWidget {
               },
             ),
           ),
-          _buildDuaWidget(context: context, provider: provider),
+          Padding(padding: SizeConfig.symmetric(horizontal: 16), child: _buildDuaWidget(context: context, provider: provider)),
         ],
       ),
     );
@@ -132,7 +130,7 @@ class TawafTrackerPage extends ConsumerWidget {
       child: Container(
         height: size,
         width: size,
-        padding: EdgeInsets.all(size * 0.03),
+        padding: SizeConfig.all(size * 0.03),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           gradient: CColors.trackingGradient,
@@ -146,8 +144,13 @@ class TawafTrackerPage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CustomImage(path: isRoundCompleted ? 'assets/svg/istilaam_time.svg' : 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: size * 0.25, margin: EdgeInsets.only(bottom: 12)),
-              Text(isRoundCompleted ? LocaleKeys.istilaam_time.tr() : LocaleKeys.tawaf_tracker.tr(), style: CTextStyle.w900(fontSize: isLTR(context) ? 14 : 22)),
+              CustomImage(
+                path: isRoundCompleted ? 'assets/svg/istilaam_time.svg' : 'assets/svg/kabaa.svg',
+                imageType: ImageType.svg,
+                height: SizeConfig.h(size * 0.25),
+                margin: SizeConfig.only(bottom: 12),
+              ),
+              Text(isRoundCompleted ? LocaleKeys.istilaam_time.tr() : LocaleKeys.tawaf_tracker.tr(), style: CTextStyle.w900(fontSize: 16)),
             ],
           ),
         ),
@@ -160,21 +163,20 @@ class TawafTrackerPage extends ConsumerWidget {
       case 7:
         return provider.userActivityType == UserActivityType.tawaf
             ? Padding(
-              padding: const EdgeInsets.only(bottom: kToolbarHeight),
+              padding: SizeConfig.only(bottom: kToolbarHeight),
               child: Consumer(builder: (context, ref, child) => CButton(onTap: provider.moveToSafaMarwa, title: LocaleKeys.go_to_home_screen.tr(), titleWithIcon: true)),
             )
             : Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 CheckBoxCard(
-                  margin: EdgeInsets.only(top: 16),
                   title: LocaleKeys.now_perform_2_rakats_salah.tr(),
                   isSelected: provider.isPerformed2RakatsSalah,
                   onTap: provider.perform2RakatsSalah,
-                  child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 14, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular')),
+                  child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 12, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular')),
                 ),
-                CheckBoxCard(margin: EdgeInsets.symmetric(vertical: 10), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
-                CButton(margin: EdgeInsets.only(bottom: 16, top: 25), onTap: provider.moveToSafaMarwa, titleWithIcon: true, title: LocaleKeys.continued.tr()),
+                CheckBoxCard(margin: SizeConfig.symmetric(vertical: 16), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
+                CButton(margin: SizeConfig.only(bottom: 16, top: 25), onTap: provider.moveToSafaMarwa, titleWithIcon: true, title: LocaleKeys.continued.tr()),
               ],
             );
       default:
@@ -189,7 +191,7 @@ class TawafTrackerPage extends ConsumerWidget {
               children: [
                 Text(provider.user?.gender == Gender.female.name ? LocaleKeys.in_low_voice.tr() : '', style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal)),
                 BasicCard(
-                  margin: EdgeInsets.symmetric(vertical: 14),
+                  margin: SizeConfig.symmetric(vertical: 14),
                   backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
                   child: Center(child: Text(dua, style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center, textDirection: TextDirection.rtl)),
                 ),
@@ -219,7 +221,7 @@ class TawafTrackerPage extends ConsumerWidget {
               children: [
                 Text('$duaTitle${provider.user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}', style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal)),
                 BasicCard(
-                  margin: EdgeInsets.symmetric(vertical: 14),
+                  margin: SizeConfig.symmetric(vertical: 14),
                   backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
                   child: Center(
                     child: Text(

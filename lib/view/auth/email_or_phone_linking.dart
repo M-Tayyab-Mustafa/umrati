@@ -34,14 +34,14 @@ class _EmailLinkingPage extends ConsumerWidget {
     return Column(
       children: [
         CTextField(
-          margin: EdgeInsets.only(top: screenSize.height * 0.08),
+          margin: SizeConfig.only(top: screenSize.height * 0.08),
           controller: ref.read(emailOrPhoneLinkingProvider.notifier).emailController,
           keyboardType: TextInputType.emailAddress,
           labelText: LocaleKeys.email.tr(),
         ),
         CButton(
           isLoading: provider.isLinkingAccount,
-          margin: EdgeInsets.only(top: screenSize.height * 0.08),
+          margin: SizeConfig.only(top: screenSize.height * 0.08),
           onTap: ref.read(emailOrPhoneLinkingProvider.notifier).linkAccount,
           title: LocaleKeys.link_account.tr(),
           titleWithIcon: true,
@@ -62,13 +62,13 @@ class _PhoneLinkingPage extends ConsumerWidget {
           textDirection: TextDirection.ltr,
           child: CTextField(
             labelText: LocaleKeys.number.tr(),
-            margin: const EdgeInsets.only(top: 40),
+            margin: SizeConfig.only(top: 40),
             controller: provider.phoneNumberController,
             onChanged: provider.onPhoneNumberTextFieldChanged,
             keyboardType: TextInputType.phone,
             inputFormatters: [UsPhoneNumberFormatter()],
             maxLength: provider.numberDigits + 1,
-            prefixMargin: const EdgeInsets.only(left: 16, top: 3),
+            prefixMargin: SizeConfig.only(left: 16, top: 3),
             textDirection: TextDirection.ltr,
             prefixIcon: CountryCodePicker(
               onChanged: provider.updateSelectedCountry,
@@ -78,16 +78,16 @@ class _PhoneLinkingPage extends ConsumerWidget {
                 return Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CustomImage(path: 'assets/png/${countryCode!.flagUri!}', imageType: ImageType.png, height: 25, width: 25),
-                    Padding(padding: const EdgeInsets.only(left: 12), child: CustomImage(path: 'assets/svg/arrow_down.svg', imageType: ImageType.svg, height: 6, width: 15)),
-                    Padding(padding: const EdgeInsets.only(left: 4), child: Text(countryCode.dialCode!, style: CTextStyle.w500(fontSize: 14, color: CColors.greyShade1))),
+                    CustomImage(path: 'assets/png/${countryCode!.flagUri!}', imageType: ImageType.png, size: SizeConfig.w(25)),
+                    Padding(padding: SizeConfig.only(left: 12), child: CustomImage(path: 'assets/svg/arrow_down.svg', imageType: ImageType.svg, height: SizeConfig.h(6), width: SizeConfig.w(15))),
+                    Padding(padding: SizeConfig.only(left: 4), child: Text(countryCode.dialCode!, style: CTextStyle.w500(fontSize: 14, color: CColors.greyShade1))),
                   ],
                 );
               },
             ),
           ),
         ),
-        CButton(isLoading: provider.isLinkingAccount, onTap: provider.linkAccount, margin: const EdgeInsets.only(top: 35), titleWithIcon: true, title: LocaleKeys.continued.tr()),
+        CButton(isLoading: provider.isLinkingAccount, onTap: provider.linkAccount, margin: SizeConfig.only(top: 35), titleWithIcon: true, title: LocaleKeys.continued.tr()),
       ],
     );
   }

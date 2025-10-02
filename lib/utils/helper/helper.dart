@@ -182,12 +182,19 @@ class Helper {
     try {
       var position = await Geolocator.getCurrentPosition().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
-      return '${placemarks.street}, ${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
+      return '${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
     } catch (e) {
       if (kDebugMode) log(e.toString());
       if (context.mounted) errorToast(e.toString());
       return '';
     }
+  }
+
+  static CrossAxisAlignment getAlignment(BuildContext context, String title, TextStyle style, double maxWidth) {
+    final textPainter = TextPainter(text: TextSpan(text: title, style: style), textDirection: TextDirection.ltr)..layout(maxWidth: maxWidth);
+    final lineHeight = textPainter.preferredLineHeight;
+    final totalLines = (textPainter.size.height / lineHeight).ceil();
+    return totalLines > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center;
   }
 
   static double calculateBearing(LatLng from, LatLng to) {

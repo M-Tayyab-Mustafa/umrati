@@ -9,30 +9,37 @@ class ManualSelection extends ConsumerWidget {
       showEmblem: false,
       title: '${_cityName(provider.selectedCity!)} ${LocaleKeys.top_ziarat_destination_of.tr()}',
       titleType: TitleType.backArrow,
-      margin: EdgeInsets.only(top: kToolbarHeight / 2, left: 16, right: 16),
+      titleMargin: SizeConfig.symmetric(vertical: kToolbarHeight * 0.5),
+      margin: SizeConfig.only(left: 16, right: 16),
       child: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.only(top: 20),
+              padding: SizeConfig.zero,
               itemCount: provider.ziarats.length,
               itemBuilder: (context, index) {
                 var ziarat = provider.ziarats[index];
                 return BasicCard(
-                  margin: EdgeInsets.only(bottom: 16),
+                  margin: SizeConfig.only(bottom: 20),
                   onTap: () => provider.updateSelectedZiarat(ziarat),
                   borderColor: provider.selectedZiarat.contains(ziarat) ? null : CColors.greyShade3,
                   boxShadow: provider.selectedZiarat.contains(ziarat) ? null : [],
                   child: Directionality(
-                    textDirection: getTextDirection(languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur),
-                    child: Text(languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur, style: CTextStyle.w500(fontSize: 16)),
+                    textDirection: getTextDirection(isLTR(context) ? ziarat.title_en : ziarat.title_ur),
+                    child: Text(isLTR(context) ? ziarat.title_en : ziarat.title_ur, style: CTextStyle.w500(fontSize: 14)),
                   ),
                 );
               },
             ),
           ),
           if (provider.selectedZiarat.isNotEmpty)
-            CButton(isLoading: provider.isLoading, onTap: provider.createZiaratRoute, margin: EdgeInsets.only(bottom: 48), title: LocaleKeys.start_your_ziarat.tr(), width: 200),
+            CButton(
+              isLoading: provider.isLoading,
+              onTap: provider.createZiaratRoute,
+              margin: SizeConfig.only(bottom: SizeConfig.screenHeight * 0.05),
+              title: LocaleKeys.start_your_ziarat.tr(),
+              width: SizeConfig.w(150),
+            ),
         ],
       ),
     );

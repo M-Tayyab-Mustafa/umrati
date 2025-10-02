@@ -1,6 +1,6 @@
-import '../../../export.dart';
-import '../../../view/bottom_nav/home/ziarat/map.dart';
-import '../../../view/bottom_nav/home/ziarat/page.dart';
+import '../../../../export.dart';
+import '../../../../view/bottom_nav/home/ziarat/map.dart';
+import '../../../../view/bottom_nav/home/ziarat/page.dart';
 
 final ziaratProvider = ChangeNotifierProvider.autoDispose<ZiaratNotifier>((ref) => ZiaratNotifier());
 
@@ -157,18 +157,17 @@ class ZiaratNotifier extends ChangeNotifier {
     notifyListeners();
     var ziarats = selectedDestinationsCreationOption == ZiaratDestinationsCreationOptions.auto ? sortedZiarats : selectedZiarat;
     var doc = historyCollection.doc();
-    await doc.set(
-      ZiaratHistoryModel(
-        uid: doc.id,
-        isCompleted: false,
-        userId: user!.uid,
-        total: ziarats.length,
-        ziaratCity: selectedCity!.name,
-        type: UserActivityType.ziarat.name,
-        remainingZiarats: ziarats,
-        completedZiarats: [],
-      ).toMap(createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp()),
+    var ziaratHistory = ZiaratHistoryModel(
+      uid: doc.id,
+      isCompleted: false,
+      userId: user!.uid,
+      total: ziarats.length,
+      ziaratCity: selectedCity!.name,
+      type: UserActivityType.ziarat.name,
+      remainingZiarats: ziarats,
+      completedZiarats: [],
     );
+    await doc.set(ziaratHistory.toMap(createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp()));
     isLoading = false;
     notifyListeners();
     if (selectedDestinationsCreationOption == ZiaratDestinationsCreationOptions.manual) {
@@ -176,7 +175,7 @@ class ZiaratNotifier extends ChangeNotifier {
     } else {
       goToBackFromAutoSelectionPage();
     }
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratMapPage()));
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratMapPage(ziaratHistory: ziaratHistory)));
     selectedZiarat.clear();
     notifyListeners();
   }

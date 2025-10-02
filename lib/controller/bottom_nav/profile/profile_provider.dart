@@ -75,7 +75,13 @@ class ProfileNotifier extends ChangeNotifier {
         if (kDebugMode) log(e.toString());
       }
       await LocalStorageManager.clearStorage();
-      ref.read(splashProvider.notifier).redirections(context, false);
+      try {
+        ref.read(loginProvider.notifier).resetPage();
+        ref.read(loginProvider.notifier).phoneNumberController.clear();
+      } catch (e) {
+        if (kDebugMode) log(e.toString());
+      }
+      ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
     }
   }
 
@@ -84,14 +90,20 @@ class ProfileNotifier extends ChangeNotifier {
     if (result == true) {
       isLoading = true;
       notifyListeners();
+      await userCollection.doc(user!.uid).delete();
+      await LocalStorageManager.clearStorage();
       try {
-        await FirebaseAuth.instance.currentUser?.delete();
+        FirebaseAuth.instance.currentUser?.delete();
       } catch (e) {
         if (kDebugMode) log(e.toString());
       }
-      await userCollection.doc(user!.uid).delete();
-      await LocalStorageManager.clearStorage();
-      ref.read(splashProvider.notifier).redirections(context, false);
+      try {
+        ref.read(loginProvider.notifier).resetPage();
+        ref.read(loginProvider.notifier).phoneNumberController.clear();
+      } catch (e) {
+        if (kDebugMode) log(e.toString());
+      }
+      ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
     }
   }
 

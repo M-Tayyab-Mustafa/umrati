@@ -1,4 +1,4 @@
-import '../../../export.dart';
+import '../../../../export.dart';
 
 final meeqaatThreeTasksProvider = ChangeNotifierProvider.autoDispose<MeeqaatThreeTasksNotifier>((ref) => MeeqaatThreeTasksNotifier());
 

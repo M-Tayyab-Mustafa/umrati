@@ -35,9 +35,9 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
         errorToast(LocaleKeys.please_enter_your_email.tr());
         return;
       }
-      isLinkingAccount = true;
-      notifyListeners();
       try {
+        isLinkingAccount = true;
+        notifyListeners();
         final credential = EmailAuthProvider.credential(email: emailController.text.trim(), password: user!.password);
         await FirebaseAuth.instance.currentUser?.linkWithCredential(credential);
         await LocalStorageManager.saveUser(user!.copyWith(email: emailController.text.trim()));
@@ -46,12 +46,14 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
       } on FirebaseAuthException catch (e) {
         if (kDebugMode) log(e.toString());
         errorToast(e.message ?? LocaleKeys.something_went_wrong_please_try_again_later.tr());
+        isLinkingAccount = false;
+        notifyListeners();
       } catch (e) {
         if (kDebugMode) log(e.toString());
         errorToast(e.toString());
+        isLinkingAccount = false;
+        notifyListeners();
       }
-      isLinkingAccount = false;
-      notifyListeners();
     } else {
       isLinkingAccount = true;
       notifyListeners();
@@ -66,9 +68,9 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
       } catch (e) {
         if (kDebugMode) log(e.toString());
         errorToast(e.toString());
+        isLinkingAccount = false;
+        notifyListeners();
       }
-      isLinkingAccount = false;
-      notifyListeners();
     }
   }
 

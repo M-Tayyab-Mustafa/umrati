@@ -28,29 +28,30 @@ class _LanguagePageState extends ConsumerState<LanguagePage> {
       titleType: TitleType.backArrow,
       backgroundType: BackgroundType.logo,
       logoAlign: provider.isUpdatingLanguage ? Alignment.center : Alignment.centerLeft,
-      margin: EdgeInsets.only(left: 32, right: 32, top: kToolbarHeight, bottom: kToolbarHeight),
-      titleMargin: EdgeInsets.only(top: kToolbarHeight, bottom: kToolbarHeight / 2),
+      margin: SizeConfig.only(top: kToolbarHeight),
+      titleMargin: SizeConfig.symmetric(horizontal: 16, vertical: kToolbarHeight / 2),
       child: Column(
         children: [
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: provider.languages.length,
+              padding: SizeConfig.only(left: 16, right: 16),
               itemBuilder: (context, index) {
                 bool isSelected = provider.languages[index] == provider.selectedLanguage;
                 return GestureDetector(
                   onTap: () => ref.read(languageProvider.notifier).updateLanguage(provider.languages[index]),
                   child: BasicCard(
-                    margin: EdgeInsets.only(top: index != 0 ? 30 : 20),
+                    margin: SizeConfig.only(top: index != 0 ? 20 : 0),
                     borderColor: isSelected ? CColors.primary : CColors.lightGrey,
                     boxShadow: isSelected ? null : [],
-                    child: Text(provider.languages[index].tr(), style: CTextStyle.w600()),
+                    child: Text(provider.languages[index].tr(), style: CTextStyle.w600(fontSize: 16)),
                   ),
                 );
               },
             ),
           ),
-          CButton(onTap: ref.read(languageProvider.notifier).continueTap, title: LocaleKeys.continued.tr(), titleWithIcon: true),
+          CButton(margin: SizeConfig.only(bottom: kToolbarHeight), onTap: ref.read(languageProvider.notifier).continueTap, title: LocaleKeys.continued.tr(), titleWithIcon: true),
         ],
       ),
     );

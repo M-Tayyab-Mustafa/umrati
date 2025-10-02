@@ -20,80 +20,83 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
   @override
   Widget build(BuildContext context) {
     final provider = ref.watch(subscriptionProvider);
-    return Background(
-      backgroundType: BackgroundType.logo,
-      titleWidget: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('3 ${LocaleKeys.months.tr()}', style: CTextStyle.w500(fontSize: 16, color: Colors.black)),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: SizedBox(
-              height: 30,
-              child: FittedBox(
-                child: Switch(
-                  value: !provider.showThreeMonthPlans,
-                  thumbColor: WidgetStatePropertyAll(CColors.deepTeal),
-                  overlayColor: WidgetStatePropertyAll(CColors.deepTeal),
-                  activeColor: CColors.deepTeal,
-                  trackColor: WidgetStatePropertyAll(CColors.primary.withValues(alpha: 0.1)),
-                  onChanged: provider.togglePlans,
+    return IgnorePointer(
+      ignoring: provider.isSubscribing,
+      child: Background(
+        backgroundType: BackgroundType.logo,
+        titleWidget: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('3 ${LocaleKeys.months.tr()}', style: CTextStyle.w500(fontSize: 18, color: Colors.black)),
+            Padding(
+              padding: SizeConfig.symmetric(horizontal: 8),
+              child: SizedBox(
+                height: SizeConfig.w(30),
+                child: FittedBox(
+                  child: Switch(
+                    value: !provider.showThreeMonthPlans,
+                    thumbColor: WidgetStatePropertyAll(CColors.deepTeal),
+                    overlayColor: WidgetStatePropertyAll(CColors.deepTeal),
+                    activeColor: CColors.deepTeal,
+                    trackColor: WidgetStatePropertyAll(CColors.primary.withValues(alpha: 0.1)),
+                    onChanged: provider.togglePlans,
+                  ),
                 ),
               ),
             ),
-          ),
-          Text('1 ${LocaleKeys.year.tr()}', style: CTextStyle.w500(fontSize: 16, color: Colors.black)),
-        ],
-      ),
-      titleType: provider.isRenewingPlan ? TitleType.backArrow : TitleType.empty,
-      titleMargin: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-      margin: EdgeInsets.only(top: kToolbarHeight / 2),
-      logoAlign: Alignment.topCenter,
-      child:
-          provider.isLoading
-              ? Loading()
-              : LayoutBuilder(
-                builder: (context, constraints) {
-                  var plans = <PlanModel>[];
-                  if (provider.showThreeMonthPlans) {
-                    plans = provider.plans.where((element) => element.duration == 90 || element.type == PlanType.free.name).toList();
-                  } else {
-                    plans = provider.plans.where((element) => element.duration != 90 && element.type != PlanType.free.name).toList();
-                  }
-                  return Stack(
-                    children: [
-                      SizedBox(
-                        height: constraints.maxHeight,
-                        width: constraints.maxWidth,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: ListView.builder(
-                                  padding: EdgeInsets.zero,
-                                  shrinkWrap: true,
-                                  itemCount: plans.length,
-                                  itemBuilder: (context, index) {
-                                    return PlanWidget(onSubscribe: provider.subscribe, plan: plans[index], isSelected: provider.selectedPlan == plans[index]);
-                                  },
+            Text('1 ${LocaleKeys.year.tr()}', style: CTextStyle.w500(fontSize: 18, color: Colors.black)),
+          ],
+        ),
+        titleType: provider.isRenewingPlan ? TitleType.backArrow : TitleType.empty,
+        titleMargin: SizeConfig.symmetric(horizontal: 20, vertical: 25),
+        margin: SizeConfig.only(top: kToolbarHeight / 2),
+        logoAlign: Alignment.topCenter,
+        child:
+            provider.isLoading
+                ? Loading()
+                : LayoutBuilder(
+                  builder: (context, constraints) {
+                    var plans = <PlanModel>[];
+                    if (provider.showThreeMonthPlans) {
+                      plans = provider.plans.where((element) => element.duration == 90 || element.type == PlanType.free.name).toList();
+                    } else {
+                      plans = provider.plans.where((element) => element.duration != 90 && element.type != PlanType.free.name).toList();
+                    }
+                    return Stack(
+                      children: [
+                        SizedBox(
+                          height: constraints.maxHeight,
+                          width: constraints.maxWidth,
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    itemCount: plans.length,
+                                    itemBuilder: (context, index) {
+                                      return PlanWidget(onSubscribe: provider.subscribe, plan: plans[index], isSelected: provider.selectedPlan == plans[index]);
+                                    },
+                                  ),
                                 ),
-                              ),
-                              if (!provider.isRenewingPlan)
-                                BasicCard(
-                                  onTap: provider.enterKeyDialog,
-                                  backgroundColor: CColors.duaBackground,
-                                  child: Text(LocaleKeys.enter_access_key_prompt.tr(), style: CTextStyle.w500(color: CColors.primary)),
-                                ),
-                            ],
+                                if (!provider.isRenewingPlan)
+                                  BasicCard(
+                                    onTap: provider.enterKeyDialog,
+                                    backgroundColor: CColors.duaBackground,
+                                    child: Text(LocaleKeys.enter_access_key_prompt.tr(), style: CTextStyle.w500(color: CColors.primary, fontSize: 14)),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      SlidingUpPanelWidget(controlHeight: 0, anchor: 0.4, panelController: provider.panelController, child: PaymentSheet()),
-                    ],
-                  );
-                },
-              ),
+                        SlidingUpPanelWidget(controlHeight: 0, anchor: 0.4, panelController: provider.panelController, child: PaymentSheet()),
+                      ],
+                    );
+                  },
+                ),
+      ),
     );
   }
 }

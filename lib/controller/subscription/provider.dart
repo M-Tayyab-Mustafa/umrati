@@ -95,66 +95,77 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   Future<void> _subscribePlan() async {
     isSubscribing = true;
     notifyListeners();
-    final query = subscriptionCollection.where(Filter('user_ids', arrayContains: user.uid)).limit(1);
-    DocumentReference<Map<String, dynamic>> doc;
-    if ((await query.get()).docs.isNotEmpty) {
-      doc = (await query.get()).docs.first.reference;
-      var userIds = List<String>.from((await doc.get()).get('user_ids'));
-      await doc.set(
-        SubscriptionModel(
-          uid: doc.id,
-          user_ids: userIds,
-          plan: selectedPlan,
-        ).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp(), expire_at: FieldValue.serverTimestamp()),
-      );
-      final expireAt = (await doc.get()).get('expire_at') as Timestamp;
-      await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: selectedPlan.duration)).millisecondsSinceEpoch)});
-      infoToast('Plan Updated Successfully');
-    } else {
-      doc = subscriptionCollection.doc();
-      await doc.set(
-        SubscriptionModel(
-          uid: doc.id,
-          user_ids: [user.uid],
-          plan: selectedPlan,
-        ).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp(), expire_at: FieldValue.serverTimestamp()),
-      );
-      final expireAt = (await doc.get()).get('expire_at') as Timestamp;
-      await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: selectedPlan.duration)).millisecondsSinceEpoch)});
-      infoToast('Plan Subscribed Successfully');
+    try {
+      final query = subscriptionCollection.where(Filter('user_ids', arrayContains: user.uid)).limit(1);
+      DocumentReference<Map<String, dynamic>> doc;
+      if ((await query.get()).docs.isNotEmpty) {
+        doc = (await query.get()).docs.first.reference;
+        var userIds = List<String>.from((await doc.get()).get('user_ids'));
+        await doc.set(
+          SubscriptionModel(
+            uid: doc.id,
+            user_ids: userIds,
+            plan: selectedPlan,
+          ).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp(), expire_at: FieldValue.serverTimestamp()),
+        );
+        final expireAt = (await doc.get()).get('expire_at') as Timestamp;
+        await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: selectedPlan.duration)).millisecondsSinceEpoch)});
+        infoToast('Plan Updated Successfully');
+      } else {
+        doc = subscriptionCollection.doc();
+        await doc.set(
+          SubscriptionModel(
+            uid: doc.id,
+            user_ids: [user.uid],
+            plan: selectedPlan,
+          ).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp(), expire_at: FieldValue.serverTimestamp()),
+        );
+        final expireAt = (await doc.get()).get('expire_at') as Timestamp;
+        await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: selectedPlan.duration)).millisecondsSinceEpoch)});
+        infoToast('Plan Subscribed Successfully');
+      }
+      Helper.userSubscription = SubscriptionModel.fromMap((await doc.get()).data()!);
+      await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id, is_premium: selectedPlan.type != PlanType.free.name));
+      Navigator.popUntil(context, (route) => route.isFirst);
+      ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
+    } catch (e) {
+      if (kDebugMode) log(e.toString());
+      errorToast(e.toString());
+      isSubscribing = false;
+      notifyListeners();
     }
-    Helper.userSubscription = SubscriptionModel.fromMap((await doc.get()).data()!);
-    await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id, is_premium: selectedPlan.type != PlanType.free.name));
-    isSubscribing = false;
-    notifyListeners();
-    Navigator.popUntil(context, (route) => route.isFirst);
-    ref.read(splashProvider.notifier).redirections(context, false);
   }
 
   Future<void> enterKeyDialog() async {
     keyController.clear();
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => PlanKeyDialog(controller: keyController));
     if (result != true) return;
-    isSubscribing = true;
-    notifyListeners();
     try {
+      isSubscribing = true;
+      notifyListeners();
       final query = subscriptionCollection.where('uid', isEqualTo: keyController.text.trim());
       final docs = (await query.get()).docs;
       if (docs.isEmpty) {
         errorToast(LocaleKeys.invalid_key.tr());
         enterKeyDialog();
+        isSubscribing = false;
+        notifyListeners();
         return;
       }
       var subscription = SubscriptionModel.fromMap(docs.first.data());
       if (subscription.user_ids.length == subscription.plan.members) {
         errorToast(LocaleKeys.key_limit_reached.tr());
         enterKeyDialog();
+        isSubscribing = false;
+        notifyListeners();
         return;
       }
       bool isExpired = DateTime.now().isAfter(subscription.expire_at!.toDate());
       if (isExpired) {
         errorToast(LocaleKeys.subscription_expire_msg.tr());
         enterKeyDialog();
+        isSubscribing = false;
+        notifyListeners();
         return;
       }
       await docs.first.reference.update({
@@ -164,11 +175,10 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       infoToast('Plan Subscribed Successfully');
       Helper.userSubscription = SubscriptionModel.fromMap((await docs.first.reference.get()).data()!);
       await LocalStorageManager.saveUser(user.copyWith(subscription_id: subscription.uid));
-      ref.read(splashProvider.notifier).redirections(context, false);
+      ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
-    } finally {
       isSubscribing = false;
       notifyListeners();
     }

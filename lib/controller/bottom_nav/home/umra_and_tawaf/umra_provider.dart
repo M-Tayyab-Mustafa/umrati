@@ -1,4 +1,4 @@
-import '../../../export.dart';
+import '../../../../export.dart';
 
 // Provider for TawafNotifier using ChangeNotifier
 final umraProvider = ChangeNotifierProvider.autoDispose<UmraNotifier>((ref) {
@@ -195,9 +195,9 @@ class UmraNotifier extends ChangeNotifier {
     // Calculate progress angle in anti-clockwise direction
     double progressAngle = Helper.antiClockwiseDelta(startBearing, currentBearing);
     if (!isRoundCompleted) tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
-    if (tawafCircleCompletionPercent >= 0.5 && tawafCircleCompletionPercent <= 0.7) hasDoneHalfCircle = true;
-    if (tawafCircleCompletionPercent >= 0.975 && !hasDoneHalfCircle) tawafCircleCompletionPercent = 0;
-    if (tawafCircleCompletionPercent >= 0.975 && hasDoneHalfCircle) {
+    if (tawafCircleCompletionPercent >= 0.5 && tawafCircleCompletionPercent <= 0.8) hasDoneHalfCircle = true;
+    if (tawafCircleCompletionPercent >= 0.985 && !hasDoneHalfCircle) tawafCircleCompletionPercent = 0;
+    if (tawafCircleCompletionPercent >= 0.985 && hasDoneHalfCircle) {
       isRoundCompleted = true;
       hasDoneHalfCircle = false;
       tawafCircleCount++;

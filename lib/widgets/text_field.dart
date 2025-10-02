@@ -8,7 +8,7 @@ import '../utils/theme/text_style.dart';
 
 class CTextField extends StatelessWidget {
   const CTextField({
-    Key? key,
+    super.key,
     this.controller,
     this.margin,
     this.hintText = '',
@@ -41,7 +41,7 @@ class CTextField extends StatelessWidget {
     this.boxShadow,
     this.focusNode,
     this.textDirection,
-  }) : super(key: key);
+  });
 
   final TextEditingController? controller;
   final EdgeInsets? margin;
@@ -97,16 +97,16 @@ class CTextField extends StatelessWidget {
         readOnly: readOnly ?? false,
         onTap: onTap,
         inputFormatters: inputFormatters,
-        style: style ?? CTextStyle.w500(fontSize: 14),
+        style: style ?? CTextStyle.w500(fontSize: 13),
         decoration: InputDecoration(
           filled: true,
           hintText: hintText,
           labelText: labelText == null || labelText!.isEmpty ? null : '$labelText -',
-          labelStyle: labelStyle ?? CTextStyle.w500(color: CColors.primary, fontSize: 20),
+          labelStyle: labelStyle ?? CTextStyle.w500(color: CColors.primary),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           counterText: counterText ?? '',
           errorStyle: CTextStyle.w400(color: Colors.red),
-          hintStyle: hintStyle ?? CTextStyle.w400(color: CColors.grey),
+          hintStyle: hintStyle ?? CTextStyle.w400(color: CColors.grey, fontSize: 13),
           isDense: isDense,
           fillColor: fillColor ?? Colors.transparent,
           enabledBorder: _getBorder(borderColor, borderRadius),

@@ -29,9 +29,9 @@ class _BottomNavigationPageState extends ConsumerState<BottomNavigationPage> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: SizeConfig.symmetric(horizontal: 16),
                   child: Container(
-                    height: 60,
+                    height: SizeConfig.h(50),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),

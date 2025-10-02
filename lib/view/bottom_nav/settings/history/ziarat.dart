@@ -21,7 +21,7 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(historyProvider);
     return Background(
-      margin: EdgeInsets.only(top: kToolbarHeight / 2, left: 16, right: 16, bottom: kToolbarHeight / 2),
+      margin: SizeConfig.zero,
       backgroundType: BackgroundType.titleWithBackButton,
       logoAlign: Alignment.center,
       title: LocaleKeys.ziarat.tr(),
@@ -30,67 +30,60 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
               ? Loading()
               : provider.ziaratHistories.isEmpty
               ? Center(child: Text(LocaleKeys.no_history_found.tr(), style: CTextStyle.w500(fontSize: 22)))
-              : Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                  itemCount: provider.ziaratHistories.length,
-                  itemBuilder: (context, index) {
-                    var history = provider.ziaratHistories[index];
-                    return BasicCard(
-                      boxShadow: [],
-                      borderColor: CColors.charcoalBlack,
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+              : GridView.builder(
+                shrinkWrap: true,
+                padding: SizeConfig.symmetric(vertical: 20, horizontal: 16),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: SizeConfig.w(30), crossAxisSpacing: SizeConfig.w(30)),
+                itemCount: provider.ziaratHistories.length,
+                itemBuilder: (context, index) {
+                  var history = provider.ziaratHistories[index];
+                  return BasicCard(
+                    boxShadow: [],
+                    borderColor: CColors.charcoalBlack,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            CustomImage(
+                              margin: SizeConfig.only(right: 8),
+                              size: SizeConfig.w(25),
+                              imageType: ImageType.svg,
+                              color: CColors.primary,
+                              path: switch (_getZiaratCity(history.ziaratCity)) {
+                                ZiaratCities.medina => 'assets/svg/ziarat/medina.svg',
+                                ZiaratCities.taif => 'assets/svg/ziarat/taif.svg',
+                                ZiaratCities.other => 'assets/svg/ziarat/other.svg',
+                                _ => 'assets/svg/ziarat/medina.svg',
+                              },
+                            ),
+                            Text(isLTR(context) ? Helper.generateTitle(history.ziaratCity) : generateTitle(history.ziaratCity), style: CTextStyle.w500(color: CColors.primary, fontSize: 14)),
+                          ],
+                        ),
+                        Text.rich(
+                          TextSpan(
                             children: [
-                              CustomImage(
-                                margin: EdgeInsets.only(right: 8),
-                                size: 30,
-                                imageType: ImageType.svg,
-                                color: CColors.primary,
-                                path: switch (_getZiaratCity(history.ziaratCity)) {
-                                  ZiaratCities.medina => 'assets/svg/ziarat/medina.svg',
-                                  ZiaratCities.taif => 'assets/svg/ziarat/taif.svg',
-                                  ZiaratCities.other => 'assets/svg/ziarat/other.svg',
-                                  _ => 'assets/svg/ziarat/medina.svg',
-                                },
-                              ),
-                              Text(
-                                isLTR(context) ? Helper.generateTitle(history.ziaratCity) : generateTitle(history.ziaratCity),
-                                style: CTextStyle.w500(fontSize: isLTR(context) ? 16 : 20, color: CColors.primary),
-                                textAlign: TextAlign.center,
-                              ),
+                              TextSpan(text: '${history.completedZiarats.length}'),
+                              TextSpan(text: '/${history.total}', style: CTextStyle.w600(fontSize: 30, color: CColors.deepTeal.withValues(alpha: 0.5))),
                             ],
                           ),
-                          Expanded(
-                            child: FittedBox(
-                              child: Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(text: '${history.completedZiarats.length}', style: CTextStyle.w600(fontSize: 85, color: CColors.deepTeal)),
-                                    TextSpan(text: '/${history.total}', style: CTextStyle.w600(fontSize: 30, color: CColors.deepTeal.withValues(alpha: 0.5))),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          CButton(
-                            onTap: () => provider.onViewZiaratTap(history),
-                            title: LocaleKeys.view.tr(),
-                            borderRadius: BorderRadius.circular(40),
-                            shadows: [],
-                            height: 35,
-                            width: 80,
-                            padding: EdgeInsets.zero,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                          style: CTextStyle.w600(fontSize: 70, color: CColors.deepTeal, height: 1),
+                        ),
+                        CButton(
+                          padding: SizeConfig.zero,
+                          margin: SizeConfig.only(top: 8),
+                          onTap: () => provider.onViewZiaratTap(history),
+                          title: LocaleKeys.view.tr(),
+                          borderRadius: BorderRadius.circular(40),
+                          shadows: [],
+                          height: SizeConfig.w(25),
+                          width: SizeConfig.w(60),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
     );
   }

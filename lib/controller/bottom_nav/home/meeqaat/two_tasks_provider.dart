@@ -1,4 +1,4 @@
-import '../../../export.dart';
+import '../../../../export.dart';
 
 final meeqaatTwoTasksProvider = ChangeNotifierProvider.autoDispose<MeeqaatTwoTasksNotifier>((ref) => MeeqaatTwoTasksNotifier());
 
@@ -103,8 +103,8 @@ class IhramTutorialDialog extends StatelessWidget {
                           ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: screenSize.height * 0.07),
-                      padding: EdgeInsets.only(top: 20, bottom: 20),
+                      margin: SizeConfig.only(top: screenSize.height * 0.07),
+                      padding: SizeConfig.only(top: 20, bottom: 20),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
@@ -115,7 +115,7 @@ class IhramTutorialDialog extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           if (gender == Gender.female.name)
-                            Padding(padding: const EdgeInsets.only(bottom: 20), child: Text(LocaleKeys.no_face_veil_or_gloves.tr(), style: CTextStyle.w600(color: CColors.primary))),
+                            Padding(padding: SizeConfig.only(bottom: 20), child: Text(LocaleKeys.no_face_veil_or_gloves.tr(), style: CTextStyle.w600(color: CColors.primary))),
                           CustomImage(
                             path: gender == Gender.male.name ? 'assets/png/ihram_tutorial.png' : 'assets/png/abaya_tutorial.png',
                             imageType: ImageType.png,

@@ -1,5 +1,5 @@
-import '../../../export.dart';
-import '../../../view/bottom_nav/home/ziarat/page.dart';
+import '../../../../export.dart';
+import '../../../../view/bottom_nav/home/ziarat/page.dart';
 
 final mapPageProvider = ChangeNotifierProvider.autoDispose<MapPageNotifier>((ref) => MapPageNotifier());
 
@@ -21,7 +21,7 @@ class MapPageNotifier extends ChangeNotifier {
   OverlayEntry? overlayEntry;
   final FlutterTts flutterTts = FlutterTts();
   bool isListening = false;
-  var bottomSheetSize = screenSize.height * 0.13;
+  var bottomSheetSize = SizeConfig.screenHeight * 0.13;
   ZiaratModel? activeZiarat;
   List<ZiaratModel> destinations = [];
   ZiaratHistoryModel? history;
@@ -178,32 +178,30 @@ class MapPageNotifier extends ChangeNotifier {
               child: Material(
                 color: Colors.transparent,
                 child: Container(
-                  width: 130,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(color: const Color(0xFF212029), borderRadius: BorderRadius.circular(32)),
+                  width: SizeConfig.w(110),
+                  padding: SizeConfig.symmetric(horizontal: 12, vertical: 16),
+                  decoration: BoxDecoration(color: const Color(0xFF212029), borderRadius: BorderRadius.circular(SizeConfig.r(32))),
                   child: Directionality(
                     textDirection: TextDirection.ltr,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(LocaleKeys.ziarat_history.tr(), style: CTextStyle.w500(fontSize: 11, color: Colors.white)),
+                        Text(LocaleKeys.ziarat_history.tr(), style: CTextStyle.w500(fontSize: 10, color: Colors.white)),
                         Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 20),
+                          padding: SizeConfig.only(top: 16, bottom: 20),
                           child: GestureDetector(
-                            onTap: () {
-                              hideMoreOptions();
-                            },
+                            onTap: hideMoreOptions,
                             child: Row(
                               children: [
-                                CustomImage(path: 'assets/svg/ziarat/listen.svg', imageType: ImageType.svg, size: 22, margin: EdgeInsets.only(right: 10)),
+                                CustomImage(path: 'assets/svg/ziarat/listen.svg', imageType: ImageType.svg, size: SizeConfig.w(20), margin: SizeConfig.only(right: 10)),
                                 Text(LocaleKeys.listen.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
                               ],
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding: SizeConfig.only(bottom: 10),
                           child: GestureDetector(
                             onTap: () {
                               hideMoreOptions();
@@ -211,7 +209,7 @@ class MapPageNotifier extends ChangeNotifier {
                             },
                             child: Row(
                               children: [
-                                CustomImage(path: 'assets/svg/ziarat/read.svg', imageType: ImageType.svg, size: 24, margin: EdgeInsets.only(right: 10)),
+                                CustomImage(path: 'assets/svg/ziarat/read.svg', imageType: ImageType.svg, fit: BoxFit.fitHeight, size: SizeConfig.w(20), margin: SizeConfig.only(right: 10)),
                                 Text(LocaleKeys.read.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
                               ],
                             ),

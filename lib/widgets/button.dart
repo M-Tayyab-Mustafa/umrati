@@ -55,9 +55,9 @@ class CButton extends StatelessWidget {
       child: GestureDetector(
         onTap: !isEnabled || isLoading ? null : onTap,
         child: Container(
-          height: height ?? 60,
-          width: width,
-          padding: padding ?? EdgeInsets.symmetric(horizontal: 25),
+          height: SizeConfig.h(height ?? 50),
+          width: width != null ? SizeConfig.w(width!) : null,
+          padding: padding ?? SizeConfig.symmetric(horizontal: 20),
           decoration: BoxDecoration(
             shape: shape ?? BoxShape.rectangle,
             border: Border.all(color: borderColor ?? CColors.primary, width: 1),
@@ -68,7 +68,7 @@ class CButton extends StatelessWidget {
           ),
           child:
               isLoading
-                  ? LayoutBuilder(builder: (context, constraints) => Loading(height: constraints.maxHeight * 0.6, width: constraints.maxHeight * 0.6, color: Colors.white))
+                  ? LayoutBuilder(builder: (context, constraints) => Loading(height: SizeConfig.h(constraints.maxHeight * 0.6), width: SizeConfig.h(constraints.maxHeight * 0.6), color: Colors.white))
                   : title != null
                   ? titleWithIcon
                       ? Directionality(
@@ -76,17 +76,17 @@ class CButton extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(title!, style: CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 17), maxLines: 1),
+                            Text(title!, style: CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: SizeConfig.sp(fontSize ?? 13)), maxLines: 1),
                             Transform.rotate(
                               angle: isLTR(context) ? 0 : pi / 180 * 180,
-                              child: CustomImage(margin: EdgeInsets.only(left: 16), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: iconSize ?? 35),
+                              child: CustomImage(margin: SizeConfig.only(left: 12), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: SizeConfig.w(iconSize ?? 25)),
                             ),
                           ],
                         ),
                       )
                       : Align(
                         alignment: Alignment.center,
-                        child: Text(title!, style: style ?? CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 17), maxLines: 1, overflow: TextOverflow.ellipsis),
+                        child: Text(title!, style: style ?? CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: SizeConfig.sp(fontSize ?? 13)), maxLines: 1, overflow: TextOverflow.ellipsis),
                       )
                   : child!,
         ),

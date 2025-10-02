@@ -19,7 +19,7 @@ class CListTile extends ConsumerWidget {
     return BasicCard(
       borderWidth: 3,
       onTap: onTap,
-      margin: margin ?? EdgeInsets.only(bottom: 22, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
+      margin: margin ?? SizeConfig.only(bottom: 22, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
       padding: padding,
       borderRadius: borderRadius ?? 8,
       backgroundColor: CColors.tileBackground,
@@ -30,13 +30,13 @@ class CListTile extends ConsumerWidget {
           children: [
             if (icon != null)
               CustomImage(
-                margin: EdgeInsets.only(right: isLTR(context) ? 10 : 0, left: isLTR(context) ? 0 : 10),
+                margin: SizeConfig.only(right: isLTR(context) ? 10 : 0, left: isLTR(context) ? 0 : 10),
                 path: icon!,
                 imageType: iconType ?? ImageType.svg,
                 size: iconSize ?? 25,
                 color: CColors.deepTeal,
               ),
-            Expanded(child: Text(title!, style: CTextStyle.w600(color: CColors.deepTeal, fontSize: 22))),
+            Expanded(child: Text(title!, style: CTextStyle.w600(color: CColors.deepTeal))),
             if (trailing != null) trailing!,
           ],
         ),

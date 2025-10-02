@@ -24,14 +24,13 @@ class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
     return Background(
       showEmblem: false,
       backgroundType: BackgroundType.logo,
-      logoAlign: Alignment.centerLeft,
-      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: 85),
+      margin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(padding: const EdgeInsets.only(top: 16), child: Text('${LocaleKeys.your_current_location.tr()}:', style: CTextStyle.w500(fontSize: 22))),
+          Padding(padding: SizeConfig.only(top: 16), child: Text('${LocaleKeys.your_current_location.tr()}:', style: CTextStyle.w500(fontSize: 22))),
           Text(provider.myCurrentLocation, style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal)),
-          Padding(padding: const EdgeInsets.only(top: 16), child: Text(LocaleKeys.your_ziarat_destinations.tr(), style: CTextStyle.w500(fontSize: 20))),
+          Padding(padding: SizeConfig.only(top: 16), child: Text(LocaleKeys.your_ziarat_destinations.tr(), style: CTextStyle.w500(fontSize: 20))),
           Expanded(
             child:
                 provider.isLoading
@@ -42,26 +41,21 @@ class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
                           ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.zero,
+                            padding: SizeConfig.zero,
                             itemCount: provider.ziaratHistory!.completedZiarats.length,
                             itemBuilder: (context, index) {
                               var ziarat = provider.ziaratHistory!.completedZiarats[index];
-                              return CMarker(
-                                color: CColors.emeraldGreen,
-                                indicatorColor: CColors.emeraldGreen,
-                                title: languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur,
-                                distance: ziarat.distance,
-                              );
+                              return CMarker(color: CColors.emeraldGreen, indicatorColor: CColors.emeraldGreen, title: isLTR(context) ? ziarat.title_en : ziarat.title_ur, distance: ziarat.distance);
                             },
                           ),
                           ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.zero,
+                            padding: SizeConfig.zero,
                             itemCount: provider.ziaratHistory!.remainingZiarats.length,
                             itemBuilder: (context, index) {
                               var ziarat = provider.ziaratHistory!.remainingZiarats[index];
-                              return CMarker(title: languageDirection(context) == TextDirection.ltr ? ziarat.title_en : ziarat.title_ur, distance: ziarat.distance);
+                              return CMarker(title: isLTR(context) ? ziarat.title_en : ziarat.title_ur, distance: ziarat.distance);
                             },
                           ),
                         ],
@@ -70,7 +64,7 @@ class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
           ),
           if (!provider.isLoading)
             Padding(
-              padding: const EdgeInsets.only(bottom: 32),
+              padding: SizeConfig.only(bottom: 32),
               child: Row(
                 children: [
                   CButton(

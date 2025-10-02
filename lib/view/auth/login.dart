@@ -36,7 +36,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 keyboardType: TextInputType.phone,
                 inputFormatters: [UsPhoneNumberFormatter()],
                 maxLength: provider.numberDigits + 1,
-                prefixMargin: const EdgeInsets.only(left: 16, top: 3),
+                prefixMargin: SizeConfig.only(left: 16, top: 3),
                 textDirection: TextDirection.ltr,
                 prefixIcon: CountryCodePicker(
                   onChanged: provider.updateSelectedCountry,
@@ -47,34 +47,28 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         CustomImage(path: 'assets/png/${countryCode!.flagUri!}', imageType: ImageType.png, height: 25, width: 25),
-                        Padding(padding: const EdgeInsets.only(left: 12), child: CustomImage(path: 'assets/svg/arrow_down.svg', imageType: ImageType.svg, height: 6, width: 15)),
-                        Padding(padding: const EdgeInsets.only(left: 4), child: Text(countryCode.dialCode!, style: CTextStyle.w500(fontSize: 14, color: CColors.greyShade1))),
+                        Padding(padding: SizeConfig.only(left: 12), child: CustomImage(path: 'assets/svg/arrow_down.svg', imageType: ImageType.svg, height: SizeConfig.h(6), width: SizeConfig.w(15))),
+                        Padding(padding: SizeConfig.only(left: 4), child: Text(countryCode.dialCode!, style: CTextStyle.w500(fontSize: 12, color: CColors.greyShade1))),
                       ],
                     );
                   },
                 ),
               ),
             ),
-            CButton(
-              isLoading: provider.isSendingOTP || provider.isSocialLogin,
-              onTap: provider.sendTheOTP,
-              margin: const EdgeInsets.only(top: 35),
-              titleWithIcon: true,
-              title: LocaleKeys.send_the_otp.tr(),
-            ),
-            Padding(padding: const EdgeInsets.symmetric(vertical: 60), child: Divider()),
+            CButton(isLoading: provider.isSendingOTP || provider.isSocialLogin, onTap: provider.sendTheOTP, margin: SizeConfig.only(top: 35), titleWithIcon: true, title: LocaleKeys.send_the_otp.tr()),
+            Padding(padding: SizeConfig.symmetric(vertical: 40), child: Divider()),
             Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
+              padding: SizeConfig.symmetric(horizontal: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 15, bottom: 10), child: Text(LocaleKeys.or_continue_with.tr(), style: CTextStyle.w500())),
+                  Padding(padding: SizeConfig.only(left: 15, bottom: 15), child: Text(LocaleKeys.or_continue_with.tr(), style: CTextStyle.w500())),
                   Row(
                     children: [
-                      Expanded(child: CustomImage(onTap: provider.googleLogin, path: 'assets/svg/google_with_border.svg', imageType: ImageType.svg)),
-                      // Expanded(child: CustomImage(onTap: provider.facebookLogin, path: 'assets/svg/facebook_with_border.svg', imageType: ImageType.svg)),
-                      Expanded(child: CustomImage(onTap: provider.appleLogin, path: 'assets/svg/apple_with_border.svg', imageType: ImageType.svg)),
+                      Expanded(child: CustomImage(onTap: provider.googleLogin, path: 'assets/svg/google_with_border.svg', imageType: ImageType.svg, width: SizeConfig.w(100))),
+                      // Expanded(child: CustomImage(onTap: provider.facebookLogin, path: 'assets/svg/facebook_with_border.svg', imageType: ImageType.svg, width: SizeConfig.w(100))),
+                      Expanded(child: CustomImage(onTap: provider.appleLogin, path: 'assets/svg/apple_with_border.svg', imageType: ImageType.svg, width: SizeConfig.w(100))),
                     ],
                   ),
                 ],

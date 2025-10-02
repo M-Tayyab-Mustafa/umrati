@@ -16,31 +16,31 @@ class CMarker extends StatelessWidget {
       children: [
         SizedBox(
           height: size,
-          width: 20,
+          width: SizeConfig.w(20),
           child: Stack(
             children: [
-              Center(child: Container(width: 2, decoration: BoxDecoration(color: indicatorColor ?? CColors.primary))),
-              Center(child: Container(width: 15, decoration: BoxDecoration(color: indicatorColor ?? CColors.primary, shape: BoxShape.circle))),
+              Center(child: Container(width: SizeConfig.w(2), decoration: BoxDecoration(color: indicatorColor ?? CColors.primary))),
+              Center(child: Container(width: SizeConfig.w(12), decoration: BoxDecoration(color: indicatorColor ?? CColors.primary, shape: BoxShape.circle))),
             ],
           ),
         ),
         Expanded(
           child: Container(
-            height: size / 1.5,
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(color: color ?? CColors.primary, borderRadius: BorderRadius.circular(3)),
+            height: SizeConfig.h(size / 1.5),
+            padding: SizeConfig.symmetric(horizontal: 8),
+            decoration: BoxDecoration(color: color ?? CColors.primary, borderRadius: BorderRadius.circular(SizeConfig.r(3))),
             child: Row(
               children: [
                 Expanded(
                   child: Text(
                     title,
-                    style: CTextStyle.w500(color: titleColor ?? Colors.white),
+                    style: CTextStyle.w400(color: titleColor ?? Colors.white, fontSize: 14),
                     maxLines: 1,
                     textDirection: textDirection ?? languageDirection(context),
                     textAlign: isLTR(context) ? TextAlign.left : TextAlign.right,
                   ),
                 ),
-                if (distance != null) Directionality(textDirection: TextDirection.ltr, child: Text('$distance Km', style: CTextStyle.w500(color: Colors.white), maxLines: 1)),
+                if (distance != null) Directionality(textDirection: TextDirection.ltr, child: Text('$distance Km', style: CTextStyle.w400(color: Colors.white, fontSize: 14), maxLines: 1)),
               ],
             ),
           ),

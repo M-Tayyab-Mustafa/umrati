@@ -44,7 +44,7 @@ class LoginNotifier extends ChangeNotifier {
   Timer? bounceTimer;
   var otpController = TextEditingController();
 
-  _resetOTPPage() {
+  resetPage() {
     countDown = _otpTimeOutDuration;
     bounceTimer?.cancel();
     isSendingOTP = false;
@@ -239,14 +239,14 @@ class LoginNotifier extends ChangeNotifier {
           //* Disable Loading
           isVerifyingOTP = false;
           notifyListeners();
-          Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.pop(context, true);
           ref.read(splashProvider.notifier).redirections(context);
         } else {
           await LocalStorageManager.saveUser(UserModel.fromMap((await userCollection.doc(userCredential.user!.uid).get()).data()!), toFirebase: false);
           //* Disable Loading
           isVerifyingOTP = false;
           notifyListeners();
-          Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.pop(context, true);
           ref.read(splashProvider.notifier).redirections(context);
         }
       }
@@ -281,8 +281,8 @@ class LoginNotifier extends ChangeNotifier {
     _forceResendingToken = forceResendingToken;
     if (isSendingOTP) {
       _startBounceTimer();
-      await Navigator.push(context, MaterialPageRoute(builder: (_) => OTPPage()));
-      _resetOTPPage();
+      var isAutoPop = await Navigator.push(context, MaterialPageRoute(builder: (_) => OTPPage()));
+      if (isAutoPop != true) resetPage();
     }
   }
 

@@ -12,14 +12,14 @@ class SelectLanguagePage extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           BasicCard(
-            margin: EdgeInsets.only(top: 70, bottom: 40),
+            margin: SizeConfig.only(top: 70, bottom: 40),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(LocaleKeys.english.tr(), style: CTextStyle.w600()),
+                Text(LocaleKeys.english.tr(), style: CTextStyle.w600(fontSize: 16)),
                 GestureDetector(
                   onTap: () => ref.read(selectLanguageProvider.notifier).changeLanguageTap(context, ref),
-                  child: Text(LocaleKeys.change_the_language.tr(), style: CTextStyle.w600(color: CColors.primary)),
+                  child: Text(LocaleKeys.change_the_language.tr(), style: CTextStyle.w600(color: CColors.primary, fontSize: 16)),
                 ),
               ],
             ),

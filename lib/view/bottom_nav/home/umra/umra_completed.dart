@@ -8,38 +8,34 @@ class UmraCompleted extends StatelessWidget {
     return Background(
       logoAlign: Alignment.center,
       backgroundType: BackgroundType.logo,
-      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: 85),
+      margin: SizeConfig.only(top: kToolbarHeight * 0.5),
       showEmblem: false,
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
+            padding: SizeConfig.symmetric(vertical: 20),
             child: SizedBox(
-              height: screenSize.height * 0.3,
+              height: SizeConfig.w(SizeConfig.screenHeight * 0.27),
               child: Stack(
                 children: [
-                  CustomImage(path: 'assets/svg/kaba_image.svg', imageType: ImageType.svg, height: screenSize.height * 0.3, fit: BoxFit.fill),
+                  CustomImage(path: 'assets/svg/kaba_image.svg', imageType: ImageType.svg, height: SizeConfig.h(SizeConfig.screenHeight * 0.27), fit: BoxFit.fill),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
-                      height: screenSize.height * 0.12,
-                      width: screenSize.height * 0.12,
+                      height: SizeConfig.h(SizeConfig.screenHeight * 0.1),
+                      width: SizeConfig.h(SizeConfig.screenHeight * 0.1),
                       decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
-                      child: Center(child: Icon(Icons.check, size: screenSize.height * 0.08, color: Colors.white)),
+                      child: Center(child: Icon(Icons.check, size: SizeConfig.h(SizeConfig.screenHeight * 0.07), color: Colors.white)),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          Text(LocaleKeys.congratulations.tr(), style: CTextStyle.w800(fontSize: 18)),
-          Padding(padding: const EdgeInsets.symmetric(vertical: 30), child: Text(LocaleKeys.your_umra_has_been_completed.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.primary))),
-          Text(LocaleKeys.may_allah_accept_your_umra_ameen.tr(), style: CTextStyle.w600(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center),
-
-          Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: Consumer(builder: (context, ref, child) => CButton(onTap: ref.read(umraProvider).goToHome, title: LocaleKeys.go_to_home_screen.tr(), titleWithIcon: true)),
-          ),
+          Text(LocaleKeys.congratulations.tr(), style: CTextStyle.w800()),
+          Padding(padding: SizeConfig.symmetric(vertical: 30), child: Text(LocaleKeys.your_umra_has_been_completed.tr(), style: CTextStyle.w600(color: CColors.primary))),
+          Text(LocaleKeys.may_allah_accept_your_umra_ameen.tr(), style: CTextStyle.w600(color: CColors.deepTeal), textAlign: TextAlign.center),
+          Consumer(builder: (context, ref, child) => CButton(margin: SizeConfig.only(top: 50), onTap: ref.read(umraProvider).goToHome, title: LocaleKeys.go_to_home_screen.tr(), titleWithIcon: true)),
         ],
       ),
     );

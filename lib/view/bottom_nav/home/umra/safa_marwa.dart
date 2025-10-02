@@ -10,10 +10,10 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
   @override
   void initState() {
     super.initState();
-    ref.read(safaMarwaProvider.notifier).context = context;
-    ref.read(safaMarwaProvider.notifier).ref = ref;
+    final provider = ref.read(safaMarwaProvider.notifier);
+    provider.context = context;
+    provider.ref = ref;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final provider = ref.read(safaMarwaProvider.notifier);
       await provider.initialization();
       if (provider.scrollController.hasClients) {
         provider.scrollController.jumpTo(provider.scrollController.position.maxScrollExtent);
@@ -24,103 +24,98 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(safaMarwaProvider);
+    var uProvider = ref.watch(umraProvider);
     return Background(
       logoAlign: Alignment.center,
       backgroundType: BackgroundType.logo,
-      title: '',
+      titleMargin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
       titleType: TitleType.backArrow,
-      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06, bottom: kToolbarHeight * 0.5),
-      showEmblem: false,
-      child: Column(
-        children: [
-          Visibility(
-            visible: provider.saiRoundCount != 7,
-            child: CButton(
-              shadows: [],
-              height: 50,
-              margin: EdgeInsets.symmetric(vertical: 30),
-              onTap: ref.read(umraProvider.notifier).startAndStopTawaf,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CustomImage(path: 'assets/svg/pause.svg', imageType: ImageType.svg, height: 16),
-                  Padding(
-                    padding: EdgeInsets.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
-                    child: Text(LocaleKeys.off_tracker.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
-                  ),
-                ],
-              ),
+      titleWidget: Center(
+        child: Visibility(
+          visible: provider.saiRoundCount != 7,
+          child: CButton(
+            shadows: [],
+            height: 45,
+            isLoading: uProvider.isLoading,
+            margin: SizeConfig.only(right: isLTR(context) ? 40 : 0, left: isLTR(context) ? 0 : 40),
+            onTap: ref.read(umraProvider.notifier).startAndStopTawaf,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomImage(path: uProvider.umraModel != null ? 'assets/svg/pause.svg' : 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.h(16)),
+                Padding(
+                  padding: SizeConfig.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
+                  child: Text(uProvider.umraModel != null ? LocaleKeys.off_tracker.tr() : LocaleKeys.start_tawaf.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
+                ),
+              ],
             ),
           ),
+        ),
+      ),
+      showEmblem: false,
+      margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: kToolbarHeight * 0.5),
+      child: Column(
+        children: [
           Expanded(
             child: Stack(
               children: [
-                if (provider.saiRoundCount > 0)
-                  Center(
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(9999), boxShadow: primaryShadows, color: Colors.white),
-                      child: Center(child: Text(provider.saiRoundCount.toString(), style: CTextStyle.w700())),
-                    ),
-                  ),
-                SizedBox(
-                  height: screenSize.height,
-                  child: SingleChildScrollView(
-                    controller: provider.scrollController,
+                SingleChildScrollView(
+                  controller: provider.scrollController,
+                  child: Padding(
+                    padding: SizeConfig.symmetric(vertical: 16),
                     child: SizedBox(
-                      height: screenSize.height,
+                      height: SizeConfig.screenHeight,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: 50),
+                          CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: SizeConfig.w(50)),
                           Expanded(
                             child: LayoutBuilder(
                               builder: (context, constraints) {
                                 final centerX = constraints.maxWidth / 2;
-                                final lineSpacing = screenSize.width * 0.45;
-                                final targetLineX = provider.isRunComplete ? centerX - lineSpacing / 2 : centerX + lineSpacing / 2;
-                                final usableHeight = constraints.maxHeight - 40;
+                                final lineSpacing = SizeConfig.screenWidth * 0.45;
+                                final trackerSize = SizeConfig.h(40);
+                                final usableHeight = constraints.maxHeight - trackerSize;
+                                final targetLineX = (provider.isRunComplete ? centerX - lineSpacing / 2 : centerX + lineSpacing / 2) - (trackerSize / 2);
                                 return Stack(
                                   children: [
                                     CustomPaint(
                                       size: Size(constraints.maxWidth, constraints.maxHeight),
                                       painter: _VerticalDashedAreaPainter(lineSpacing: lineSpacing, dashWidth: 15, dashHeight: 4, lineColor: Colors.black, fillColor: Colors.transparent),
                                     ),
-
                                     Align(
                                       alignment: provider.startingRunAlign,
-                                      child: CustomImage(path: 'assets/svg/area_to_run_fast.svg', imageType: ImageType.svg, width: screenSize.width * 0.5, height: screenSize.height * 0.068),
-                                    ),
-                                    Align(
-                                      alignment: provider.endingRunAlign,
-                                      child: CustomImage(path: 'assets/svg/area_to_slow_down.svg', imageType: ImageType.svg, width: screenSize.width * 0.5, height: screenSize.height * 0.068),
+                                      child: CustomImage(
+                                        path: 'assets/svg/area_to_run_fast.svg',
+                                        imageType: ImageType.svg,
+                                        width: SizeConfig.screenWidth * 0.5,
+                                        height: SizeConfig.screenHeight * 0.068,
+                                      ),
                                     ),
                                     Column(
                                       children: [
-                                        Padding(padding: const EdgeInsets.only(top: 10), child: Text(LocaleKeys.marwa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 18))),
-                                        const Expanded(child: SizedBox()),
+                                        Padding(padding: SizeConfig.only(top: 10), child: Text(LocaleKeys.marwa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
+                                        Spacer(),
                                         Column(
                                           children: [
-                                            Padding(padding: const EdgeInsets.only(bottom: 10), child: Text(LocaleKeys.safa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 18))),
-                                            CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: 50),
+                                            Padding(padding: SizeConfig.only(bottom: 10), child: Text(LocaleKeys.safa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
+                                            CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: SizeConfig.w(50)),
                                           ],
                                         ),
                                       ],
                                     ),
-
                                     Positioned(
-                                      left: targetLineX - 20,
-                                      top: usableHeight - provider.oneSideRunCompletionPercent * usableHeight,
+                                      left: targetLineX,
+                                      top: usableHeight - (provider.oneSideRunCompletionPercent * usableHeight),
                                       child: Container(
-                                        width: 40,
-                                        height: 40,
+                                        width: trackerSize,
+                                        height: trackerSize,
                                         decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
                                         child: Padding(
-                                          padding: EdgeInsets.only(top: provider.isRunComplete ? 4 : 0, bottom: provider.isRunComplete ? 0 : 4),
+                                          padding: SizeConfig.only(top: provider.isRunComplete ? 4 : 0, bottom: provider.isRunComplete ? 0 : 4),
                                           child: Transform.rotate(
                                             angle: provider.isRunComplete ? (pi / 2) : (3 * pi / 2),
-                                            child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: 20),
+                                            child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.w(20)),
                                           ),
                                         ),
                                       ),
@@ -130,12 +125,22 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
                               },
                             ),
                           ),
-                          Padding(padding: const EdgeInsets.only(bottom: 20, top: 10), child: Text(LocaleKeys.starting_point.tr(), style: CTextStyle.w400(color: CColors.deepTeal, fontSize: 18))),
+                          Padding(padding: SizeConfig.only(top: 10), child: Text(LocaleKeys.starting_point.tr(), style: CTextStyle.w400(color: CColors.deepTeal))),
                         ],
                       ),
                     ),
                   ),
                 ),
+                if (provider.saiRoundCount > 0)
+                  Align(
+                    alignment: Alignment(0, 0.1),
+                    child: Container(
+                      height: SizeConfig.w(40),
+                      width: SizeConfig.w(40),
+                      decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: primaryShadows, color: Colors.white),
+                      child: Center(child: Text(provider.saiRoundCount.toString(), style: CTextStyle.w900(fontSize: 20, color: CColors.primary))),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -172,13 +177,15 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
           style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal),
         ),
         BasicCard(
-          margin: EdgeInsets.only(top: 8, bottom: 8),
+          margin: SizeConfig.symmetric(vertical: 8, horizontal: 16),
           backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
-          child: Text(
-            dua,
-            style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular'),
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.rtl,
+          child: Center(
+            child: Text(
+              dua,
+              style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular'),
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
+            ),
           ),
         ),
       ],

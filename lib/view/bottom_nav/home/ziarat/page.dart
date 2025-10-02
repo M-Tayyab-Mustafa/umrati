@@ -27,16 +27,16 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
       logoAlign: Alignment.center,
       title: LocaleKeys.select_ziarat_cities.tr(),
       titleType: TitleType.backArrow,
-      titleMargin: const EdgeInsets.only(top: 30, bottom: 20),
-      margin: EdgeInsets.only(top: kToolbarHeight * 0.5, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
+      titleMargin: SizeConfig.symmetric(vertical: kToolbarHeight * 0.5),
+      margin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
       child: Column(
         children: [
           GridView.count(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            mainAxisSpacing: 30,
-            crossAxisSpacing: 30,
+            mainAxisSpacing: SizeConfig.w(30),
+            crossAxisSpacing: SizeConfig.w(30),
             children: [
               ZiaratCityCard(
                 icon: 'assets/svg/ziarat/mecca.svg',
@@ -64,7 +64,8 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
               ),
             ],
           ),
-          if (provider.selectedCity != null) CButton(onTap: provider.goToDestinationGenerationPage, margin: EdgeInsets.only(top: 64), title: LocaleKeys.proceed_forward.tr(), width: 200),
+          if (provider.selectedCity != null)
+            CButton(onTap: provider.goToDestinationGenerationPage, margin: SizeConfig.only(top: SizeConfig.screenHeight * 0.05), title: LocaleKeys.proceed_forward.tr(), width: 200),
         ],
       ),
     );
