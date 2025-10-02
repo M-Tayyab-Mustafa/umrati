@@ -116,10 +116,11 @@ class Background extends StatelessWidget {
                                     alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
                                     child: CustomImage(
                                       margin:
-                                          (logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight)) != Alignment.center ? SizeConfig.only(left: 16, right: 16) : EdgeInsets.zero,
+                                          (logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight)) != Alignment.center ? SizeConfig.symmetric(horizontal: 16) : SizeConfig.zero,
                                       path: DefaultImages.logoWithName,
                                       imageType: ImageType.svg,
-                                      width: SizeConfig.w(SizeConfig.screenWidth * 0.35),
+                                      fit: BoxFit.fitWidth,
+                                      width: SizeConfig.w(SizeConfig.screenWidth * 0.5),
                                     ),
                                   ),
                                 ),

@@ -17,8 +17,8 @@ class SaiCompletionPage extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
-            height: SizeConfig.w(SizeConfig.screenWidth * 0.6),
-            width: SizeConfig.w(SizeConfig.screenWidth * 0.6),
+            height: SizeConfig.w(SizeConfig.screenWidth * 0.8),
+            width: SizeConfig.w(SizeConfig.screenWidth * 0.8),
             alignment: Alignment.center,
             padding: SizeConfig.all(16),
             decoration: BoxDecoration(

@@ -40,12 +40,12 @@ class TawafTrackerPage extends ConsumerWidget {
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final size = SizeConfig.w(constraints.maxWidth * 0.65);
-                final trackingIndicatorSize = SizeConfig.w(size * 0.1);
-                final tawafCounterSize = SizeConfig.w(size * 0.2);
-                final centralContentSize = SizeConfig.w(size * 0.7);
-                final center = Offset(size / 2, size / 2);
+                final size = SizeConfig.w(constraints.maxWidth * 0.8);
+                final centralContentSize = provider.tawafCircleCount < 7 ? size * 0.8 : size * 0.9;
+                final trackingIndicatorSize = size * 0.16;
+                final tawafCounterSize = size * 0.32;
                 final radius = size * 0.5;
+                final center = Offset(radius, radius);
                 final angle = -2 * pi * provider.tawafCircleCompletionPercent + pi;
                 final trackerDX = center.dx + radius * cos(angle);
                 final trackerDY = center.dy + radius * sin(angle);
