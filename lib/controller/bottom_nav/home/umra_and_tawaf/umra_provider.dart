@@ -118,7 +118,7 @@ class UmraNotifier extends ChangeNotifier {
 
   // Method to start or stop Tawaf
   Future<void> pauseAndResumeTracker() async {
-    if (isTrackerPaused) {
+    if (!isTrackerPaused) {
       _pauseTracker();
     } else {
       _resumeTracker();
@@ -158,7 +158,7 @@ class UmraNotifier extends ChangeNotifier {
     var isUserInBetweenAlHajarAndMataf =
         Helper.distanceToVector(alHajarAlAswadLatLng, matafGreenLightLatLng, LatLng(startingPosition!.latitude, startingPosition!.longitude)) <=
         num.parse(constantsDoc.get(CommonField.alHajarToMatafThreshold.name).toString()).toDouble();
-    if (!isUserInBetweenAlHajarAndMataf) await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => UmraStartConfirmationDialog());
+    if (!isUserInBetweenAlHajarAndMataf) await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
     tawafCircleCompletionPercent = 0;
     notifyListeners();
     try {
@@ -217,6 +217,16 @@ class UmraNotifier extends ChangeNotifier {
       tawafCircleCompletionPercent = 0;
     }
     notifyListeners();
+  }
+
+  //Todo:: Remove After Testing...
+  void debugSkipTawaf() async {
+    isRoundCompleted = true;
+    tawafCircleCount++;
+    tawafCircleCompletionPercent = 0;
+    notifyListeners();
+    if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
+    await updateUmraModel(umraModel!.copyWith(tawaf_circle_count: tawafCircleCount));
   }
 
   // Method to start the next Tawaf round

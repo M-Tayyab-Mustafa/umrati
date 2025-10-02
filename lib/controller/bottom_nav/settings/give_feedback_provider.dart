@@ -11,8 +11,9 @@ class GiveFeedbackNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
   bool isLoading = true;
-  UserModel? user;
 
+  UserModel? user;
+  CountryCode selectedCountry = CountryCode.fromDialCode('+92');
   final TextEditingController emailController = TextEditingController();
   final TextEditingController numberController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
@@ -30,4 +31,10 @@ class GiveFeedbackNotifier extends ChangeNotifier {
   }
 
   void submit() {}
+
+  //* Update Selected Country Code
+  void updateSelectedCountry(CountryCode selectedCountry) async {
+    this.selectedCountry = selectedCountry;
+    notifyListeners();
+  }
 }

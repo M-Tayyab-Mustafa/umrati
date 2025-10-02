@@ -208,7 +208,8 @@ class CodegenLoader extends AssetLoader{
   "may_allah_accept_your_umra_ameen": "May Allah accept your Umra\nAmeen",
   "shave_the_head_description": "It is preferable for men to shave their entire head, but if they trim their hair to the extent of a fingertip from the entire head, that is also permissible.",
   "take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram": "Take a bath (ghusl) or perform ablution (wudu) and then wear the Ihram.",
-  "do_these_5_ihram_related_tasks": "Do these 5 Ihram-related tasks"
+  "do_these_5_ihram_related_tasks": "Do these 5 Ihram-related tasks",
+  "ziarat_not_found": "No information is available at this moment for this city ziarats."
 };
 static const Map<String,dynamic> _ur_PK = {
   "select_your_language": "اپنی زبان منتخب کریں",
@@ -404,7 +405,8 @@ static const Map<String,dynamic> _ur_PK = {
   "may_allah_accept_your_umra_ameen": "اللہ آپ کا عمرہ قبول فرمائے، آمین",
   "shave_the_head_description": "مردوں کے لیے پورا سر منڈوانا افضل ہے، لیکن اگر وہ انگلی کے پور تک بال تراشیں تو یہ بھی جائز ہے۔",
   "take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram": "غسل کریں یا وضو کریں اور پھر احرام پہنیں",
-  "do_these_5_ihram_related_tasks": "یہ 5 احرام سے متعلق کام کریں"
+  "do_these_5_ihram_related_tasks": "یہ 5 احرام سے متعلق کام کریں",
+  "ziarat_not_found": "اس شہر کی زیارت کے بارے میں فی الحال کوئی معلومات دستیاب نہیں ہیں۔."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": _en_US, "ur_PK": _ur_PK};
 }

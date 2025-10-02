@@ -29,7 +29,7 @@ class _UmrahHistoryPageState extends ConsumerState<UmrahHistoryPage> {
           provider.isLoading
               ? Loading()
               : provider.umrahHistories.isEmpty
-              ? Center(child: Text(LocaleKeys.no_history_found.tr(), style: CTextStyle.w500(fontSize: 22)))
+              ? Center(child: Text(LocaleKeys.no_history_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
               : ListView.builder(
                 padding: SizeConfig.zero,
                 itemCount: provider.umrahHistories.length,

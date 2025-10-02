@@ -197,5 +197,6 @@ abstract class  LocaleKeys {
   static const shave_the_head_description = 'shave_the_head_description';
   static const take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram = 'take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram';
   static const do_these_5_ihram_related_tasks = 'do_these_5_ihram_related_tasks';
+  static const ziarat_not_found = 'ziarat_not_found';
 
 }

@@ -42,14 +42,29 @@ class AlreadyDialog extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: SizeConfig.only(left: 20, right: 16),
-                            child: CButton(height: 45, title: LocaleKeys.start_new.tr(), onTap: () => Navigator.pop(dialogContext, false), style: CTextStyle.w400(fontSize: 12, color: Colors.white)),
+                            padding: SizeConfig.only(left: isLTR(dialogContext) ? 20 : 16, right: isLTR(dialogContext) ? 16 : 20),
+                            child: CButton(
+                              backgroundColor: Colors.transparent,
+                              borderColor: CColors.primary,
+                              titleColor: CColors.primary,
+                              height: 45,
+                              title: LocaleKeys.start_new.tr(),
+                              shadows: [],
+                              onTap: () => Navigator.pop(dialogContext, false),
+                              style: CTextStyle.w400(fontSize: 12, color: CColors.primary),
+                            ),
                           ),
                         ),
                         Expanded(
                           child: Padding(
-                            padding: SizeConfig.only(left: 16, right: 20),
-                            child: CButton(height: 45, title: LocaleKeys.continued.tr(), onTap: () => Navigator.pop(dialogContext, true), style: CTextStyle.w400(fontSize: 12, color: Colors.white)),
+                            padding: SizeConfig.only(left: isLTR(dialogContext) ? 16 : 20, right: isLTR(dialogContext) ? 20 : 16),
+                            child: CButton(
+                              shadows: [],
+                              height: 45,
+                              title: LocaleKeys.continued.tr(),
+                              onTap: () => Navigator.pop(dialogContext, true),
+                              style: CTextStyle.w400(fontSize: 12, color: Colors.white),
+                            ),
                           ),
                         ),
                       ],

@@ -116,9 +116,7 @@ class Background extends StatelessWidget {
                                     alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
                                     child: CustomImage(
                                       margin:
-                                          (logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight)) != Alignment.center
-                                              ? SizeConfig.only(left: isLTR(context) ? 16 : 0, right: isLTR(context) ? 0 : 16)
-                                              : EdgeInsets.zero,
+                                          (logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight)) != Alignment.center ? SizeConfig.only(left: 16, right: 16) : EdgeInsets.zero,
                                       path: DefaultImages.logoWithName,
                                       imageType: ImageType.svg,
                                       width: SizeConfig.w(SizeConfig.screenWidth * 0.35),
@@ -147,7 +145,9 @@ class Background extends StatelessWidget {
                                   TitleType.empty => titleWidget ?? Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 18)),
                                   TitleType.backArrow => Row(
                                     crossAxisAlignment:
-                                        title != null ? Helper.getAlignment(context, title ?? '', titleStyle ?? CTextStyle.w500(fontSize: 18), SizeConfig.screenWidth - 32) : CrossAxisAlignment.center,
+                                        title != null
+                                            ? Helper.getAlignment(context, title ?? '', titleStyle ?? CTextStyle.w500(fontSize: isLTR(context) ? 18 : 22), SizeConfig.screenWidth - 32)
+                                            : CrossAxisAlignment.center,
                                     children: [
                                       GestureDetector(
                                         onTap: () => Navigator.pop(context),

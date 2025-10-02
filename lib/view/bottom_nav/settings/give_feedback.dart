@@ -45,14 +45,13 @@ class _GiveFeedbackPageState extends ConsumerState<GiveFeedbackPage> {
                         keyboardType: TextInputType.emailAddress,
                         hintText: LocaleKeys.your_email_here.tr(),
                       ),
-                      CTextField(
+                      PhoneNumberTextField(
                         margin: SizeConfig.symmetric(horizontal: 16, vertical: 25),
+                        withCountryCodePicker: true,
+                        initialCountryCode: provider.selectedCountry,
+                        onChanged: (value) => Helper.fixPhoneFormate(value, provider.numberController),
+                        updateSelectedCountry: provider.updateSelectedCountry,
                         controller: provider.numberController,
-                        labelText: LocaleKeys.number.tr(),
-                        maxLength: 13,
-                        textDirection: TextDirection.ltr,
-                        keyboardType: TextInputType.phone,
-                        hintText: LocaleKeys.your_number_here.tr(),
                       ),
                       CTextField(margin: SizeConfig.symmetric(horizontal: 16), controller: provider.nameController, labelText: LocaleKeys.name.tr(), hintText: LocaleKeys.your_name_here.tr()),
                       CTextField(

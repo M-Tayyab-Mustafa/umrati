@@ -22,39 +22,42 @@ class _ZiaratMapPageState extends ConsumerState<ZiaratMapPage> {
   Widget build(BuildContext context) {
     final provider = ref.watch(mapPageProvider);
     return Scaffold(
-      body: Stack(
-        children: [
-          GoogleMap(
-            mapType: MapType.hybrid,
-            initialCameraPosition: provider.initialCameraPosition,
-            onMapCreated: (controller) => provider.mapController = controller,
-            myLocationEnabled: false,
-            markers: provider.markers,
-            zoomControlsEnabled: false,
-            polylines: provider.polylines,
-            onTap: (argument) => provider.hideMoreOptions(),
-          ),
-          Align(
-            alignment: Alignment(-0.9, -0.9),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                decoration: BoxDecoration(color: CColors.charcoalBlack, shape: BoxShape.circle),
-                child: CustomImage(margin: SizeConfig.all(10), path: 'assets/svg/go_backward.svg', color: Colors.white, imageType: ImageType.svg, size: SizeConfig.w(20)),
-              ),
+      body: SafeArea(
+        top: false,
+        child: Stack(
+          children: [
+            GoogleMap(
+              mapType: MapType.hybrid,
+              initialCameraPosition: provider.initialCameraPosition,
+              onMapCreated: (controller) => provider.mapController = controller,
+              myLocationEnabled: false,
+              markers: provider.markers,
+              zoomControlsEnabled: false,
+              polylines: provider.polylines,
+              onTap: (argument) => provider.hideMoreOptions(),
             ),
-          ),
-          if (provider.activeZiarat != null)
             Align(
-              alignment: Alignment(0.9, -0.9),
+              alignment: Alignment(-0.9, -0.9),
               child: GestureDetector(
-                onTap: () => provider.showMoreOptions(context: context),
-                child: Directionality(textDirection: TextDirection.ltr, child: CustomImage(path: 'assets/svg/ziarat/more_options.svg', imageType: ImageType.svg, size: SizeConfig.w(40))),
+                onTap: () => Navigator.pop(context),
+                child: Container(
+                  decoration: BoxDecoration(color: CColors.charcoalBlack, shape: BoxShape.circle),
+                  child: CustomImage(margin: SizeConfig.all(10), path: 'assets/svg/go_backward.svg', color: Colors.white, imageType: ImageType.svg, size: SizeConfig.w(20)),
+                ),
               ),
             ),
-          Align(alignment: Alignment(0.42, -0.92), child: CompositedTransformTarget(link: provider.layerLink, child: SizedBox(height: SizeConfig.w(20), width: SizeConfig.w(20)))),
-          _BottomSheet(),
-        ],
+            if (provider.activeZiarat != null)
+              Align(
+                alignment: Alignment(0.9, -0.9),
+                child: GestureDetector(
+                  onTap: () => provider.showMoreOptions(context: context),
+                  child: Directionality(textDirection: TextDirection.ltr, child: CustomImage(path: 'assets/svg/ziarat/more_options.svg', imageType: ImageType.svg, size: SizeConfig.w(40))),
+                ),
+              ),
+            Align(alignment: Alignment(0.42, -0.92), child: CompositedTransformTarget(link: provider.layerLink, child: SizedBox(height: SizeConfig.w(20), width: SizeConfig.w(20)))),
+            _BottomSheet(),
+          ],
+        ),
       ),
     );
   }
@@ -65,7 +68,7 @@ class _BottomSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(mapPageProvider);
     return SlidingUpPanelWidget(
-      controlHeight: SizeConfig.w(provider.bottomSheetSize),
+      controlHeight: SizeConfig.h(SizeConfig.screenHeight * 0.13),
       panelController: provider.panelController,
       onTap: provider.hideMoreOptions,
       child: Container(

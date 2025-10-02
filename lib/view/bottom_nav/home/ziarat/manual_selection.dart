@@ -14,23 +14,26 @@ class ManualSelection extends ConsumerWidget {
       child: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              padding: SizeConfig.zero,
-              itemCount: provider.ziarats.length,
-              itemBuilder: (context, index) {
-                var ziarat = provider.ziarats[index];
-                return BasicCard(
-                  margin: SizeConfig.only(bottom: 20),
-                  onTap: () => provider.updateSelectedZiarat(ziarat),
-                  borderColor: provider.selectedZiarat.contains(ziarat) ? null : CColors.greyShade3,
-                  boxShadow: provider.selectedZiarat.contains(ziarat) ? null : [],
-                  child: Directionality(
-                    textDirection: getTextDirection(isLTR(context) ? ziarat.title_en : ziarat.title_ur),
-                    child: Text(isLTR(context) ? ziarat.title_en : ziarat.title_ur, style: CTextStyle.w500(fontSize: 14)),
-                  ),
-                );
-              },
-            ),
+            child:
+                provider.ziarats.isEmpty
+                    ? Center(child: Text(LocaleKeys.ziarat_not_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
+                    : ListView.builder(
+                      padding: SizeConfig.zero,
+                      itemCount: provider.ziarats.length,
+                      itemBuilder: (context, index) {
+                        var ziarat = provider.ziarats[index];
+                        return BasicCard(
+                          margin: SizeConfig.only(bottom: 20),
+                          onTap: () => provider.updateSelectedZiarat(ziarat),
+                          borderColor: provider.selectedZiarat.contains(ziarat) ? null : CColors.greyShade3,
+                          boxShadow: provider.selectedZiarat.contains(ziarat) ? null : [],
+                          child: Directionality(
+                            textDirection: getTextDirection(isLTR(context) ? ziarat.title_en : ziarat.title_ur),
+                            child: Text(isLTR(context) ? ziarat.title_en : ziarat.title_ur, style: CTextStyle.w500(fontSize: 14)),
+                          ),
+                        );
+                      },
+                    ),
           ),
           if (provider.selectedZiarat.isNotEmpty)
             CButton(

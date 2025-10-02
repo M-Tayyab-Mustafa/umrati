@@ -112,7 +112,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         ],
                       ),
                     ),
-                    CTextField(controller: provider.numberController, labelText: LocaleKeys.number.tr(), readOnly: true),
+                    PhoneNumberTextField(controller: provider.numberController, readOnly: true),
                     CTextField(margin: SizeConfig.symmetric(vertical: 20), controller: provider.emailController, labelText: LocaleKeys.email.tr(), readOnly: true),
                     CTextField(
                       onTap: provider.updateName,

@@ -1,7 +1,8 @@
 import '../../export.dart';
 
-class UmraStartConfirmationDialog extends StatelessWidget {
-  const UmraStartConfirmationDialog({super.key});
+class StartConfirmationDialog extends StatelessWidget {
+  const StartConfirmationDialog({super.key, this.fromUmra = true});
+  final bool fromUmra;
 
   @override
   Widget build(BuildContext dialogContext) {
@@ -12,10 +13,10 @@ class UmraStartConfirmationDialog extends StatelessWidget {
           Center(child: Container(decoration: BoxDecoration(color: Colors.black26))),
           Center(
             child: Container(
-              height: SizeConfig.screenHeight * 0.6,
+              height: SizeConfig.h(fromUmra ? SizeConfig.screenHeight * 0.5 : SizeConfig.screenHeight * 0.4),
               margin: SizeConfig.symmetric(horizontal: SizeConfig.screenWidth * 0.08),
               decoration: BoxDecoration(
-                color: CColors.secondaryBackground,
+                color: fromUmra ? CColors.secondaryBackground : Colors.white,
                 borderRadius: BorderRadius.circular(SizeConfig.r(20)),
                 border: Border.all(color: CColors.primary, width: 2),
                 boxShadow: primaryShadows.map((e) => e.copyWith(blurRadius: 30)).toList(),
@@ -28,12 +29,18 @@ class UmraStartConfirmationDialog extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(LocaleKeys.umra_start_detail.tr(), style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center),
-                          CustomImage(
-                            margin: SizeConfig.only(top: SizeConfig.screenHeight * 0.03, bottom: SizeConfig.screenHeight * 0.03),
-                            path: 'assets/png/home/green_light.png',
-                            imageType: ImageType.png,
-                            height: SizeConfig.screenHeight * 0.3,
+                          Text(
+                            fromUmra ? LocaleKeys.umra_start_detail.tr() : LocaleKeys.please_reach_safa_start_point.tr(),
+                            style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal),
+                            textAlign: TextAlign.center,
+                          ),
+                          Expanded(
+                            child: CustomImage(
+                              margin: SizeConfig.symmetric(vertical: SizeConfig.screenHeight * 0.03),
+                              path: fromUmra ? 'assets/png/home/green_light.png' : 'assets/png/home/safa_marwa.png',
+                              imageType: ImageType.png,
+                              fit: BoxFit.fitWidth,
+                            ),
                           ),
                         ],
                       ),

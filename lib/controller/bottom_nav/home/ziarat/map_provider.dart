@@ -21,7 +21,6 @@ class MapPageNotifier extends ChangeNotifier {
   OverlayEntry? overlayEntry;
   final FlutterTts flutterTts = FlutterTts();
   bool isListening = false;
-  var bottomSheetSize = SizeConfig.screenHeight * 0.13;
   ZiaratModel? activeZiarat;
   List<ZiaratModel> destinations = [];
   ZiaratHistoryModel? history;

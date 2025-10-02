@@ -1,5 +1,4 @@
 import '../../../../export.dart';
-import '../../../../widgets/dialog/safa_marwa_start_confirmation.dart';
 
 // Provider for SafaMarwaNotifier using ChangeNotifier
 final safaMarwaProvider = ChangeNotifierProvider.autoDispose<SafaMarwaNotifier>((ref) => SafaMarwaNotifier());
@@ -39,7 +38,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
       var distanceFromSafa = Geolocator.distanceBetween(currentPosition.latitude, currentPosition.longitude, safaLatLng.latitude, safaLatLng.longitude).abs();
       if (!context.mounted) return;
       if (!(distanceFromSafa <= num.parse(safaMarwaModel!.threshold))) {
-        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => SafaMarwaStartConfirmationDialog());
+        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog(fromUmra: false));
       }
     } catch (e) {
       if (kDebugMode) log(e.toString());
@@ -71,7 +70,10 @@ class SafaMarwaNotifier extends ChangeNotifier {
       var safaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, safaLatLng.latitude, safaLatLng.longitude).abs();
       if (safaDistance > (safaMarwaDistance + threshold)) return;
       if (safaDistance <= threshold) {
-        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => TawafCompletionDialog());
+        await showGeneralDialog(
+          context: context,
+          pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
+        );
         await _updateRoundCount();
         _updateRunLocations();
       } else {
@@ -81,7 +83,10 @@ class SafaMarwaNotifier extends ChangeNotifier {
       var marwaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, marwaLatLng.latitude, marwaLatLng.longitude).abs();
       if (marwaDistance <= threshold) {
         umraModel = umraModel.copyWith(is_one_side_sai_run_completed: true);
-        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => TawafCompletionDialog());
+        await showGeneralDialog(
+          context: context,
+          pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
+        );
         ref.read(umraProvider.notifier).updateUmraModel(umraModel);
         isRunComplete = true;
         _updateRunLocations();
@@ -110,6 +115,28 @@ class SafaMarwaNotifier extends ChangeNotifier {
       saiRoundCount = 0;
       notifyListeners();
       ref.read(umraProvider).safaMarwaCompleted();
+    }
+  }
+
+  //Todo:: Remove After Testing...
+  void debugSkipSafaMarwa() async {
+    if (umraModel.is_one_side_sai_run_completed) {
+      await showGeneralDialog(
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
+      );
+      await _updateRoundCount();
+      _updateRunLocations();
+    } else {
+      umraModel = umraModel.copyWith(is_one_side_sai_run_completed: true);
+      await showGeneralDialog(
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
+      );
+      ref.read(umraProvider.notifier).updateUmraModel(umraModel);
+      oneSideRunCompletionPercent = 1.0;
+      isRunComplete = true;
+      _updateRunLocations();
     }
   }
 

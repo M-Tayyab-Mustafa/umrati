@@ -16,7 +16,6 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
   UserModel? user;
   var phoneNumberUtil = PhoneNumberUtil.instance;
   CountryCode selectedCountry = CountryCode.fromDialCode('+92');
-  int numberDigits = 10;
   final emailController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final otpController = TextEditingController();
@@ -63,7 +62,6 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
         provider.ref = ref;
         provider.phoneNumberController.text = phoneNumberController.text.trim();
         provider.selectedCountry = selectedCountry;
-        provider.numberDigits = numberDigits;
         await provider.sendTheOTP(true);
       } catch (e) {
         if (kDebugMode) log(e.toString());
@@ -88,16 +86,6 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
   //* Update Selected Country Code
   void updateSelectedCountry(CountryCode selectedCountry) async {
     this.selectedCountry = selectedCountry;
-    var exampleNumber = phoneNumberUtil.getExampleNumber(selectedCountry.code ?? 'PK');
-    numberDigits = exampleNumber?.nationalNumber.toString().length ?? 12;
     notifyListeners();
-  }
-
-  //* Fix The Phone number Format
-  void onPhoneNumberTextFieldChanged(String number) async {
-    if (number.startsWith('0') && number.length >= 8 && number.length <= 12) {
-      phoneNumberController.text = number.substring(1);
-      notifyListeners();
-    }
   }
 }

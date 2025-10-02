@@ -29,7 +29,7 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
           provider.isLoading
               ? Loading()
               : provider.ziaratHistories.isEmpty
-              ? Center(child: Text(LocaleKeys.no_history_found.tr(), style: CTextStyle.w500(fontSize: 22)))
+              ? Center(child: Text(LocaleKeys.no_history_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
               : GridView.builder(
                 shrinkWrap: true,
                 padding: SizeConfig.symmetric(vertical: 20, horizontal: 16),

@@ -58,34 +58,13 @@ class _PhoneLinkingPage extends ConsumerWidget {
     final provider = ref.watch(emailOrPhoneLinkingProvider);
     return Column(
       children: [
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: CTextField(
-            labelText: LocaleKeys.number.tr(),
-            margin: SizeConfig.only(top: 40),
-            controller: provider.phoneNumberController,
-            onChanged: provider.onPhoneNumberTextFieldChanged,
-            keyboardType: TextInputType.phone,
-            inputFormatters: [UsPhoneNumberFormatter()],
-            maxLength: provider.numberDigits + 1,
-            prefixMargin: SizeConfig.only(left: 16, top: 3),
-            textDirection: TextDirection.ltr,
-            prefixIcon: CountryCodePicker(
-              onChanged: provider.updateSelectedCountry,
-              initialSelection: 'PK',
-              favorite: ['+92', 'PK'],
-              builder: (countryCode) {
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomImage(path: 'assets/png/${countryCode!.flagUri!}', imageType: ImageType.png, size: SizeConfig.w(25)),
-                    Padding(padding: SizeConfig.only(left: 12), child: CustomImage(path: 'assets/svg/arrow_down.svg', imageType: ImageType.svg, height: SizeConfig.h(6), width: SizeConfig.w(15))),
-                    Padding(padding: SizeConfig.only(left: 4), child: Text(countryCode.dialCode!, style: CTextStyle.w500(fontSize: 14, color: CColors.greyShade1))),
-                  ],
-                );
-              },
-            ),
-          ),
+        PhoneNumberTextField(
+          margin: SizeConfig.only(top: 40),
+          withCountryCodePicker: true,
+          controller: provider.phoneNumberController,
+          onChanged: (value) => Helper.fixPhoneFormate(value, provider.phoneNumberController),
+          updateSelectedCountry: provider.updateSelectedCountry,
+          initialCountryCode: provider.selectedCountry,
         ),
         CButton(isLoading: provider.isLinkingAccount, onTap: provider.linkAccount, margin: SizeConfig.only(top: 35), titleWithIcon: true, title: LocaleKeys.continued.tr()),
       ],

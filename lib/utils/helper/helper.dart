@@ -178,6 +178,13 @@ class Helper {
     return text.substring(0, 1).toUpperCase() + text.substring(1);
   }
 
+  //* Fix The Phone number Format
+  static void fixPhoneFormate(String number, controller) async {
+    if (number.startsWith('0') && number.length >= 8 && number.length <= 12) {
+      controller.text = number.substring(1);
+    }
+  }
+
   static Future<String> getLocation(BuildContext context) async {
     try {
       var position = await Geolocator.getCurrentPosition().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
@@ -191,10 +198,10 @@ class Helper {
   }
 
   static CrossAxisAlignment getAlignment(BuildContext context, String title, TextStyle style, double maxWidth) {
-    final textPainter = TextPainter(text: TextSpan(text: title, style: style), textDirection: TextDirection.ltr)..layout(maxWidth: maxWidth);
+    final textPainter = TextPainter(text: TextSpan(text: title, style: style), textDirection: languageDirection(context))..layout(maxWidth: maxWidth);
     final lineHeight = textPainter.preferredLineHeight;
-    final totalLines = (textPainter.size.height / lineHeight).ceil();
-    return totalLines > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center;
+    final totalLines = (textPainter.size.height / lineHeight);
+    return totalLines > 1.0 ? CrossAxisAlignment.start : CrossAxisAlignment.center;
   }
 
   static double calculateBearing(LatLng from, LatLng to) {

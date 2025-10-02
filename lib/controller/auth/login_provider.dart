@@ -6,7 +6,6 @@ final loginProvider = ChangeNotifierProvider<LoginNotifier>((ref) => LoginNotifi
 class LoginNotifier extends ChangeNotifier {
   //* Instances
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  var phoneNumberUtil = PhoneNumberUtil.instance;
   // bool isSkipping = false;
 
   BuildContext? _context;
@@ -24,7 +23,6 @@ class LoginNotifier extends ChangeNotifier {
   bool isSocialLogin = false;
   var phoneNumberController = TextEditingController();
   CountryCode selectedCountry = CountryCode.fromDialCode('+92');
-  int numberDigits = 10;
 
   bool isLinkingAccount = false;
 
@@ -113,17 +111,7 @@ class LoginNotifier extends ChangeNotifier {
   //* Update Selected Country Code
   void updateSelectedCountry(CountryCode selectedCountry) async {
     this.selectedCountry = selectedCountry;
-    var exampleNumber = phoneNumberUtil.getExampleNumber(selectedCountry.code ?? 'PK');
-    numberDigits = exampleNumber?.nationalNumber.toString().length ?? 12;
     notifyListeners();
-  }
-
-  //* Fix The Phone number Format
-  void onPhoneNumberTextFieldChanged(String number) async {
-    if (number.startsWith('0') && number.length >= 8 && number.length <= 12) {
-      phoneNumberController.text = number.substring(1);
-      notifyListeners();
-    }
   }
 
   //* Google Login

@@ -33,7 +33,7 @@ class MeeqaatThreeTasksNotifier extends ChangeNotifier {
   }
 
   void skip() async {
-    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => SkipConfirmationDialog());
+    var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.confirmation_dialog.tr()));
     if (result == false || result == null) {
       return;
     }
