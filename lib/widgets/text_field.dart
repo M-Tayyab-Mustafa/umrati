@@ -106,7 +106,7 @@ class CTextField extends StatelessWidget {
           labelStyle: labelStyle ?? CTextStyle.w500(color: CColors.primary),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           counterText: counterText ?? '',
-          errorStyle: CTextStyle.w400(color: Colors.red),
+          errorStyle: CTextStyle.w400(color: Colors.red, fontSize: 13),
           hintStyle: hintStyle ?? CTextStyle.w400(color: CColors.grey, fontSize: 13),
           isDense: isDense,
           fillColor: fillColor ?? Colors.transparent,
@@ -175,8 +175,8 @@ class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
       hintText: LocaleKeys.your_number_here.tr(),
       inputFormatters: [UsPhoneNumberFormatter()],
       maxLength: numberDigits + 1,
-      prefixMargin: SizeConfig.only(left: 16, top: 3),
-      suffixMargin: SizeConfig.only(left: 16, top: 3),
+      prefixMargin: SizeConfig.only(left: 16, top: 0),
+      suffixMargin: SizeConfig.only(left: 16, top: 0),
       textDirection: TextDirection.ltr,
       prefixIcon: widget.withCountryCodePicker && isLTR(context) ? _countryCodePicker : null,
       suffixIcon: widget.withCountryCodePicker && !isLTR(context) ? _countryCodePicker : null,
@@ -193,9 +193,9 @@ class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CustomImage(path: 'assets/png/${countryCode!.flagUri!}', imageType: ImageType.png, height: 25, width: 25),
+            CustomImage(path: 'assets/png/${countryCode!.flagUri!}', imageType: ImageType.png, size: SizeConfig.w(25)),
             Padding(padding: SizeConfig.only(left: 12), child: CustomImage(path: 'assets/svg/arrow_down.svg', imageType: ImageType.svg, height: SizeConfig.h(6), width: SizeConfig.w(15))),
-            Padding(padding: SizeConfig.only(left: 4), child: Text(countryCode.dialCode!, style: CTextStyle.w500(fontSize: 12, color: CColors.greyShade1))),
+            Padding(padding: SizeConfig.only(left: 4), child: Text(countryCode.dialCode!, style: CTextStyle.w500(fontSize: 13, color: CColors.greyShade1))),
           ],
         );
       },
