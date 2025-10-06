@@ -28,6 +28,8 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(umraProvider);
+    ref.read(umraProvider.notifier).context = context;
+    ref.read(umraProvider.notifier).ref = ref;
     if (!provider.hasDoneBeforeMeeqaatTasks) {
       return MeeqaatTwoTasksPage();
     } else if (!provider.hasReachedMeeqaat) {

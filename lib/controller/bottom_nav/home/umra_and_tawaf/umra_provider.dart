@@ -152,13 +152,14 @@ class UmraNotifier extends ChangeNotifier {
 
   Future<void> _startTawaf() async {
     startingPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
-    var constantsDoc = await settingsCollection.doc(CommonDoc.constants.name).get();
-    LatLng alHajarAlAswadLatLng = LatLng(constantsDoc.get(CommonField.alHajarAlAswad.name)!['lat'], constantsDoc.get(CommonField.alHajarAlAswad.name)!['lng']);
-    LatLng matafGreenLightLatLng = LatLng(constantsDoc.get(CommonField.matafGreenLight.name)!['lat'], constantsDoc.get(CommonField.matafGreenLight.name)!['lng']);
-    var isUserInBetweenAlHajarAndMataf =
-        Helper.distanceToVector(alHajarAlAswadLatLng, matafGreenLightLatLng, LatLng(startingPosition!.latitude, startingPosition!.longitude)) <=
-        num.parse(constantsDoc.get(CommonField.alHajarToMatafThreshold.name).toString()).toDouble();
-    if (!isUserInBetweenAlHajarAndMataf) await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
+    // var constantsDoc = await settingsCollection.doc(CommonDoc.constants.name).get();
+    // LatLng alHajarAlAswadLatLng = LatLng(constantsDoc.get(CommonField.alHajarAlAswad.name)!['lat'], constantsDoc.get(CommonField.alHajarAlAswad.name)!['lng']);
+    // LatLng matafGreenLightLatLng = LatLng(constantsDoc.get(CommonField.matafGreenLight.name)!['lat'], constantsDoc.get(CommonField.matafGreenLight.name)!['lng']);
+    // var threshold = num.parse(constantsDoc.get(CommonField.alHajarToMatafThreshold.name).toString());
+    LatLng alHajarAlAswadLatLng = LatLng(21.422651430493204, 39.82622509166598);
+    LatLng matafGreenLightLatLng = LatLng(21.42276755004554, 39.82620239563855);
+    var threshold = num.parse('20');
+    await _checkReachedNearTheGreenLight(alHajarAlAswadLatLng: alHajarAlAswadLatLng, matafGreenLightLatLng: matafGreenLightLatLng, threshold: threshold);
     tawafCircleCompletionPercent = 0;
     notifyListeners();
     try {
@@ -169,12 +170,30 @@ class UmraNotifier extends ChangeNotifier {
     }
   }
 
+  Future<void> _checkReachedNearTheGreenLight({required LatLng alHajarAlAswadLatLng, required LatLng matafGreenLightLatLng, required num threshold}) async {
+    try {
+      var isUserInBetweenAlHajarAndMataf =
+          Helper.distanceToVector(alHajarAlAswadLatLng, matafGreenLightLatLng, LatLng(startingPosition!.latitude, startingPosition!.longitude)) <= threshold.toDouble();
+      if (isUserInBetweenAlHajarAndMataf) return;
+      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
+      if (result == true) {
+        errorToast(LocaleKeys.you_are_not_near_the_green_light.tr());
+        await _checkReachedNearTheGreenLight(alHajarAlAswadLatLng: alHajarAlAswadLatLng, matafGreenLightLatLng: matafGreenLightLatLng, threshold: threshold);
+      } else {
+        goToHome();
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   // Method to request location permissions and initialize Tawaf
   Future<void> _initializeTawafLocationTracking() async {
     try {
       positionStreamSubscription?.cancel();
-      var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
-      var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
+      // var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
+      // var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
+      var kabaLatLng = LatLng(31.2568019, 74.2239854);
       // Start listening to position updates
       positionStreamSubscription = Geolocator.getPositionStream(
         locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),

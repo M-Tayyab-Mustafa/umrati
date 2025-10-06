@@ -51,7 +51,7 @@ class StartConfirmationDialog extends StatelessWidget {
                     height: 45,
                     shadows: [],
                     title: LocaleKeys.yes_i_have_reached.tr(),
-                    onTap: () => Navigator.pop(dialogContext),
+                    onTap: () => Navigator.pop(dialogContext, true),
                     style: CTextStyle.w400(fontSize: 13, color: Colors.white),
                   ),
                 ],

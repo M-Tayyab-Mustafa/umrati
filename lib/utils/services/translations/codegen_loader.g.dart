@@ -209,7 +209,8 @@ class CodegenLoader extends AssetLoader{
   "shave_the_head_description": "It is preferable for men to shave their entire head, but if they trim their hair to the extent of a fingertip from the entire head, that is also permissible.",
   "take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram": "Take a bath (ghusl) or perform ablution (wudu) and then wear the Ihram.",
   "do_these_5_ihram_related_tasks": "Do these 5 Ihram-related tasks",
-  "ziarat_not_found": "No information is available at this moment for this city ziarats."
+  "ziarat_not_found": "No information is available at this moment for this city ziarats.",
+  "you_are_not_near_the_green_light": "You are not near the green light"
 };
 static const Map<String,dynamic> _ur_PK = {
   "select_your_language": "اپنی زبان منتخب کریں",
@@ -406,7 +407,8 @@ static const Map<String,dynamic> _ur_PK = {
   "shave_the_head_description": "مردوں کے لیے پورا سر منڈوانا افضل ہے، لیکن اگر وہ انگلی کے پور تک بال تراشیں تو یہ بھی جائز ہے۔",
   "take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram": "غسل کریں یا وضو کریں اور پھر احرام پہنیں",
   "do_these_5_ihram_related_tasks": "یہ 5 احرام سے متعلق کام کریں",
-  "ziarat_not_found": "اس شہر کی زیارت کے بارے میں فی الحال کوئی معلومات دستیاب نہیں ہیں۔."
+  "ziarat_not_found": "اس شہر کی زیارت کے بارے میں فی الحال کوئی معلومات دستیاب نہیں ہیں۔.",
+  "you_are_not_near_the_green_light": "آپ کو گرین لائٹ کا پھولا نہیں ہے"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": _en_US, "ur_PK": _ur_PK};
 }
