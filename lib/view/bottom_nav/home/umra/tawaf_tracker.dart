@@ -9,7 +9,8 @@ class TawafTrackerPage extends ConsumerWidget {
     var provider = ref.watch(umraProvider);
     return Background(
       logoAlign: Alignment.center,
-      backgroundType: BackgroundType.logo,
+      backgroundType: BackgroundType.logoWithSkip,
+      onSkipTap: provider.debugSkipTawaf,
       showEmblem: false,
       margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: kToolbarHeight * 0.5),
       titleMargin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
@@ -214,7 +215,6 @@ class TawafTrackerPage extends ConsumerWidget {
               children: [
                 Text('$duaTitle${provider.user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}', style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal)),
                 BasicCard(
-                  onTap: provider.debugSkipTawaf,
                   margin: SizeConfig.symmetric(vertical: 14),
                   backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
                   child: Center(
