@@ -38,14 +38,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     CListTile(
                       title: LocaleKeys.dark_mode.tr(),
                       icon: 'assets/svg/settings/theme.svg',
-                      trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.deepTeal, fontSize: 16)),
+                      trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.emeraldGreen, fontSize: 16)),
                     ),
                     CListTile(onTap: provider.onGiveFeedbackTap, title: LocaleKeys.give_feedback.tr(), icon: 'assets/svg/settings/feed_back.svg'),
                   ],
                 ),
               ),
             ),
-            if (provider.user != null && (provider.user!.subscription_id == null || provider.user!.subscription_id!.isNotEmpty))
+            if (provider.user != null && (provider.user!.subscription_id == null || provider.user!.subscription_id!.isEmpty))
               CListTile(
                 onTap: ref.read(settingsProvider.notifier).onBuyPremiumTap,
                 borderRadius: 25,

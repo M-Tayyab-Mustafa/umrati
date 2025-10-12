@@ -34,7 +34,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               updateSelectedCountry: provider.updateSelectedCountry,
               withCountryCodePicker: true,
             ),
-            CButton(isLoading: provider.isSendingOTP || provider.isSocialLogin, onTap: provider.sendTheOTP, margin: SizeConfig.only(top: 35), titleWithIcon: true, title: LocaleKeys.send_the_otp.tr()),
+            CButton(isLoading: provider.isSendingOTP || provider.isSocialLogin, onTap: provider.sendTheOTP, margin: SizeConfig.only(top: 35), titleWithIcon: true, title: LocaleKeys.verify_now.tr()),
             Padding(padding: SizeConfig.symmetric(vertical: 40), child: Divider()),
             Padding(
               padding: SizeConfig.symmetric(horizontal: 30),

@@ -76,7 +76,6 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
                           onTap: () => provider.onViewZiaratTap(history),
                           title: LocaleKeys.view.tr(),
                           borderRadius: BorderRadius.circular(40),
-                          shadows: [],
                           height: SizeConfig.w(25),
                           width: SizeConfig.w(60),
                         ),

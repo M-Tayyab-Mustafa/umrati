@@ -62,7 +62,6 @@ class SocialLoginService {
         await _auth.currentUser?.linkWithCredential(credential);
         infoToast('Login Successfully');
         await LocalStorageManager.saveUser(user, toFirebase: false);
-        Navigator.popUntil(context, (route) => route.isFirst);
         ref.read(splashProvider.notifier).redirections(context);
       } else {
         await _signWithCredentials(context: context, credential: credential);
@@ -106,7 +105,6 @@ class SocialLoginService {
       }
       await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
       infoToast("Login Successfully");
-      Navigator.popUntil(context, (route) => route.isFirst);
       ref.read(splashProvider.notifier).redirections(context);
     } catch (e) {
       rethrow;

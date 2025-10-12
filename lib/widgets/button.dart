@@ -56,19 +56,29 @@ class CButton extends StatelessWidget {
         onTap: !isEnabled || isLoading ? null : onTap,
         child: Container(
           height: SizeConfig.h(height ?? 50),
-          width: width != null ? SizeConfig.w(width!) : null,
+          width:
+              width != null
+                  ? SizeConfig.w(width!)
+                  : title != null
+                  ? SizeConfig.w(
+                    Helper.getTextSize(title!, CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: SizeConfig.sp(fontSize ?? 13))).width +
+                        (padding?.horizontal ?? 20) +
+                        24 +
+                        (titleWithIcon ? SizeConfig.w(iconSize ?? 25) : 0),
+                  )
+                  : null,
           padding: padding ?? SizeConfig.symmetric(horizontal: 20),
           decoration: BoxDecoration(
             shape: shape ?? BoxShape.rectangle,
             border: Border.all(color: borderColor ?? CColors.primary, width: 1),
             boxShadow: shadows ?? [...primaryShadows, BoxShadow(color: CColors.buttonShadow, offset: Offset(0, 6), blurRadius: 6)],
             color: isEnabled ? backgroundColor : Colors.grey,
-            gradient: isEnabled ? gradient ?? CColors.buttonGradient : null,
+            gradient: isEnabled && backgroundColor == null ? gradient ?? CColors.buttonGradient : null,
             borderRadius: shape == BoxShape.circle ? null : borderRadius ?? BorderRadius.circular(16),
           ),
           child:
               isLoading
-                  ? LayoutBuilder(builder: (context, constraints) => Loading(height: SizeConfig.h(constraints.maxHeight * 0.6), width: SizeConfig.h(constraints.maxHeight * 0.6), color: Colors.white))
+                  ? Loading(height: SizeConfig.h(30), width: SizeConfig.h(30), color: Colors.white)
                   : title != null
                   ? titleWithIcon
                       ? Directionality(

@@ -33,19 +33,13 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       user = (await LocalStorageManager.getUser())!;
       userRegion = await Helper.userRegion();
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs;
-      docs = (await plansCollection.where(Filter.or(Filter('type', isEqualTo: PlanType.free.name), Filter('regions', arrayContains: userRegion))).get()).docs;
+      docs = (await plansCollection.where(Filter('regions', arrayContains: userRegion)).get()).docs;
       if (docs.isEmpty) {
-        docs = (await plansCollection.where(Filter.or(Filter('type', isEqualTo: PlanType.free.name), Filter('regions', isEqualTo: []))).get()).docs;
+        docs = (await plansCollection.where(Filter('regions', isEqualTo: [])).get()).docs;
       }
       plans = docs.map((planDoc) => PlanModel.fromMap(planDoc.data())).toList()..sort((a, b) => a.amount.compareTo(b.amount));
-
       await Future.delayed(const Duration(milliseconds: 400));
-      if (isRenewingPlan) {
-        plans = plans.where((e) => e.type != PlanType.free.name).toList();
-        selectedPlan = plans.first;
-      } else {
-        selectedPlan = plans.firstWhere((e) => e.type == PlanType.free.name);
-      }
+      selectedPlan = plans.first;
       isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -58,13 +52,9 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     isSubscribing = true;
     notifyListeners();
     try {
-      if (selectedPlan.type == PlanType.free.name) {
-        await _subscribePlan();
-      } else {
-        panelController.anchor();
-        isSubscribing = false;
-        notifyListeners();
-      }
+      panelController.anchor();
+      isSubscribing = false;
+      notifyListeners();
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -84,9 +74,9 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     showThreeMonthPlans = !value;
     var data = <PlanModel>[];
     if (showThreeMonthPlans) {
-      data = plans.where((element) => element.duration == 90 || element.type == PlanType.free.name).toList();
+      data = plans.where((element) => element.duration == 90).toList();
     } else {
-      data = plans.where((element) => element.duration != 90 && element.type != PlanType.free.name).toList();
+      data = plans.where((element) => element.duration != 90).toList();
     }
     if (data.isNotEmpty) selectedPlan = data.first;
     notifyListeners();
@@ -125,8 +115,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
         infoToast('Plan Subscribed Successfully');
       }
       Helper.userSubscription = SubscriptionModel.fromMap((await doc.get()).data()!);
-      await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id, is_premium: selectedPlan.type != PlanType.free.name));
-      Navigator.popUntil(context, (route) => route.isFirst);
+      await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id, is_premium: true));
       ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
     } catch (e) {
       if (kDebugMode) log(e.toString());

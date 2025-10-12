@@ -43,7 +43,7 @@ class _EditNameDialogState extends State<EditNameDialog> {
                       isLoading: isLoading,
                       margin: EdgeInsets.only(bottom: screenSize.height * 0.04),
                       height: 45,
-                      shadows: [],
+
                       fontSize: 14,
                       title: LocaleKeys.update.tr(),
                       onTap: () async {

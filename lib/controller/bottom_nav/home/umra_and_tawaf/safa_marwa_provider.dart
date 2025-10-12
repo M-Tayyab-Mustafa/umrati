@@ -20,14 +20,12 @@ class SafaMarwaNotifier extends ChangeNotifier {
   int saiRoundCount = 0;
 
   double distanceBetweenSafaAndMarwa = 0;
-  Alignment startingRunAlign = Alignment(0, 0.34);
   SafaMarwaModel? safaMarwaModel;
 
   Future<void> initialization() async {
     umraModel = ref.read(umraProvider.notifier).umraModel!;
     isRunComplete = umraModel.is_one_side_sai_run_completed;
     saiRoundCount = umraModel.sai_round_count;
-    _updateRunLocations();
     cancelPositionStreamSubscription();
     safaMarwaModel = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
     final safaLatLng = LatLng(safaMarwaModel!.safaLat, safaMarwaModel!.safaLng);
@@ -75,7 +73,6 @@ class SafaMarwaNotifier extends ChangeNotifier {
           pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
         );
         await _updateRoundCount();
-        _updateRunLocations();
       } else {
         oneSideRunCompletionPercent = (safaDistance / safaMarwaDistance).clamp(0, 1);
       }
@@ -89,7 +86,6 @@ class SafaMarwaNotifier extends ChangeNotifier {
         );
         ref.read(umraProvider.notifier).updateUmraModel(umraModel);
         isRunComplete = true;
-        _updateRunLocations();
       } else {
         if (marwaDistance > (safaMarwaDistance + threshold)) return;
         oneSideRunCompletionPercent = (marwaDistance / safaMarwaDistance).clamp(0, 1);
@@ -126,7 +122,6 @@ class SafaMarwaNotifier extends ChangeNotifier {
         pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
       );
       await _updateRoundCount();
-      _updateRunLocations();
     } else {
       umraModel = umraModel.copyWith(is_one_side_sai_run_completed: true);
       await showGeneralDialog(
@@ -136,17 +131,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
       ref.read(umraProvider.notifier).updateUmraModel(umraModel);
       oneSideRunCompletionPercent = 1.0;
       isRunComplete = true;
-      _updateRunLocations();
     }
-  }
-
-  void _updateRunLocations() {
-    if (isRunComplete) {
-      startingRunAlign = Alignment(0, -0.34);
-    } else {
-      startingRunAlign = Alignment(0, 0.34);
-    }
-    notifyListeners();
   }
 
   void cancelPositionStreamSubscription() {

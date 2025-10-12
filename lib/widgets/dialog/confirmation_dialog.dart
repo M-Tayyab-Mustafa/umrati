@@ -43,10 +43,10 @@ class ConfirmationDialog extends StatelessWidget {
                               width: 70,
                               height: 45,
                               padding: SizeConfig.zero,
-                              backgroundColor: Colors.transparent,
+                              backgroundColor: CColors.secondaryBackground,
                               borderColor: CColors.primary,
                               titleColor: CColors.primary,
-                              shadows: [],
+
                               title: LocaleKeys.no.tr(),
                               onTap: () => Navigator.pop(dialogContext, false),
                             ),
@@ -55,7 +55,7 @@ class ConfirmationDialog extends StatelessWidget {
                               width: 70,
                               height: 45,
                               padding: SizeConfig.zero,
-                              shadows: [],
+
                               title: LocaleKeys.yes.tr(),
                               onTap: () => Navigator.pop(dialogContext, true),
                             ),

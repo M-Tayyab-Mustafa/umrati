@@ -42,7 +42,7 @@ class _MeeqaatTwoTasksPageState extends ConsumerState<MeeqaatTwoTasksPage> {
               ),
               CheckBoxCard(
                 margin: SizeConfig.only(bottom: 40),
-                title: provider.user?.gender == Gender.male.name ? LocaleKeys.ihram.tr() : LocaleKeys.wear_abaya.tr(),
+                title: provider.user?.gender == Gender.female.name ? LocaleKeys.wear_abaya.tr() : LocaleKeys.ihram.tr(),
                 isSelected: provider.isIhramChecked,
                 onTap: ref.read(meeqaatTwoTasksProvider).updateIhramChecked,
                 child: Padding(
@@ -52,16 +52,16 @@ class _MeeqaatTwoTasksPageState extends ConsumerState<MeeqaatTwoTasksPage> {
                       children: [
                         TextSpan(
                           text:
-                              provider.user?.gender == Gender.male.name
-                                  ? '${LocaleKeys.take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram.tr()}\n'
-                                  : '${LocaleKeys.take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_abaya.tr()}\n',
+                              provider.user?.gender == Gender.female.name
+                                  ? '${LocaleKeys.take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_abaya.tr()}\n'
+                                  : '${LocaleKeys.take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram.tr()}\n',
                           style: CTextStyle.w600(fontSize: 12, color: CColors.deepTeal),
                         ),
                         WidgetSpan(
                           child: GestureDetector(
                             onTap: provider.showIhramTutorial,
                             child: Text(
-                              provider.user?.gender == Gender.male.name ? LocaleKeys.ihram_tutorial_pics.tr() : LocaleKeys.abaya_tutorial_pics.tr(),
+                              provider.user?.gender == Gender.female.name ? LocaleKeys.abaya_tutorial_pics.tr() : LocaleKeys.ihram_tutorial_pics.tr(),
                               style: CTextStyle.w600(fontSize: 14, color: CColors.primary, decoration: TextDecoration.underline, height: 0.8),
                             ),
                           ),

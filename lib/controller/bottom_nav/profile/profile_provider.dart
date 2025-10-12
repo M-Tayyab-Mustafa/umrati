@@ -33,11 +33,19 @@ class ProfileNotifier extends ChangeNotifier {
       emailController.text = user!.email;
       nameController.text = user!.name.isEmpty ? user!.uid.substring(0, (user!.uid.length / 2).toInt()) : user!.name;
     }
-    if (user!.photo.isEmpty && user!.gender == Gender.female.name) localImagePath = 'assets/png/profile/male_avatar.png';
-    var subscriptionDoc = await subscriptionCollection.doc(user!.subscription_id).get();
-    final subscription = SubscriptionModel.fromMap(subscriptionDoc.data()!);
-    final expireData = subscription.expire_at!.toDate();
-    daysRemaining = expireData.difference(DateTime.now()).inDays;
+    if (user!.photo.isEmpty) {
+      if (user!.gender == Gender.female.name) {
+        localImagePath = 'assets/png/profile/female_avatar.png';
+      } else {
+        localImagePath = 'assets/png/profile/male_avatar.png';
+      }
+    }
+    if (user!.subscription_id != null && user!.subscription_id!.isNotEmpty) {
+      var subscriptionDoc = await subscriptionCollection.doc(user!.subscription_id).get();
+      final subscription = SubscriptionModel.fromMap(subscriptionDoc.data()!);
+      final expireData = subscription.expire_at!.toDate();
+      daysRemaining = expireData.difference(DateTime.now()).inDays;
+    }
     isLoading = false;
     if (context.mounted) notifyListeners();
   }
@@ -93,22 +101,32 @@ class ProfileNotifier extends ChangeNotifier {
       await userCollection.doc(user!.uid).delete();
       await LocalStorageManager.clearStorage();
       try {
-        FirebaseAuth.instance.currentUser?.delete();
-      } catch (e) {
-        if (kDebugMode) log(e.toString());
-      }
-      try {
+        await FirebaseAuth.instance.currentUser?.delete();
         ref.read(loginProvider.notifier).resetPage();
         ref.read(loginProvider.notifier).phoneNumberController.clear();
+        ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
+      } on FirebaseAuthException catch (e) {
+        isLoading = false;
+        notifyListeners();
+        if (kDebugMode) log(e.toString());
+        errorToast(e.message ?? LocaleKeys.something_went_wrong_please_try_again_later.tr());
       } catch (e) {
+        isLoading = false;
+        notifyListeners();
         if (kDebugMode) log(e.toString());
       }
-      ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
     }
   }
 
   Future<void> updateGender(Gender gender) async {
     user = user!.copyWith(gender: gender.name.toLowerCase());
+    if (user!.photo.isEmpty) {
+      if (user!.gender == Gender.female.name) {
+        localImagePath = 'assets/png/profile/female_avatar.png';
+      } else {
+        localImagePath = 'assets/png/profile/male_avatar.png';
+      }
+    }
     notifyListeners();
     await LocalStorageManager.saveUser(user!);
   }

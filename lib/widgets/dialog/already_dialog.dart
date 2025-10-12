@@ -44,12 +44,11 @@ class AlreadyDialog extends StatelessWidget {
                           child: Padding(
                             padding: SizeConfig.only(left: isLTR(dialogContext) ? 20 : 16, right: isLTR(dialogContext) ? 16 : 20),
                             child: CButton(
-                              backgroundColor: Colors.transparent,
+                              backgroundColor: CColors.secondaryBackground,
                               borderColor: CColors.primary,
                               titleColor: CColors.primary,
                               height: 45,
                               title: LocaleKeys.start_new.tr(),
-                              shadows: [],
                               onTap: () => Navigator.pop(dialogContext, false),
                               style: CTextStyle.w400(fontSize: 12, color: CColors.primary),
                             ),
@@ -58,13 +57,7 @@ class AlreadyDialog extends StatelessWidget {
                         Expanded(
                           child: Padding(
                             padding: SizeConfig.only(left: isLTR(dialogContext) ? 16 : 20, right: isLTR(dialogContext) ? 20 : 16),
-                            child: CButton(
-                              shadows: [],
-                              height: 45,
-                              title: LocaleKeys.continued.tr(),
-                              onTap: () => Navigator.pop(dialogContext, true),
-                              style: CTextStyle.w400(fontSize: 12, color: Colors.white),
-                            ),
+                            child: CButton(height: 45, title: LocaleKeys.continued.tr(), onTap: () => Navigator.pop(dialogContext, true), style: CTextStyle.w400(fontSize: 12, color: Colors.white)),
                           ),
                         ),
                       ],

@@ -21,43 +21,19 @@ class _HomePageState extends ConsumerState<HomePage> {
       showEmblem: false,
       backgroundType: BackgroundType.empty,
       margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: 50),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _Card(
-                maxHeight: constraints.maxHeight * 0.25,
-                onTap: ref.read(homeProvider).onUmraTap,
-                title: LocaleKeys.umra.tr(),
-                description: LocaleKeys.start_your_umra_from_here.tr(),
-                image: 'assets/png/home/umrah.png',
-              ),
-              _Card(
-                maxHeight: constraints.maxHeight * 0.25,
-                onTap: ref.read(homeProvider).onTawafTap,
-                title: LocaleKeys.tawaf.tr(),
-                description: LocaleKeys.start_your_tawaf_from_here.tr(),
-                image: 'assets/png/home/tawaf.png',
-              ),
-              _Card(
-                maxHeight: constraints.maxHeight * 0.25,
-                onTap: ref.read(homeProvider).onZiaratTap,
-                title: LocaleKeys.ziarat.tr(),
-                description: LocaleKeys.start_your_ziarat_from_here.tr(),
-                image: 'assets/png/home/ziarat.png',
-              ),
-            ],
-          );
-        },
+      child: Column(
+        children: [
+          _Card(onTap: ref.read(homeProvider).onUmraTap, title: LocaleKeys.umra.tr(), description: LocaleKeys.start_your_umra_from_here.tr(), image: 'assets/png/home/umrah.png'),
+          _Card(onTap: ref.read(homeProvider).onTawafTap, title: LocaleKeys.tawaf.tr(), description: LocaleKeys.start_your_tawaf_from_here.tr(), image: 'assets/png/home/tawaf.png'),
+          _Card(onTap: ref.read(homeProvider).onZiaratTap, title: LocaleKeys.ziarat.tr(), description: LocaleKeys.start_your_ziarat_from_here.tr(), image: 'assets/png/home/ziarat.png'),
+        ],
       ),
     );
   }
 }
 
 class _Card extends ConsumerWidget {
-  const _Card({required this.maxHeight, required this.onTap, required this.title, required this.description, required this.image});
-  final double maxHeight;
+  const _Card({required this.onTap, required this.title, required this.description, required this.image});
   final VoidCallback onTap;
   final String title;
   final String description;
@@ -67,9 +43,9 @@ class _Card extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return BasicCard(
       onTap: onTap,
-      margin: SizeConfig.symmetric(horizontal: 16),
+      margin: SizeConfig.symmetric(horizontal: 16, vertical: 18),
       padding: SizeConfig.only(top: 16, bottom: 16, right: 16),
-      height: maxHeight,
+      height: SizeConfig.h(170),
       borderColor: CColors.grey,
       boxShadow: greyShadows,
       child: Row(
@@ -79,13 +55,13 @@ class _Card extends ConsumerWidget {
             child: LayoutBuilder(
               builder:
                   (context, constraints) =>
-                      CustomImage(width: SizeConfig.w(constraints.maxWidth), height: SizeConfig.h(constraints.maxHeight), path: image, fit: BoxFit.fill, imageType: ImageType.png),
+                      CustomImage(width: SizeConfig.w(constraints.maxWidth), height: SizeConfig.h(constraints.maxHeight * 0.65), path: image, fit: BoxFit.fill, imageType: ImageType.png),
             ),
           ),
           Expanded(
             flex: 7,
             child: Padding(
-              padding: SizeConfig.symmetric(horizontal: 16),
+              padding: SizeConfig.symmetric(horizontal: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,

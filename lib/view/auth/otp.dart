@@ -27,7 +27,7 @@ class OTPPage extends ConsumerWidget {
               ],
             ),
             Center(child: Directionality(textDirection: TextDirection.ltr, child: PinInput(controller: provider.otpController, margin: SizeConfig.symmetric(vertical: 30)))),
-            CButton(isLoading: provider.isVerifyingOTP, onTap: provider.verifyOTP, title: LocaleKeys.verify_the_otp.tr(), titleWithIcon: true),
+            CButton(isLoading: provider.isVerifyingOTP, onTap: provider.verifyOTP, title: LocaleKeys.verify.tr(), titleWithIcon: true),
 
             if (provider.bounceTimer != null)
               Padding(

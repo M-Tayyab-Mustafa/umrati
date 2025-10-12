@@ -5,7 +5,6 @@ import 'package:umrati/view/bottom_nav/page.dart';
 
 import '../../utils/services/local_storage.dart';
 import '../../utils/services/translations/locale_keys.g.dart';
-import '../../view/auth/login.dart';
 
 final languageProvider = ChangeNotifierProvider.autoDispose<LanguageNotifier>((ref) => LanguageNotifier());
 
@@ -48,8 +47,7 @@ class LanguageNotifier extends ChangeNotifier {
         context.setLocale(Locale('ur', 'PK'));
       }
       LocalStorageManager.showSelectLanguagePage(false);
-      Navigator.popUntil(context, (route) => route.isFirst);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+      Navigator.pop(context, selectedLanguage);
     }
   }
 

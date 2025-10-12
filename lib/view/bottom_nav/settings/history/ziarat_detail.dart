@@ -67,14 +67,7 @@ class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
               padding: SizeConfig.only(bottom: 32),
               child: Row(
                 children: [
-                  CButton(
-                    onTap: () => Navigator.pop(context),
-                    title: LocaleKeys.go_back.tr(),
-                    backgroundColor: Colors.transparent,
-                    borderColor: CColors.primary,
-                    titleColor: CColors.primary,
-                    shadows: [],
-                  ),
+                  CButton(onTap: () => Navigator.pop(context), title: LocaleKeys.go_back.tr(), backgroundColor: CColors.secondaryBackground, borderColor: CColors.primary, titleColor: CColors.primary),
                   Spacer(),
                   if (!provider.ziaratHistory!.isCompleted) CButton(onTap: provider.resume, title: LocaleKeys.resume_ziarat.tr()),
                 ],

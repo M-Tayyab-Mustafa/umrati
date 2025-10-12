@@ -204,6 +204,11 @@ class Helper {
     return totalLines > 1.0 ? CrossAxisAlignment.start : CrossAxisAlignment.center;
   }
 
+  static Size getTextSize(String text, TextStyle style) {
+    final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
+    return textPainter.size;
+  }
+
   static double calculateBearing(LatLng from, LatLng to) {
     double lat1 = degToRad(from.latitude);
     double lon1 = degToRad(from.longitude);

@@ -11,10 +11,10 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
   @override
   void initState() {
     super.initState();
-    ref.read(subscriptionProvider.notifier).getSubscriptionPlans();
     ref.read(subscriptionProvider).context = context;
     ref.read(subscriptionProvider).ref = ref;
     ref.read(subscriptionProvider).isRenewingPlan = widget.isRenewingPlan;
+    ref.read(subscriptionProvider.notifier).getSubscriptionPlans();
   }
 
   @override
@@ -58,9 +58,9 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                   builder: (context, constraints) {
                     var plans = <PlanModel>[];
                     if (provider.showThreeMonthPlans) {
-                      plans = provider.plans.where((element) => element.duration == 90 || element.type == PlanType.free.name).toList();
+                      plans = provider.plans.where((element) => element.duration == 90).toList();
                     } else {
-                      plans = provider.plans.where((element) => element.duration != 90 && element.type != PlanType.free.name).toList();
+                      plans = provider.plans.where((element) => element.duration != 90).toList();
                     }
                     return Stack(
                       children: [

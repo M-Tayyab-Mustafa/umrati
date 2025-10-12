@@ -40,7 +40,7 @@ enum CommonDoc {
   const CommonDoc(this.name);
 }
 
-enum PlanType { free, individual, group }
+enum PlanType { individual, group }
 
 enum CommonField {
   isInTawaf('isInTawaf'),

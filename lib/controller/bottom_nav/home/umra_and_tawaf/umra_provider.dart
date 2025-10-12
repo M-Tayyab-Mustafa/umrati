@@ -36,7 +36,7 @@ class UmraNotifier extends ChangeNotifier {
   bool hasDoneAfterMeeqaatTasks = false;
   bool hasDoneHalfCircle = false;
   double tawafCircleCompletionPercent = 0;
-  bool isRoundCompleted = false;
+  bool isRoundCompleted = true;
   int tawafCircleCount = 0;
 
   bool isTrackerPaused = false;
@@ -172,16 +172,17 @@ class UmraNotifier extends ChangeNotifier {
 
   Future<void> _checkReachedNearTheGreenLight({required LatLng alHajarAlAswadLatLng, required LatLng matafGreenLightLatLng, required num threshold}) async {
     try {
-      var isUserInBetweenAlHajarAndMataf =
-          Helper.distanceToVector(alHajarAlAswadLatLng, matafGreenLightLatLng, LatLng(startingPosition!.latitude, startingPosition!.longitude)) <= threshold.toDouble();
-      if (isUserInBetweenAlHajarAndMataf) return;
-      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
-      if (result == true) {
-        errorToast(LocaleKeys.you_are_not_near_the_green_light.tr());
-        await _checkReachedNearTheGreenLight(alHajarAlAswadLatLng: alHajarAlAswadLatLng, matafGreenLightLatLng: matafGreenLightLatLng, threshold: threshold);
-      } else {
-        goToHome();
-      }
+      await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
+      // var isUserInBetweenAlHajarAndMataf =
+      //     Helper.distanceToVector(alHajarAlAswadLatLng, matafGreenLightLatLng, LatLng(startingPosition!.latitude, startingPosition!.longitude)) <= threshold.toDouble();
+      // if (isUserInBetweenAlHajarAndMataf) return;
+      // var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
+      // if (result == true) {
+      //   errorToast(LocaleKeys.you_are_not_near_the_green_light.tr());
+      //   await _checkReachedNearTheGreenLight(alHajarAlAswadLatLng: alHajarAlAswadLatLng, matafGreenLightLatLng: matafGreenLightLatLng, threshold: threshold);
+      // } else {
+      //   goToHome();
+      // }
     } catch (e) {
       log(e.toString());
     }

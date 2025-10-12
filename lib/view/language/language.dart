@@ -41,11 +41,14 @@ class _LanguagePageState extends ConsumerState<LanguagePage> {
                 bool isSelected = provider.languages[index] == provider.selectedLanguage;
                 return GestureDetector(
                   onTap: () => ref.read(languageProvider.notifier).updateLanguage(provider.languages[index]),
-                  child: BasicCard(
-                    margin: SizeConfig.only(top: index != 0 ? 20 : 0),
-                    borderColor: isSelected ? CColors.primary : CColors.lightGrey,
-                    boxShadow: isSelected ? null : [],
-                    child: Text(provider.languages[index].tr(), style: CTextStyle.w600(fontSize: 16)),
+                  child: Directionality(
+                    textDirection: getTextDirection(provider.languages[index].tr()),
+                    child: BasicCard(
+                      margin: SizeConfig.only(top: index != 0 ? 20 : 0),
+                      borderColor: isSelected ? CColors.primary : CColors.lightGrey,
+                      boxShadow: isSelected ? null : [],
+                      child: Text(provider.languages[index].tr(), style: CTextStyle.w600(fontSize: 16)),
+                    ),
                   ),
                 );
               },

@@ -17,14 +17,20 @@ class _LocationPermissionPageState extends ConsumerState<LocationPermissionPage>
   @override
   Widget build(BuildContext context) {
     return Background(
-      backgroundType: BackgroundType.logoWithSkip,
+      backgroundType: BackgroundType.logo,
       titleAlignment: Alignment.center,
       onSkipTap: ref.read(locationPermissionProvider.notifier).skip,
       titleMargin: SizeConfig.only(top: 60, bottom: 40),
       child: Column(
         children: [
           Padding(padding: SizeConfig.only(top: 32), child: FormattedText(rawText: LocaleKeys.permission_request_message.tr())),
-          CButton(margin: SizeConfig.only(top: 48), title: LocaleKeys.turn_on_location.tr(), fontSize: 14, onTap: ref.read(locationPermissionProvider.notifier).continueTab),
+          CButton(
+            isLoading: ref.watch(locationPermissionProvider).isLoading,
+            margin: SizeConfig.only(top: 48),
+            title: LocaleKeys.turn_on_location.tr(),
+            fontSize: 14,
+            onTap: ref.read(locationPermissionProvider.notifier).continueTab,
+          ),
         ],
       ),
     );

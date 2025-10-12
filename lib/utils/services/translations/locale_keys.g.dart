@@ -32,7 +32,7 @@ abstract class  LocaleKeys {
   static const key_limit_reached = 'key_limit_reached';
   static const key = 'key';
   static const ask_mufti = 'ask_mufti';
-  static const verify_the_otp = 'verify_the_otp';
+  static const verify  = 'verify ';
   static const resend_the_otp = 'resend_the_otp';
   static const resend_the_otp_in = 'resend_the_otp_in';
   static const select_your_gender = 'select_your_gender';
@@ -40,7 +40,7 @@ abstract class  LocaleKeys {
   static const already_in_umra = 'already_in_umra';
   static const enter_the_otp_you_received_to = 'enter_the_otp_you_received_to';
   static const or_continue_with = 'or_continue_with';
-  static const send_the_otp = 'send_the_otp';
+  static const verify_now = 'verify_now';
   static const english = 'english';
   static const urdu = 'urdu';
   static const ask_legitimate_needs = 'ask_legitimate_needs';
@@ -186,6 +186,7 @@ abstract class  LocaleKeys {
   static const your_sai_has_completed = 'your_sai_has_completed';
   static const seven_rounds_completed = 'seven_rounds_completed';
   static const now_perform_2_rakats_salah = 'now_perform_2_rakats_salah';
+  static const area_to_run_fast = 'area_to_run_fast';
   static const please_check_makrooh_time_before = 'please_check_makrooh_time_before';
   static const drink_zamzam = 'drink_zamzam';
   static const shave_the_head = 'shave_the_head';

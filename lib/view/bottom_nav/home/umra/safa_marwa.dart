@@ -27,14 +27,14 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
     var uProvider = ref.watch(umraProvider);
     return Background(
       logoAlign: Alignment.center,
-      backgroundType: BackgroundType.logo,
+      backgroundType: BackgroundType.logoWithSkip,
+      onSkipTap: provider.debugSkipSafaMarwa,
       titleMargin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
       titleType: TitleType.backArrow,
       titleWidget: Center(
         child: Visibility(
           visible: provider.saiRoundCount != 7,
           child: CButton(
-            shadows: [],
             height: 45,
             margin: SizeConfig.only(right: isLTR(context) ? 40 : 0, left: isLTR(context) ? 0 : 40),
             onTap: ref.read(umraProvider.notifier).pauseAndResumeTracker,
@@ -64,6 +64,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
                     padding: SizeConfig.symmetric(vertical: 16),
                     child: SizedBox(
                       height: SizeConfig.screenHeight,
+                      width: SizeConfig.screenWidth,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -72,25 +73,19 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
                             child: LayoutBuilder(
                               builder: (context, constraints) {
                                 final centerX = constraints.maxWidth / 2;
-                                final lineSpacing = SizeConfig.screenWidth * 0.45;
+                                final trackWidth = constraints.maxWidth * 0.5;
                                 final trackerSize = SizeConfig.h(40);
                                 final usableHeight = constraints.maxHeight - trackerSize;
-                                final targetLineX = (provider.isRunComplete ? centerX - lineSpacing / 2 : centerX + lineSpacing / 2) - (trackerSize / 2);
+                                final targetLineX = (provider.isRunComplete ? centerX - trackWidth / 2 : centerX + trackWidth / 2) - (trackerSize / 2);
                                 return Stack(
                                   children: [
-                                    CustomPaint(
-                                      size: Size(constraints.maxWidth, constraints.maxHeight),
-                                      painter: _VerticalDashedAreaPainter(lineSpacing: lineSpacing, dashWidth: 15, dashHeight: 4, lineColor: Colors.black, fillColor: Colors.transparent),
-                                    ),
-                                    Align(
-                                      alignment: provider.startingRunAlign,
-                                      child: CustomImage(
-                                        path: 'assets/svg/area_to_run_fast.svg',
-                                        imageType: ImageType.svg,
-                                        width: SizeConfig.screenWidth * 0.5,
-                                        height: SizeConfig.screenHeight * 0.068,
+                                    Center(
+                                      child: CustomPaint(
+                                        size: Size(trackWidth, constraints.maxHeight),
+                                        painter: _VerticalDashedAreaPainter(lineSpacing: trackWidth, dashWidth: 15, dashHeight: 4, lineColor: Colors.black, fillColor: Colors.transparent),
                                       ),
                                     ),
+                                    Align(alignment: Alignment.center, child: _AreaToRunFast(width: trackWidth)),
                                     Column(
                                       children: [
                                         Padding(padding: SizeConfig.only(top: 10), child: Text(LocaleKeys.marwa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
@@ -176,7 +171,6 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
           style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal),
         ),
         BasicCard(
-          onTap: provider.debugSkipSafaMarwa,
           margin: SizeConfig.symmetric(vertical: 8, horizontal: 16),
           backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
           child: Center(
@@ -238,4 +232,25 @@ class _VerticalDashedAreaPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class _AreaToRunFast extends StatelessWidget {
+  const _AreaToRunFast({required this.width});
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: SizeConfig.screenHeight * 0.64,
+      width: width,
+      child: Stack(
+        children: [
+          Container(color: CColors.primary.withValues(alpha: 0.15), margin: SizeConfig.symmetric(horizontal: 10)),
+          Align(alignment: Alignment(-1.08, 0), child: VerticalDivider(color: CColors.emeraldGreen, thickness: SizeConfig.w(20))),
+          Align(alignment: Alignment.centerRight, child: VerticalDivider(color: CColors.emeraldGreen, thickness: SizeConfig.w(20))),
+          Center(child: Text(LocaleKeys.area_to_run_fast.tr(), style: CTextStyle.w300(color: Colors.white, fontSize: 16))),
+        ],
+      ),
+    );
+  }
 }

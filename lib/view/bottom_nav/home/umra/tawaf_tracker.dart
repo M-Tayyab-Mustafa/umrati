@@ -18,7 +18,6 @@ class TawafTrackerPage extends ConsumerWidget {
         child: Visibility(
           visible: provider.tawafCircleCount != 7,
           child: CButton(
-            shadows: [],
             height: 45,
             margin: SizeConfig.only(right: isLTR(context) ? 40 : 0, left: isLTR(context) ? 0 : 40),
             onTap: provider.pauseAndResumeTracker,
@@ -123,17 +122,28 @@ class TawafTrackerPage extends ConsumerWidget {
                             child: Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(gradient: CColors.trackingSecondaryGradient, shape: BoxShape.circle),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                              child: Stack(
                                 children: [
-                                  CustomImage(
-                                    path: provider.isRoundCompleted ? 'assets/svg/istilaam_time.svg' : 'assets/svg/kabaa.svg',
-                                    imageType: ImageType.svg,
-                                    height: SizeConfig.w(80),
-                                    margin: SizeConfig.only(bottom: 12),
+                                  if (provider.isRoundCompleted)
+                                    Center(
+                                      child: Opacity(
+                                        opacity: 0.1,
+                                        child: CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: centralContentSize * 0.8, margin: SizeConfig.only(bottom: 12)),
+                                      ),
+                                    ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      CustomImage(
+                                        path: provider.isRoundCompleted ? 'assets/svg/istilaam_time.svg' : 'assets/svg/kabaa.svg',
+                                        imageType: ImageType.svg,
+                                        height: SizeConfig.w(80),
+                                        margin: SizeConfig.only(bottom: 12),
+                                      ),
+                                      Text(provider.isRoundCompleted ? LocaleKeys.istilaam_time.tr() : LocaleKeys.tawaf_tracker.tr(), style: CTextStyle.w900(fontSize: 16)),
+                                    ],
                                   ),
-                                  Text(provider.isRoundCompleted ? LocaleKeys.istilaam_time.tr() : LocaleKeys.tawaf_tracker.tr(), style: CTextStyle.w900(fontSize: 16)),
                                 ],
                               ),
                             ),
@@ -177,7 +187,7 @@ class TawafTrackerPage extends ConsumerWidget {
         {
           if (provider.isRoundCompleted) {
             String dua = switch (provider.tawafCircleCount) {
-              1 => IstilaamDua.round1.dua,
+              0 => IstilaamDua.round1.dua,
               _ => IstilaamDua.otherRounds.dua,
             };
             return Column(

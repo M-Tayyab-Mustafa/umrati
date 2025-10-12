@@ -73,7 +73,7 @@ class LoginNotifier extends ChangeNotifier {
   //     isSkipping = false;
   //     notifyListeners();
   //     Navigator.popUntil(context, (route) => route.isFirst);
-  //     ref.read(splashProvider).redirections(context);
+  //     ref.read(splashProvider).redirections(context,ref);
   //   } catch (e) {
   //     if (kDebugMode) log(e.toString());
   //     errorToast(e.toString());
@@ -224,17 +224,9 @@ class LoginNotifier extends ChangeNotifier {
             gender: '',
           );
           await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
-          //* Disable Loading
-          isVerifyingOTP = false;
-          notifyListeners();
-          Navigator.pop(context, true);
           ref.read(splashProvider.notifier).redirections(context);
         } else {
           await LocalStorageManager.saveUser(UserModel.fromMap((await userCollection.doc(userCredential.user!.uid).get()).data()!), toFirebase: false);
-          //* Disable Loading
-          isVerifyingOTP = false;
-          notifyListeners();
-          Navigator.pop(context, true);
           ref.read(splashProvider.notifier).redirections(context);
         }
       }
