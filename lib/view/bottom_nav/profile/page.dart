@@ -108,7 +108,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text('${provider.user!.total_umra_done}  ', style: CTextStyle.w900(fontSize: 25, color: CColors.primary)),
-                          Expanded(child: Text(LocaleKeys.number_of_umra_done.tr(), style: CTextStyle.w400(fontSize: 18, color: CColors.deepTeal))),
+                          Expanded(child: Text(LocaleKeys.number_of_umrah_done.tr(), style: CTextStyle.w400(fontSize: 18, color: CColors.deepTeal))),
                         ],
                       ),
                     ),
@@ -130,7 +130,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           Expanded(
                             child: CustomImage(
                               onTap: () => provider.updateGender(Gender.male),
-                              path: provider.user!.gender == Gender.male.name ? 'assets/svg/gender/selected_male.svg' : 'assets/svg/gender/un_selected_male.svg',
+                              path:
+                                  provider.user!.gender == Gender.male.name
+                                      ? isLTR(context)
+                                          ? 'assets/svg/gender/selected_male.svg'
+                                          : 'assets/svg/gender/selected_male_ur.svg'
+                                      : isLTR(context)
+                                      ? 'assets/svg/gender/un_selected_male.svg'
+                                      : 'assets/svg/gender/un_selected_male_ur.svg',
                               imageType: ImageType.svg,
                               fit: BoxFit.fill,
                               size: SizeConfig.h(100),
@@ -139,7 +146,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           Expanded(
                             child: CustomImage(
                               onTap: () => provider.updateGender(Gender.female),
-                              path: provider.user!.gender == Gender.female.name ? 'assets/svg/gender/selected_female.svg' : 'assets/svg/gender/un_selected_female.svg',
+                              path:
+                                  provider.user!.gender == Gender.female.name
+                                      ? isLTR(context)
+                                          ? 'assets/svg/gender/selected_female.svg'
+                                          : 'assets/svg/gender/selected_female_ur.svg'
+                                      : isLTR(context)
+                                      ? 'assets/svg/gender/un_selected_female.svg'
+                                      : 'assets/svg/gender/un_selected_female_ur.svg',
                               imageType: ImageType.svg,
                               fit: BoxFit.fill,
                               size: SizeConfig.h(100),

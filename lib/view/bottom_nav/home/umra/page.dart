@@ -18,18 +18,18 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
   @override
   void initState() {
     super.initState();
-    ref.read(umraProvider.notifier).context = context;
-    ref.read(umraProvider.notifier).ref = ref;
+    ref.read(umrahProvider.notifier).context = context;
+    ref.read(umrahProvider.notifier).ref = ref;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(umraProvider.notifier).initialization(widget.userActivityType);
+      await ref.read(umrahProvider.notifier).initialization(widget.userActivityType);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    var provider = ref.watch(umraProvider);
-    ref.read(umraProvider.notifier).context = context;
-    ref.read(umraProvider.notifier).ref = ref;
+    var provider = ref.watch(umrahProvider);
+    ref.read(umrahProvider.notifier).context = context;
+    ref.read(umrahProvider.notifier).ref = ref;
     if (!provider.hasDoneBeforeMeeqaatTasks) {
       return MeeqaatTwoTasksPage();
     } else if (!provider.hasReachedMeeqaat) {

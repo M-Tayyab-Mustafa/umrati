@@ -68,13 +68,13 @@ flutter:
     - assets/translations/
     
   fonts:
-    - family: Jameel Noori Nastaleeq Kasheeda
+    - family: Jameel Noori Nastaleeq Regular
       fonts:
-        - asset: assets/font/urdu/jameel_noori_nastaleeq_kasheeda.ttf
+        - asset: assets/font/urdu/jameel_noori_nastaleeq_regular.ttf
       
-    - family: KFGQPC Uthmanic Script HAFS Regular
+    - family: Traditional Arabic Regular
       fonts:
-        - asset: assets/font/arabic/kfgqpc_uthmanic_script_hafs_regular.ttf
+        - asset: assets/font/arabic/traditional_arabic_regular.ttf
       
     - family: Roboto
       fonts:

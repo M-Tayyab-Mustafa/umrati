@@ -6,10 +6,13 @@ class TawafTrackerPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var provider = ref.watch(umraProvider);
+    var provider = ref.watch(umrahProvider);
     return Background(
+      canPop: provider.canPop,
+      popConfirmationTitle: LocaleKeys.exit_umrah_confirmation.tr(),
+      onPopInvokedWithResult: provider.onPopInvokedWithResult,
       logoAlign: Alignment.center,
-      backgroundType: BackgroundType.logoWithSkip,
+      backgroundType: provider.tawafCircleCount == 7 ? BackgroundType.logo : BackgroundType.logoWithSkip,
       onSkipTap: provider.debugSkipTawaf,
       showEmblem: false,
       margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: kToolbarHeight * 0.5),
@@ -55,7 +58,7 @@ class TawafTrackerPage extends ConsumerWidget {
                 return Stack(
                   children: [
                     Center(child: CustomPaint(size: Size(size, size), painter: DashedCirclePainter(primaryColor: CColors.primary, gradientRadiusFactor: provider.tawafCircleCompletionPercent))),
-                    if ((provider.tawafCircleCount != 0 || provider.umraModel != null) && provider.tawafCircleCount < 7)
+                    if ((provider.tawafCircleCount != 0 || provider.umrahModel != null) && provider.tawafCircleCount < 7)
                       Positioned(
                         left: (constraints.maxWidth - size) / 2 + trackerDX - (trackingIndicatorSize / 2),
                         top: (constraints.maxHeight - size) / 2 + trackerDY - (trackingIndicatorSize / 2),
@@ -96,6 +99,7 @@ class TawafTrackerPage extends ConsumerWidget {
                             boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
                           ),
                           child: Container(
+                            padding: SizeConfig.all(16),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
                             child: Column(
@@ -162,7 +166,7 @@ class TawafTrackerPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildDuaWidget({required BuildContext context, required UmraNotifier provider}) {
+  Widget _buildDuaWidget({required BuildContext context, required UmrahNotifier provider}) {
     switch (provider.tawafCircleCount) {
       case 7:
         return provider.userActivityType == UserActivityType.tawaf
@@ -177,7 +181,7 @@ class TawafTrackerPage extends ConsumerWidget {
                   title: LocaleKeys.now_perform_2_rakats_salah.tr(),
                   isSelected: provider.isPerformed2RakatsSalah,
                   onTap: provider.perform2RakatsSalah,
-                  child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 12, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular')),
+                  child: Text(LocaleKeys.please_check_makrooh_time_before.tr(), style: CTextStyle.w400(color: Colors.redAccent, fontSize: 12)),
                 ),
                 CheckBoxCard(margin: SizeConfig.symmetric(vertical: 16), title: LocaleKeys.drink_zamzam.tr(), isSelected: provider.isDrinkZamzam, onTap: provider.drinkZamzam),
                 CButton(margin: SizeConfig.only(bottom: 16, top: 25), onTap: provider.moveToSafaMarwa, titleWithIcon: true, title: LocaleKeys.continued.tr()),
@@ -197,7 +201,7 @@ class TawafTrackerPage extends ConsumerWidget {
                 BasicCard(
                   margin: SizeConfig.symmetric(vertical: 14),
                   backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
-                  child: Center(child: Text(dua, style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center, textDirection: TextDirection.rtl)),
+                  child: Center(child: Text(dua, style: CTextStyle.w500(fontSize: 18, color: CColors.deepTeal), textAlign: TextAlign.center, textDirection: TextDirection.rtl)),
                 ),
               ],
             );
@@ -230,7 +234,7 @@ class TawafTrackerPage extends ConsumerWidget {
                   child: Center(
                     child: Text(
                       dua,
-                      style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular'),
+                      style: CTextStyle.w500(fontSize: 18, color: CColors.deepTeal, fontFamily: provider.tawafCircleCount < 6 ? Helper.arabicTextFontFamily : null),
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.rtl,
                     ),

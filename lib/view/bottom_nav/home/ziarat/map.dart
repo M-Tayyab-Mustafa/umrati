@@ -1,13 +1,13 @@
 import '../../../../export.dart';
 
-class ZiaratMapPage extends ConsumerStatefulWidget {
-  const ZiaratMapPage({super.key, this.ziaratHistory});
-  final ZiaratHistoryModel? ziaratHistory;
+class ZiaraatMapPage extends ConsumerStatefulWidget {
+  const ZiaraatMapPage({super.key, this.ziaratHistory});
+  final ZiaraatHistoryModel? ziaratHistory;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ZiaratMapPageState();
 }
 
-class _ZiaratMapPageState extends ConsumerState<ZiaratMapPage> {
+class _ZiaratMapPageState extends ConsumerState<ZiaraatMapPage> {
   @override
   void initState() {
     super.initState();
@@ -51,7 +51,10 @@ class _ZiaratMapPageState extends ConsumerState<ZiaratMapPage> {
                 alignment: Alignment(0.9, -0.9),
                 child: GestureDetector(
                   onTap: () => provider.showMoreOptions(context: context),
-                  child: Directionality(textDirection: TextDirection.ltr, child: CustomImage(path: 'assets/svg/ziarat/more_options.svg', imageType: ImageType.svg, size: SizeConfig.w(40))),
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: CustomImage(path: isLTR(context) ? 'assets/svg/ziarat/more_options.svg' : 'assets/svg/ziarat/more_options_ur.svg', imageType: ImageType.svg, size: SizeConfig.w(40)),
+                  ),
                 ),
               ),
             Align(alignment: Alignment(0.42, -0.92), child: CompositedTransformTarget(link: provider.layerLink, child: SizedBox(height: SizeConfig.w(20), width: SizeConfig.w(20)))),

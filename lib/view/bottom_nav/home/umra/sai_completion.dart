@@ -5,7 +5,7 @@ class SaiCompletionPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var provider = ref.watch(umraProvider);
+    var provider = ref.watch(umrahProvider);
     return Background(
       logoAlign: Alignment.center,
       backgroundType: BackgroundType.logo,
@@ -53,7 +53,7 @@ class SaiCompletionPage extends ConsumerWidget {
               style: CTextStyle.w400(color: CColors.primary, fontSize: 14),
             ),
           ),
-          CButton(margin: SizeConfig.symmetric(horizontal: 16), isLoading: provider.isLoading, title: LocaleKeys.continued.tr(), titleWithIcon: true, onTap: ref.read(umraProvider).umraCompleted),
+          CButton(margin: SizeConfig.symmetric(horizontal: 16), isLoading: provider.isLoading, title: LocaleKeys.continued.tr(), titleWithIcon: true, onTap: ref.read(umrahProvider).umraCompleted),
         ],
       ),
     );

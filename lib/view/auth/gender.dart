@@ -34,7 +34,14 @@ class _SelectGenderPageState extends ConsumerState<SelectGenderPage> {
               Expanded(
                 child: CustomImage(
                   onTap: () => provider.updateGender(Gender.male),
-                  path: provider.selectedGender == Gender.male ? 'assets/svg/gender/selected_male.svg' : 'assets/svg/gender/un_selected_male.svg',
+                  path:
+                      provider.selectedGender == Gender.male
+                          ? isLTR(context)
+                              ? 'assets/svg/gender/selected_male.svg'
+                              : 'assets/svg/gender/selected_male_ur.svg'
+                          : isLTR(context)
+                          ? 'assets/svg/gender/un_selected_male.svg'
+                          : 'assets/svg/gender/un_selected_male_ur.svg',
                   imageType: ImageType.svg,
                   fit: BoxFit.fill,
                   height: SizeConfig.w(140),

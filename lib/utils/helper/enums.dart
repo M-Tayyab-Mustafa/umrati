@@ -8,9 +8,9 @@ enum TitleType { empty, backArrow }
 
 enum BottomNavTabs { home, profile, askMufti, settings }
 
-enum ZiaratCities { mecca, medina, taif, other }
+enum ZiaraatCities { mecca, medina, taif, other }
 
-enum ZiaratDestinationsCreationOptions { auto, manual }
+enum ZiaraatDestinationsCreationOptions { auto, manual }
 
 enum CollectionNames { users, settings, plans, subscriptions, histories, messages }
 
@@ -24,7 +24,7 @@ enum StorageFolderNames {
 
 enum MapMarkerId { userLocation, destination }
 
-enum UserActivityType { tawaf, umra, ziarat }
+enum UserActivityType { tawaf, umra, ziaraat }
 
 enum CommonDoc {
   alKaba('al_kaba'),
@@ -33,7 +33,7 @@ enum CommonDoc {
   constants('constants'),
   safaMarwa('safa_marwa'),
   safaMarwaRunningPoints('safa_marwa_running_points'),
-  ziarat('ziarat');
+  ziaraat('ziaraat');
 
   final String name;
 

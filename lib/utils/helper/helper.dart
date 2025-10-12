@@ -1,6 +1,10 @@
 import '../../../export.dart';
 
 class Helper {
+  static const englishTextFontFamily = 'Roboto';
+  static const urduTextFontFamily = 'Jameel Noori Nastaleeq Regular';
+  static const arabicTextFontFamily = 'Traditional Arabic Regular';
+
   static double degToRad(double degrees) => degrees * pi / 180;
   static double radToDeg(double rad) => rad * 180 / pi;
 

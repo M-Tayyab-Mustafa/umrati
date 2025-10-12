@@ -29,4 +29,6 @@ class SettingsNotifier extends ChangeNotifier {
   Future<void> onGiveFeedbackTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const GiveFeedbackPage()));
 
   Future<void> onBuyPremiumTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
+
+  void onChangeTheThemeTap() async {}
 }

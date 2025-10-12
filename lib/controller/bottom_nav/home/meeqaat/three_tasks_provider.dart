@@ -39,19 +39,19 @@ class MeeqaatThreeTasksNotifier extends ChangeNotifier {
     }
     isLoading = true;
     if (context.mounted) notifyListeners();
-    await ref.read(umraProvider.notifier).updateHasDoneAfterMeeqaatTasks();
+    await ref.read(umrahProvider.notifier).updateHasDoneAfterMeeqaatTasks();
     isLoading = false;
     if (context.mounted) notifyListeners();
   }
 
   void tasksDone() async {
     if (!(isTwoNafiPrayersChecked && isIntentionChecked && isTalbiyahChecked)) {
-      errorToast(LocaleKeys.please_check_the_boxes_for_the_two_nafl_prayers_the_intention_and_the_talbiyah.tr());
+      errorToast(LocaleKeys.please_check_the_boxes_for_the_two_nafl_prayer_the_intention_and_the_talbiyah.tr());
       return;
     }
     isLoading = true;
     if (context.mounted) notifyListeners();
-    await ref.read(umraProvider.notifier).updateHasDoneAfterMeeqaatTasks();
+    await ref.read(umrahProvider.notifier).updateHasDoneAfterMeeqaatTasks();
     isLoading = false;
     if (context.mounted) notifyListeners();
   }

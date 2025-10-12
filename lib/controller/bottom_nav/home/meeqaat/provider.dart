@@ -47,7 +47,7 @@ class MeeqaatLocationFetchProviderNotifier extends ChangeNotifier {
   void onContinueYourRemainingTasks() async {
     isLoading = true;
     if (context.mounted) notifyListeners();
-    var result = await ref.read(umraProvider.notifier).continueYourRemainingTasks();
+    var result = await ref.read(umrahProvider.notifier).continueYourRemainingTasks();
     if (result) positionStreamSubscription?.cancel();
     isLoading = false;
     if (context.mounted) notifyListeners();

@@ -16,15 +16,15 @@ class SafaMarwaNotifier extends ChangeNotifier {
   StreamSubscription<Position>? positionStreamSubscription;
   ScrollController scrollController = ScrollController();
   double oneSideRunCompletionPercent = 0.0;
-  bool isRunComplete = false;
+  bool isOneSideSaiRunCompleted = false;
   int saiRoundCount = 0;
 
   double distanceBetweenSafaAndMarwa = 0;
   SafaMarwaModel? safaMarwaModel;
 
   Future<void> initialization() async {
-    umraModel = ref.read(umraProvider.notifier).umraModel!;
-    isRunComplete = umraModel.is_one_side_sai_run_completed;
+    umraModel = ref.read(umrahProvider.notifier).umrahModel!;
+    isOneSideSaiRunCompleted = umraModel.is_one_side_sai_run_completed;
     saiRoundCount = umraModel.sai_round_count;
     cancelPositionStreamSubscription();
     safaMarwaModel = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
@@ -36,7 +36,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
       var distanceFromSafa = Geolocator.distanceBetween(currentPosition.latitude, currentPosition.longitude, safaLatLng.latitude, safaLatLng.longitude).abs();
       if (!context.mounted) return;
       if (!(distanceFromSafa <= num.parse(safaMarwaModel!.threshold))) {
-        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog(fromUmra: false));
+        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog(fromUmrah: false));
       }
     } catch (e) {
       if (kDebugMode) log(e.toString());
@@ -64,14 +64,10 @@ class SafaMarwaNotifier extends ChangeNotifier {
   // Method to update location and track progress between Safa and Marwa
   void _updateLocation(Position position, LatLng safaLatLng, LatLng marwaLatLng, num safaMarwaDistance, num threshold) async {
     if (!umraModel.is_doing) return cancelPositionStreamSubscription();
-    if (isRunComplete) {
+    if (isOneSideSaiRunCompleted) {
       var safaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, safaLatLng.latitude, safaLatLng.longitude).abs();
       if (safaDistance > (safaMarwaDistance + threshold)) return;
       if (safaDistance <= threshold) {
-        await showGeneralDialog(
-          context: context,
-          pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
-        );
         await _updateRoundCount();
       } else {
         oneSideRunCompletionPercent = (safaDistance / safaMarwaDistance).clamp(0, 1);
@@ -79,13 +75,8 @@ class SafaMarwaNotifier extends ChangeNotifier {
     } else {
       var marwaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, marwaLatLng.latitude, marwaLatLng.longitude).abs();
       if (marwaDistance <= threshold) {
-        umraModel = umraModel.copyWith(is_one_side_sai_run_completed: true);
-        await showGeneralDialog(
-          context: context,
-          pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
-        );
-        ref.read(umraProvider.notifier).updateUmraModel(umraModel);
-        isRunComplete = true;
+        isOneSideSaiRunCompleted = true;
+        await _updateRoundCount();
       } else {
         if (marwaDistance > (safaMarwaDistance + threshold)) return;
         oneSideRunCompletionPercent = (marwaDistance / safaMarwaDistance).clamp(0, 1);
@@ -99,38 +90,36 @@ class SafaMarwaNotifier extends ChangeNotifier {
   }
 
   Future<void> _updateRoundCount() async {
-    isRunComplete = false;
+    await showGeneralDialog(
+      context: context,
+      pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
+    );
     saiRoundCount++;
     if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
-    oneSideRunCompletionPercent = 0.0;
+    if (isOneSideSaiRunCompleted) {
+      oneSideRunCompletionPercent = 1.0;
+    } else {
+      oneSideRunCompletionPercent = 0.0;
+    }
     notifyListeners();
-    umraModel = umraModel.copyWith(sai_round_count: saiRoundCount, is_one_side_sai_run_completed: false);
-    ref.read(umraProvider.notifier).updateUmraModel(umraModel);
+    umraModel = umraModel.copyWith(sai_round_count: saiRoundCount, is_one_side_sai_run_completed: isOneSideSaiRunCompleted);
+    ref.read(umrahProvider.notifier).updateUmraModel(umraModel);
     if (saiRoundCount == 7) {
       cancelPositionStreamSubscription();
       saiRoundCount = 0;
       notifyListeners();
-      ref.read(umraProvider).safaMarwaCompleted();
+      ref.read(umrahProvider).safaMarwaCompleted();
     }
   }
 
   //Todo:: Remove After Testing...
   void debugSkipSafaMarwa() async {
     if (umraModel.is_one_side_sai_run_completed) {
-      await showGeneralDialog(
-        context: context,
-        pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
-      );
+      isOneSideSaiRunCompleted = false;
       await _updateRoundCount();
     } else {
-      umraModel = umraModel.copyWith(is_one_side_sai_run_completed: true);
-      await showGeneralDialog(
-        context: context,
-        pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
-      );
-      ref.read(umraProvider.notifier).updateUmraModel(umraModel);
-      oneSideRunCompletionPercent = 1.0;
-      isRunComplete = true;
+      isOneSideSaiRunCompleted = true;
+      await _updateRoundCount();
     }
   }
 

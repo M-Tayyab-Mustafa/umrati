@@ -4,7 +4,7 @@ class ManualSelection extends ConsumerWidget {
   const ManualSelection({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var provider = ref.watch(ziaratProvider);
+    var provider = ref.watch(ziaraatProvider);
     return Background(
       showEmblem: false,
       title: '${_cityName(provider.selectedCity!)} ${LocaleKeys.top_ziarat_destination_of.tr()}',
@@ -24,9 +24,9 @@ class ManualSelection extends ConsumerWidget {
                         var ziarat = provider.ziarats[index];
                         return BasicCard(
                           margin: SizeConfig.only(bottom: 20),
-                          onTap: () => provider.updateSelectedZiarat(ziarat),
-                          borderColor: provider.selectedZiarat.contains(ziarat) ? null : CColors.greyShade3,
-                          boxShadow: provider.selectedZiarat.contains(ziarat) ? null : [],
+                          onTap: () => provider.updateSelectedZiaraat(ziarat),
+                          borderColor: provider.selectedZiaraat.contains(ziarat) ? null : CColors.greyShade3,
+                          boxShadow: provider.selectedZiaraat.contains(ziarat) ? null : [],
                           child: Directionality(
                             textDirection: getTextDirection(isLTR(context) ? ziarat.title_en : ziarat.title_ur),
                             child: Text(isLTR(context) ? ziarat.title_en : ziarat.title_ur, style: CTextStyle.w500(fontSize: 14)),
@@ -35,10 +35,10 @@ class ManualSelection extends ConsumerWidget {
                       },
                     ),
           ),
-          if (provider.selectedZiarat.isNotEmpty)
+          if (provider.selectedZiaraat.isNotEmpty)
             CButton(
               isLoading: provider.isLoading,
-              onTap: provider.createZiaratRoute,
+              onTap: provider.createZiaraatRoute,
               margin: SizeConfig.only(bottom: SizeConfig.screenHeight * 0.05),
               title: LocaleKeys.start_your_ziarat.tr(),
               width: SizeConfig.w(150),
@@ -48,13 +48,13 @@ class ManualSelection extends ConsumerWidget {
     );
   }
 
-  String _cityName(ZiaratCities city) {
+  String _cityName(ZiaraatCities city) {
     switch (city) {
-      case ZiaratCities.mecca:
+      case ZiaraatCities.mecca:
         return LocaleKeys.Mecca.tr();
-      case ZiaratCities.medina:
+      case ZiaraatCities.medina:
         return LocaleKeys.medina.tr();
-      case ZiaratCities.taif:
+      case ZiaraatCities.taif:
         return LocaleKeys.taif.tr();
       default:
         return LocaleKeys.others.tr();

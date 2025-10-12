@@ -21,9 +21,9 @@ class MapPageNotifier extends ChangeNotifier {
   OverlayEntry? overlayEntry;
   final FlutterTts flutterTts = FlutterTts();
   bool isListening = false;
-  ZiaratModel? activeZiarat;
-  List<ZiaratModel> destinations = [];
-  ZiaratHistoryModel? history;
+  ZiaraatModel? activeZiarat;
+  List<ZiaraatModel> destinations = [];
+  ZiaraatHistoryModel? history;
   get panelController => SlidingUpPanelController();
 
   set mapController(GoogleMapController? controller) {
@@ -33,7 +33,7 @@ class MapPageNotifier extends ChangeNotifier {
 
   CameraPosition initialCameraPosition = CameraPosition(target: LatLng(30.17271735209673, 71.45729802421867), zoom: 20);
 
-  Future<void> initialization({ZiaratHistoryModel? ziaratHistory}) async {
+  Future<void> initialization({ZiaraatHistoryModel? ziaratHistory}) async {
     try {
       var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
       initialCameraPosition = CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude), zoom: 20);
@@ -42,14 +42,14 @@ class MapPageNotifier extends ChangeNotifier {
       user = await LocalStorageManager.getUser();
       if (ziaratHistory == null) {
         var query = await historyCollection
-            .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziarat.name), Filter('is_completed', isEqualTo: false)))
+            .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziaraat.name), Filter('is_completed', isEqualTo: false)))
             .get()
             .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
         if (query.docs.isEmpty) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ZiaratPage()));
           return;
         }
-        history = ZiaratHistoryModel.fromMap(query.docs.first.data());
+        history = ZiaraatHistoryModel.fromMap(query.docs.first.data());
       } else {
         history = ziaratHistory;
       }
@@ -95,7 +95,7 @@ class MapPageNotifier extends ChangeNotifier {
         notifyListeners();
         await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.complete_ziarats.tr(), withContinueButton: true));
         Navigator.pop(context);
-        return ref.read(ziaratProvider.notifier).reset();
+        return ref.read(ziaraatProvider.notifier).reset();
       } else {
         activeZiarat = destinations.first;
         _positionStream = Geolocator.getPositionStream(
@@ -163,9 +163,9 @@ class MapPageNotifier extends ChangeNotifier {
     return polyline;
   }
 
-  Future<void> updateActiveZiarat({required ZiaratModel activeZiarat}) async {
+  Future<void> updateActiveZiarat({required ZiaraatModel activeZiarat}) async {
     var data = (await userCollection.doc(user!.uid).get()).data()!;
-    destinations = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaratModel.fromMap(e)).toList();
+    destinations = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaraatModel.fromMap(e)).toList();
     await userCollection.doc(user!.uid).update({CommonField.selectedZiarat.name: destinations.map((e) => e.title_en == activeZiarat.title_en ? activeZiarat.toMap() : e.toMap()).toList()});
   }
 
@@ -207,7 +207,7 @@ class MapPageNotifier extends ChangeNotifier {
                           child: GestureDetector(
                             onTap: () {
                               hideMoreOptions();
-                              showDialog(context: context, builder: (context) => ZiaratReadingDetailDialog(ziarat: activeZiarat!));
+                              showDialog(context: context, builder: (context) => ZiaraatReadingDetailDialog(ziaraat: activeZiarat!));
                             },
                             child: Row(
                               children: [

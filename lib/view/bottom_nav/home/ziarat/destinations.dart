@@ -4,9 +4,9 @@ class ChooseDestinations extends ConsumerWidget {
   const ChooseDestinations({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var provider = ref.watch(ziaratProvider);
-    var isAutoSelected = provider.selectedDestinationsCreationOption == ZiaratDestinationsCreationOptions.auto;
-    var isManualSelected = provider.selectedDestinationsCreationOption == ZiaratDestinationsCreationOptions.manual;
+    var provider = ref.watch(ziaraatProvider);
+    var isAutoSelected = provider.selectedDestinationsCreationOption == ZiaraatDestinationsCreationOptions.auto;
+    var isManualSelected = provider.selectedDestinationsCreationOption == ZiaraatDestinationsCreationOptions.manual;
     return Background(
       showEmblem: false,
       backgroundType: BackgroundType.logo,
@@ -21,7 +21,7 @@ class ChooseDestinations extends ConsumerWidget {
             BasicCard(
               height: SizeConfig.h(120),
               width: SizeConfig.screenWidth,
-              onTap: () => ref.read(ziaratProvider.notifier).updateSelectedDestinationsCreationOption(ZiaratDestinationsCreationOptions.auto),
+              onTap: () => ref.read(ziaraatProvider.notifier).updateSelectedDestinationsCreationOption(ZiaraatDestinationsCreationOptions.auto),
               padding: SizeConfig.all(20),
               borderColor: isAutoSelected ? null : CColors.greyShade2,
               boxShadow: isAutoSelected ? null : [],
@@ -38,7 +38,7 @@ class ChooseDestinations extends ConsumerWidget {
             BasicCard(
               height: SizeConfig.h(120),
               width: SizeConfig.screenWidth,
-              onTap: () => ref.read(ziaratProvider.notifier).updateSelectedDestinationsCreationOption(ZiaratDestinationsCreationOptions.manual),
+              onTap: () => ref.read(ziaraatProvider.notifier).updateSelectedDestinationsCreationOption(ZiaraatDestinationsCreationOptions.manual),
               margin: SizeConfig.symmetric(vertical: 30),
               padding: SizeConfig.all(20),
               borderColor: isManualSelected ? CColors.primary : CColors.greyShade2,
@@ -53,8 +53,8 @@ class ChooseDestinations extends ConsumerWidget {
                 ],
               ),
             ),
-            if (ref.watch(ziaratProvider).selectedDestinationsCreationOption != null)
-              CButton(margin: SizeConfig.only(top: SizeConfig.screenHeight * 0.05), isLoading: provider.isLoading, onTap: provider.generateZiarat, title: LocaleKeys.proceed_forward.tr(), width: 200),
+            if (ref.watch(ziaraatProvider).selectedDestinationsCreationOption != null)
+              CButton(margin: SizeConfig.only(top: SizeConfig.screenHeight * 0.05), isLoading: provider.isLoading, onTap: provider.generateZiaraat, title: LocaleKeys.proceed_forward.tr(), width: 200),
           ],
         ),
       ),

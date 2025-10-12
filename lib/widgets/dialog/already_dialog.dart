@@ -1,8 +1,8 @@
 import '../../export.dart';
 
 class AlreadyDialog extends StatelessWidget {
-  const AlreadyDialog({super.key, required this.isDoingUmra});
-  final bool isDoingUmra;
+  const AlreadyDialog({super.key, required this.isDoingUmrah});
+  final bool isDoingUmrah;
 
   @override
   Widget build(BuildContext dialogContext) {
@@ -29,7 +29,7 @@ class AlreadyDialog extends StatelessWidget {
                       padding: SizeConfig.symmetric(horizontal: SizeConfig.screenWidth * 0.1),
                       child: Center(
                         child: Text(
-                          isDoingUmra ? LocaleKeys.already_in_umra.tr() : LocaleKeys.already_in_ziarats.tr(),
+                          isDoingUmrah ? LocaleKeys.already_in_umrah.tr() : LocaleKeys.already_in_ziarats.tr(),
                           style: CTextStyle.w900(fontSize: 16, color: CColors.deepTeal),
                           textAlign: TextAlign.center,
                         ),

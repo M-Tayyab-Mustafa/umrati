@@ -15,10 +15,10 @@ class ZiaratDetailNotifier extends ChangeNotifier {
   String myCurrentLocation = '';
   UserModel? user;
   StreamSubscription<Position>? positionStream;
-  ZiaratHistoryModel? ziaratHistory;
+  ZiaraatHistoryModel? ziaratHistory;
   bool isLoading = true;
 
-  Future<void> initialization(ZiaratHistoryModel ziaratHistory) async {
+  Future<void> initialization(ZiaraatHistoryModel ziaratHistory) async {
     isLoading = true;
     notifyListeners();
     this.ziaratHistory = ziaratHistory;
@@ -44,13 +44,13 @@ class ZiaratDetailNotifier extends ChangeNotifier {
 
   void sortZiarats({required Position position}) {
     var remainingZiarats =
-        ziaratHistory!.remainingZiarats.map<ZiaratModel>((ziarat) {
+        ziaratHistory!.remainingZiarats.map<ZiaraatModel>((ziarat) {
             var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziarat.lat.toDouble(), ziarat.lng.toDouble());
             return ziarat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
           }).toList()
           ..sort((a, b) => int.parse(a.distance).compareTo(int.parse(b.distance)));
     var completedZiarats =
-        ziaratHistory!.completedZiarats.map<ZiaratModel>((ziarat) {
+        ziaratHistory!.completedZiarats.map<ZiaraatModel>((ziarat) {
             var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziarat.lat.toDouble(), ziarat.lng.toDouble());
             return ziarat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
           }).toList()
@@ -59,7 +59,7 @@ class ZiaratDetailNotifier extends ChangeNotifier {
     if (context.mounted) notifyListeners();
   }
 
-  void resume() async => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ZiaratMapPage(ziaratHistory: ziaratHistory!)));
+  void resume() async => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ZiaraatMapPage(ziaratHistory: ziaratHistory!)));
 
   @override
   void dispose() {

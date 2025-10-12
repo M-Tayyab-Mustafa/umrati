@@ -37,7 +37,7 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                     value: !provider.showThreeMonthPlans,
                     thumbColor: WidgetStatePropertyAll(CColors.deepTeal),
                     overlayColor: WidgetStatePropertyAll(CColors.deepTeal),
-                    activeColor: CColors.deepTeal,
+                    activeThumbColor: CColors.deepTeal,
                     trackColor: WidgetStatePropertyAll(CColors.primary.withValues(alpha: 0.1)),
                     onChanged: provider.togglePlans,
                   ),

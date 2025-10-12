@@ -1,11 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 import '../export.dart';
-import '../utils/helper/constants.dart';
-import '../utils/theme/colors.dart';
-import '../utils/theme/text_style.dart';
 
 class CTextField extends StatelessWidget {
   const CTextField({

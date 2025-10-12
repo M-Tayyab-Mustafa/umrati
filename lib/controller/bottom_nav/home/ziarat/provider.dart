@@ -2,9 +2,9 @@ import '../../../../export.dart';
 import '../../../../view/bottom_nav/home/ziarat/map.dart';
 import '../../../../view/bottom_nav/home/ziarat/page.dart';
 
-final ziaratProvider = ChangeNotifierProvider.autoDispose<ZiaratNotifier>((ref) => ZiaratNotifier());
+final ziaraatProvider = ChangeNotifierProvider.autoDispose<ZiaraatNotifier>((ref) => ZiaraatNotifier());
 
-class ZiaratNotifier extends ChangeNotifier {
+class ZiaraatNotifier extends ChangeNotifier {
   BuildContext? _context;
   BuildContext get context => _context!;
   set context(BuildContext value) => _context = value;
@@ -13,22 +13,22 @@ class ZiaratNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
 
-  ZiaratCities? selectedCity;
-  List<ZiaratModel> ziarats = [];
-  List<ZiaratModel> selectedZiarat = [];
-  List<ZiaratModel> sortedZiarats = [];
+  ZiaraatCities? selectedCity;
+  List<ZiaraatModel> ziarats = [];
+  List<ZiaraatModel> selectedZiaraat = [];
+  List<ZiaraatModel> sortedZiarats = [];
   StreamSubscription<Position>? positionStream;
   bool isLoading = false;
   bool isGeneratingAutoZiarats = true;
   String myCurrentLocation = '';
-  ZiaratDestinationsCreationOptions? selectedDestinationsCreationOption;
+  ZiaraatDestinationsCreationOptions? selectedDestinationsCreationOption;
   UserModel? user;
 
   initialization() async {
     try {
       user = await LocalStorageManager.getUser();
       myCurrentLocation = await Helper.getLocation(context);
-      checkAlreadyDoingZiarat();
+      checkAlreadyDoingZiaraat();
       if (context.mounted) notifyListeners();
     } catch (e) {
       if (kDebugMode) log(e.toString());
@@ -36,23 +36,23 @@ class ZiaratNotifier extends ChangeNotifier {
     }
   }
 
-  void checkAlreadyDoingZiarat() async {
+  void checkAlreadyDoingZiaraat() async {
     var query = await historyCollection
-        .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziarat.name), Filter('is_completed', isEqualTo: false)))
+        .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziaraat.name), Filter('is_completed', isEqualTo: false)))
         .get()
         .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
     if (query.docs.isNotEmpty) {
-      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmra: false));
-      if (result == true) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ZiaratMapPage()));
+      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => AlreadyDialog(isDoingUmrah: false));
+      if (result == true) Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ZiaraatMapPage()));
     }
   }
 
-  void updateSelectedCity(ZiaratCities city) {
+  void updateSelectedCity(ZiaraatCities city) {
     selectedCity = city;
     notifyListeners();
   }
 
-  void updateSelectedDestinationsCreationOption(ZiaratDestinationsCreationOptions option) {
+  void updateSelectedDestinationsCreationOption(ZiaraatDestinationsCreationOptions option) {
     selectedDestinationsCreationOption = option;
     notifyListeners();
   }
@@ -61,7 +61,7 @@ class ZiaratNotifier extends ChangeNotifier {
     selectedCity = null;
     selectedDestinationsCreationOption = null;
     positionStream?.cancel();
-    selectedZiarat.clear();
+    selectedZiaraat.clear();
     sortedZiarats.clear();
     isLoading = false;
     notifyListeners();
@@ -70,7 +70,7 @@ class ZiaratNotifier extends ChangeNotifier {
   void goBackToSelectCity() {
     Navigator.pop(context);
     reset();
-    checkAlreadyDoingZiarat();
+    checkAlreadyDoingZiaraat();
   }
 
   void goToBackFromAutoSelectionPage() {
@@ -86,31 +86,31 @@ class ZiaratNotifier extends ChangeNotifier {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseDestinations()));
   }
 
-  updateSelectedZiarat(ZiaratModel ziarat) {
-    if (selectedZiarat.contains(ziarat)) {
-      selectedZiarat.remove(ziarat);
+  updateSelectedZiaraat(ZiaraatModel ziaraat) {
+    if (selectedZiaraat.contains(ziaraat)) {
+      selectedZiaraat.remove(ziaraat);
     } else {
-      selectedZiarat.add(ziarat);
+      selectedZiaraat.add(ziaraat);
     }
     notifyListeners();
   }
 
-  void generateZiarat() async {
+  void generateZiaraat() async {
     try {
       isLoading = true;
       notifyListeners();
-      var doc = await settingsCollection.doc(CommonDoc.ziarat.name).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      ziarats = List.from(doc.data()![selectedCity?.name]).map<ZiaratModel>((map) => ZiaratModel.fromMap(map)).toList();
+      var doc = await settingsCollection.doc(CommonDoc.ziaraat.name).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      ziarats = List.from(doc.data()![selectedCity?.name]).map<ZiaraatModel>((map) => ZiaraatModel.fromMap(map)).toList();
       if (ziarats.isNotEmpty) {
         ziarats = ziarats.sublist(0, Helper.userSubscription == null ? 3 : null);
       }
-      if (selectedDestinationsCreationOption == ZiaratDestinationsCreationOptions.manual) {
-        selectedZiarat.clear();
+      if (selectedDestinationsCreationOption == ZiaraatDestinationsCreationOptions.manual) {
+        selectedZiaraat.clear();
         isLoading = false;
         notifyListeners();
         await Navigator.push(context, MaterialPageRoute(builder: (context) => ManualSelection()));
       } else {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AutoGeneratedZiaratPlan()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => AutoGeneratedZiaraatPlan()));
       }
     } catch (e) {
       if (kDebugMode) log(e.toString());
@@ -128,18 +128,18 @@ class ZiaratNotifier extends ChangeNotifier {
       if (context.mounted) notifyListeners();
       var position = await Geolocator.getCurrentPosition();
       sortedZiarats =
-          ziarats.map<ZiaratModel>((ziarat) {
-            var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziarat.lat.toDouble(), ziarat.lng.toDouble());
-            return ziarat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
+          ziarats.map<ZiaraatModel>((ziaraat) {
+            var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziaraat.lat.toDouble(), ziaraat.lng.toDouble());
+            return ziaraat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
           }).toList();
       sortedZiarats.sort((a, b) => int.parse(a.distance).compareTo(int.parse(b.distance)));
       if (context.mounted) notifyListeners();
       positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation)).listen((position) async {
         if (!context.mounted) return positionStream?.cancel();
         sortedZiarats =
-            ziarats.map<ZiaratModel>((ziarat) {
-              var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziarat.lat.toDouble(), ziarat.lng.toDouble());
-              return ziarat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
+            ziarats.map<ZiaraatModel>((ziaraat) {
+              var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziaraat.lat.toDouble(), ziaraat.lng.toDouble());
+              return ziaraat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
             }).toList();
         sortedZiarats.sort((a, b) => int.parse(a.distance).compareTo(int.parse(b.distance)));
         if (context.mounted) notifyListeners();
@@ -152,31 +152,31 @@ class ZiaratNotifier extends ChangeNotifier {
     if (context.mounted) notifyListeners();
   }
 
-  void createZiaratRoute() async {
+  void createZiaraatRoute() async {
     isLoading = true;
     notifyListeners();
-    var ziarats = selectedDestinationsCreationOption == ZiaratDestinationsCreationOptions.auto ? sortedZiarats : selectedZiarat;
+    var ziarats = selectedDestinationsCreationOption == ZiaraatDestinationsCreationOptions.auto ? sortedZiarats : selectedZiaraat;
     var doc = historyCollection.doc();
-    var ziaratHistory = ZiaratHistoryModel(
+    var ziaraatHistory = ZiaraatHistoryModel(
       uid: doc.id,
       isCompleted: false,
       userId: user!.uid,
       total: ziarats.length,
       ziaratCity: selectedCity!.name,
-      type: UserActivityType.ziarat.name,
+      type: UserActivityType.ziaraat.name,
       remainingZiarats: ziarats,
       completedZiarats: [],
     );
-    await doc.set(ziaratHistory.toMap(createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp()));
+    await doc.set(ziaraatHistory.toMap(createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp()));
     isLoading = false;
     notifyListeners();
-    if (selectedDestinationsCreationOption == ZiaratDestinationsCreationOptions.manual) {
+    if (selectedDestinationsCreationOption == ZiaraatDestinationsCreationOptions.manual) {
       Navigator.pop(context);
     } else {
       goToBackFromAutoSelectionPage();
     }
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratMapPage(ziaratHistory: ziaratHistory)));
-    selectedZiarat.clear();
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaraatMapPage(ziaratHistory: ziaraatHistory)));
+    selectedZiaraat.clear();
     notifyListeners();
   }
 

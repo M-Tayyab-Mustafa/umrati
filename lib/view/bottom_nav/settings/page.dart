@@ -36,6 +36,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     CListTile(onTap: provider.onHistoryTap, title: LocaleKeys.history.tr(), icon: 'assets/svg/settings/history.svg'),
                     CListTile(onTap: provider.onChangeTheLanguageTap, title: LocaleKeys.change_the_language.tr(), icon: 'assets/svg/settings/language.svg'),
                     CListTile(
+                      onTap: provider.onChangeTheThemeTap,
                       title: LocaleKeys.dark_mode.tr(),
                       icon: 'assets/svg/settings/theme.svg',
                       trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.emeraldGreen, fontSize: 16)),
@@ -75,7 +76,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 CustomImage(margin: SizeConfig.only(bottom: 10), path: 'assets/svg/settings/more_ziarats.png', height: SizeConfig.h(50), imageType: ImageType.png, fit: BoxFit.fill),
-                                Text(LocaleKeys.more_ziarat_destinations.tr(), style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal), textAlign: TextAlign.center),
+                                Text(LocaleKeys.more_ziaraat_destinations.tr(), style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal), textAlign: TextAlign.center),
                               ],
                             ),
                           ),

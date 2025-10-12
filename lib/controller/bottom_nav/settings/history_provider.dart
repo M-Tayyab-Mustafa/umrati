@@ -19,7 +19,7 @@ class HistoryNotifier extends ChangeNotifier {
 
   Map<DateTime, List<HistoryModel>> umrahHistories = {};
   Map<DateTime, List<HistoryModel>> tawafHistories = {};
-  List<ZiaratHistoryModel> ziaratHistories = [];
+  List<ZiaraatHistoryModel> ziaratHistories = [];
 
   Future<void> initialization({HistoryType historyType = HistoryType.umra}) async {
     isLoading = true;
@@ -45,10 +45,10 @@ class HistoryNotifier extends ChangeNotifier {
       });
     } else {
       var query = await historyCollection
-          .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziarat.name)))
+          .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziaraat.name)))
           .get()
           .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      ziaratHistories = query.docs.map((history) => ZiaratHistoryModel.fromMap(history.data())).toList();
+      ziaratHistories = query.docs.map((history) => ZiaraatHistoryModel.fromMap(history.data())).toList();
     }
     isLoading = false;
     notifyListeners();
@@ -60,5 +60,5 @@ class HistoryNotifier extends ChangeNotifier {
 
   void onZiaratTap() => Navigator.push(context, MaterialPageRoute(builder: (context) => const ZiaratHistoryPage()));
 
-  void onViewZiaratTap(ZiaratHistoryModel history) => Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratDetailPage(ziaratHistory: history)));
+  void onViewZiaratTap(ZiaraatHistoryModel history) => Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratDetailPage(ziaratHistory: history)));
 }

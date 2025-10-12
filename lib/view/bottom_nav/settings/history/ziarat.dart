@@ -52,9 +52,9 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
                               imageType: ImageType.svg,
                               color: CColors.primary,
                               path: switch (_getZiaratCity(history.ziaratCity)) {
-                                ZiaratCities.medina => 'assets/svg/ziarat/medina.svg',
-                                ZiaratCities.taif => 'assets/svg/ziarat/taif.svg',
-                                ZiaratCities.other => 'assets/svg/ziarat/other.svg',
+                                ZiaraatCities.medina => 'assets/svg/ziarat/medina.svg',
+                                ZiaraatCities.taif => 'assets/svg/ziarat/taif.svg',
+                                ZiaraatCities.other => 'assets/svg/ziarat/other.svg',
                                 _ => 'assets/svg/ziarat/medina.svg',
                               },
                             ),
@@ -87,24 +87,24 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
     );
   }
 
-  ZiaratCities _getZiaratCity(String city) {
-    if (city == ZiaratCities.medina.name) {
-      return ZiaratCities.medina;
-    } else if (city == ZiaratCities.taif.name) {
-      return ZiaratCities.taif;
-    } else if (city == ZiaratCities.other.name) {
-      return ZiaratCities.other;
+  ZiaraatCities _getZiaratCity(String city) {
+    if (city == ZiaraatCities.medina.name) {
+      return ZiaraatCities.medina;
+    } else if (city == ZiaraatCities.taif.name) {
+      return ZiaraatCities.taif;
+    } else if (city == ZiaraatCities.other.name) {
+      return ZiaraatCities.other;
     } else {
-      return ZiaratCities.mecca;
+      return ZiaraatCities.mecca;
     }
   }
 
   String generateTitle(String city) {
-    if (city == ZiaratCities.medina.name) {
+    if (city == ZiaraatCities.medina.name) {
       return LocaleKeys.medina.tr();
-    } else if (city == ZiaratCities.taif.name) {
+    } else if (city == ZiaraatCities.taif.name) {
       return LocaleKeys.taif.tr();
-    } else if (city == ZiaratCities.other.name) {
+    } else if (city == ZiaraatCities.other.name) {
       return LocaleKeys.others.tr();
     } else {
       return LocaleKeys.Mecca.tr();

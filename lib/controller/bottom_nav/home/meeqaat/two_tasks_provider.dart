@@ -30,7 +30,7 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
     }
     isLoading = true;
     if (context.mounted) notifyListeners();
-    await ref.read(umraProvider.notifier).updateHasDoneBeforeMeeqaatTasks();
+    await ref.read(umrahProvider.notifier).updateHasDoneBeforeMeeqaatTasks();
     isLoading = false;
     if (context.mounted) notifyListeners();
   }
@@ -42,7 +42,7 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
     }
     isLoading = true;
     if (context.mounted) notifyListeners();
-    await ref.read(umraProvider.notifier).updateHasDoneBeforeMeeqaatTasks();
+    await ref.read(umrahProvider.notifier).updateHasDoneBeforeMeeqaatTasks();
     isLoading = false;
     if (context.mounted) notifyListeners();
   }

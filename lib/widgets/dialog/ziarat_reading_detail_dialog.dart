@@ -1,14 +1,14 @@
 import '../../export.dart';
 
-class ZiaratReadingDetailDialog extends StatefulWidget {
-  const ZiaratReadingDetailDialog({super.key, required this.ziarat});
-  final ZiaratModel ziarat;
+class ZiaraatReadingDetailDialog extends StatefulWidget {
+  const ZiaraatReadingDetailDialog({super.key, required this.ziaraat});
+  final ZiaraatModel ziaraat;
 
   @override
-  State<ZiaratReadingDetailDialog> createState() => _ZiaratReadingDetailDialogState();
+  State<ZiaraatReadingDetailDialog> createState() => _ZiaraatReadingDetailDialogState();
 }
 
-class _ZiaratReadingDetailDialogState extends State<ZiaratReadingDetailDialog> {
+class _ZiaraatReadingDetailDialogState extends State<ZiaraatReadingDetailDialog> {
   double fontSize = SizeConfig.sp(10);
 
   @override
@@ -17,7 +17,7 @@ class _ZiaratReadingDetailDialogState extends State<ZiaratReadingDetailDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(SizeConfig.r(8))),
       title: Row(
         children: [
-          if (isLTR(context)) const Spacer(),
+          if (!isLTR(context)) const Spacer(),
           GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Container(
@@ -26,7 +26,7 @@ class _ZiaratReadingDetailDialogState extends State<ZiaratReadingDetailDialog> {
               child: Icon(Icons.close_rounded, color: Colors.white, size: SizeConfig.w(18)),
             ),
           ),
-          if (!isLTR(context)) const Spacer(),
+          if (isLTR(context)) const Spacer(),
         ],
       ),
       contentPadding: SizeConfig.symmetric(horizontal: 16),
@@ -40,7 +40,7 @@ class _ZiaratReadingDetailDialogState extends State<ZiaratReadingDetailDialog> {
               alignment: isLTR(context) ? Alignment.centerLeft : Alignment.centerRight,
               child: Padding(
                 padding: SizeConfig.only(bottom: 8),
-                child: Text(isLTR(context) ? widget.ziarat.title_en : widget.ziarat.title_ur, style: CTextStyle.w500(fontSize: fontSize + 6), maxLines: 2, overflow: TextOverflow.ellipsis),
+                child: Text(isLTR(context) ? widget.ziaraat.title_en : widget.ziaraat.title_ur, style: CTextStyle.w500(fontSize: fontSize + 6), maxLines: 2, overflow: TextOverflow.ellipsis),
               ),
             ),
             ScrollbarTheme(
@@ -57,7 +57,17 @@ class _ZiaratReadingDetailDialogState extends State<ZiaratReadingDetailDialog> {
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: SizeConfig.symmetric(horizontal: 8),
-                    child: Text((widget.ziarat.detail ?? LocaleKeys.ziarat_detail_not_found.tr()).trim(), style: CTextStyle.w400(fontSize: fontSize)),
+                    child: Text(
+                      (isLTR(context)
+                              ? widget.ziaraat.detail_en.isEmpty
+                                  ? LocaleKeys.ziarat_detail_not_found.tr()
+                                  : widget.ziaraat.detail_en
+                              : widget.ziaraat.detail_ur.isEmpty
+                              ? LocaleKeys.ziarat_detail_not_found.tr()
+                              : widget.ziaraat.detail_ur)
+                          .trim(),
+                      style: CTextStyle.w400(fontSize: fontSize),
+                    ),
                   ),
                 ),
               ),

@@ -39,7 +39,7 @@ class _MeeqaatThreeTasksPageState extends ConsumerState<MeeqaatThreeTasksPage> {
               ),
               CheckBoxCard(
                 margin: SizeConfig.symmetric(vertical: 20),
-                title: LocaleKeys.two_nafl_prayers.tr(),
+                title: LocaleKeys.two_nafl_prayer.tr(),
                 isSelected: provider.isTwoNafiPrayersChecked,
                 onTap: provider.updateTwoNafiPrayersChecked,
               ),

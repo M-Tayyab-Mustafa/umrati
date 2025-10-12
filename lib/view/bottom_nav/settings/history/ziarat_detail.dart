@@ -2,7 +2,7 @@ import '../../../../export.dart';
 
 class ZiaratDetailPage extends ConsumerStatefulWidget {
   const ZiaratDetailPage({super.key, required this.ziaratHistory});
-  final ZiaratHistoryModel ziaratHistory;
+  final ZiaraatHistoryModel ziaratHistory;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ZiaratDetailPageState();
 }

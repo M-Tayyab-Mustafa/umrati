@@ -1,17 +1,17 @@
 import '../export.dart';
 
-class ZiaratHistoryModel {
+class ZiaraatHistoryModel {
   final String uid;
   final String userId;
   final String type;
   final int total;
   final String ziaratCity;
   final bool isCompleted;
-  final List<ZiaratModel> remainingZiarats;
-  final List<ZiaratModel> completedZiarats;
+  final List<ZiaraatModel> remainingZiarats;
+  final List<ZiaraatModel> completedZiarats;
   final Timestamp? createdAt;
   final Timestamp? updatedAt;
-  ZiaratHistoryModel({
+  ZiaraatHistoryModel({
     required this.uid,
     required this.userId,
     required this.type,
@@ -24,17 +24,17 @@ class ZiaratHistoryModel {
     this.updatedAt,
   });
 
-  ZiaratHistoryModel copyWith({
+  ZiaraatHistoryModel copyWith({
     String? uid,
     String? userId,
     String? type,
     int? total,
     String? ziaratCity,
     bool? isCompleted,
-    List<ZiaratModel>? remainingZiarats,
-    List<ZiaratModel>? completedZiarats,
+    List<ZiaraatModel>? remainingZiarats,
+    List<ZiaraatModel>? completedZiarats,
   }) {
-    return ZiaratHistoryModel(
+    return ZiaraatHistoryModel(
       uid: uid ?? this.uid,
       userId: userId ?? this.userId,
       type: type ?? this.type,
@@ -63,16 +63,16 @@ class ZiaratHistoryModel {
     };
   }
 
-  factory ZiaratHistoryModel.fromMap(Map<String, dynamic> map) {
-    return ZiaratHistoryModel(
+  factory ZiaraatHistoryModel.fromMap(Map<String, dynamic> map) {
+    return ZiaraatHistoryModel(
       uid: map['uid'] ?? '',
       userId: map['user_id'] ?? '',
       type: map['type'] ?? '',
       total: map['total'] ?? 0,
       ziaratCity: map['ziarat_city'] ?? '',
       isCompleted: map['is_completed'] ?? false,
-      remainingZiarats: List<ZiaratModel>.from(map['remainingZiarats'].map<ZiaratModel>((ziarat) => ZiaratModel.fromMap(ziarat))),
-      completedZiarats: List<ZiaratModel>.from(map['completedZiarats'].map<ZiaratModel>((ziarat) => ZiaratModel.fromMap(ziarat))),
+      remainingZiarats: List<ZiaraatModel>.from(map['remainingZiarats'].map<ZiaraatModel>((ziarat) => ZiaraatModel.fromMap(ziarat))),
+      completedZiarats: List<ZiaraatModel>.from(map['completedZiarats'].map<ZiaraatModel>((ziarat) => ZiaraatModel.fromMap(ziarat))),
       createdAt:
           map['created_at'] != null
               ? map['created_at'].runtimeType == Timestamp
@@ -90,14 +90,14 @@ class ZiaratHistoryModel {
 
   String toJson() => json.encode(toMap());
 
-  factory ZiaratHistoryModel.fromJson(String source) => ZiaratHistoryModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ZiaraatHistoryModel.fromJson(String source) => ZiaraatHistoryModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() =>
       'ZiaratHistoryModel(uid: $uid, user_id: $userId, type: $type, total: $total, ziarat_city: $ziaratCity, is_completed: $isCompleted, remainingZiarats: $remainingZiarats, completedZiarats: $completedZiarats, created_at: $createdAt, updated_at: $updatedAt)';
 
   @override
-  bool operator ==(covariant ZiaratHistoryModel other) {
+  bool operator ==(covariant ZiaraatHistoryModel other) {
     if (identical(this, other)) return true;
     final listEquals = const DeepCollectionEquality().equals;
 

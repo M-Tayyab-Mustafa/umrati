@@ -24,7 +24,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(safaMarwaProvider);
-    var uProvider = ref.watch(umraProvider);
+    var uProvider = ref.watch(umrahProvider);
     return Background(
       logoAlign: Alignment.center,
       backgroundType: BackgroundType.logoWithSkip,
@@ -37,7 +37,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
           child: CButton(
             height: 45,
             margin: SizeConfig.only(right: isLTR(context) ? 40 : 0, left: isLTR(context) ? 0 : 40),
-            onTap: ref.read(umraProvider.notifier).pauseAndResumeTracker,
+            onTap: ref.read(umrahProvider.notifier).pauseAndResumeTracker,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -76,7 +76,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
                                 final trackWidth = constraints.maxWidth * 0.5;
                                 final trackerSize = SizeConfig.h(40);
                                 final usableHeight = constraints.maxHeight - trackerSize;
-                                final targetLineX = (provider.isRunComplete ? centerX - trackWidth / 2 : centerX + trackWidth / 2) - (trackerSize / 2);
+                                final targetLineX = (provider.isOneSideSaiRunCompleted ? centerX - trackWidth / 2 : centerX + trackWidth / 2) - (trackerSize / 2);
                                 return Stack(
                                   children: [
                                     Center(
@@ -106,9 +106,9 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
                                         height: trackerSize,
                                         decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
                                         child: Padding(
-                                          padding: SizeConfig.only(top: provider.isRunComplete ? 4 : 0, bottom: provider.isRunComplete ? 0 : 4),
+                                          padding: SizeConfig.only(top: provider.isOneSideSaiRunCompleted ? 4 : 0, bottom: provider.isOneSideSaiRunCompleted ? 0 : 4),
                                           child: Transform.rotate(
-                                            angle: provider.isRunComplete ? (pi / 2) : (3 * pi / 2),
+                                            angle: provider.isOneSideSaiRunCompleted ? (pi / 2) : (3 * pi / 2),
                                             child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.w(20)),
                                           ),
                                         ),
@@ -167,7 +167,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '$duaTitle${ref.read(umraProvider.notifier).user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}',
+          '$duaTitle${ref.read(umrahProvider.notifier).user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}',
           style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal),
         ),
         BasicCard(
@@ -176,7 +176,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
           child: Center(
             child: Text(
               dua,
-              style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: 'KFGQPC Uthmanic Script HAFS Regular'),
+              style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: provider.saiRoundCount < 6 ? Helper.arabicTextFontFamily : null),
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
             ),
