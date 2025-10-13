@@ -12,7 +12,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
 
-  late HistoryModel umraModel;
+  late HistoryModel umrahModel;
   StreamSubscription<Position>? positionStreamSubscription;
   ScrollController scrollController = ScrollController();
   double oneSideRunCompletionPercent = 0.0;
@@ -23,9 +23,9 @@ class SafaMarwaNotifier extends ChangeNotifier {
   SafaMarwaModel? safaMarwaModel;
 
   Future<void> initialization() async {
-    umraModel = ref.read(umrahProvider.notifier).umrahModel!;
-    isOneSideSaiRunCompleted = umraModel.is_one_side_sai_run_completed;
-    saiRoundCount = umraModel.sai_round_count;
+    umrahModel = ref.read(umrahProvider.notifier).umrahModel!;
+    isOneSideSaiRunCompleted = umrahModel.is_one_side_sai_run_completed;
+    saiRoundCount = umrahModel.sai_round_count;
     cancelPositionStreamSubscription();
     safaMarwaModel = SafaMarwaModel.fromMap((await settingsCollection.doc(CommonDoc.safaMarwa.name).get()).data()!);
     final safaLatLng = LatLng(safaMarwaModel!.safaLat, safaMarwaModel!.safaLng);
@@ -63,7 +63,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   // Method to update location and track progress between Safa and Marwa
   void _updateLocation(Position position, LatLng safaLatLng, LatLng marwaLatLng, num safaMarwaDistance, num threshold) async {
-    if (!umraModel.is_doing) return cancelPositionStreamSubscription();
+    if (!umrahModel.is_doing) return cancelPositionStreamSubscription();
     if (isOneSideSaiRunCompleted) {
       var safaDistance = Geolocator.distanceBetween(position.latitude, position.longitude, safaLatLng.latitude, safaLatLng.longitude).abs();
       if (safaDistance > (safaMarwaDistance + threshold)) return;
@@ -102,8 +102,8 @@ class SafaMarwaNotifier extends ChangeNotifier {
       oneSideRunCompletionPercent = 0.0;
     }
     notifyListeners();
-    umraModel = umraModel.copyWith(sai_round_count: saiRoundCount, is_one_side_sai_run_completed: isOneSideSaiRunCompleted);
-    ref.read(umrahProvider.notifier).updateUmraModel(umraModel);
+    umrahModel = umrahModel.copyWith(sai_round_count: saiRoundCount, is_one_side_sai_run_completed: isOneSideSaiRunCompleted);
+    ref.read(umrahProvider.notifier).updateUmraModel(umrahModel);
     if (saiRoundCount == 7) {
       cancelPositionStreamSubscription();
       saiRoundCount = 0;
@@ -114,7 +114,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   //Todo:: Remove After Testing...
   void debugSkipSafaMarwa() async {
-    if (umraModel.is_one_side_sai_run_completed) {
+    if (umrahModel.is_one_side_sai_run_completed) {
       isOneSideSaiRunCompleted = false;
       await _updateRoundCount();
     } else {

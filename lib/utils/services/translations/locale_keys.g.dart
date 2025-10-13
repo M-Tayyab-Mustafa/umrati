@@ -32,7 +32,7 @@ abstract class  LocaleKeys {
   static const key_limit_reached = 'key_limit_reached';
   static const key = 'key';
   static const ask_mufti = 'ask_mufti';
-  static const verify  = 'verify ';
+  static const verify = 'verify';
   static const resend_the_otp = 'resend_the_otp';
   static const resend_the_otp_in = 'resend_the_otp_in';
   static const select_your_gender = 'select_your_gender';
