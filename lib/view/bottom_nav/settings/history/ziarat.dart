@@ -51,14 +51,14 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
                               size: SizeConfig.w(25),
                               imageType: ImageType.svg,
                               color: CColors.primary,
-                              path: switch (_getZiaratCity(history.ziaratCity)) {
+                              path: switch (_getZiaratCity(history.ziaraatCity)) {
                                 ZiaraatCities.medina => 'assets/svg/ziarat/medina.svg',
                                 ZiaraatCities.taif => 'assets/svg/ziarat/taif.svg',
                                 ZiaraatCities.other => 'assets/svg/ziarat/other.svg',
                                 _ => 'assets/svg/ziarat/medina.svg',
                               },
                             ),
-                            Text(isLTR(context) ? Helper.generateTitle(history.ziaratCity) : generateTitle(history.ziaratCity), style: CTextStyle.w500(color: CColors.primary, fontSize: 14)),
+                            Text(isLTR(context) ? Helper.generateTitle(history.ziaraatCity) : generateTitle(history.ziaraatCity), style: CTextStyle.w500(color: CColors.primary, fontSize: 14)),
                           ],
                         ),
                         Expanded(

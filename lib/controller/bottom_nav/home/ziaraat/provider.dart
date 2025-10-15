@@ -162,7 +162,7 @@ class ZiaraatNotifier extends ChangeNotifier {
       isCompleted: false,
       userId: user!.uid,
       total: ziarats.length,
-      ziaratCity: selectedCity!.name,
+      ziaraatCity: selectedCity!.name,
       type: UserActivityType.ziaraat.name,
       remainingZiarats: ziarats,
       completedZiarats: [],

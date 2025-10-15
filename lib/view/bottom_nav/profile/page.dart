@@ -107,7 +107,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text('${provider.user!.total_umra_done}  ', style: CTextStyle.w900(fontSize: 25, color: CColors.primary)),
+                          Text('${provider.user!.total_umrah_done}  ', style: CTextStyle.w900(fontSize: 25, color: CColors.primary)),
                           Expanded(child: Text(LocaleKeys.number_of_umrah_done.tr(), style: CTextStyle.w400(fontSize: 18, color: CColors.deepTeal))),
                         ],
                       ),

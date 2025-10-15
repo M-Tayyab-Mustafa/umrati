@@ -11,16 +11,16 @@ class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
   @override
   void initState() {
     super.initState();
-    ref.read(ziaratDetailProvider.notifier).context = context;
-    ref.read(ziaratDetailProvider.notifier).ref = ref;
+    ref.read(ziaraatDetailProvider.notifier).context = context;
+    ref.read(ziaraatDetailProvider.notifier).ref = ref;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(ziaratDetailProvider.notifier).initialization(widget.ziaratHistory);
+      await ref.read(ziaraatDetailProvider.notifier).initialization(widget.ziaratHistory);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    var provider = ref.watch(ziaratDetailProvider);
+    var provider = ref.watch(ziaraatDetailProvider);
     return Background(
       showEmblem: false,
       backgroundType: BackgroundType.logo,

@@ -313,7 +313,7 @@ class UmrahNotifier extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
     umrahModel = umrahModel!.copyWith(is_doing: false);
-    user = user!.copyWith(total_umra_done: user!.total_umra_done + 1);
+    user = user!.copyWith(total_umrah_done: user!.total_umrah_done + 1);
     await LocalStorageManager.saveUser(user!);
     await updateUmrahModel(umrahModel!);
     umrahModel = null;

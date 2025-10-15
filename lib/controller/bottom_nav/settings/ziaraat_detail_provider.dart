@@ -1,9 +1,9 @@
 import '../../../export.dart';
 import '../../../view/bottom_nav/home/ziarat/map.dart';
 
-final ziaratDetailProvider = ChangeNotifierProvider.autoDispose<ZiaratDetailNotifier>((ref) => ZiaratDetailNotifier());
+final ziaraatDetailProvider = ChangeNotifierProvider.autoDispose<ZiaraatDetailNotifier>((ref) => ZiaraatDetailNotifier());
 
-class ZiaratDetailNotifier extends ChangeNotifier {
+class ZiaraatDetailNotifier extends ChangeNotifier {
   BuildContext? _context;
   BuildContext get context => _context!;
   set context(BuildContext value) => _context = value;

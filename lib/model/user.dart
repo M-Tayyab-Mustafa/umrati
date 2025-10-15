@@ -9,7 +9,7 @@ class UserModel {
   final String photo;
   final String gender;
   final String password;
-  final num total_umra_done;
+  final num total_umrah_done;
   final bool is_premium;
   final String? subscription_id;
   final Timestamp? created_at;
@@ -25,7 +25,7 @@ class UserModel {
     required this.gender,
     required this.password,
     this.is_premium = false,
-    this.total_umra_done = 0,
+    this.total_umrah_done = 0,
     this.subscription_id,
     this.created_at,
     this.updated_at,
@@ -41,7 +41,7 @@ class UserModel {
     String? gender,
     String? password,
     bool? is_premium,
-    num? total_umra_done,
+    num? total_umrah_done,
     String? subscription_id,
     Timestamp? created_at,
     Timestamp? updated_at,
@@ -56,7 +56,7 @@ class UserModel {
       photo: photo ?? this.photo,
       gender: gender ?? this.gender,
       password: password ?? this.password,
-      total_umra_done: total_umra_done ?? this.total_umra_done,
+      total_umrah_done: total_umrah_done ?? this.total_umrah_done,
       subscription_id: subscription_id ?? this.subscription_id,
       created_at: created_at ?? this.created_at,
       updated_at: updated_at ?? this.updated_at,
@@ -74,7 +74,7 @@ class UserModel {
       'photo': photo,
       'gender': gender,
       'password': password,
-      'total_umra_done': total_umra_done,
+      'total_umrah_done': total_umrah_done,
       'subscription_id': subscription_id,
       'created_at': created_at ?? this.created_at?.millisecondsSinceEpoch,
       'updated_at': updated_at ?? this.updated_at?.millisecondsSinceEpoch,
@@ -92,7 +92,7 @@ class UserModel {
       photo: map['photo']?.toString() ?? '',
       gender: map['gender']?.toString() ?? '',
       password: map['password']?.toString() ?? '',
-      total_umra_done: map['total_umra_done'] ?? 0,
+      total_umrah_done: map['total_umrah_done'] ?? 0,
       subscription_id: map['subscription_id']?.toString() ?? '',
       created_at: map['created_at'].runtimeType == int ? Timestamp.fromMillisecondsSinceEpoch(map['created_at']) : map['created_at'],
       updated_at: map['updated_at'].runtimeType == int ? Timestamp.fromMillisecondsSinceEpoch(map['updated_at']) : map['updated_at'],
@@ -105,7 +105,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, email: $email, is_premium: $is_premium, password: $password, phone: $phone, country_code: $country_code, photo: $photo, gender: $gender, total_umra_done: $total_umra_done, subscription_id: $subscription_id, created_at: $created_at, updated_at: $updated_at)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, is_premium: $is_premium, password: $password, phone: $phone, country_code: $country_code, photo: $photo, gender: $gender, total_umrah_done: $total_umrah_done, subscription_id: $subscription_id, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -121,7 +121,7 @@ class UserModel {
         other.photo == photo &&
         other.gender == gender &&
         other.password == password &&
-        other.total_umra_done == total_umra_done &&
+        other.total_umrah_done == total_umrah_done &&
         other.subscription_id == subscription_id &&
         other.created_at == created_at &&
         other.updated_at == updated_at;
@@ -138,7 +138,7 @@ class UserModel {
         photo.hashCode ^
         gender.hashCode ^
         password.hashCode ^
-        total_umra_done.hashCode ^
+        total_umrah_done.hashCode ^
         subscription_id.hashCode ^
         created_at.hashCode ^
         updated_at.hashCode;

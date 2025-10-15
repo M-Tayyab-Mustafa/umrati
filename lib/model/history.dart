@@ -104,7 +104,7 @@ class HistoryModel {
 
   @override
   String toString() {
-    return 'UmraModel(uid: $uid, user_id: $user_id, type: $type, is_doing: $is_doing, has_done_before_meeqaat_tasks: $has_done_before_meeqaat_tasks, has_reached_meeqaat: $has_reached_meeqaat, has_done_after_meeqaat_tasks: $has_done_after_meeqaat_tasks, tawaf_circle_count: $tawaf_circle_count, can_start_sai: $can_start_sai, sai_round_count: $sai_round_count, is_one_side_sai_run_completed: $is_one_side_sai_run_completed, created_at: $created_at, updated_at: $updated_at)';
+    return 'UmrahModel(uid: $uid, user_id: $user_id, type: $type, is_doing: $is_doing, has_done_before_meeqaat_tasks: $has_done_before_meeqaat_tasks, has_reached_meeqaat: $has_reached_meeqaat, has_done_after_meeqaat_tasks: $has_done_after_meeqaat_tasks, tawaf_circle_count: $tawaf_circle_count, can_start_sai: $can_start_sai, sai_round_count: $sai_round_count, is_one_side_sai_run_completed: $is_one_side_sai_run_completed, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
