@@ -1,4 +1,4 @@
-part of '../view/bottom_nav/home/umra/tawaf_tracker.dart';
+part of '../view/bottom_nav/home/umrah/tawaf_tracker.dart';
 
 class DashedCirclePainter extends CustomPainter {
   DashedCirclePainter({required this.primaryColor, required this.gradientRadiusFactor});

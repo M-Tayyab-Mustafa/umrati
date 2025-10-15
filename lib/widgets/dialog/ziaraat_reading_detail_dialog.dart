@@ -60,10 +60,10 @@ class _ZiaraatReadingDetailDialogState extends State<ZiaraatReadingDetailDialog>
                     child: Text(
                       (isLTR(context)
                               ? widget.ziaraat.detail_en.isEmpty
-                                  ? LocaleKeys.ziarat_detail_not_found.tr()
+                                  ? LocaleKeys.ziaraat_detail_not_found.tr()
                                   : widget.ziaraat.detail_en
                               : widget.ziaraat.detail_ur.isEmpty
-                              ? LocaleKeys.ziarat_detail_not_found.tr()
+                              ? LocaleKeys.ziaraat_detail_not_found.tr()
                               : widget.ziaraat.detail_ur)
                           .trim(),
                       style: CTextStyle.w400(fontSize: fontSize),

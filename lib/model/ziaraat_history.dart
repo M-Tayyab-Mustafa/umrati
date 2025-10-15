@@ -7,8 +7,8 @@ class ZiaraatHistoryModel {
   final int total;
   final String ziaraatCity;
   final bool isCompleted;
-  final List<ZiaraatModel> remainingZiarats;
-  final List<ZiaraatModel> completedZiarats;
+  final List<ZiaraatModel> remainingZiaraats;
+  final List<ZiaraatModel> completedZiaraats;
   final Timestamp? createdAt;
   final Timestamp? updatedAt;
   ZiaraatHistoryModel({
@@ -18,8 +18,8 @@ class ZiaraatHistoryModel {
     required this.total,
     required this.ziaraatCity,
     required this.isCompleted,
-    required this.remainingZiarats,
-    required this.completedZiarats,
+    required this.remainingZiaraats,
+    required this.completedZiaraats,
     this.createdAt,
     this.updatedAt,
   });
@@ -31,8 +31,8 @@ class ZiaraatHistoryModel {
     int? total,
     String? ziaraatCity,
     bool? isCompleted,
-    List<ZiaraatModel>? remainingZiarats,
-    List<ZiaraatModel>? completedZiarats,
+    List<ZiaraatModel>? remainingZiaraats,
+    List<ZiaraatModel>? completedZiaraats,
   }) {
     return ZiaraatHistoryModel(
       uid: uid ?? this.uid,
@@ -41,8 +41,8 @@ class ZiaraatHistoryModel {
       total: total ?? this.total,
       ziaraatCity: ziaraatCity ?? this.ziaraatCity,
       isCompleted: isCompleted ?? this.isCompleted,
-      remainingZiarats: remainingZiarats ?? this.remainingZiarats,
-      completedZiarats: completedZiarats ?? this.completedZiarats,
+      remainingZiaraats: remainingZiaraats ?? this.remainingZiaraats,
+      completedZiaraats: completedZiaraats ?? this.completedZiaraats,
       createdAt: createdAt,
       updatedAt: updatedAt,
     );
@@ -56,8 +56,8 @@ class ZiaraatHistoryModel {
       'total': total,
       'ziaraat_city': ziaraatCity,
       'is_completed': isCompleted,
-      'remainingZiarats': remainingZiarats.map((x) => x.toMap()).toList(),
-      'completedZiarats': completedZiarats.map((x) => x.toMap()).toList(),
+      'remaining_ziaraats': remainingZiaraats.map((x) => x.toMap()).toList(),
+      'completed_ziaraats': completedZiaraats.map((x) => x.toMap()).toList(),
       'created_at': createdAt ?? this.createdAt?.millisecondsSinceEpoch,
       'updated_at': updatedAt ?? this.updatedAt?.millisecondsSinceEpoch,
     };
@@ -71,8 +71,8 @@ class ZiaraatHistoryModel {
       total: map['total'] ?? 0,
       ziaraatCity: map['ziaraat_city'] ?? '',
       isCompleted: map['is_completed'] ?? false,
-      remainingZiarats: List<ZiaraatModel>.from(map['remainingZiarats'].map<ZiaraatModel>((ziaraat) => ZiaraatModel.fromMap(ziaraat))),
-      completedZiarats: List<ZiaraatModel>.from(map['completedZiarats'].map<ZiaraatModel>((ziaraat) => ZiaraatModel.fromMap(ziaraat))),
+      remainingZiaraats: List<ZiaraatModel>.from(map['remaining_ziaraats'].map<ZiaraatModel>((ziaraat) => ZiaraatModel.fromMap(ziaraat))),
+      completedZiaraats: List<ZiaraatModel>.from(map['completed_ziaraats'].map<ZiaraatModel>((ziaraat) => ZiaraatModel.fromMap(ziaraat))),
       createdAt:
           map['created_at'] != null
               ? map['created_at'].runtimeType == Timestamp
@@ -94,7 +94,7 @@ class ZiaraatHistoryModel {
 
   @override
   String toString() =>
-      'ZiaraatHistoryModel(uid: $uid, user_id: $userId, type: $type, total: $total, ziaraat_city: $ziaraatCity, is_completed: $isCompleted, remainingZiarats: $remainingZiarats, completedZiarats: $completedZiarats, created_at: $createdAt, updated_at: $updatedAt)';
+      'ZiaraatHistoryModel(uid: $uid, user_id: $userId, type: $type, total: $total, ziaraat_city: $ziaraatCity, is_completed: $isCompleted, remaining_ziaraats: $remainingZiaraats, completed_ziaraats: $completedZiaraats, created_at: $createdAt, updated_at: $updatedAt)';
 
   @override
   bool operator ==(covariant ZiaraatHistoryModel other) {
@@ -107,8 +107,8 @@ class ZiaraatHistoryModel {
         other.total == total &&
         other.ziaraatCity == ziaraatCity &&
         other.isCompleted == isCompleted &&
-        listEquals(other.remainingZiarats, remainingZiarats) &&
-        listEquals(other.completedZiarats, completedZiarats) &&
+        listEquals(other.remainingZiaraats, remainingZiaraats) &&
+        listEquals(other.completedZiaraats, completedZiaraats) &&
         other.createdAt == createdAt &&
         other.updatedAt == updatedAt;
   }
@@ -121,8 +121,8 @@ class ZiaraatHistoryModel {
       total.hashCode ^
       ziaraatCity.hashCode ^
       isCompleted.hashCode ^
-      remainingZiarats.hashCode ^
-      completedZiarats.hashCode ^
+      remainingZiaraats.hashCode ^
+      completedZiaraats.hashCode ^
       createdAt.hashCode ^
       updatedAt.hashCode;
 }

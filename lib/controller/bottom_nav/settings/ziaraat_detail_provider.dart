@@ -1,5 +1,5 @@
 import '../../../export.dart';
-import '../../../view/bottom_nav/home/ziarat/map.dart';
+import '../../../view/bottom_nav/home/ziaraat/map.dart';
 
 final ziaraatDetailProvider = ChangeNotifierProvider.autoDispose<ZiaraatDetailNotifier>((ref) => ZiaraatDetailNotifier());
 
@@ -15,13 +15,13 @@ class ZiaraatDetailNotifier extends ChangeNotifier {
   String myCurrentLocation = '';
   UserModel? user;
   StreamSubscription<Position>? positionStream;
-  ZiaraatHistoryModel? ziaratHistory;
+  ZiaraatHistoryModel? ziaraatHistory;
   bool isLoading = true;
 
-  Future<void> initialization(ZiaraatHistoryModel ziaratHistory) async {
+  Future<void> initialization(ZiaraatHistoryModel ziaraatHistory) async {
     isLoading = true;
     notifyListeners();
-    this.ziaratHistory = ziaratHistory;
+    this.ziaraatHistory = ziaraatHistory;
     user = await LocalStorageManager.getUser();
     myCurrentLocation = await Helper.getLocation(context);
     await getDistance();
@@ -31,10 +31,10 @@ class ZiaraatDetailNotifier extends ChangeNotifier {
 
   Future<void> getDistance() async {
     try {
-      sortZiarats(position: await Geolocator.getCurrentPosition());
+      sortZiaraats(position: await Geolocator.getCurrentPosition());
       positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation)).listen((position) async {
         if (!context.mounted) return positionStream?.cancel();
-        sortZiarats(position: position);
+        sortZiaraats(position: position);
       });
     } catch (e) {
       if (kDebugMode) log(e.toString());
@@ -42,24 +42,24 @@ class ZiaraatDetailNotifier extends ChangeNotifier {
     }
   }
 
-  void sortZiarats({required Position position}) {
-    var remainingZiarats =
-        ziaratHistory!.remainingZiarats.map<ZiaraatModel>((ziarat) {
-            var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziarat.lat.toDouble(), ziarat.lng.toDouble());
-            return ziarat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
+  void sortZiaraats({required Position position}) {
+    var remainingZiaraats =
+        ziaraatHistory!.remainingZiaraats.map<ZiaraatModel>((ziaraat) {
+            var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziaraat.lat.toDouble(), ziaraat.lng.toDouble());
+            return ziaraat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
           }).toList()
           ..sort((a, b) => int.parse(a.distance).compareTo(int.parse(b.distance)));
-    var completedZiarats =
-        ziaratHistory!.completedZiarats.map<ZiaraatModel>((ziarat) {
-            var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziarat.lat.toDouble(), ziarat.lng.toDouble());
-            return ziarat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
+    var completedZiaraats =
+        ziaraatHistory!.completedZiaraats.map<ZiaraatModel>((ziaraat) {
+            var distance = Geolocator.distanceBetween(position.latitude, position.longitude, ziaraat.lat.toDouble(), ziaraat.lng.toDouble());
+            return ziaraat.copyWith(distance: (distance / 1000).toStringAsFixed(0));
           }).toList()
           ..sort((a, b) => int.parse(a.distance).compareTo(int.parse(b.distance)));
-    ziaratHistory = ziaratHistory!.copyWith(remainingZiarats: remainingZiarats, completedZiarats: completedZiarats);
+    ziaraatHistory = ziaraatHistory!.copyWith(remainingZiaraats: remainingZiaraats, completedZiaraats: completedZiaraats);
     if (context.mounted) notifyListeners();
   }
 
-  void resume() async => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ZiaraatMapPage(ziaratHistory: ziaratHistory!)));
+  void resume() async => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ZiaraatMapPage(ziaraatHistory: ziaraatHistory!)));
 
   @override
   void dispose() {

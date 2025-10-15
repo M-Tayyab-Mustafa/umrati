@@ -30,7 +30,7 @@ class AlreadyDialog extends StatelessWidget {
                       padding: SizeConfig.symmetric(horizontal: SizeConfig.screenWidth * 0.1),
                       child: Center(
                         child: Text(
-                          isDoingUmrah ? LocaleKeys.already_in_umrah.tr() : LocaleKeys.already_in_ziarats.tr(),
+                          isDoingUmrah ? LocaleKeys.already_in_umrah.tr() : LocaleKeys.already_in_ziaraats.tr(),
                           style: CTextStyle.w900(fontSize: 16, color: CColors.deepTeal),
                           textAlign: TextAlign.center,
                         ),

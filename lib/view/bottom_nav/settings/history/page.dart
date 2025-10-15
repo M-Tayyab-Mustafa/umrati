@@ -27,10 +27,10 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
           children: [
             HistoryMenuCard(
               margin: SizeConfig.only(bottom: 24),
-              onTap: ref.read(historyProvider.notifier).onUmraTap,
+              onTap: ref.read(historyProvider.notifier).onUmrahTap,
               image: 'assets/png/history/umrah.png',
-              title: LocaleKeys.umra.tr(),
-              description: '${LocaleKeys.see_history_of_your.tr()} ${LocaleKeys.umra.tr()}',
+              title: LocaleKeys.umrah.tr(),
+              description: '${LocaleKeys.see_history_of_your.tr()} ${LocaleKeys.umrah.tr()}',
             ),
             HistoryMenuCard(
               margin: SizeConfig.only(bottom: 24),
@@ -41,10 +41,10 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
             ),
             HistoryMenuCard(
               margin: SizeConfig.only(bottom: 24),
-              onTap: ref.read(historyProvider.notifier).onZiaratTap,
-              image: 'assets/png/history/ziarat.png',
-              title: LocaleKeys.ziarat.tr(),
-              description: '${LocaleKeys.see_history_of_your.tr()} ${LocaleKeys.ziarat.tr()}',
+              onTap: ref.read(historyProvider.notifier).onZiaraatTap,
+              image: 'assets/png/history/ziaraat.png',
+              title: LocaleKeys.ziaraat.tr(),
+              description: '${LocaleKeys.see_history_of_your.tr()} ${LocaleKeys.ziaraat.tr()}',
             ),
           ],
         ),

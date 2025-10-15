@@ -19,7 +19,7 @@ class UmrahNotifier extends ChangeNotifier {
   set ref(WidgetRef value) => _ref = value;
 
   // Flag to track if user is currently performing Tawaf
-  UserActivityType userActivityType = UserActivityType.umra;
+  UserActivityType userActivityType = UserActivityType.umrah;
   bool isLoading = false;
 
   HistoryModel? umrahModel;
@@ -69,9 +69,9 @@ class UmrahNotifier extends ChangeNotifier {
     this.userActivityType = userActivityType;
     ref.read(meeqaatTwoTasksProvider.notifier).updateLoading(true);
     user = (await LocalStorageManager.getUser(fromFirebase: true))!;
-    if (userActivityType == UserActivityType.umra) {
+    if (userActivityType == UserActivityType.umrah) {
       final querySnapshot =
-          await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('is_doing', isEqualTo: true), Filter('type', isEqualTo: UserActivityType.umra.name))).get();
+          await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('is_doing', isEqualTo: true), Filter('type', isEqualTo: UserActivityType.umrah.name))).get();
       if (querySnapshot.docs.isNotEmpty) {
         final doc = querySnapshot.docs.first.reference;
         umrahModel = HistoryModel.fromMap((await doc.get()).data()!);

@@ -7,7 +7,7 @@ class ManualSelection extends ConsumerWidget {
     var provider = ref.watch(ziaraatProvider);
     return Background(
       showEmblem: false,
-      title: '${_cityName(provider.selectedCity!)} ${LocaleKeys.top_ziarat_destination_of.tr()}',
+      title: '${_cityName(provider.selectedCity!)} ${LocaleKeys.top_ziaraat_destination_of.tr()}',
       titleType: TitleType.backArrow,
       titleMargin: SizeConfig.symmetric(vertical: kToolbarHeight * 0.5),
       margin: SizeConfig.only(left: 16, right: 16),
@@ -15,21 +15,21 @@ class ManualSelection extends ConsumerWidget {
         children: [
           Expanded(
             child:
-                provider.ziarats.isEmpty
+                provider.ziaraats.isEmpty
                     ? Center(child: Text(LocaleKeys.ziaraat_not_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
                     : ListView.builder(
                       padding: SizeConfig.zero,
-                      itemCount: provider.ziarats.length,
+                      itemCount: provider.ziaraats.length,
                       itemBuilder: (context, index) {
-                        var ziarat = provider.ziarats[index];
+                        var ziaraat = provider.ziaraats[index];
                         return BasicCard(
                           margin: SizeConfig.only(bottom: 20),
-                          onTap: () => provider.updateSelectedZiaraat(ziarat),
-                          borderColor: provider.selectedZiaraat.contains(ziarat) ? null : CColors.greyShade3,
-                          boxShadow: provider.selectedZiaraat.contains(ziarat) ? null : [],
+                          onTap: () => provider.updateSelectedZiaraat(ziaraat),
+                          borderColor: provider.selectedZiaraat.contains(ziaraat) ? null : CColors.greyShade3,
+                          boxShadow: provider.selectedZiaraat.contains(ziaraat) ? null : [],
                           child: Directionality(
-                            textDirection: getTextDirection(isLTR(context) ? ziarat.title_en : ziarat.title_ur),
-                            child: Text(isLTR(context) ? ziarat.title_en : ziarat.title_ur, style: CTextStyle.w500(fontSize: 14)),
+                            textDirection: getTextDirection(isLTR(context) ? ziaraat.title_en : ziaraat.title_ur),
+                            child: Text(isLTR(context) ? ziaraat.title_en : ziaraat.title_ur, style: CTextStyle.w500(fontSize: 14)),
                           ),
                         );
                       },

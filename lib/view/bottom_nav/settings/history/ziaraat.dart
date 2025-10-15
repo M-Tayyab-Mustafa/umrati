@@ -1,19 +1,19 @@
 import '../../../../export.dart';
 
-class ZiaratHistoryPage extends ConsumerStatefulWidget {
-  const ZiaratHistoryPage({super.key});
+class ZiaraatHistoryPage extends ConsumerStatefulWidget {
+  const ZiaraatHistoryPage({super.key});
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ZiaratHistoryPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ZiaraatHistoryPageState();
 }
 
-class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
+class _ZiaraatHistoryPageState extends ConsumerState<ZiaraatHistoryPage> {
   @override
   void initState() {
     super.initState();
     ref.read(historyProvider.notifier).context = context;
     ref.read(historyProvider.notifier).ref = ref;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(historyProvider.notifier).initialization(historyType: HistoryType.ziarat);
+      ref.read(historyProvider.notifier).initialization(historyType: HistoryType.ziaraat);
     });
   }
 
@@ -24,19 +24,19 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
       margin: SizeConfig.zero,
       backgroundType: BackgroundType.titleWithBackButton,
       logoAlign: Alignment.center,
-      title: LocaleKeys.ziarat.tr(),
+      title: LocaleKeys.ziaraat.tr(),
       child:
           provider.isLoading
               ? Loading()
-              : provider.ziaratHistories.isEmpty
+              : provider.ziaraatHistories.isEmpty
               ? Center(child: Text(LocaleKeys.no_history_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
               : GridView.builder(
                 shrinkWrap: true,
                 padding: SizeConfig.symmetric(vertical: 20, horizontal: 16),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: SizeConfig.w(30), crossAxisSpacing: SizeConfig.w(30)),
-                itemCount: provider.ziaratHistories.length,
+                itemCount: provider.ziaraatHistories.length,
                 itemBuilder: (context, index) {
-                  var history = provider.ziaratHistories[index];
+                  var history = provider.ziaraatHistories[index];
                   return BasicCard(
                     boxShadow: [],
                     borderColor: CColors.charcoalBlack,
@@ -51,11 +51,11 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
                               size: SizeConfig.w(25),
                               imageType: ImageType.svg,
                               color: CColors.primary,
-                              path: switch (_getZiaratCity(history.ziaraatCity)) {
-                                ZiaraatCities.medina => 'assets/svg/ziarat/medina.svg',
-                                ZiaraatCities.taif => 'assets/svg/ziarat/taif.svg',
-                                ZiaraatCities.other => 'assets/svg/ziarat/other.svg',
-                                _ => 'assets/svg/ziarat/medina.svg',
+                              path: switch (_getZiaraatCity(history.ziaraatCity)) {
+                                ZiaraatCities.medina => 'assets/svg/ziaraat/medina.svg',
+                                ZiaraatCities.taif => 'assets/svg/ziaraat/taif.svg',
+                                ZiaraatCities.other => 'assets/svg/ziaraat/other.svg',
+                                _ => 'assets/svg/ziaraat/medina.svg',
                               },
                             ),
                             Text(isLTR(context) ? Helper.generateTitle(history.ziaraatCity) : generateTitle(history.ziaraatCity), style: CTextStyle.w500(color: CColors.primary, fontSize: 14)),
@@ -65,7 +65,7 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
                           child: Text.rich(
                             TextSpan(
                               children: [
-                                TextSpan(text: '${history.completedZiarats.length}'),
+                                TextSpan(text: '${history.completedZiaraats.length}'),
                                 TextSpan(text: '/${history.total}', style: CTextStyle.w600(fontSize: 30, color: CColors.deepTeal.withValues(alpha: 0.5))),
                               ],
                             ),
@@ -75,7 +75,7 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
                         CButton(
                           padding: SizeConfig.zero,
                           margin: SizeConfig.only(top: 4),
-                          onTap: () => provider.onViewZiaratTap(history),
+                          onTap: () => provider.onViewZiaraatTap(history),
                           title: LocaleKeys.view.tr(),
                           borderRadius: BorderRadius.circular(40),
                           height: 30,
@@ -89,7 +89,7 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
     );
   }
 
-  ZiaraatCities _getZiaratCity(String city) {
+  ZiaraatCities _getZiaraatCity(String city) {
     if (city == ZiaraatCities.medina.name) {
       return ZiaraatCities.medina;
     } else if (city == ZiaraatCities.taif.name) {

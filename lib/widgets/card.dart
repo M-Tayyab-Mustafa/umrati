@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../utils/helper/constants.dart';
-import '../utils/theme/colors.dart';
+import '../export.dart';
 
 class BasicCard extends StatelessWidget {
   const BasicCard({

@@ -1,8 +1,8 @@
 import '../../../export.dart';
 import '../../../view/bottom_nav/settings/history/tawaf.dart';
 import '../../../view/bottom_nav/settings/history/umrah.dart';
-import '../../../view/bottom_nav/settings/history/ziarat.dart';
-import '../../../view/bottom_nav/settings/history/ziarat_detail.dart';
+import '../../../view/bottom_nav/settings/history/ziaraat.dart';
+import '../../../view/bottom_nav/settings/history/ziaraat_detail.dart';
 
 final historyProvider = ChangeNotifierProvider.autoDispose<HistoryNotifier>((ref) => HistoryNotifier());
 
@@ -19,15 +19,15 @@ class HistoryNotifier extends ChangeNotifier {
 
   Map<DateTime, List<HistoryModel>> umrahHistories = {};
   Map<DateTime, List<HistoryModel>> tawafHistories = {};
-  List<ZiaraatHistoryModel> ziaratHistories = [];
+  List<ZiaraatHistoryModel> ziaraatHistories = [];
 
-  Future<void> initialization({HistoryType historyType = HistoryType.umra}) async {
+  Future<void> initialization({HistoryType historyType = HistoryType.umrah}) async {
     isLoading = true;
     notifyListeners();
     user = await LocalStorageManager.getUser();
-    if (historyType == HistoryType.umra) {
+    if (historyType == HistoryType.umrah) {
       final query =
-          (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.umra.name))).get()).docs
+          (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.umrah.name))).get()).docs
               .map((history) => HistoryModel.fromMap(history.data()))
               .toList();
       umrahHistories = groupBy(query, (history) {
@@ -48,17 +48,17 @@ class HistoryNotifier extends ChangeNotifier {
           .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziaraat.name)))
           .get()
           .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      ziaratHistories = query.docs.map((history) => ZiaraatHistoryModel.fromMap(history.data())).toList();
+      ziaraatHistories = query.docs.map((history) => ZiaraatHistoryModel.fromMap(history.data())).toList();
     }
     isLoading = false;
     notifyListeners();
   }
 
-  void onUmraTap() => Navigator.push(context, MaterialPageRoute(builder: (context) => const UmrahHistoryPage()));
+  void onUmrahTap() => Navigator.push(context, MaterialPageRoute(builder: (context) => const UmrahHistoryPage()));
 
   void onTawafTap() => Navigator.push(context, MaterialPageRoute(builder: (context) => const TawafHistoryPage()));
 
-  void onZiaratTap() => Navigator.push(context, MaterialPageRoute(builder: (context) => const ZiaratHistoryPage()));
+  void onZiaraatTap() => Navigator.push(context, MaterialPageRoute(builder: (context) => const ZiaraatHistoryPage()));
 
-  void onViewZiaratTap(ZiaraatHistoryModel history) => Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaratDetailPage(ziaratHistory: history)));
+  void onViewZiaraatTap(ZiaraatHistoryModel history) => Navigator.push(context, MaterialPageRoute(builder: (context) => ZiaraatDetailPage(ziaraatHistory: history)));
 }

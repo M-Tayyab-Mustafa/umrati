@@ -1,5 +1,5 @@
 import '../../../../export.dart';
-import '../../../../view/bottom_nav/home/ziarat/page.dart';
+import '../../../../view/bottom_nav/home/ziaraat/page.dart';
 
 final mapPageProvider = ChangeNotifierProvider.autoDispose<MapPageNotifier>((ref) => MapPageNotifier());
 
@@ -21,7 +21,7 @@ class MapPageNotifier extends ChangeNotifier {
   OverlayEntry? overlayEntry;
   final FlutterTts flutterTts = FlutterTts();
   bool isListening = false;
-  ZiaraatModel? activeZiarat;
+  ZiaraatModel? activeZiaraat;
   List<ZiaraatModel> destinations = [];
   ZiaraatHistoryModel? history;
   get panelController => SlidingUpPanelController();
@@ -33,14 +33,14 @@ class MapPageNotifier extends ChangeNotifier {
 
   CameraPosition initialCameraPosition = CameraPosition(target: LatLng(30.17271735209673, 71.45729802421867), zoom: 20);
 
-  Future<void> initialization({ZiaraatHistoryModel? ziaratHistory}) async {
+  Future<void> initialization({ZiaraatHistoryModel? ziaraatHistory}) async {
     try {
       var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
       initialCameraPosition = CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude), zoom: 20);
       markers.add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: initialCameraPosition.target, icon: await _loadCustomIcon('assets/png/map/user.png')));
       _controller?.animateCamera(CameraUpdate.newLatLng(initialCameraPosition.target));
       user = await LocalStorageManager.getUser();
-      if (ziaratHistory == null) {
+      if (ziaraatHistory == null) {
         var query = await historyCollection
             .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziaraat.name), Filter('is_completed', isEqualTo: false)))
             .get()
@@ -51,15 +51,15 @@ class MapPageNotifier extends ChangeNotifier {
         }
         history = ZiaraatHistoryModel.fromMap(query.docs.first.data());
       } else {
-        history = ziaratHistory;
+        history = ziaraatHistory;
       }
 
-      destinations = history!.remainingZiarats;
-      activeZiarat = history!.remainingZiarats.first;
+      destinations = history!.remainingZiaraats;
+      activeZiaraat = history!.remainingZiaraats.first;
       markers.add(
         Marker(
           markerId: MarkerId(MapMarkerId.destination.name),
-          position: LatLng(activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble()),
+          position: LatLng(activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble()),
           icon: await _loadCustomIcon('assets/png/map/destination.png'),
         ),
       );
@@ -79,25 +79,25 @@ class MapPageNotifier extends ChangeNotifier {
     markers =
         markers.where((e) => e.markerId.value != MapMarkerId.userLocation.name).toSet()
           ..add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: LatLng(position.latitude, position.longitude), icon: await _loadCustomIcon('assets/png/map/user.png')));
-    var distance = Geolocator.distanceBetween(position.latitude, position.longitude, activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble());
+    var distance = Geolocator.distanceBetween(position.latitude, position.longitude, activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble());
     if (distance < 20) {
       _positionStream?.cancel();
       await showGeneralDialog(
         context: context,
-        pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.ziarat_completion_message.tr(), withContinueButton: true),
+        pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.ziaraat_completion_message.tr(), withContinueButton: true),
       );
       destinations.removeAt(0);
-      history = history!.copyWith(remainingZiarats: destinations, completedZiarats: [...history!.completedZiarats, activeZiarat!]);
+      history = history!.copyWith(remainingZiaraats: destinations, completedZiaraats: [...history!.completedZiaraats, activeZiaraat!]);
       await historyCollection.doc(history!.uid).update(history!.toMap(updatedAt: FieldValue.serverTimestamp()));
       if (destinations.isEmpty) {
         _positionStream?.cancel();
         markers = markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet();
         notifyListeners();
-        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.complete_ziarats.tr(), withContinueButton: true));
+        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.complete_ziaraats.tr(), withContinueButton: true));
         Navigator.pop(context);
         return ref.read(ziaraatProvider.notifier).reset();
       } else {
-        activeZiarat = destinations.first;
+        activeZiaraat = destinations.first;
         _positionStream = Geolocator.getPositionStream(
           locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter),
         ).listen((position) => _updateLocation(position));
@@ -106,12 +106,12 @@ class MapPageNotifier extends ChangeNotifier {
           markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet()..add(
             Marker(
               markerId: MarkerId(MapMarkerId.destination.name),
-              position: LatLng(activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble()),
+              position: LatLng(activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble()),
               icon: await _loadCustomIcon('assets/png/map/destination.png'),
             ),
           );
     }
-    await _getRoutePolyline(LatLng(position.latitude + 0.000007, position.longitude), LatLng(activeZiarat!.lat.toDouble(), activeZiarat!.lng.toDouble()));
+    await _getRoutePolyline(LatLng(position.latitude + 0.000007, position.longitude), LatLng(activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble()));
     if (context.mounted) notifyListeners();
   }
 
@@ -120,8 +120,8 @@ class MapPageNotifier extends ChangeNotifier {
   Future<void> _getRoutePolyline(LatLng startPoint, LatLng endPoint) async {
     final leg = await Helper.getRouteLeg(startPoint: startPoint, endPoint: endPoint);
     if (leg != null) {
-      activeZiarat = activeZiarat!.copyWith(distance: leg['distance']['text'], time: leg['duration']['text']);
-      updateActiveZiarat(activeZiarat: activeZiarat!);
+      activeZiaraat = activeZiaraat!.copyWith(distance: leg['distance']['text'], time: leg['duration']['text']);
+      updateActiveZiaraat(activeZiaraat: activeZiaraat!);
       var steps = leg['steps'] as List;
       for (var step in steps) {
         final points = step['polyline']['points'];
@@ -163,10 +163,10 @@ class MapPageNotifier extends ChangeNotifier {
     return polyline;
   }
 
-  Future<void> updateActiveZiarat({required ZiaraatModel activeZiarat}) async {
+  Future<void> updateActiveZiaraat({required ZiaraatModel activeZiaraat}) async {
     var data = (await userCollection.doc(user!.uid).get()).data()!;
-    destinations = List.from(data[CommonField.selectedZiarat.name]).map((e) => ZiaraatModel.fromMap(e)).toList();
-    await userCollection.doc(user!.uid).update({CommonField.selectedZiarat.name: destinations.map((e) => e.title_en == activeZiarat.title_en ? activeZiarat.toMap() : e.toMap()).toList()});
+    destinations = List.from(data[CommonField.selectedZiaraat.name]).map((e) => ZiaraatModel.fromMap(e)).toList();
+    await userCollection.doc(user!.uid).update({CommonField.selectedZiaraat.name: destinations.map((e) => e.title_en == activeZiaraat.title_en ? activeZiaraat.toMap() : e.toMap()).toList()});
   }
 
   Future<void> showMoreOptions({required BuildContext context}) async {
@@ -189,14 +189,14 @@ class MapPageNotifier extends ChangeNotifier {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(LocaleKeys.ziarat_history.tr(), style: CTextStyle.w500(fontSize: 10, color: Colors.white)),
+                        Text(LocaleKeys.ziaraat_history.tr(), style: CTextStyle.w500(fontSize: 10, color: Colors.white)),
                         Padding(
                           padding: SizeConfig.only(top: 16, bottom: 20),
                           child: GestureDetector(
                             onTap: hideMoreOptions,
                             child: Row(
                               children: [
-                                CustomImage(path: 'assets/svg/ziarat/listen.svg', imageType: ImageType.svg, size: SizeConfig.w(20), margin: SizeConfig.only(right: 10)),
+                                CustomImage(path: 'assets/svg/ziaraat/listen.svg', imageType: ImageType.svg, size: SizeConfig.w(20), margin: SizeConfig.only(right: 10)),
                                 Text(LocaleKeys.listen.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
                               ],
                             ),
@@ -207,11 +207,11 @@ class MapPageNotifier extends ChangeNotifier {
                           child: GestureDetector(
                             onTap: () {
                               hideMoreOptions();
-                              showDialog(context: context, builder: (context) => ZiaraatReadingDetailDialog(ziaraat: activeZiarat!));
+                              showDialog(context: context, builder: (context) => ZiaraatReadingDetailDialog(ziaraat: activeZiaraat!));
                             },
                             child: Row(
                               children: [
-                                CustomImage(path: 'assets/svg/ziarat/read.svg', imageType: ImageType.svg, fit: BoxFit.fitHeight, size: SizeConfig.w(20), margin: SizeConfig.only(right: 10)),
+                                CustomImage(path: 'assets/svg/ziaraat/read.svg', imageType: ImageType.svg, fit: BoxFit.fitHeight, size: SizeConfig.w(20), margin: SizeConfig.only(right: 10)),
                                 Text(LocaleKeys.read.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
                               ],
                             ),

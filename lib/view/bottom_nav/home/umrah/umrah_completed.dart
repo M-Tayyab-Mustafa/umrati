@@ -1,7 +1,7 @@
 import '../../../../export.dart';
 
-class UmraCompleted extends StatelessWidget {
-  const UmraCompleted({super.key});
+class UmrahCompleted extends StatelessWidget {
+  const UmrahCompleted({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +33,8 @@ class UmraCompleted extends StatelessWidget {
             ),
           ),
           Text(LocaleKeys.congratulations.tr(), style: CTextStyle.w800()),
-          Padding(padding: SizeConfig.symmetric(vertical: 30), child: Text(LocaleKeys.your_umra_has_been_completed.tr(), style: CTextStyle.w600(color: CColors.primary))),
-          Text(LocaleKeys.may_allah_accept_your_umra_ameen.tr(), style: CTextStyle.w600(color: CColors.deepTeal), textAlign: TextAlign.center),
+          Padding(padding: SizeConfig.symmetric(vertical: 30), child: Text(LocaleKeys.your_umrah_has_been_completed.tr(), style: CTextStyle.w600(color: CColors.primary))),
+          Text(LocaleKeys.may_allah_accept_your_umrah_ameen.tr(), style: CTextStyle.w600(color: CColors.deepTeal), textAlign: TextAlign.center),
           Consumer(builder: (context, ref, child) => CButton(margin: SizeConfig.only(top: 50), onTap: ref.read(umrahProvider).goToHome, title: LocaleKeys.go_to_home_screen.tr(), titleWithIcon: true)),
         ],
       ),

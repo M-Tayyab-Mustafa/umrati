@@ -78,7 +78,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                CustomImage(margin: SizeConfig.only(bottom: 10), path: 'assets/svg/settings/more_ziarats.png', height: SizeConfig.h(50), imageType: ImageType.png, fit: BoxFit.fill),
+                                CustomImage(margin: SizeConfig.only(bottom: 10), path: 'assets/svg/settings/more_ziaraats.png', height: SizeConfig.h(50), imageType: ImageType.png, fit: BoxFit.fill),
                                 Text(LocaleKeys.more_ziaraat_destinations.tr(), style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal), textAlign: TextAlign.center),
                               ],
                             ),

@@ -1,20 +1,20 @@
 import '../../../../export.dart';
 
-class ZiaratDetailPage extends ConsumerStatefulWidget {
-  const ZiaratDetailPage({super.key, required this.ziaratHistory});
-  final ZiaraatHistoryModel ziaratHistory;
+class ZiaraatDetailPage extends ConsumerStatefulWidget {
+  const ZiaraatDetailPage({super.key, required this.ziaraatHistory});
+  final ZiaraatHistoryModel ziaraatHistory;
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ZiaratDetailPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _ZiaraatDetailPageState();
 }
 
-class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
+class _ZiaraatDetailPageState extends ConsumerState<ZiaraatDetailPage> {
   @override
   void initState() {
     super.initState();
     ref.read(ziaraatDetailProvider.notifier).context = context;
     ref.read(ziaraatDetailProvider.notifier).ref = ref;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(ziaraatDetailProvider.notifier).initialization(widget.ziaratHistory);
+      await ref.read(ziaraatDetailProvider.notifier).initialization(widget.ziaraatHistory);
     });
   }
 
@@ -42,20 +42,20 @@ class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             padding: SizeConfig.zero,
-                            itemCount: provider.ziaratHistory!.completedZiarats.length,
+                            itemCount: provider.ziaraatHistory!.completedZiaraats.length,
                             itemBuilder: (context, index) {
-                              var ziarat = provider.ziaratHistory!.completedZiarats[index];
-                              return CMarker(color: CColors.secondary, indicatorColor: CColors.secondary, title: isLTR(context) ? ziarat.title_en : ziarat.title_ur, distance: ziarat.distance);
+                              var ziaraat = provider.ziaraatHistory!.completedZiaraats[index];
+                              return CMarker(color: CColors.secondary, indicatorColor: CColors.secondary, title: isLTR(context) ? ziaraat.title_en : ziaraat.title_ur, distance: ziaraat.distance);
                             },
                           ),
                           ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             padding: SizeConfig.zero,
-                            itemCount: provider.ziaratHistory!.remainingZiarats.length,
+                            itemCount: provider.ziaraatHistory!.remainingZiaraats.length,
                             itemBuilder: (context, index) {
-                              var ziarat = provider.ziaratHistory!.remainingZiarats[index];
-                              return CMarker(title: isLTR(context) ? ziarat.title_en : ziarat.title_ur, distance: ziarat.distance);
+                              var ziaraat = provider.ziaraatHistory!.remainingZiaraats[index];
+                              return CMarker(title: isLTR(context) ? ziaraat.title_en : ziaraat.title_ur, distance: ziaraat.distance);
                             },
                           ),
                         ],
@@ -76,7 +76,7 @@ class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
                     titleColor: CColors.primary,
                   ),
                   Spacer(),
-                  if (!provider.ziaratHistory!.isCompleted) CButton(onTap: provider.resume, title: LocaleKeys.resume_ziarat.tr()),
+                  if (!provider.ziaraatHistory!.isCompleted) CButton(onTap: provider.resume, title: LocaleKeys.resume_ziaraat.tr()),
                 ],
               ),
             ),

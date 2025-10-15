@@ -24,7 +24,7 @@ class _UmrahHistoryPageState extends ConsumerState<UmrahHistoryPage> {
       margin: SizeConfig.zero,
       backgroundType: BackgroundType.titleWithBackButton,
       logoAlign: Alignment.center,
-      title: LocaleKeys.umra.tr(),
+      title: LocaleKeys.umrah.tr(),
       child:
           provider.isLoading
               ? Loading()

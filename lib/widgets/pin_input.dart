@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:pinput/pinput.dart';
-
-import '../utils/helper/constants.dart';
-import '../utils/theme/colors.dart';
-import '../utils/theme/text_style.dart';
+import '../export.dart';
 
 class PinInput extends StatelessWidget {
   const PinInput({super.key, required this.controller, this.margin});

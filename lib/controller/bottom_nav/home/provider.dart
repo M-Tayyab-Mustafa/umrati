@@ -1,6 +1,6 @@
 import '../../../export.dart';
-import '../../../view/bottom_nav/home/umra/page.dart';
-import '../../../view/bottom_nav/home/ziarat/page.dart';
+import '../../../view/bottom_nav/home/umrah/page.dart';
+import '../../../view/bottom_nav/home/ziaraat/page.dart';
 
 final homeProvider = ChangeNotifierProvider.autoDispose<HomeNotifier>((ref) => HomeNotifier());
 
@@ -13,11 +13,11 @@ class HomeNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
 
-  void onUmraTap() async => Navigator.push(context, MaterialPageRoute(builder: (context) => const UmraPage()));
+  void onUmrahTap() async => Navigator.push(context, MaterialPageRoute(builder: (context) => const UmrahPage()));
 
-  void onTawafTap() async => Navigator.push(context, MaterialPageRoute(builder: (context) => const UmraPage(userActivityType: UserActivityType.tawaf)));
+  void onTawafTap() async => Navigator.push(context, MaterialPageRoute(builder: (context) => const UmrahPage(userActivityType: UserActivityType.tawaf)));
 
-  void onZiaratTap() async {
+  void onZiaraatTap() async {
     Navigator.push(context, MaterialPageRoute(builder: (context) => const ZiaraatPage()));
   }
 }

@@ -11,7 +11,7 @@ class ChooseDestinations extends ConsumerWidget {
       showEmblem: false,
       backgroundType: BackgroundType.logo,
       logoAlign: Alignment.center,
-      title: LocaleKeys.please_select_one_option_to_continue_your_ziarat.tr(),
+      title: LocaleKeys.please_select_one_option_to_continue_your_ziaraat.tr(),
       titleType: TitleType.backArrow,
       titleMargin: SizeConfig.symmetric(vertical: kToolbarHeight * 0.5),
       margin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),

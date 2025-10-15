@@ -23,9 +23,9 @@ class _HomePageState extends ConsumerState<HomePage> {
       margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: 50),
       child: Column(
         children: [
-          _Card(onTap: ref.read(homeProvider).onUmraTap, title: LocaleKeys.umra.tr(), description: LocaleKeys.start_your_umrah_from_here.tr(), image: 'assets/png/home/umrah.png'),
+          _Card(onTap: ref.read(homeProvider).onUmrahTap, title: LocaleKeys.umrah.tr(), description: LocaleKeys.start_your_umrah_from_here.tr(), image: 'assets/png/home/umrah.png'),
           _Card(onTap: ref.read(homeProvider).onTawafTap, title: LocaleKeys.tawaf.tr(), description: LocaleKeys.start_your_tawaf_from_here.tr(), image: 'assets/png/home/tawaf.png'),
-          _Card(onTap: ref.read(homeProvider).onZiaratTap, title: LocaleKeys.ziarat.tr(), description: LocaleKeys.start_your_ziaraat_from_here.tr(), image: 'assets/png/home/ziarat.png'),
+          _Card(onTap: ref.read(homeProvider).onZiaraatTap, title: LocaleKeys.ziaraat.tr(), description: LocaleKeys.start_your_ziaraat_from_here.tr(), image: 'assets/png/home/ziaraat.png'),
         ],
       ),
     );

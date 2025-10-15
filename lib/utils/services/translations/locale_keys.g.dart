@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const select_your_language = 'select_your_language';
   static const change_the_language = 'change_the_language';
   static const register_your_account = 'register_your_account';
@@ -71,7 +71,7 @@ abstract class LocaleKeys {
   static const copied_to_clipboard = 'copied_to_clipboard';
   static const to = 'to';
   static const view = 'view';
-  static const resume_ziarat = 'resume_ziarat';
+  static const resume_ziaraat = 'resume_ziaraat';
   static const cleanliness = 'cleanliness';
   static const months = 'months';
   static const price = 'price';
@@ -129,17 +129,17 @@ abstract class LocaleKeys {
   static const dua_during_7th_round = 'dua_during_7th_round';
   static const in_low_voice = 'in_low_voice';
   static const your = 'your';
-  static const ziarat_history = 'ziarat_history';
+  static const ziaraat_history = 'ziaraat_history';
   static const listen = 'listen';
   static const read = 'read';
-  static const ziarat_detail_not_found = 'ziarat_detail_not_found';
+  static const ziaraat_detail_not_found = 'ziaraat_detail_not_found';
   static const profile = 'profile';
-  static const umra = 'umra';
+  static const umrah = 'umrah';
   static const tawaf = 'tawaf';
   static const start_your_umrah_from_here = 'start_your_umrah_from_here';
   static const start_your_tawaf_from_here = 'start_your_tawaf_from_here';
   static const start_your_ziaraat_from_here = 'start_your_ziaraat_from_here';
-  static const ziarat = 'ziarat';
+  static const ziaraat = 'ziaraat';
   static const settings = 'settings';
   static const more = 'more';
   static const location_permission_denied_permission_is_required_to_proceed_forward = 'location_permission_denied_permission_is_required_to_proceed_forward';
@@ -159,9 +159,9 @@ abstract class LocaleKeys {
   static const start_tawaf = 'start_tawaf';
   static const starting_point = 'starting_point';
   static const start_new = 'start_new';
-  static const already_in_ziarats = 'already_in_ziarats';
-  static const complete_ziarats = 'complete_ziarats';
-  static const ziarat_completion_message = 'ziarat_completion_message';
+  static const already_in_ziaraats = 'already_in_ziaraats';
+  static const complete_ziaraats = 'complete_ziaraats';
+  static const ziaraat_completion_message = 'ziaraat_completion_message';
   static const going_to_safa = 'going_to_safa';
   static const going_to_marwa = 'going_to_marwa';
   static const safa = 'safa';
@@ -177,12 +177,12 @@ abstract class LocaleKeys {
   static const proceed_forward = 'proceed_forward';
   static const your_ziaraat_destinations = 'your_ziaraat_destinations';
   static const start_your_ziaraat = 'start_your_ziaraat';
-  static const top_ziarat_destination_of = 'top_ziarat_destination_of';
+  static const top_ziaraat_destination_of = 'top_ziaraat_destination_of';
   static const go_back = 'go_back';
   static const confirmation_dialog = 'confirmation_dialog';
   static const auto_generate_description = 'auto_generate_description';
   static const manual_selection_description = 'manual_selection_description';
-  static const please_select_one_option_to_continue_your_ziarat = 'please_select_one_option_to_continue_your_ziarat';
+  static const please_select_one_option_to_continue_your_ziaraat = 'please_select_one_option_to_continue_your_ziaraat';
   static const now_please_pray_while_facing_kibla = 'now_please_pray_while_facing_kibla';
   static const your_sai_has_completed = 'your_sai_has_completed';
   static const seven_rounds_completed = 'seven_rounds_completed';
@@ -194,11 +194,12 @@ abstract class LocaleKeys {
   static const go_to_home_screen = 'go_to_home_screen';
   static const congratulations = 'congratulations';
   static const meeqaat_task_confirmation = 'meeqaat_task_confirmation';
-  static const your_umra_has_been_completed = 'your_umra_has_been_completed';
-  static const may_allah_accept_your_umra_ameen = 'may_allah_accept_your_umra_ameen';
+  static const your_umrah_has_been_completed = 'your_umrah_has_been_completed';
+  static const may_allah_accept_your_umrah_ameen = 'may_allah_accept_your_umrah_ameen';
   static const shave_the_head_description = 'shave_the_head_description';
   static const take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram = 'take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram';
   static const do_these_5_ihram_related_tasks = 'do_these_5_ihram_related_tasks';
   static const ziaraat_not_found = 'ziaraat_not_found';
   static const you_are_not_near_the_green_light = 'you_are_not_near_the_green_light';
+
 }

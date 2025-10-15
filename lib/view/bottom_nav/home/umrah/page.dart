@@ -5,16 +5,16 @@ import '../meeqaat/two_tasks.dart';
 import 'safa_marwa.dart';
 import 'sai_completion.dart';
 import 'tawaf_tracker.dart';
-import 'umra_completed.dart';
+import 'umrah_completed.dart';
 
-class UmraPage extends ConsumerStatefulWidget {
-  const UmraPage({super.key, this.userActivityType = UserActivityType.umra});
+class UmrahPage extends ConsumerStatefulWidget {
+  const UmrahPage({super.key, this.userActivityType = UserActivityType.umrah});
   final UserActivityType userActivityType;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _StartTawafPageState();
 }
 
-class _StartTawafPageState extends ConsumerState<UmraPage> {
+class _StartTawafPageState extends ConsumerState<UmrahPage> {
   @override
   void initState() {
     super.initState();
@@ -37,7 +37,7 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
     } else if (!provider.hasDoneAfterMeeqaatTasks) {
       return MeeqaatThreeTasksPage();
     } else if (provider.isUmrahCompleted) {
-      return UmraCompleted();
+      return UmrahCompleted();
     } else if (provider.isSafaMarwaComplete) {
       return SaiCompletionPage();
     } else if (!provider.showSafaMarwa) {

@@ -24,7 +24,7 @@ enum StorageFolderNames {
 
 enum MapMarkerId { userLocation, destination }
 
-enum UserActivityType { tawaf, umra, ziaraat }
+enum UserActivityType { tawaf, umrah, ziaraat }
 
 enum CommonDoc {
   alKaba('al_kaba'),
@@ -58,7 +58,7 @@ enum CommonField {
   startingPoint('startingPoint'),
   stripePublishableKey('stripe_publishable_key'),
   stripeSecretKey('stripe_secret_key'),
-  selectedZiarat('selected_ziarat');
+  selectedZiaraat('selected_ziaraat');
 
   final String name;
 
@@ -93,4 +93,4 @@ enum IstilaamDua {
   const IstilaamDua(this.dua);
 }
 
-enum HistoryType { umra, tawaf, ziarat }
+enum HistoryType { umrah, tawaf, ziaraat }
