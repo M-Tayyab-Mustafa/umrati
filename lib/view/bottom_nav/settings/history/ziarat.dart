@@ -61,23 +61,25 @@ class _ZiaratHistoryPageState extends ConsumerState<ZiaratHistoryPage> {
                             Text(isLTR(context) ? Helper.generateTitle(history.ziaratCity) : generateTitle(history.ziaratCity), style: CTextStyle.w500(color: CColors.primary, fontSize: 14)),
                           ],
                         ),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(text: '${history.completedZiarats.length}'),
-                              TextSpan(text: '/${history.total}', style: CTextStyle.w600(fontSize: 30, color: CColors.deepTeal.withValues(alpha: 0.5))),
-                            ],
+                        Expanded(
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(text: '${history.completedZiarats.length}'),
+                                TextSpan(text: '/${history.total}', style: CTextStyle.w600(fontSize: 30, color: CColors.deepTeal.withValues(alpha: 0.5))),
+                              ],
+                            ),
+                            style: CTextStyle.w600(fontSize: 70, color: CColors.deepTeal, height: 1),
                           ),
-                          style: CTextStyle.w600(fontSize: 70, color: CColors.deepTeal, height: 1),
                         ),
                         CButton(
                           padding: SizeConfig.zero,
-                          margin: SizeConfig.only(top: 8),
+                          margin: SizeConfig.only(top: 4),
                           onTap: () => provider.onViewZiaratTap(history),
                           title: LocaleKeys.view.tr(),
                           borderRadius: BorderRadius.circular(40),
-                          height: SizeConfig.w(25),
-                          width: SizeConfig.w(60),
+                          height: 30,
+                          useTitleWidth: true,
                         ),
                       ],
                     ),

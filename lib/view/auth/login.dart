@@ -21,6 +21,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return Background(
       backgroundType: BackgroundType.logo,
       title: LocaleKeys.log_in_to_your_account.tr(),
+
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,

@@ -15,6 +15,7 @@ class SplashNotifier extends ChangeNotifier {
   set ref(WidgetRef value) => _ref = value;
 
   void initialization(BuildContext context) async {
+    await LocalStorageManager.clearStorage();
     await Future.delayed(const Duration(seconds: 2));
     screenSize = MediaQuery.sizeOf(context);
     await redirections(context);

@@ -65,7 +65,7 @@ class Helper {
           final leg = route['legs'].first;
           return leg;
         } else {
-          log('Routes not found.');
+          log('Routes not found. ${response.body}');
         }
       } else {
         log(body.toString());

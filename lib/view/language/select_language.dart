@@ -27,15 +27,13 @@ class _SelectLanguagePageState extends ConsumerState<SelectLanguagePage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           BasicCard(
+            onTap: ref.read(selectLanguageProvider.notifier).changeLanguageTap,
             margin: SizeConfig.only(top: 70, bottom: 40),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(ref.watch(selectLanguageProvider).selectedLanguage.tr(), style: CTextStyle.w600(fontSize: 16)),
-                GestureDetector(
-                  onTap: ref.read(selectLanguageProvider.notifier).changeLanguageTap,
-                  child: Text(LocaleKeys.change_the_language.tr(), style: CTextStyle.w600(color: CColors.primary, fontSize: 16)),
-                ),
+                Text(LocaleKeys.change_the_language.tr(), style: CTextStyle.w600(color: CColors.primary, fontSize: 16)),
               ],
             ),
           ),

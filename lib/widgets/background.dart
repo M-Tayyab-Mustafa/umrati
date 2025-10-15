@@ -12,6 +12,7 @@ class Background<T> extends StatelessWidget {
     this.logoAlign,
     this.onSkipTap,
     this.titleMargin,
+    this.logoMargin,
     this.titleStyle,
     this.showEmblem = true,
     this.isSkipLoading = false,
@@ -33,6 +34,7 @@ class Background<T> extends StatelessWidget {
   final EdgeInsets? margin;
   final EdgeInsets? titleMargin;
   final EdgeInsets? skipMargin;
+  final EdgeInsets? logoMargin;
   final TextStyle? titleStyle;
   final bool showEmblem;
   final bool isSkipLoading;
@@ -134,8 +136,7 @@ class Background<T> extends StatelessWidget {
                                     child: Align(
                                       alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
                                       child: CustomImage(
-                                        margin:
-                                            (logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight)) != Alignment.center ? SizeConfig.symmetric(horizontal: 16) : SizeConfig.zero,
+                                        margin: logoMargin ?? SizeConfig.zero,
                                         path: DefaultImages.logoWithName,
                                         imageType: ImageType.svg,
                                         fit: BoxFit.fitWidth,
@@ -160,7 +161,7 @@ class Background<T> extends StatelessWidget {
                               Align(
                                 alignment: titleAlignment ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
                                 child: Padding(
-                                  padding: titleMargin ?? SizeConfig.only(top: 20, left: 16, right: 16),
+                                  padding: titleMargin ?? SizeConfig.only(top: 20),
                                   child: switch (titleType) {
                                     TitleType.empty => titleWidget ?? Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 18)),
                                     TitleType.backArrow => Row(

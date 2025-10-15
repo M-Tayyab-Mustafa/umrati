@@ -38,15 +38,17 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
             height: 45,
             margin: SizeConfig.only(right: isLTR(context) ? 40 : 0, left: isLTR(context) ? 0 : 40),
             onTap: ref.read(umrahProvider.notifier).pauseAndResumeTracker,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CustomImage(path: !uProvider.isTrackerPaused ? 'assets/svg/pause.svg' : 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.h(16)),
-                Padding(
-                  padding: SizeConfig.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
-                  child: Text(!uProvider.isTrackerPaused ? LocaleKeys.pause_tracker.tr() : LocaleKeys.start_tracker.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
-                ),
-              ],
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CustomImage(path: !uProvider.isTrackerPaused ? 'assets/svg/pause.svg' : 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.h(16)),
+                  Padding(
+                    padding: SizeConfig.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
+                    child: Text(!uProvider.isTrackerPaused ? LocaleKeys.pause_tracker.tr() : LocaleKeys.start_tracker.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -56,86 +58,94 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
       child: Column(
         children: [
           Expanded(
-            child: Stack(
-              children: [
-                SingleChildScrollView(
-                  controller: provider.scrollController,
-                  child: Padding(
-                    padding: SizeConfig.symmetric(vertical: 16),
-                    child: SizedBox(
-                      height: SizeConfig.screenHeight,
-                      width: SizeConfig.screenWidth,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: SizeConfig.w(50)),
-                          Expanded(
-                            child: LayoutBuilder(
-                              builder: (context, constraints) {
-                                final centerX = constraints.maxWidth / 2;
-                                final trackWidth = constraints.maxWidth * 0.5;
-                                final trackerSize = SizeConfig.h(40);
-                                final usableHeight = constraints.maxHeight - trackerSize;
-                                final targetLineX = (provider.isOneSideSaiRunCompleted ? centerX - trackWidth / 2 : centerX + trackWidth / 2) - (trackerSize / 2);
-                                return Stack(
-                                  children: [
-                                    Center(
-                                      child: CustomPaint(
-                                        size: Size(trackWidth, constraints.maxHeight),
-                                        painter: _VerticalDashedAreaPainter(lineSpacing: trackWidth, dashWidth: 15, dashHeight: 4, lineColor: Colors.black, fillColor: Colors.transparent),
-                                      ),
-                                    ),
-                                    Align(alignment: Alignment.center, child: _AreaToRunFast(width: trackWidth)),
-                                    Column(
-                                      children: [
-                                        Padding(padding: SizeConfig.only(top: 10), child: Text(LocaleKeys.marwa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
-                                        Spacer(),
-                                        Column(
-                                          children: [
-                                            Padding(padding: SizeConfig.only(bottom: 10), child: Text(LocaleKeys.safa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
-                                            CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: SizeConfig.w(50)),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Positioned(
-                                      left: targetLineX,
-                                      top: usableHeight - (provider.oneSideRunCompletionPercent * usableHeight),
-                                      child: Container(
-                                        width: trackerSize,
-                                        height: trackerSize,
-                                        decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
-                                        child: Padding(
-                                          padding: SizeConfig.only(top: provider.isOneSideSaiRunCompleted ? 4 : 0, bottom: provider.isOneSideSaiRunCompleted ? 0 : 4),
-                                          child: Transform.rotate(
-                                            angle: provider.isOneSideSaiRunCompleted ? (pi / 2) : (3 * pi / 2),
-                                            child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.w(20)),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    controller: provider.scrollController,
+                    child: Padding(
+                      padding: SizeConfig.symmetric(vertical: 16),
+                      child: SizedBox(
+                        height: SizeConfig.screenHeight,
+                        width: SizeConfig.screenWidth,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: SizeConfig.w(50)),
+                            Expanded(
+                              child: Builder(
+                                builder: (context) {
+                                  final height = SizeConfig.h(SizeConfig.screenHeight);
+                                  final trackWidth = SizeConfig.w(250);
+                                  final trackerSize = SizeConfig.h(40);
+                                  return Stack(
+                                    children: [
+                                      Center(
+                                        child: CustomPaint(
+                                          size: Size(trackWidth, height),
+                                          painter: _VerticalDashedAreaPainter(
+                                            lineSpacing: trackWidth - SizeConfig.w(15),
+                                            dashWidth: SizeConfig.w(15),
+                                            dashHeight: SizeConfig.h(4),
+                                            lineColor: Colors.black,
+                                            fillColor: Colors.transparent,
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              },
+                                      Align(alignment: Alignment.center, child: _AreaToRunFast(width: trackWidth)),
+                                      Column(
+                                        children: [
+                                          Padding(padding: SizeConfig.only(top: 8), child: Text(LocaleKeys.marwa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
+                                          Spacer(),
+                                          Column(
+                                            children: [
+                                              Padding(padding: SizeConfig.only(bottom: 8), child: Text(LocaleKeys.safa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
+                                              CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: SizeConfig.w(50)),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      AnimatedAlign(
+                                        duration: const Duration(milliseconds: 300),
+                                        curve: Curves.easeInOut,
+                                        alignment: Alignment(provider.isOneSideSaiRunCompleted ? -0.67 : 0.67, (1 - 2 * provider.oneSideRunCompletionPercent).clamp(-1.0, 1.0)),
+                                        child: Container(
+                                          width: trackerSize,
+                                          height: trackerSize,
+                                          decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
+                                          child: Padding(
+                                            padding: SizeConfig.only(top: provider.isOneSideSaiRunCompleted ? 4 : 0, bottom: provider.isOneSideSaiRunCompleted ? 0 : 4),
+                                            child: Transform.rotate(
+                                              angle: provider.isOneSideSaiRunCompleted ? (pi / 2) : (3 * pi / 2),
+                                              child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.w(20)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                          Padding(padding: SizeConfig.only(top: 10), child: Text(LocaleKeys.starting_point.tr(), style: CTextStyle.w400(color: CColors.deepTeal))),
-                        ],
+                            Padding(padding: SizeConfig.only(top: 10), child: Text(LocaleKeys.starting_point.tr(), style: CTextStyle.w400(color: CColors.deepTeal))),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                if (provider.saiRoundCount > 0)
-                  Align(
-                    alignment: Alignment(0, 0.1),
-                    child: Container(
-                      height: SizeConfig.w(40),
-                      width: SizeConfig.w(40),
-                      decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: primaryShadows, color: Colors.white),
-                      child: Center(child: Text(provider.saiRoundCount.toString(), style: CTextStyle.w900(fontSize: 20, color: CColors.primary))),
+                  if (provider.saiRoundCount > 0)
+                    Align(
+                      alignment: Alignment(0, 0.1),
+                      child: Container(
+                        height: SizeConfig.w(40),
+                        width: SizeConfig.w(40),
+                        decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: primaryShadows, color: Colors.white),
+                        child: Center(child: Text(provider.saiRoundCount.toString(), style: CTextStyle.w900(fontSize: 20, color: CColors.primary))),
+                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
           _buildDuaWidget(context: context, provider: provider),
@@ -188,11 +198,11 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
 }
 
 class _VerticalDashedAreaPainter extends CustomPainter {
-  final double lineSpacing; // Horizontal distance between the lines
-  final double dashWidth; // Thickness of each dash
-  final double dashHeight; // Vertical length of each dash segment
-  final Color lineColor; // Color of the dashes
-  final Color fillColor; // Color of the area between the lines
+  final double lineSpacing;
+  final double dashWidth;
+  final double dashHeight;
+  final Color lineColor;
+  final Color fillColor;
 
   _VerticalDashedAreaPainter({required this.lineSpacing, required this.dashWidth, required this.dashHeight, this.lineColor = Colors.black, this.fillColor = const Color(0x220000FF)});
 
@@ -209,9 +219,9 @@ class _VerticalDashedAreaPainter extends CustomPainter {
           ..color = fillColor
           ..style = PaintingStyle.fill;
 
-    final centerX = size.width / 2;
-    final leftX = centerX - lineSpacing / 2;
-    final rightX = centerX + lineSpacing / 2;
+    final centerX = size.width * 0.5;
+    final leftX = centerX - (lineSpacing * 0.5);
+    final rightX = centerX + (lineSpacing * 0.5);
 
     // Draw the filled area between the lines
     final fillRect = Rect.fromLTRB(leftX, 0, rightX, size.height);
@@ -241,13 +251,13 @@ class _AreaToRunFast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: SizeConfig.screenHeight * 0.64,
+      height: SizeConfig.h(SizeConfig.screenHeight * 0.56),
       width: width,
       child: Stack(
         children: [
           Container(color: CColors.primary.withValues(alpha: 0.15), margin: SizeConfig.symmetric(horizontal: 10)),
-          Align(alignment: Alignment(-1.08, 0), child: VerticalDivider(color: CColors.emeraldGreen, thickness: SizeConfig.w(20))),
-          Align(alignment: Alignment.centerRight, child: VerticalDivider(color: CColors.emeraldGreen, thickness: SizeConfig.w(20))),
+          Align(alignment: Alignment.centerLeft, child: Container(color: CColors.secondary, width: SizeConfig.w(20))),
+          Align(alignment: Alignment.centerRight, child: Container(color: CColors.secondary, width: SizeConfig.w(20))),
           Center(child: Text(LocaleKeys.area_to_run_fast.tr(), style: CTextStyle.w300(color: Colors.white, fontSize: 16))),
         ],
       ),

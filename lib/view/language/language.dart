@@ -28,15 +28,15 @@ class _LanguagePageState extends ConsumerState<LanguagePage> {
       titleType: TitleType.backArrow,
       backgroundType: BackgroundType.logo,
       logoAlign: provider.isUpdatingLanguage ? Alignment.center : Alignment.centerLeft,
-      margin: SizeConfig.only(top: kToolbarHeight),
-      titleMargin: SizeConfig.symmetric(horizontal: 16, vertical: kToolbarHeight / 2),
+      margin: SizeConfig.only(top: kToolbarHeight, left: 16, right: 16),
+      titleMargin: SizeConfig.symmetric(vertical: 20),
       child: Column(
         children: [
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: provider.languages.length,
-              padding: SizeConfig.only(left: 16, right: 16),
+              padding: SizeConfig.zero,
               itemBuilder: (context, index) {
                 bool isSelected = provider.languages[index] == provider.selectedLanguage;
                 return GestureDetector(

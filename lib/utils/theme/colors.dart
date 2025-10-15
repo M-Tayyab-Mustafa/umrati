@@ -20,7 +20,6 @@ class CColors {
   static const Color deepTeal = Color(0xFF1D4C4F);
   static const Color tackingRadiusColor = Color(0xFFBDCDBB);
   static const Color softMintGreen = Color(0xFFDDFFDF);
-  static const Color emeraldGreen = Color(0xFF28B67E);
   static final Color tackingSecondaryRadiusColor = Color(0xFFBBBABC).withValues(alpha: 0.25);
 
   static final LinearGradient planCardBackgroundGradient = LinearGradient(colors: [Color(0xFFFFFFFF), Color(0xFFE5F7E6)], begin: Alignment.topLeft, end: Alignment.bottomRight);
@@ -28,14 +27,14 @@ class CColors {
 
   //* Button
   static final LinearGradient buttonGradient = LinearGradient(
-    colors: [Color(0xFF28B67E), Color(0xFF0B7C18).withValues(alpha: 0.95), Color(0xFF0B7C18)],
+    colors: [secondary, Color(0xFF0B7C18).withValues(alpha: 0.95), Color(0xFF0B7C18)],
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   );
   static final LinearGradient trackingGradient = LinearGradient(colors: [Color(0xFFDBE8D9), Color(0xFFF1FFF3)], begin: Alignment(-0.1, 1), end: Alignment(4, -1.5));
   static final LinearGradient trackingSecondaryGradient = LinearGradient(colors: [Color(0xFFFFFFFF), Color(0xFFDFE3DF)], begin: Alignment.topCenter, end: Alignment.bottomCenter);
 
-  static final LinearGradient solidButtonGradient = LinearGradient(colors: [Color(0xFF28B67E), Color(0xFF0B7C18), Color(0xFF0B7C18)], begin: Alignment.centerLeft, end: Alignment.centerRight);
+  static final LinearGradient solidButtonGradient = LinearGradient(colors: [secondary, Color(0xFF0B7C18), Color(0xFF0B7C18)], begin: Alignment.centerLeft, end: Alignment.centerRight);
   static final Color shadow = Color(0xFF09C61F).withValues(alpha: 0.3);
   static final Color buttonShadow = Colors.black.withValues(alpha: 0.6);
 }

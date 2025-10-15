@@ -36,13 +36,7 @@ class ManualSelection extends ConsumerWidget {
                     ),
           ),
           if (provider.selectedZiaraat.isNotEmpty)
-            CButton(
-              isLoading: provider.isLoading,
-              onTap: provider.createZiaraatRoute,
-              margin: SizeConfig.only(bottom: SizeConfig.screenHeight * 0.05),
-              title: LocaleKeys.start_your_ziarat.tr(),
-              width: SizeConfig.w(150),
-            ),
+            CButton(isLoading: provider.isLoading, onTap: provider.createZiaraatRoute, margin: SizeConfig.only(bottom: SizeConfig.screenHeight * 0.05), title: LocaleKeys.start_your_ziarat.tr()),
         ],
       ),
     );

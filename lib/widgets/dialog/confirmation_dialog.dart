@@ -40,8 +40,8 @@ class ConfirmationDialog extends StatelessWidget {
                           children: [
                             CButton(
                               margin: SizeConfig.only(right: isLTR(dialogContext) ? 16 : 0, left: isLTR(dialogContext) ? 0 : 16),
-                              width: 70,
                               height: 45,
+                              useTitleWidth: true,
                               padding: SizeConfig.zero,
                               backgroundColor: CColors.secondaryBackground,
                               borderColor: CColors.primary,
@@ -51,8 +51,8 @@ class ConfirmationDialog extends StatelessWidget {
                             ),
                             CButton(
                               margin: SizeConfig.only(right: isLTR(dialogContext) ? 0 : 16, left: isLTR(dialogContext) ? 16 : 0),
-                              width: 70,
                               height: 45,
+                              useTitleWidth: true,
                               padding: SizeConfig.zero,
                               title: LocaleKeys.yes.tr(),
                               onTap: () => Navigator.pop(dialogContext, true),

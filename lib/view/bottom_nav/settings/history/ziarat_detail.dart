@@ -45,7 +45,7 @@ class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
                             itemCount: provider.ziaratHistory!.completedZiarats.length,
                             itemBuilder: (context, index) {
                               var ziarat = provider.ziaratHistory!.completedZiarats[index];
-                              return CMarker(color: CColors.emeraldGreen, indicatorColor: CColors.emeraldGreen, title: isLTR(context) ? ziarat.title_en : ziarat.title_ur, distance: ziarat.distance);
+                              return CMarker(color: CColors.secondary, indicatorColor: CColors.secondary, title: isLTR(context) ? ziarat.title_en : ziarat.title_ur, distance: ziarat.distance);
                             },
                           ),
                           ListView.builder(
@@ -67,7 +67,14 @@ class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
               padding: SizeConfig.only(bottom: 32),
               child: Row(
                 children: [
-                  CButton(onTap: () => Navigator.pop(context), title: LocaleKeys.go_back.tr(), backgroundColor: CColors.secondaryBackground, borderColor: CColors.primary, titleColor: CColors.primary),
+                  CButton(
+                    onTap: () => Navigator.pop(context),
+                    title: LocaleKeys.go_back.tr(),
+                    useTitleWidth: true,
+                    backgroundColor: CColors.secondaryBackground,
+                    borderColor: CColors.primary,
+                    titleColor: CColors.primary,
+                  ),
                   Spacer(),
                   if (!provider.ziaratHistory!.isCompleted) CButton(onTap: provider.resume, title: LocaleKeys.resume_ziarat.tr()),
                 ],

@@ -72,7 +72,7 @@ class HistoryCard extends StatelessWidget {
                     decoration: BoxDecoration(color: CColors.softMintGreen, shape: BoxShape.circle),
                     padding: SizeConfig.all(10),
                     margin: SizeConfig.only(right: isLTR(context) ? 12 : 32, left: isLTR(context) ? 32 : 12),
-                    child: Text('${index + 1}', style: CTextStyle.w600(color: CColors.emeraldGreen, fontSize: 16)),
+                    child: Text('${index + 1}', style: CTextStyle.w600(color: CColors.secondary, fontSize: 16)),
                   ),
                   Text.rich(
                     TextSpan(
@@ -108,7 +108,7 @@ class HistoryCard extends StatelessWidget {
               );
             },
           ),
-          Divider(color: CColors.emeraldGreen),
+          Divider(color: CColors.secondary),
         ],
       ),
     );

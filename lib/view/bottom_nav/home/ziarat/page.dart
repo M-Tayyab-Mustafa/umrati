@@ -65,7 +65,7 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
             ],
           ),
           if (provider.selectedCity != null)
-            CButton(onTap: provider.goToDestinationGenerationPage, margin: SizeConfig.only(top: SizeConfig.screenHeight * 0.05), title: LocaleKeys.proceed_forward.tr(), width: 200),
+            CButton(onTap: provider.goToDestinationGenerationPage, margin: SizeConfig.only(top: SizeConfig.screenHeight * 0.05), title: LocaleKeys.proceed_forward.tr()),
         ],
       ),
     );

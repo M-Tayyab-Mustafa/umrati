@@ -54,7 +54,7 @@ class ChooseDestinations extends ConsumerWidget {
               ),
             ),
             if (ref.watch(ziaraatProvider).selectedDestinationsCreationOption != null)
-              CButton(margin: SizeConfig.only(top: SizeConfig.screenHeight * 0.05), isLoading: provider.isLoading, onTap: provider.generateZiaraat, title: LocaleKeys.proceed_forward.tr(), width: 200),
+              CButton(margin: SizeConfig.only(top: SizeConfig.screenHeight * 0.05), isLoading: provider.isLoading, onTap: provider.generateZiaraat, title: LocaleKeys.proceed_forward.tr()),
           ],
         ),
       ),
