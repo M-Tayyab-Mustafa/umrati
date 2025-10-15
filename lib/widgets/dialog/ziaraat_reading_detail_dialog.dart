@@ -79,16 +79,18 @@ class _ZiaraatReadingDetailDialogState extends State<ZiaraatReadingDetailDialog>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.text_decrease, size: SizeConfig.w(20)),
-                  SliderTheme(
-                    data: SliderTheme.of(context).copyWith(trackHeight: SizeConfig.w(1), thumbShape: RoundSliderThumbShape(enabledThumbRadius: SizeConfig.r(6))),
-                    child: Slider(
-                      value: fontSize,
-                      min: SizeConfig.sp(10),
-                      max: SizeConfig.sp(20),
-                      onChanged: increaseSize,
-                      thumbColor: CColors.primary,
-                      activeColor: CColors.charcoalBlack,
-                      inactiveColor: CColors.charcoalBlack,
+                  Expanded(
+                    child: SliderTheme(
+                      data: SliderTheme.of(context).copyWith(trackHeight: SizeConfig.w(1), thumbShape: RoundSliderThumbShape(enabledThumbRadius: SizeConfig.r(6))),
+                      child: Slider(
+                        value: fontSize,
+                        min: SizeConfig.sp(10),
+                        max: SizeConfig.sp(20),
+                        onChanged: increaseSize,
+                        thumbColor: CColors.primary,
+                        activeColor: CColors.charcoalBlack,
+                        inactiveColor: CColors.charcoalBlack,
+                      ),
                     ),
                   ),
                   Icon(Icons.text_increase, size: SizeConfig.w(24)),
