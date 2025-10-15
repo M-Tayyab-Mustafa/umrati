@@ -203,7 +203,14 @@ class TawafTrackerPage extends ConsumerWidget {
                 BasicCard(
                   margin: SizeConfig.symmetric(vertical: 14),
                   backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
-                  child: Center(child: Text(dua, style: CTextStyle.w500(fontSize: 18, color: CColors.deepTeal), textAlign: TextAlign.center, textDirection: TextDirection.rtl)),
+                  child: Center(
+                    child: Text(
+                      dua,
+                      style: CTextStyle.w500(fontSize: 18, color: CColors.deepTeal, fontFamily: Helper.arabicTextFontFamily),
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.rtl,
+                    ),
+                  ),
                 ),
               ],
             );

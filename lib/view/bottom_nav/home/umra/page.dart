@@ -36,7 +36,7 @@ class _StartTawafPageState extends ConsumerState<UmraPage> {
       return MeeqaatPage();
     } else if (!provider.hasDoneAfterMeeqaatTasks) {
       return MeeqaatThreeTasksPage();
-    } else if (provider.isUmraCompleted) {
+    } else if (provider.isUmrahCompleted) {
       return UmraCompleted();
     } else if (provider.isSafaMarwaComplete) {
       return SaiCompletionPage();

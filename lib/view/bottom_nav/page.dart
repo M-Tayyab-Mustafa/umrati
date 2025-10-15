@@ -31,7 +31,7 @@ class _BottomNavigationPageState extends ConsumerState<BottomNavigationPage> {
                 child: Padding(
                   padding: SizeConfig.symmetric(horizontal: 16),
                   child: Container(
-                    height: SizeConfig.h(50),
+                    height: SizeConfig.h(55),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),

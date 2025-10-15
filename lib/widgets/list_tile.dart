@@ -1,7 +1,7 @@
 import '../export.dart';
 
 class CListTile extends ConsumerWidget {
-  const CListTile({super.key, this.child, this.icon, this.iconSize, this.iconType, this.title, this.margin, this.padding, this.onTap, this.borderRadius, this.trailing})
+  const CListTile({super.key, this.child, this.icon, this.iconSize, this.iconType, this.title, this.margin, this.padding, this.onTap, this.borderRadius, this.trailing, this.height, this.width})
     : assert((title != null) ^ (child != null), 'Must contain either title or child, but not both.');
   final Widget? child;
   final Widget? trailing;
@@ -13,6 +13,8 @@ class CListTile extends ConsumerWidget {
   final EdgeInsets? padding;
   final VoidCallback? onTap;
   final double? borderRadius;
+  final double? height;
+  final double? width;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,6 +23,8 @@ class CListTile extends ConsumerWidget {
       onTap: onTap,
       margin: margin ?? SizeConfig.only(bottom: 22, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
       padding: padding,
+      height: height,
+      width: width,
       borderRadius: borderRadius ?? 8,
       backgroundColor: CColors.tileBackground,
       boxShadow: [BoxShadow(color: CColors.greyShade4, blurRadius: 5, offset: Offset(0, 2))],

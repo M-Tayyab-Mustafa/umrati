@@ -4,7 +4,7 @@ import '../../../../export.dart';
 final umrahProvider = ChangeNotifierProvider.autoDispose<UmrahNotifier>((ref) {
   final notifier = UmrahNotifier();
   ref.onDispose(() {
-    if (notifier.userActivityType == UserActivityType.tawaf) notifier.updateUmraModel(notifier.umrahModel!.copyWith(is_doing: false));
+    if (notifier.userActivityType == UserActivityType.tawaf) notifier.updateUmrahModel(notifier.umrahModel!.copyWith(is_doing: false));
   });
   return notifier;
 });
@@ -45,8 +45,8 @@ class UmrahNotifier extends ChangeNotifier {
   bool showSafaMarwa = false;
   bool isSafaMarwaComplete = false;
 
-  //* umra Complete
-  bool isUmraCompleted = false;
+  //* umrah Complete
+  bool isUmrahCompleted = false;
   bool isShavedHead = false;
   Position? startingPosition;
 
@@ -88,7 +88,7 @@ class UmrahNotifier extends ChangeNotifier {
           }
           if (context.mounted) notifyListeners();
         } else {
-          await updateUmraModel(umrahModel!.copyWith(is_doing: false));
+          await updateUmrahModel(umrahModel!.copyWith(is_doing: false));
           umrahModel = null;
           _resetTawafData();
         }
@@ -107,9 +107,9 @@ class UmrahNotifier extends ChangeNotifier {
     hasDoneAfterMeeqaatTasks = true;
     notifyListeners();
     if (umrahModel != null) {
-      await updateUmraModel(umrahModel!.copyWith(has_done_before_meeqaat_tasks: true, has_reached_meeqaat: true, has_done_after_meeqaat_tasks: true));
+      await updateUmrahModel(umrahModel!.copyWith(has_done_before_meeqaat_tasks: true, has_reached_meeqaat: true, has_done_after_meeqaat_tasks: true));
     } else {
-      await setUmraModel(
+      await setUmrahModel(
         HistoryModel(
           uid: '',
           user_id: user!.uid,
@@ -245,7 +245,7 @@ class UmrahNotifier extends ChangeNotifier {
       hasDoneHalfCircle = false;
       tawafCircleCount++;
       if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
-      updateUmraModel(umrahModel!.copyWith(tawaf_circle_count: tawafCircleCount));
+      updateUmrahModel(umrahModel!.copyWith(tawaf_circle_count: tawafCircleCount));
       tawafCircleCompletionPercent = 0;
     }
     notifyListeners();
@@ -258,7 +258,7 @@ class UmrahNotifier extends ChangeNotifier {
     tawafCircleCompletionPercent = 0;
     notifyListeners();
     if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
-    await updateUmraModel(umrahModel!.copyWith(tawaf_circle_count: tawafCircleCount));
+    await updateUmrahModel(umrahModel!.copyWith(tawaf_circle_count: tawafCircleCount));
   }
 
   // Method to start the next Tawaf round
@@ -279,7 +279,7 @@ class UmrahNotifier extends ChangeNotifier {
       errorToast(LocaleKeys.please_offer_two_rakat_of_salah_and_drink_zamzam.tr());
       return;
     }
-    updateUmraModel(umrahModel!.copyWith(can_start_sai: true));
+    updateUmrahModel(umrahModel!.copyWith(can_start_sai: true));
 
     showSafaMarwa = true;
     isSafaMarwaComplete = false;
@@ -309,23 +309,23 @@ class UmrahNotifier extends ChangeNotifier {
   }
 
   // Method to mark Umrah as completed
-  void umraCompleted() async {
+  void umrahCompleted() async {
     isLoading = true;
     notifyListeners();
     umrahModel = umrahModel!.copyWith(is_doing: false);
     user = user!.copyWith(total_umra_done: user!.total_umra_done + 1);
     await LocalStorageManager.saveUser(user!);
-    await updateUmraModel(umrahModel!);
+    await updateUmrahModel(umrahModel!);
     umrahModel = null;
     isLoading = false;
-    isUmraCompleted = true;
+    isUmrahCompleted = true;
     notifyListeners();
   }
 
   // Method to return to home state
   void goToHome() {
     showSafaMarwa = false;
-    isUmraCompleted = false;
+    isUmrahCompleted = false;
     isSafaMarwaComplete = false;
     _resetTawafData();
     Navigator.pop(context);
@@ -347,7 +347,7 @@ class UmrahNotifier extends ChangeNotifier {
   }
 
   Future<void> updateHasDoneBeforeMeeqaatTasks() async {
-    await setUmraModel(
+    await setUmrahModel(
       HistoryModel(
         uid: '',
         user_id: user!.uid,
@@ -369,7 +369,7 @@ class UmrahNotifier extends ChangeNotifier {
   Future<bool> continueYourRemainingTasks() async {
     try {
       umrahModel = umrahModel!.copyWith(has_reached_meeqaat: true);
-      await updateUmraModel(umrahModel!);
+      await updateUmrahModel(umrahModel!);
       hasReachedMeeqaat = true;
       notifyListeners();
       return true;
@@ -383,7 +383,7 @@ class UmrahNotifier extends ChangeNotifier {
   Future<void> updateHasDoneAfterMeeqaatTasks() async {
     try {
       umrahModel = umrahModel!.copyWith(has_done_after_meeqaat_tasks: true);
-      await updateUmraModel(umrahModel!);
+      await updateUmrahModel(umrahModel!);
       hasDoneAfterMeeqaatTasks = true;
       notifyListeners();
       await _startTawaf();
@@ -393,15 +393,15 @@ class UmrahNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> updateUmraModel(HistoryModel umra) async {
-    var doc = historyCollection.doc(umra.uid);
-    await doc.update(umra.toMap(updated_at: FieldValue.serverTimestamp()));
+  Future<void> updateUmrahModel(HistoryModel umrah) async {
+    var doc = historyCollection.doc(umrah.uid);
+    await doc.update(umrah.toMap(updated_at: FieldValue.serverTimestamp()));
     umrahModel = HistoryModel.fromMap((await doc.get()).data()!);
   }
 
-  Future<void> setUmraModel(HistoryModel umra) async {
+  Future<void> setUmrahModel(HistoryModel umrah) async {
     var doc = historyCollection.doc();
-    await doc.set(umra.copyWith(uid: doc.id).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp()));
+    await doc.set(umrah.copyWith(uid: doc.id).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp()));
     umrahModel = HistoryModel.fromMap((await doc.get()).data()!);
   }
 

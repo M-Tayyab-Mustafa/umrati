@@ -15,7 +15,6 @@ class ConfirmationDialog extends StatelessWidget {
           Center(
             child: Container(
               height: SizeConfig.h(230),
-              padding: SizeConfig.only(top: SizeConfig.h(30)),
               margin: SizeConfig.symmetric(horizontal: 32),
               decoration: BoxDecoration(
                 color: CColors.secondaryBackground,
@@ -25,6 +24,7 @@ class ConfirmationDialog extends StatelessWidget {
               ),
               child: Column(
                 children: [
+                  CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: SizeConfig.h(80), padding: SizeConfig.only(top: 10)),
                   Expanded(
                     child: Padding(
                       padding: SizeConfig.symmetric(horizontal: 24),
@@ -64,7 +64,6 @@ class ConfirmationDialog extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(left: 0, right: 0, top: 0, bottom: SizeConfig.h(230), child: IgnorePointer(child: CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: SizeConfig.w(70)))),
         ],
       ),
     );

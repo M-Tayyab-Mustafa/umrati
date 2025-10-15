@@ -103,7 +103,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
     }
     notifyListeners();
     umrahModel = umrahModel.copyWith(sai_round_count: saiRoundCount, is_one_side_sai_run_completed: isOneSideSaiRunCompleted);
-    ref.read(umrahProvider.notifier).updateUmraModel(umrahModel);
+    ref.read(umrahProvider.notifier).updateUmrahModel(umrahModel);
     if (saiRoundCount == 7) {
       cancelPositionStreamSubscription();
       saiRoundCount = 0;

@@ -11,7 +11,7 @@ class SaiCompletionPage extends ConsumerWidget {
       backgroundType: BackgroundType.logo,
       title: '',
       titleType: TitleType.backArrow,
-      margin: SizeConfig.only(top: kToolbarHeight * 0.5),
+      margin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
       showEmblem: false,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -44,7 +44,6 @@ class SaiCompletionPage extends ConsumerWidget {
             ),
           ),
           CheckBoxCard(
-            margin: SizeConfig.symmetric(horizontal: 16),
             title: provider.user?.gender == Gender.female.name ? LocaleKeys.perform_taqsir.tr() : LocaleKeys.shave_the_head.tr(),
             isSelected: provider.isShavedHead,
             onTap: provider.toggleShaveTheHead,
@@ -53,7 +52,7 @@ class SaiCompletionPage extends ConsumerWidget {
               style: CTextStyle.w400(color: CColors.primary, fontSize: 14),
             ),
           ),
-          CButton(margin: SizeConfig.symmetric(horizontal: 16), isLoading: provider.isLoading, title: LocaleKeys.continued.tr(), titleWithIcon: true, onTap: ref.read(umrahProvider).umraCompleted),
+          CButton(isLoading: provider.isLoading, title: LocaleKeys.continued.tr(), titleWithIcon: true, onTap: ref.read(umrahProvider).umrahCompleted),
         ],
       ),
     );

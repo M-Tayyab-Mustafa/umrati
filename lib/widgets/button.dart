@@ -51,7 +51,9 @@ class CButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double buttonSize =
-        title != null ? Helper.getTextSize(title!, CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13)).width + 50 + (titleWithIcon ? SizeConfig.w(iconSize ?? 25) : 0) : 0;
+        title != null
+            ? Helper.getTextSize(title!, CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13)).width + SizeConfig.w(50) + (titleWithIcon ? SizeConfig.w(iconSize ?? 25) : 0)
+            : 0;
     return Padding(
       padding: margin ?? EdgeInsets.zero,
       child: GestureDetector(
@@ -83,7 +85,7 @@ class CButton extends StatelessWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(title!, style: CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: SizeConfig.sp(fontSize ?? 13)), maxLines: 1),
+                              Text(title!, style: CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13), maxLines: 1),
                               Transform.rotate(
                                 angle: isLTR(context) ? 0 : pi / 180 * 180,
                                 child: CustomImage(margin: SizeConfig.only(left: 12), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: SizeConfig.w(iconSize ?? 24)),
@@ -93,12 +95,7 @@ class CButton extends StatelessWidget {
                         )
                         : Align(
                           alignment: Alignment.center,
-                          child: Text(
-                            title!,
-                            style: style ?? CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: SizeConfig.sp(fontSize ?? 13)),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          child: Text(title!, style: style ?? CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13), maxLines: 1, overflow: TextOverflow.ellipsis),
                         )
                     : child!,
           ),

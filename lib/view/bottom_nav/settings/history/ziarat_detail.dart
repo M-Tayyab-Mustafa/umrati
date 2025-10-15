@@ -30,7 +30,7 @@ class _ZiaratDetailPageState extends ConsumerState<ZiaratDetailPage> {
         children: [
           Padding(padding: SizeConfig.only(top: 16), child: Text('${LocaleKeys.your_current_location.tr()}:', style: CTextStyle.w500(fontSize: 22))),
           Text(provider.myCurrentLocation, style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal)),
-          Padding(padding: SizeConfig.only(top: 16), child: Text(LocaleKeys.your_ziarat_destinations.tr(), style: CTextStyle.w500(fontSize: 20))),
+          Padding(padding: SizeConfig.only(top: 16), child: Text(LocaleKeys.your_ziaraat_destinations.tr(), style: CTextStyle.w500(fontSize: 20))),
           Expanded(
             child:
                 provider.isLoading

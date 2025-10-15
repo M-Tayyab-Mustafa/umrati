@@ -46,7 +46,7 @@ class MapPageNotifier extends ChangeNotifier {
             .get()
             .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
         if (query.docs.isEmpty) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ZiaratPage()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ZiaraatPage()));
           return;
         }
         history = ZiaraatHistoryModel.fromMap(query.docs.first.data());

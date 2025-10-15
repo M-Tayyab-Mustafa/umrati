@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const select_your_language = 'select_your_language';
   static const change_the_language = 'change_the_language';
   static const register_your_account = 'register_your_account';
@@ -166,7 +166,7 @@ abstract class  LocaleKeys {
   static const going_to_marwa = 'going_to_marwa';
   static const safa = 'safa';
   static const marwa = 'marwa';
-  static const select_ziarat_cities = 'select_ziarat_cities';
+  static const select_ziaraat_cities = 'select_ziaraat_cities';
   static const Mecca = 'Mecca';
   static const medina = 'medina';
   static const taif = 'taif';
@@ -175,8 +175,8 @@ abstract class  LocaleKeys {
   static const auto_generate = 'auto_generate';
   static const manual_selection = 'manual_selection';
   static const proceed_forward = 'proceed_forward';
-  static const your_ziarat_destinations = 'your_ziarat_destinations';
-  static const start_your_ziarat = 'start_your_ziarat';
+  static const your_ziaraat_destinations = 'your_ziaraat_destinations';
+  static const start_your_ziaraat = 'start_your_ziaraat';
   static const top_ziarat_destination_of = 'top_ziarat_destination_of';
   static const go_back = 'go_back';
   static const confirmation_dialog = 'confirmation_dialog';
@@ -199,7 +199,6 @@ abstract class  LocaleKeys {
   static const shave_the_head_description = 'shave_the_head_description';
   static const take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram = 'take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram';
   static const do_these_5_ihram_related_tasks = 'do_these_5_ihram_related_tasks';
-  static const ziarat_not_found = 'ziarat_not_found';
+  static const ziaraat_not_found = 'ziaraat_not_found';
   static const you_are_not_near_the_green_light = 'you_are_not_near_the_green_light';
-
 }

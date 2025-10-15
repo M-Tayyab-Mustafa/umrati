@@ -18,6 +18,6 @@ class HomeNotifier extends ChangeNotifier {
   void onTawafTap() async => Navigator.push(context, MaterialPageRoute(builder: (context) => const UmraPage(userActivityType: UserActivityType.tawaf)));
 
   void onZiaratTap() async {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const ZiaratPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const ZiaraatPage()));
   }
 }

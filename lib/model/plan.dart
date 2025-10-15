@@ -4,7 +4,8 @@ class PlanModel {
   final String id;
   final num amount;
   final num discount_amount;
-  final String name;
+  final String name_en;
+  final String name_ur;
   final int members;
   final String member_count_label;
   final int duration;
@@ -16,7 +17,8 @@ class PlanModel {
     required this.id,
     required this.amount,
     required this.discount_amount,
-    required this.name,
+    required this.name_en,
+    required this.name_ur,
     required this.members,
     required this.member_count_label,
     required this.duration,
@@ -25,12 +27,25 @@ class PlanModel {
     required this.has_discount,
   });
 
-  PlanModel copyWith({String? id, num? amount, num? discount_amount, String? name, int? members, String? member_count_label, int? duration, List<String>? regions, String? type, bool? has_discount}) {
+  PlanModel copyWith({
+    String? id,
+    num? amount,
+    num? discount_amount,
+    String? name_en,
+    String? name_ur,
+    int? members,
+    String? member_count_label,
+    int? duration,
+    List<String>? regions,
+    String? type,
+    bool? has_discount,
+  }) {
     return PlanModel(
       id: id ?? this.id,
       amount: amount ?? this.amount,
       discount_amount: discount_amount ?? this.discount_amount,
-      name: name ?? this.name,
+      name_en: name_en ?? this.name_en,
+      name_ur: name_ur ?? this.name_ur,
       members: members ?? this.members,
       member_count_label: member_count_label ?? this.member_count_label,
       duration: duration ?? this.duration,
@@ -45,7 +60,8 @@ class PlanModel {
       'id': id,
       'amount': amount,
       'discount_amount': discount_amount,
-      'name': name,
+      'name_en': name_en,
+      'name_ur': name_ur,
       'members': members,
       'member_count_label': member_count_label,
       'duration': duration,
@@ -60,7 +76,8 @@ class PlanModel {
       id: map['id'],
       amount: map['amount'],
       discount_amount: map['discount_amount'],
-      name: map['name'].toString(),
+      name_en: map['name_en'].toString(),
+      name_ur: map['name_ur'].toString(),
       members: int.tryParse(map['members'].toString()) ?? 1,
       member_count_label: map['member_count_label']?.toString() ?? '',
       duration: int.tryParse(map['duration'].toString()) ?? 0,
@@ -76,7 +93,7 @@ class PlanModel {
 
   @override
   String toString() {
-    return 'PlanModel(id: $id, amount: $amount, discount_amount: $discount_amount, name: $name, members: $members, member_count_label: $member_count_label, duration: $duration, regions: $regions, type: $type, has_discount: $has_discount)';
+    return 'PlanModel(id: $id, amount: $amount, discount_amount: $discount_amount, name_en: $name_en, name_ur: $name_ur, members: $members, member_count_label: $member_count_label, duration: $duration, regions: $regions, type: $type, has_discount: $has_discount)';
   }
 
   @override
@@ -86,11 +103,12 @@ class PlanModel {
     return other.id == id &&
         other.amount == amount &&
         other.discount_amount == discount_amount &&
-        other.name == name &&
+        other.name_en == name_en &&
+        other.name_ur == name_ur &&
         other.members == members &&
         other.member_count_label == member_count_label &&
         other.duration == duration &&
-        other.regions == regions &&
+        listEquals(other.regions, regions) &&
         other.type == type &&
         other.has_discount == has_discount;
   }
@@ -100,7 +118,8 @@ class PlanModel {
     return id.hashCode ^
         amount.hashCode ^
         discount_amount.hashCode ^
-        name.hashCode ^
+        name_en.hashCode ^
+        name_ur.hashCode ^
         members.hashCode ^
         member_count_label.hashCode ^
         duration.hashCode ^

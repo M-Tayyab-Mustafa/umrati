@@ -16,7 +16,7 @@ class ManualSelection extends ConsumerWidget {
           Expanded(
             child:
                 provider.ziarats.isEmpty
-                    ? Center(child: Text(LocaleKeys.ziarat_not_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
+                    ? Center(child: Text(LocaleKeys.ziaraat_not_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
                     : ListView.builder(
                       padding: SizeConfig.zero,
                       itemCount: provider.ziarats.length,
@@ -36,7 +36,7 @@ class ManualSelection extends ConsumerWidget {
                     ),
           ),
           if (provider.selectedZiaraat.isNotEmpty)
-            CButton(isLoading: provider.isLoading, onTap: provider.createZiaraatRoute, margin: SizeConfig.only(bottom: SizeConfig.screenHeight * 0.05), title: LocaleKeys.start_your_ziarat.tr()),
+            CButton(isLoading: provider.isLoading, onTap: provider.createZiaraatRoute, margin: SizeConfig.only(bottom: SizeConfig.screenHeight * 0.05), title: LocaleKeys.start_your_ziaraat.tr()),
         ],
       ),
     );

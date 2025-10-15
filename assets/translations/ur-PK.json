@@ -162,7 +162,7 @@
   "going_to_marwa": "مروہ دعا کی طرف جانا",
   "safa": "صفا",
   "marwa": "مروہ",
-  "select_ziarat_cities": "زیارت کے شہر منتخب کریں",
+  "select_ziaraat_cities": "زیارت کے شہر منتخب کریں",
   "Mecca": "مکہ",
   "medina": "مدینہ",
   "taif": "طائف",
@@ -171,8 +171,8 @@
   "auto_generate": "خودکار بنائیں",
   "manual_selection": "دستی انتخاب",
   "proceed_forward": "آگے بڑھیں",
-  "your_ziarat_destinations": "آپ کی زیارت کی منزلیں",
-  "start_your_ziarat": "اپنی زیارت شروع کریں",
+  "your_ziaraat_destinations": "آپ کی زیارت کی منزلیں",
+  "start_your_ziaraat": "اپنی زیارت شروع کریں",
   "top_ziarat_destination_of": "زیارت کی اہم منزل",
   "go_back": "واپس جائیں",
   "confirmation_dialog": "کیا آپ واقعی یہ مرحلہ چھوڑنا چاہتے ہیں؟",
@@ -195,6 +195,6 @@
   "shave_the_head_description": "مردوں کے لیے پورا سر منڈوانا افضل ہے، لیکن اگر وہ انگلی کے پور تک بال تراشیں تو یہ بھی جائز ہے۔",
   "take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_ihram": "غسل کریں یا وضو کریں اور پھر احرام پہنیں",
   "do_these_5_ihram_related_tasks": "یہ 5 احرام سے متعلق کام کریں",
-  "ziarat_not_found": "اس شہر کی زیارت کے بارے میں فی الحال کوئی معلومات دستیاب نہیں ہیں۔.",
+  "ziaraat_not_found": "اس شہر کی زیارت کے بارے میں فی الحال کوئی معلومات دستیاب نہیں ہیں۔.",
   "you_are_not_near_the_green_light": "آپ کو گرین لائٹ کا پھولا نہیں ہے"
 }

@@ -13,7 +13,7 @@ class AlreadyDialog extends StatelessWidget {
           Center(child: Container(decoration: BoxDecoration(color: Colors.black26))),
           Center(
             child: Container(
-              height: SizeConfig.screenHeight * 0.3,
+              height: SizeConfig.screenHeight * 0.35,
               padding: SizeConfig.symmetric(vertical: SizeConfig.screenHeight * 0.0),
               margin: SizeConfig.symmetric(horizontal: SizeConfig.screenWidth * 0.08),
               decoration: BoxDecoration(
@@ -24,6 +24,7 @@ class AlreadyDialog extends StatelessWidget {
               ),
               child: Column(
                 children: [
+                  CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: SizeConfig.h(80), padding: SizeConfig.only(top: 10)),
                   Expanded(
                     child: Padding(
                       padding: SizeConfig.symmetric(horizontal: SizeConfig.screenWidth * 0.1),
@@ -66,11 +67,6 @@ class AlreadyDialog extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-          Positioned(
-            top: (SizeConfig.screenHeight * 0.275) + 30,
-            left: (SizeConfig.screenWidth * 0.5) - 40,
-            child: CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: SizeConfig.h(80)),
           ),
         ],
       ),

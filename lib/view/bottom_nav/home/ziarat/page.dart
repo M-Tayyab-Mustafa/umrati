@@ -1,15 +1,15 @@
 import '../../../../export.dart';
-part 'auto_generated_ziarat_plan.dart';
+part 'auto_generated_ziaraat_plan.dart';
 part 'destinations.dart';
 part 'manual_selection.dart';
 
-class ZiaratPage extends ConsumerStatefulWidget {
-  const ZiaratPage({super.key});
+class ZiaraatPage extends ConsumerStatefulWidget {
+  const ZiaraatPage({super.key});
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CitiesPageState();
 }
 
-class _CitiesPageState extends ConsumerState<ZiaratPage> {
+class _CitiesPageState extends ConsumerState<ZiaraatPage> {
   @override
   void initState() {
     super.initState();
@@ -25,7 +25,7 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
       showEmblem: false,
       backgroundType: BackgroundType.logo,
       logoAlign: Alignment.center,
-      title: LocaleKeys.select_ziarat_cities.tr(),
+      title: LocaleKeys.select_ziaraat_cities.tr(),
       titleType: TitleType.backArrow,
       titleMargin: SizeConfig.symmetric(vertical: kToolbarHeight * 0.5),
       margin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
@@ -38,26 +38,26 @@ class _CitiesPageState extends ConsumerState<ZiaratPage> {
             mainAxisSpacing: SizeConfig.w(30),
             crossAxisSpacing: SizeConfig.w(30),
             children: [
-              ZiaratCityCard(
-                icon: 'assets/svg/ziarat/mecca.svg',
+              ZiaraatCityCard(
+                icon: 'assets/svg/ziaraat/mecca.svg',
                 title: LocaleKeys.Mecca.tr(),
                 isSelected: provider.selectedCity == ZiaraatCities.mecca,
                 onTap: () => provider.updateSelectedCity(ZiaraatCities.mecca),
               ),
-              ZiaratCityCard(
-                icon: 'assets/svg/ziarat/medina.svg',
+              ZiaraatCityCard(
+                icon: 'assets/svg/ziaraat/medina.svg',
                 title: LocaleKeys.medina.tr(),
                 isSelected: provider.selectedCity == ZiaraatCities.medina,
                 onTap: () => provider.updateSelectedCity(ZiaraatCities.medina),
               ),
-              ZiaratCityCard(
-                icon: 'assets/svg/ziarat/taif.svg',
+              ZiaraatCityCard(
+                icon: 'assets/svg/ziaraat/taif.svg',
                 title: LocaleKeys.taif.tr(),
                 isSelected: provider.selectedCity == ZiaraatCities.taif,
                 onTap: () => provider.updateSelectedCity(ZiaraatCities.taif),
               ),
-              ZiaratCityCard(
-                icon: 'assets/svg/ziarat/other.svg',
+              ZiaraatCityCard(
+                icon: 'assets/svg/ziaraat/other.svg',
                 title: LocaleKeys.others.tr(),
                 isSelected: provider.selectedCity == ZiaraatCities.other,
                 onTap: () => provider.updateSelectedCity(ZiaraatCities.other),

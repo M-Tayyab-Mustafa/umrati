@@ -1,7 +1,7 @@
 import '../export.dart';
 
-class ZiaratCityCard extends StatelessWidget {
-  const ZiaratCityCard({super.key, required this.icon, required this.title, this.isSelected = false, required this.onTap});
+class ZiaraatCityCard extends StatelessWidget {
+  const ZiaraatCityCard({super.key, required this.icon, required this.title, this.isSelected = false, required this.onTap});
   final String icon;
   final String title;
   final bool isSelected;
@@ -17,7 +17,6 @@ class ZiaratCityCard extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            flex: 5,
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return CustomImage(
@@ -31,7 +30,7 @@ class ZiaratCityCard extends StatelessWidget {
               },
             ),
           ),
-          Expanded(child: Text(title, style: CTextStyle.w500(fontSize: 20, color: isSelected ? CColors.primary : CColors.greyShade2))),
+          Text(title, style: CTextStyle.w500(fontSize: 20, color: isSelected ? CColors.primary : CColors.greyShade2)),
         ],
       ),
     );

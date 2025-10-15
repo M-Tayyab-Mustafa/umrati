@@ -22,7 +22,7 @@ class PlanWidget extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(plan.name, style: CTextStyle.w500(color: CColors.darkIndigo, fontSize: 20)),
+                  Text(isLTR(context) ? plan.name_en : plan.name_ur, style: CTextStyle.w500(color: CColors.darkIndigo, fontSize: 20)),
                   Padding(
                     padding: SizeConfig.only(top: 32),
                     child: switch (plan.has_discount) {
@@ -71,7 +71,7 @@ class PlanWidget extends ConsumerWidget {
         padding: SizeConfig.all(16),
         child: Row(
           children: [
-            Text(plan.name, style: CTextStyle.w400(color: CColors.darkIndigo, fontSize: 18)),
+            Text(isLTR(context) ? plan.name_en : plan.name_ur, style: CTextStyle.w400(color: CColors.darkIndigo, fontSize: 18)),
             Expanded(
               child: Padding(
                 padding: SizeConfig.only(left: 16),

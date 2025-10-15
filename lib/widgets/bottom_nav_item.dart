@@ -17,7 +17,7 @@ class BottomNavItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomImage(path: icon, imageType: ImageType.svg, height: SizeConfig.h(25), width: SizeConfig.w(15), fit: BoxFit.scaleDown, color: isSelected ? CColors.primary : CColors.deepTeal),
-            Text(title, style: CTextStyle.w400(color: isSelected ? CColors.primary : CColors.deepTeal, fontSize: 10)),
+            Text(title, style: CTextStyle.w400(color: isSelected ? CColors.primary : CColors.deepTeal, fontSize: 12)),
           ],
         ),
       ),

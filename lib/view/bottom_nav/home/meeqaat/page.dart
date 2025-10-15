@@ -30,7 +30,7 @@ class _MeeqaatPageState extends ConsumerState<MeeqaatPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(LocaleKeys.dhul_huayfah.tr(), style: CTextStyle.w400(color: CColors.primary, fontSize: 18)),
-          Padding(padding: SizeConfig.only(top: 10, bottom: 20), child: TimeLine(items: [(provider.distance ?? '0 Km'), (provider.time ?? '0 min')])),
+          Padding(padding: SizeConfig.only(top: 10, bottom: 20), child: TimeLine(items: [(provider.distance ?? '0 km'), (provider.time ?? '0 min')])),
           Text('${LocaleKeys.your_current_location.tr()}:', style: CTextStyle.w500(fontSize: 18)),
           Padding(padding: SizeConfig.only(top: 10, bottom: 30), child: Text(provider.location, style: CTextStyle.w400(fontSize: 15))),
           Center(

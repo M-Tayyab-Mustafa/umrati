@@ -62,6 +62,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         children: [
                           Expanded(
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -70,8 +71,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                               ],
                             ),
                           ),
+                          SizedBox(width: SizeConfig.w(8)),
                           Expanded(
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -80,8 +83,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                               ],
                             ),
                           ),
+                          SizedBox(width: SizeConfig.w(8)),
                           Expanded(
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
