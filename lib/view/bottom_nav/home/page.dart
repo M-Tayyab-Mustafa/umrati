@@ -19,8 +19,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     return Background(
       showEmblem: false,
-      backgroundType: BackgroundType.empty,
-      margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: 50),
+      backgroundType: BackgroundType.logo,
+      logoAlign: Alignment.center,
+      margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: 50, left: 16, right: 16),
       child: Column(
         children: [
           _Card(onTap: ref.read(homeProvider).onUmrahTap, title: LocaleKeys.umrah.tr(), description: LocaleKeys.start_your_umrah_from_here.tr(), image: 'assets/png/home/umrah.png'),
@@ -43,23 +44,15 @@ class _Card extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return BasicCard(
       onTap: onTap,
-      margin: SizeConfig.symmetric(horizontal: 16, vertical: 18),
+      margin: SizeConfig.symmetric(vertical: 18),
       padding: SizeConfig.only(top: 16, bottom: 16, right: 16),
-      height: SizeConfig.h(170),
+      height: SizeConfig.h(140),
       borderColor: CColors.grey,
       boxShadow: greyShadows,
       child: Row(
         children: [
+          CustomImage(height: SizeConfig.h(120), width: SizeConfig.w(100), path: image, fit: BoxFit.fill, imageType: ImageType.png),
           Expanded(
-            flex: 3,
-            child: LayoutBuilder(
-              builder:
-                  (context, constraints) =>
-                      CustomImage(width: SizeConfig.w(constraints.maxWidth), height: SizeConfig.h(constraints.maxHeight * 0.65), path: image, fit: BoxFit.fill, imageType: ImageType.png),
-            ),
-          ),
-          Expanded(
-            flex: 7,
             child: Padding(
               padding: SizeConfig.symmetric(horizontal: 8),
               child: Column(

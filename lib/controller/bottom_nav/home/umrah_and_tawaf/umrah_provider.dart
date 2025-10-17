@@ -91,6 +91,8 @@ class UmrahNotifier extends ChangeNotifier {
           await updateUmrahModel(umrahModel!.copyWith(is_doing: false));
           umrahModel = null;
           _resetTawafData();
+          isRoundCompleted = true;
+          if (context.mounted) notifyListeners();
         }
       }
     } else {

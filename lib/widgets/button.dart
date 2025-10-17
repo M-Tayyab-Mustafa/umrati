@@ -52,7 +52,9 @@ class CButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final double buttonSize =
         title != null
-            ? Helper.getTextSize(title!, CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13)).width + SizeConfig.w(50) + (titleWithIcon ? SizeConfig.w(iconSize ?? 25) : 0)
+            ? Helper.getTextSize(title!, style ?? CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13)).width +
+                SizeConfig.w(50) +
+                (titleWithIcon ? SizeConfig.w(iconSize ?? 25) : 0)
             : 0;
     return Padding(
       padding: margin ?? EdgeInsets.zero,
@@ -85,7 +87,7 @@ class CButton extends StatelessWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(title!, style: CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13), maxLines: 1),
+                              Text(title!, style: style ?? CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13), maxLines: 1, overflow: TextOverflow.ellipsis),
                               Transform.rotate(
                                 angle: isLTR(context) ? 0 : pi / 180 * 180,
                                 child: CustomImage(margin: SizeConfig.only(left: 12), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: SizeConfig.w(iconSize ?? 24)),

@@ -59,6 +59,7 @@ flutter:
     - assets/svg/gender/
     - assets/svg/ziaraat/
     - assets/svg/bottom_nav/
+    - assets/svg/location_permission/
     - assets/png/
     - assets/png/history/
     - assets/png/profile/

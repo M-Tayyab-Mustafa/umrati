@@ -51,31 +51,32 @@ class Background<T> extends StatelessWidget {
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         body: Stack(
           children: [
-            Opacity(opacity: 0.1, child: CustomImage(path: 'assets/png/background.png', imageType: ImageType.png, height: SizeConfig.screenHeight, width: SizeConfig.screenWidth, fit: BoxFit.fill)),
-            Container(
-              height: SizeConfig.screenHeight,
-              width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0x73737300).withValues(alpha: 0.05), Color.fromARGB(255, 168, 255, 178).withValues(alpha: 0.25)],
-                  stops: [0.3, 1],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-              ),
-            ),
-            Opacity(
-              opacity: 0.6,
-              child: CustomImage(
-                path: 'assets/svg/islamic_pattern.svg',
-                imageType: ImageType.svg,
-                fit: BoxFit.cover,
-                height: SizeConfig.screenHeight,
-                width: SizeConfig.screenWidth,
-                color: Colors.white,
-              ),
-            ),
-            Opacity(opacity: 0.3, child: CustomImage(path: 'assets/svg/modal.svg', imageType: ImageType.svg, fit: BoxFit.cover, height: SizeConfig.screenHeight, width: SizeConfig.screenWidth)),
+            // Opacity(opacity: 0.1, child: CustomImage(path: 'assets/png/background.png', imageType: ImageType.png, height: SizeConfig.screenHeight, width: SizeConfig.screenWidth, fit: BoxFit.fill)),
+            // Container(
+            //   height: SizeConfig.screenHeight,
+            //   width: SizeConfig.screenWidth,
+            //   decoration: BoxDecoration(
+            //     gradient: LinearGradient(
+            //       colors: [Color(0x73737300).withValues(alpha: 0.05), Color.fromARGB(255, 168, 255, 178).withValues(alpha: 0.25)],
+            //       stops: [0.3, 1],
+            //       begin: Alignment.centerLeft,
+            //       end: Alignment.centerRight,
+            //     ),
+            //   ),
+            // ),
+            CustomImage(path: 'assets/svg/background_layer.svg', imageType: ImageType.svg, height: SizeConfig.screenHeight, width: SizeConfig.screenWidth, fit: BoxFit.fill),
+            // Opacity(
+            //   opacity: 0.6,
+            //   child: CustomImage(
+            //     path: 'assets/svg/islamic_pattern.svg',
+            //     imageType: ImageType.svg,
+            //     fit: BoxFit.cover,
+            //     height: SizeConfig.screenHeight,
+            //     width: SizeConfig.screenWidth,
+            //     color: Colors.white,
+            //   ),
+            // ),
+            // Opacity(opacity: 0.3, child: CustomImage(path: 'assets/svg/modal.svg', imageType: ImageType.svg, fit: BoxFit.cover, height: SizeConfig.screenHeight, width: SizeConfig.screenWidth)),
             if (showEmblem)
               Align(
                 alignment: Alignment.bottomCenter,

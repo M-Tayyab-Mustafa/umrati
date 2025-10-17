@@ -20,18 +20,32 @@ class _LocationPermissionPageState extends ConsumerState<LocationPermissionPage>
       backgroundType: BackgroundType.logo,
       titleAlignment: Alignment.center,
       onSkipTap: ref.read(locationPermissionProvider.notifier).skip,
-      titleMargin: SizeConfig.only(top: 60, bottom: 40),
+      title: LocaleKeys.the_umrati_app_needs_location_access_without_it_it_cant.tr(),
+      titleStyle: CTextStyle.w400(fontSize: 20),
+      titleMargin: SizeConfig.only(top: 30, bottom: 4, right: 16),
       child: Column(
         children: [
-          Padding(padding: SizeConfig.only(top: 32), child: FormattedText(rawText: LocaleKeys.permission_request_message.tr())),
+          _basicCard(icon: 'assets/svg/location_permission/tawaf_sai.svg', title: LocaleKeys.track_tawaf_or_sai.tr()),
+          _basicCard(icon: 'assets/svg/location_permission/meeqaat.svg', title: LocaleKeys.alert_you_about_how_far_meeqaat_is.tr()),
+          _basicCard(icon: 'assets/svg/location_permission/navigation.svg', title: LocaleKeys.provide_accurate_navigation.tr()),
           CButton(
             isLoading: ref.watch(locationPermissionProvider).isLoading,
             margin: SizeConfig.only(top: 48),
-            title: LocaleKeys.turn_on_location.tr(),
-            fontSize: 14,
+            titleWithIcon: true,
+            title: LocaleKeys.turn_it_on_to_get_full_support.tr(),
             onTap: ref.read(locationPermissionProvider.notifier).continueTab,
           ),
         ],
+      ),
+    );
+  }
+
+  _basicCard({required String icon, required String title}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [CustomImage(margin: EdgeInsets.only(right: 8), size: SizeConfig.h(30), path: icon, imageType: ImageType.svg), Expanded(child: Text(title, style: CTextStyle.w400(fontSize: 18)))],
       ),
     );
   }

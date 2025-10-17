@@ -108,11 +108,14 @@ abstract class  LocaleKeys {
   static const trim_a_small_portion = 'trim_a_small_portion';
   static const take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_abaya = 'take_a_bath_ghusl_or_perform_ablution_wudu_and_then_wear_the_abaya';
   static const distance_from_meeqaat = 'distance_from_meeqaat';
-  static const permission_request_message = 'permission_request_message';
+  static const the_umrati_app_needs_location_access_without_it_it_cant = 'the_umrati_app_needs_location_access_without_it_it_cant';
+  static const track_tawaf_or_sai = 'track_tawaf_or_sai';
+  static const alert_you_about_how_far_meeqaat_is = 'alert_you_about_how_far_meeqaat_is';
+  static const provide_accurate_navigation = 'provide_accurate_navigation';
   static const your_current_location = 'your_current_location';
+  static const turn_it_on_to_get_full_support = 'turn_it_on_to_get_full_support';
   static const no_history_found = 'no_history_found';
   static const dhul_huayfah = 'dhul_huayfah';
-  static const turn_on_location = 'turn_on_location';
   static const ihram = 'ihram';
   static const open_setting = 'open_setting';
   static const permission_description = 'permission_description';

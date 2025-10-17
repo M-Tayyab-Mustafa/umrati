@@ -25,7 +25,7 @@ class GiveFeedbackNotifier extends ChangeNotifier {
     notifyListeners();
     user = await LocalStorageManager.getUser(fromFirebase: true);
     emailController.text = user!.email;
-    numberController.text = user!.phone;
+    numberController.text = user!.phone.contains(user!.country_code) ? user!.phone.replaceAll(user!.country_code, '') : user!.phone;
     isLoading = false;
     notifyListeners();
   }

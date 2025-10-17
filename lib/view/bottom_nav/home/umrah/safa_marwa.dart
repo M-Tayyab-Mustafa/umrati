@@ -45,7 +45,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
                   CustomImage(path: !uProvider.isTrackerPaused ? 'assets/svg/pause.svg' : 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.h(16)),
                   Padding(
                     padding: SizeConfig.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
-                    child: Text(!uProvider.isTrackerPaused ? LocaleKeys.pause_tracker.tr() : LocaleKeys.start_tracker.tr(), style: CTextStyle.w500(fontSize: 12, color: Colors.white)),
+                    child: Text(!uProvider.isTrackerPaused ? LocaleKeys.pause_tracker.tr() : LocaleKeys.start_tracker.tr(), style: CTextStyle.w500(color: Colors.white)),
                   ),
                 ],
               ),
