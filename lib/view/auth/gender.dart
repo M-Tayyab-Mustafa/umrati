@@ -1,16 +1,28 @@
 import '../../export.dart';
 
-class SelectGenderPage extends ConsumerWidget {
+class SelectGenderPage extends ConsumerStatefulWidget {
   const SelectGenderPage({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _SelectGenderPageState();
+}
+
+class _SelectGenderPageState extends ConsumerState<SelectGenderPage> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(genderProvider.notifier).ref = ref;
+    ref.read(genderProvider.notifier).context = context;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var provider = ref.watch(genderProvider);
     return Background(
       title: LocaleKeys.select_your_gender.tr(),
       backgroundType: BackgroundType.logoWithSkip,
       isSkipLoading: provider.isUpdatingGender,
-      onSkipTap: () => provider.skip(context),
-      titleMargin: EdgeInsets.only(top: 60, bottom: 40),
+      onSkipTap: provider.skip,
+      titleMargin: SizeConfig.only(top: 50, bottom: 40),
       titleAlignment: Alignment.center,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -22,24 +34,38 @@ class SelectGenderPage extends ConsumerWidget {
               Expanded(
                 child: CustomImage(
                   onTap: () => provider.updateGender(Gender.male),
-                  path: provider.selectedGender == Gender.male ? 'assets/svg/gender/selected_male.svg' : 'assets/svg/gender/un_selected_male.svg',
+                  path:
+                      provider.selectedGender == Gender.male
+                          ? isLTR(context)
+                              ? 'assets/svg/gender/selected_male.svg'
+                              : 'assets/svg/gender/selected_male_ur.svg'
+                          : isLTR(context)
+                          ? 'assets/svg/gender/un_selected_male.svg'
+                          : 'assets/svg/gender/un_selected_male_ur.svg',
                   imageType: ImageType.svg,
                   fit: BoxFit.fill,
-                  height: 180,
+                  height: SizeConfig.w(140),
                 ),
               ),
               Expanded(
                 child: CustomImage(
                   onTap: () => provider.updateGender(Gender.female),
-                  path: provider.selectedGender == Gender.female ? 'assets/svg/gender/selected_female.svg' : 'assets/svg/gender/un_selected_female.svg',
+                  path:
+                      provider.selectedGender == Gender.female
+                          ? isLTR(context)
+                              ? 'assets/svg/gender/selected_female.svg'
+                              : 'assets/svg/gender/selected_female_ur.svg'
+                          : isLTR(context)
+                          ? 'assets/svg/gender/un_selected_female.svg'
+                          : 'assets/svg/gender/un_selected_female_ur.svg',
                   imageType: ImageType.svg,
                   fit: BoxFit.fill,
-                  height: 180,
+                  height: SizeConfig.w(140),
                 ),
               ),
             ],
           ),
-          CButton(isLoading: provider.isUpdatingGender, onTap: () => provider.continueTap(context), margin: EdgeInsets.only(top: 40), title: LocaleKeys.continued.tr(), titleWithIcon: true),
+          CButton(isLoading: provider.isUpdatingGender, onTap: provider.continueTap, margin: SizeConfig.only(top: 40), title: LocaleKeys.continued.tr(), titleWithIcon: true),
         ],
       ),
     );

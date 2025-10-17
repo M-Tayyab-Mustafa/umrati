@@ -11,6 +11,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   @override
   void initState() {
     super.initState();
+    ref.read(splashProvider.notifier).ref = ref;
     ref.read(splashProvider.notifier).initialization(context);
   }
 
@@ -19,7 +20,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(gradient: LinearGradient(colors: [CColors.lightGrey.withValues(alpha: 0.20), CColors.primary.withValues(alpha: 0.20), CColors.primary.withValues(alpha: 0.15)])),
-        child: CustomImage(path: 'assets/svg/logo.svg', imageType: ImageType.svg),
+        child: Center(child: CustomImage(path: 'assets/svg/logo.svg', imageType: ImageType.svg, size: SizeConfig.w(SizeConfig.screenWidth * 0.6), fit: BoxFit.fitWidth)),
       ),
     );
   }

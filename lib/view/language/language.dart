@@ -1,33 +1,60 @@
 import '../../export.dart';
 
-class LanguagePage extends ConsumerWidget {
-  const LanguagePage({super.key});
+class LanguagePage extends ConsumerStatefulWidget {
+  const LanguagePage({super.key, this.isUpdatingLanguage = false});
+  final bool isUpdatingLanguage;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final languageNotifier = ref.watch(languageProvider.notifier);
+  ConsumerState<ConsumerStatefulWidget> createState() => _LanguagePageState();
+}
+
+class _LanguagePageState extends ConsumerState<LanguagePage> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(languageProvider.notifier).isUpdatingLanguage = widget.isUpdatingLanguage;
+    ref.read(languageProvider.notifier).context = context;
+    ref.read(languageProvider.notifier).ref = ref;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(languageProvider.notifier).initialization();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = ref.watch(languageProvider);
     return Background(
       title: LocaleKeys.change_the_language.tr(),
+      titleType: TitleType.backArrow,
+      backgroundType: BackgroundType.logo,
+      logoAlign: provider.isUpdatingLanguage ? Alignment.center : Alignment.centerLeft,
+      margin: SizeConfig.only(top: kToolbarHeight, left: 16, right: 16),
+      titleMargin: SizeConfig.symmetric(vertical: 20),
       child: Column(
         children: [
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: languageNotifier.languages.length,
+              itemCount: provider.languages.length,
+              padding: SizeConfig.zero,
               itemBuilder: (context, index) {
-                bool isSelected = languageNotifier.languages[index] == ref.watch(languageProvider).selectedLanguage;
+                bool isSelected = provider.languages[index] == provider.selectedLanguage;
                 return GestureDetector(
-                  onTap: () => languageNotifier.updateLanguage(context, languageNotifier.languages[index]),
-                  child: BasicCard(
-                    margin: EdgeInsets.only(top: index != 0 ? 30 : 20),
-                    borderColor: isSelected ? CColors.primary : CColors.lightGrey,
-                    boxShadow: isSelected ? null : [],
-                    child: Text(languageNotifier.languages[index].tr(), style: CTextStyle.w600()),
+                  onTap: () => ref.read(languageProvider.notifier).updateLanguage(provider.languages[index]),
+                  child: Directionality(
+                    textDirection: getTextDirection(provider.languages[index].tr()),
+                    child: BasicCard(
+                      margin: SizeConfig.only(top: index != 0 ? 20 : 0),
+                      borderColor: isSelected ? CColors.primary : CColors.lightGrey,
+                      boxShadow: isSelected ? null : [],
+                      child: Text(provider.languages[index].tr(), style: CTextStyle.w600(fontSize: 16)),
+                    ),
                   ),
                 );
               },
             ),
           ),
-          CButton(onTap: () => languageNotifier.continueTap(context), title: LocaleKeys.continued.tr(), titleWithIcon: true),
+          CButton(margin: SizeConfig.only(bottom: kToolbarHeight), onTap: ref.read(languageProvider.notifier).continueTap, title: LocaleKeys.continued.tr(), titleWithIcon: true),
         ],
       ),
     );

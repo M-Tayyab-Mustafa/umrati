@@ -1,10 +1,24 @@
 import '../../export.dart';
 
-class SelectLanguagePage extends ConsumerWidget {
+class SelectLanguagePage extends ConsumerStatefulWidget {
   const SelectLanguagePage({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var provider = ref.watch(selectLanguageProvider.notifier);
+  ConsumerState<ConsumerStatefulWidget> createState() => _SelectLanguagePageState();
+}
+
+class _SelectLanguagePageState extends ConsumerState<SelectLanguagePage> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(selectLanguageProvider.notifier).ref = ref;
+    ref.read(selectLanguageProvider.notifier).context = context;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(selectLanguageProvider.notifier).initialization();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Background(
       backgroundType: BackgroundType.logo,
       title: LocaleKeys.select_your_language.tr(),
@@ -13,16 +27,17 @@ class SelectLanguagePage extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           BasicCard(
-            margin: EdgeInsets.only(top: 70, bottom: 40),
+            onTap: ref.read(selectLanguageProvider.notifier).changeLanguageTap,
+            margin: SizeConfig.only(top: 70, bottom: 40),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(LocaleKeys.english.tr(), style: CTextStyle.w600()),
-                GestureDetector(onTap: () => provider.changeLanguageTap(context, ref), child: Text(LocaleKeys.change_the_language.tr(), style: CTextStyle.w600(color: CColors.primary))),
+                Text(ref.watch(selectLanguageProvider).selectedLanguage.tr(), style: CTextStyle.w600(fontSize: 16)),
+                Text(LocaleKeys.change_the_language.tr(), style: CTextStyle.w600(color: CColors.primary, fontSize: 16)),
               ],
             ),
           ),
-          CButton(onTap: () => provider.continueTap(context), title: LocaleKeys.continued.tr(), titleWithIcon: true),
+          CButton(onTap: ref.read(selectLanguageProvider.notifier).continueTap, title: LocaleKeys.continued.tr(), titleWithIcon: true),
         ],
       ),
     );

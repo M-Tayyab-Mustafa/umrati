@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-
-import 'custom_image.dart';
-import '../utils/theme/colors.dart';
-import '../utils/theme/text_style.dart';
+import '../export.dart';
 
 class BottomNavItem extends StatelessWidget {
   const BottomNavItem({super.key, required this.icon, required this.title, required this.onTap, required this.isSelected});
@@ -20,7 +16,7 @@ class BottomNavItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomImage(path: icon, imageType: ImageType.svg, height: 30, width: 20, fit: BoxFit.scaleDown, color: isSelected ? CColors.primary : CColors.deepTeal),
+            CustomImage(path: icon, imageType: ImageType.svg, height: SizeConfig.h(25), width: SizeConfig.w(15), fit: BoxFit.scaleDown, color: isSelected ? CColors.primary : CColors.deepTeal),
             Text(title, style: CTextStyle.w400(color: isSelected ? CColors.primary : CColors.deepTeal, fontSize: 12)),
           ],
         ),

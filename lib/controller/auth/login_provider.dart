@@ -1,24 +1,30 @@
 import '../../export.dart';
 import '../../view/auth/otp.dart';
-import '../../view/auth/gender.dart';
-import '../../view/nav/page.dart';
-import '../../widgets/dialog/confirmation.dart';
 
-final loginProvider = ChangeNotifierProvider.autoDispose<LoginNotifier>((ref) => LoginNotifier());
+final loginProvider = ChangeNotifierProvider<LoginNotifier>((ref) => LoginNotifier());
 
 class LoginNotifier extends ChangeNotifier {
   //* Instances
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  var phoneNumberUtil = PhoneNumberUtil.instance;
-  bool isSkipping = false;
+  // bool isSkipping = false;
+
+  BuildContext? _context;
+  BuildContext get context => _context!;
+  set context(BuildContext value) => _context = value;
+
+  WidgetRef? _ref;
+  WidgetRef get ref => _ref!;
+  set ref(WidgetRef value) => _ref = value;
+
+  void _codeAutoRetrievalTimeout(verificationId) => _verificationId = verificationId;
 
   //* Login Variables
   bool isSendingOTP = false;
   bool isSocialLogin = false;
-  BuildContext? context;
   var phoneNumberController = TextEditingController();
   CountryCode selectedCountry = CountryCode.fromDialCode('+92');
-  int numberDigits = 10;
+
+  bool isLinkingAccount = false;
 
   //* OTP Time Out Duration
   static const int _otpTimeOutDuration = 90;
@@ -36,7 +42,7 @@ class LoginNotifier extends ChangeNotifier {
   Timer? bounceTimer;
   var otpController = TextEditingController();
 
-  _resetOTPPage() {
+  resetPage() {
     countDown = _otpTimeOutDuration;
     bounceTimer?.cancel();
     isSendingOTP = false;
@@ -47,37 +53,37 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   //* Skip Login
-  Future<void> skip(BuildContext context) async {
-    try {
-      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
-      if (result == false) return;
-      isSkipping = true;
-      notifyListeners();
-      var userCredential = await _auth.signInAnonymously().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-
-      UserModel user = UserModel(
-        uid: userCredential.user!.uid,
-        name: userCredential.user!.displayName ?? '',
-        email: userCredential.user!.email ?? '',
-        phone: userCredential.user!.phoneNumber ?? '',
-        photo: userCredential.user!.photoURL ?? '',
-        gender: Gender.unknown.name.toLowerCase(),
-      );
-      await LocalStorageManager.saveUser(user);
-      LocalStorageManager.showLoginPage(false);
-      isSkipping = false;
-      notifyListeners();
-      Navigator.popUntil(context, (route) => route.isFirst);
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectGenderPage()));
-    } catch (e) {
-      errorToast(e.toString());
-    }
-  }
+  // Future<void> skip() async {
+  //   try {
+  //     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
+  //     if (result == false || result == null) return;
+  //     isSkipping = true;
+  //     notifyListeners();
+  //     var userCredential = await _auth.signInAnonymously().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+  //     UserModel user = UserModel(
+  //       uid: userCredential.user!.uid,
+  //       name: userCredential.user!.displayName ?? '',
+  //       email: userCredential.user!.email ?? '',
+  //       photo: userCredential.user!.photoURL ?? '',
+  //       phone: '',
+  //       country_code: '',
+  //       gender: '',
+  //     );
+  //     await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
+  //     isSkipping = false;
+  //     notifyListeners();
+  //     Navigator.popUntil(context, (route) => route.isFirst);
+  //     ref.read(splashProvider).redirections(context,ref);
+  //   } catch (e) {
+  //     if (kDebugMode) log(e.toString());
+  //     errorToast(e.toString());
+  //   }
+  // }
 
   //* Send OTP To Phone Number
-  Future<void> sendTheOTP(BuildContext context) async {
+  Future<void> sendTheOTP([bool isLinkingAccount = false]) async {
     try {
-      this.context = context;
+      this.isLinkingAccount = isLinkingAccount;
       final phoneError = simpleFieldValidation(phoneNumberController.text, LocaleKeys.phone_number.tr(), context);
       if (phoneError != null) {
         errorToast(phoneError);
@@ -97,6 +103,7 @@ class LoginNotifier extends ChangeNotifier {
           )
           .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
   }
@@ -104,26 +111,17 @@ class LoginNotifier extends ChangeNotifier {
   //* Update Selected Country Code
   void updateSelectedCountry(CountryCode selectedCountry) async {
     this.selectedCountry = selectedCountry;
-    var exampleNumber = phoneNumberUtil.getExampleNumber(selectedCountry.code ?? 'PK');
-    numberDigits = exampleNumber?.nationalNumber.toString().length ?? 12;
     notifyListeners();
   }
 
-  //* Fix The Phone number Format
-  void onPhoneNumberTextFieldChanged(String number) async {
-    if (number.startsWith('0') && number.length >= 8 && number.length <= 12) {
-      phoneNumberController.text = number.substring(1);
-      notifyListeners();
-    }
-  }
-
   //* Google Login
-  void googleLogin(BuildContext context) async {
+  void googleLogin() async {
     try {
       isSocialLogin = true;
       notifyListeners();
-      await SocialLoginService.signInWithGoogle(context);
+      await SocialLoginService.instance.signInWithGoogle(context);
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     } finally {
       isSocialLogin = false;
@@ -132,12 +130,13 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   //* Facebook Login
-  void facebookLogin(BuildContext context) async {
+  void facebookLogin() async {
     try {
       isSocialLogin = true;
       notifyListeners();
-      await SocialLoginService.signInWithFacebook(context);
+      await SocialLoginService.instance.signInWithFacebook(context);
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     } finally {
       isSocialLogin = false;
@@ -146,12 +145,13 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   //* Apple Login
-  void appleLogin(BuildContext context) async {
+  void appleLogin() async {
     try {
       isSocialLogin = true;
       notifyListeners();
-      await SocialLoginService.signInWithApple(context);
+      await SocialLoginService.instance.signInWithApple(context);
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     } finally {
       isSocialLogin = false;
@@ -189,12 +189,13 @@ class LoginNotifier extends ChangeNotifier {
           )
           .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
   }
 
   //* OTP Verified
-  void verifyOTP(BuildContext context) async {
+  void verifyOTP() async {
     var otpError = simpleFieldValidation(LocaleKeys.otp_verification.tr(), otpController.text, context);
     if (otpError != null) {
       errorToast(otpError);
@@ -204,42 +205,37 @@ class LoginNotifier extends ChangeNotifier {
     notifyListeners();
     try {
       final credential = PhoneAuthProvider.credential(verificationId: _verificationId!, smsCode: otpController.text);
-      var userCredential = await _auth.signInWithCredential(credential).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      if (userCredential.additionalUserInfo!.isNewUser) {
-        UserModel user = UserModel(
-          uid: userCredential.user!.uid,
-          name: userCredential.user!.displayName ?? '',
-          email: userCredential.user!.email ?? '',
-          phone: userCredential.user!.phoneNumber ?? '',
-          photo: userCredential.user!.photoURL ?? '',
-          gender: Gender.unknown.name.toLowerCase(),
-        );
-        await LocalStorageManager.saveUser(user);
-        LocalStorageManager.showLoginPage(false);
-        //* Disable Loading
-        isVerifyingOTP = false;
-        notifyListeners();
-        Navigator.popUntil(context, (route) => route.isFirst);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectGenderPage()));
+      if (isLinkingAccount) {
+        await FirebaseAuth.instance.currentUser?.linkWithCredential(credential);
+        await LocalStorageManager.saveUser((await LocalStorageManager.getUser(fromFirebase: true))!.copyWith(phone: phoneNumberController.text.trim(), country_code: selectedCountry.dialCode ?? ''));
+        infoToast(LocaleKeys.account_linked_successfully.tr());
+        ref.read(splashProvider.notifier).redirections(context);
       } else {
-        await LocalStorageManager.saveUser(UserModel.fromMap((await userCollection.doc(userCredential.user!.uid).get()).data()!), toFirebase: false);
-        LocalStorageManager.showLoginPage(false);
-        //* Disable Loading
-        isVerifyingOTP = false;
-        notifyListeners();
-        LocalStorageManager.showGenderPage(false);
-        LocalStorageManager.showGetLocationPermissionPage(false);
-        LocalStorageManager.showLocationFetchPage(false);
-        LocalStorageManager.showMeeqaatThreeTasksPage(false);
-        LocalStorageManager.showTwoTasksBeforeMeeqaatPage(false);
-        Navigator.popUntil(context, (route) => route.isFirst);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavigationPage()));
+        var userCredential = await _auth.signInWithCredential(credential).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+        if (userCredential.additionalUserInfo!.isNewUser) {
+          UserModel user = UserModel(
+            uid: userCredential.user!.uid,
+            phone: userCredential.user!.phoneNumber ?? '',
+            country_code: selectedCountry.dialCode ?? '',
+            name: '',
+            email: '',
+            photo: '',
+            password: Helper.generateRandomId(),
+            gender: '',
+          );
+          await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
+          ref.read(splashProvider.notifier).redirections(context);
+        } else {
+          await LocalStorageManager.saveUser(UserModel.fromMap((await userCollection.doc(userCredential.user!.uid).get()).data()!), toFirebase: false);
+          ref.read(splashProvider.notifier).redirections(context);
+        }
       }
     } on FirebaseAuthException catch (e) {
       isVerifyingOTP = false;
       notifyListeners();
       errorToast(e.message.toString());
     } catch (e) {
+      if (kDebugMode) log(e.toString());
       isVerifyingOTP = false;
       notifyListeners();
       errorToast(e.toString());
@@ -263,16 +259,14 @@ class LoginNotifier extends ChangeNotifier {
   void _onCodeSent(verificationId, forceResendingToken) async {
     _verificationId = verificationId;
     _forceResendingToken = forceResendingToken;
-    if (isSendingOTP && context != null) {
+    if (isSendingOTP) {
       _startBounceTimer();
-      await Navigator.push(context!, MaterialPageRoute(builder: (_) => OTPPage()));
-      _resetOTPPage();
+      var isAutoPop = await Navigator.push(context, MaterialPageRoute(builder: (_) => OTPPage()));
+      if (isAutoPop != true) resetPage();
     }
   }
 
   void _verificationCompleted(phoneAuthCredential) {}
-
-  void _codeAutoRetrievalTimeout(verificationId) => _verificationId = verificationId;
 
   @override
   void dispose() {

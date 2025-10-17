@@ -1,10 +1,4 @@
-import 'dart:io' show File;
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
-import 'loading.dart';
+import '../export.dart';
 
 class CustomImage extends StatelessWidget {
   const CustomImage({
@@ -26,6 +20,7 @@ class CustomImage extends StatelessWidget {
     this.loadingHeight,
     this.loadingWidth,
     this.gradientBorder,
+    this.border,
   });
 
   final String path;
@@ -44,6 +39,7 @@ class CustomImage extends StatelessWidget {
   final EdgeInsets? margin;
   final GestureTapCallback? onTap;
   final bool enableBorder;
+  final Border? border;
   final Gradient? gradientBorder;
 
   @override
@@ -53,7 +49,7 @@ class CustomImage extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          decoration: BoxDecoration(borderRadius: borderRadius ?? BorderRadius.zero, border: enableBorder ? Border() : null),
+          decoration: BoxDecoration(borderRadius: borderRadius ?? BorderRadius.zero, border: enableBorder ? border ?? Border() : null),
           child: ClipRRect(
             borderRadius: borderRadius ?? BorderRadius.zero,
             clipper: clipper,

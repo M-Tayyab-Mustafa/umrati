@@ -11,50 +11,39 @@ class LocalStorageManager {
 
   //* Local Keys
   static final String _languagePage = 'language_page';
-  static final String _loginPage = 'login_page';
-  static final String _genderPage = 'gender_page';
-  static final String _twoTasksBeforeMeeqaatPage = 'two_tasks_before_meeqaat_page';
-  static final String _getLocationPermissionPage = 'get_location_permission_page';
-  static final String _locationFetchPage = 'location_fetch_page';
-  static final String _meeqaatThreeTasksPage = 'meeqaat_three_tasks_page';
   static final String _user = 'user';
 
-  static Future<void> initialization() async {
+  static FutureOr<void> initialization() async {
     _sharedPreferences = await SharedPreferences.getInstance();
   }
 
-  static Future<bool?> showSelectLanguagePage(bool show) {
+  static FutureOr<bool?> showSelectLanguagePage(bool show) {
     return _sharedPreferences!.setBool(_languagePage, show);
   }
 
-  static Future<bool> getSelectLanguagePage() async {
+  static FutureOr<bool> getSelectLanguagePage() async {
     return (_sharedPreferences!.getBool(_languagePage)) ?? true;
   }
 
-  static Future<bool?> showLoginPage(bool show) {
-    return _sharedPreferences!.setBool(_loginPage, show);
-  }
-
-  static Future<bool> getLoginPage() async {
-    return (_sharedPreferences!.getBool(_loginPage)) ?? true;
-  }
-
-  static Future<void> saveUser(UserModel user, {bool toFirebase = true}) async {
+  static Future<void> saveUser(UserModel user, {bool toFirebase = true, FieldValue? created_at}) async {
     try {
-      if (toFirebase) await userCollection.doc(user.uid).set(user.toMap(), SetOptions(merge: true));
+      if (toFirebase) {
+        await userCollection.doc(user.uid).set(user.toMap(updated_at: FieldValue.serverTimestamp(), created_at: created_at), SetOptions(merge: true));
+        user = UserModel.fromMap((await userCollection.doc(user.uid).get()).data()!);
+      }
       await _sharedPreferences!.setString(_user, user.toJson());
     } catch (e) {
       rethrow;
     }
   }
 
-  static Future<UserModel?> getUser({bool fromFirebase = false}) async {
+  static FutureOr<UserModel?> getUser({bool fromFirebase = false}) async {
     try {
       var json = _sharedPreferences!.getString(_user);
       if (json == null) return null;
       var user = UserModel.fromJson(json);
       if (fromFirebase) {
-        var doc = await userCollection.doc(user.uid).get();
+        var doc = await userCollection.doc(user.uid).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
         if (doc.exists) {
           var updatedUser = UserModel.fromMap(doc.data() as Map<String, dynamic>);
           await saveUser(updatedUser, toFirebase: false);
@@ -71,47 +60,7 @@ class LocalStorageManager {
     }
   }
 
-  static Future<bool?> showGenderPage(bool show) {
-    return _sharedPreferences!.setBool(_genderPage, show);
-  }
-
-  static Future<bool> getGenderPage() async {
-    return (_sharedPreferences!.getBool(_genderPage)) ?? true;
-  }
-
-  static Future<bool?> showTwoTasksBeforeMeeqaatPage(bool show) {
-    return _sharedPreferences!.setBool(_twoTasksBeforeMeeqaatPage, show);
-  }
-
-  static Future<bool> getTwoTasksBeforeMeeqaatPage() async {
-    return (_sharedPreferences!.getBool(_twoTasksBeforeMeeqaatPage)) ?? true;
-  }
-
-  static Future<bool?> showGetLocationPermissionPage(bool show) {
-    return _sharedPreferences!.setBool(_getLocationPermissionPage, show);
-  }
-
-  static Future<bool> getGetLocationPermissionPage() async {
-    return (_sharedPreferences!.getBool(_getLocationPermissionPage)) ?? true;
-  }
-
-  static Future<bool?> showLocationFetchPage(bool show) {
-    return _sharedPreferences!.setBool(_locationFetchPage, show);
-  }
-
-  static Future<bool> getLocationFetchPage() async {
-    return (_sharedPreferences!.getBool(_locationFetchPage)) ?? true;
-  }
-
-  static Future<bool?> showMeeqaatThreeTasksPage(bool show) {
-    return _sharedPreferences!.setBool(_meeqaatThreeTasksPage, show);
-  }
-
-  static Future<bool> getMeeqaatThreeTasksPage() async {
-    return (_sharedPreferences!.getBool(_meeqaatThreeTasksPage)) ?? true;
-  }
-
-  static Future<bool> clearStorage() async {
+  static FutureOr<bool> clearStorage() async {
     return await _sharedPreferences!.clear();
   }
 }

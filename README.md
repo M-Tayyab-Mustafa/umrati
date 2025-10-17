@@ -1,6 +1,6 @@
 # umrati
-
-A new Flutter project.
+### Flutter Version
+Flutter 3.32.8
 
 ## Commands To Create Translations
 

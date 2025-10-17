@@ -1,0 +1,256 @@
+import '../../../../export.dart';
+import '../../../../view/bottom_nav/home/ziaraat/page.dart';
+
+final mapPageProvider = ChangeNotifierProvider.autoDispose<MapPageNotifier>((ref) => MapPageNotifier());
+
+class MapPageNotifier extends ChangeNotifier {
+  BuildContext? _context;
+  BuildContext get context => _context!;
+  set context(BuildContext value) => _context = value;
+
+  WidgetRef? _ref;
+  WidgetRef get ref => _ref!;
+  set ref(WidgetRef value) => _ref = value;
+
+  GoogleMapController? _controller;
+  StreamSubscription<Position>? _positionStream;
+  Set<Marker> markers = {};
+  Set<Polyline> polylines = {};
+  UserModel? user;
+  final LayerLink layerLink = LayerLink();
+  OverlayEntry? overlayEntry;
+  final FlutterTts flutterTts = FlutterTts();
+  bool isListening = false;
+  ZiaraatModel? activeZiaraat;
+  List<ZiaraatModel> destinations = [];
+  ZiaraatHistoryModel? history;
+  get panelController => SlidingUpPanelController();
+
+  set mapController(GoogleMapController? controller) {
+    _controller = controller;
+    notifyListeners();
+  }
+
+  CameraPosition initialCameraPosition = CameraPosition(target: LatLng(30.17271735209673, 71.45729802421867), zoom: 20);
+
+  Future<void> initialization({ZiaraatHistoryModel? ziaraatHistory}) async {
+    try {
+      var currentPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
+      initialCameraPosition = CameraPosition(target: LatLng(currentPosition.latitude, currentPosition.longitude), zoom: 20);
+      markers.add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: initialCameraPosition.target, icon: await _loadCustomIcon('assets/png/map/user.png')));
+      _controller?.animateCamera(CameraUpdate.newLatLng(initialCameraPosition.target));
+      user = await LocalStorageManager.getUser();
+      if (ziaraatHistory == null) {
+        var query = await historyCollection
+            .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziaraat.name), Filter('is_completed', isEqualTo: false)))
+            .get()
+            .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+        if (query.docs.isEmpty) {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ZiaraatPage()));
+          return;
+        }
+        history = ZiaraatHistoryModel.fromMap(query.docs.first.data());
+      } else {
+        history = ziaraatHistory;
+      }
+
+      destinations = history!.remainingZiaraats;
+      activeZiaraat = history!.remainingZiaraats.first;
+      markers.add(
+        Marker(
+          markerId: MarkerId(MapMarkerId.destination.name),
+          position: LatLng(activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble()),
+          icon: await _loadCustomIcon('assets/png/map/destination.png'),
+        ),
+      );
+
+      notifyListeners();
+      _positionStream?.cancel();
+      _positionStream = Geolocator.getPositionStream(
+        locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter),
+      ).listen((position) => _updateLocation(position));
+    } catch (e) {
+      if (kDebugMode) log(e.toString());
+      errorToast(e.toString());
+    }
+  }
+
+  Future<void> _updateLocation(Position position) async {
+    markers =
+        markers.where((e) => e.markerId.value != MapMarkerId.userLocation.name).toSet()
+          ..add(Marker(markerId: MarkerId(MapMarkerId.userLocation.name), position: LatLng(position.latitude, position.longitude), icon: await _loadCustomIcon('assets/png/map/user.png')));
+    var distance = Geolocator.distanceBetween(position.latitude, position.longitude, activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble());
+    if (distance < 20) {
+      _positionStream?.cancel();
+      await showGeneralDialog(
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.ziaraat_completion_message.tr(), withContinueButton: true),
+      );
+      destinations.removeAt(0);
+      history = history!.copyWith(remainingZiaraats: destinations, completedZiaraats: [...history!.completedZiaraats, activeZiaraat!]);
+      await historyCollection.doc(history!.uid).update(history!.toMap(updatedAt: FieldValue.serverTimestamp()));
+      if (destinations.isEmpty) {
+        _positionStream?.cancel();
+        markers = markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet();
+        notifyListeners();
+        await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.complete_ziaraats.tr(), withContinueButton: true));
+        Navigator.pop(context);
+        return ref.read(ziaraatProvider.notifier).reset();
+      } else {
+        activeZiaraat = destinations.first;
+        _positionStream = Geolocator.getPositionStream(
+          locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter),
+        ).listen((position) => _updateLocation(position));
+      }
+      markers =
+          markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet()..add(
+            Marker(
+              markerId: MarkerId(MapMarkerId.destination.name),
+              position: LatLng(activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble()),
+              icon: await _loadCustomIcon('assets/png/map/destination.png'),
+            ),
+          );
+    }
+    await _getRoutePolyline(LatLng(position.latitude + 0.000007, position.longitude), LatLng(activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble()));
+    if (context.mounted) notifyListeners();
+  }
+
+  Future<AssetMapBitmap> _loadCustomIcon(String icon) async => await BitmapDescriptor.asset(ImageConfiguration(size: Size(25, 25)), icon);
+
+  Future<void> _getRoutePolyline(LatLng startPoint, LatLng endPoint) async {
+    final leg = await Helper.getRouteLeg(startPoint: startPoint, endPoint: endPoint);
+    if (leg != null) {
+      activeZiaraat = activeZiaraat!.copyWith(distance: leg['distance']['text'], time: leg['duration']['text']);
+      updateActiveZiaraat(activeZiaraat: activeZiaraat!);
+      var steps = leg['steps'] as List;
+      for (var step in steps) {
+        final points = step['polyline']['points'];
+        final List<LatLng> routeCoords = _decodePolyline(points);
+        final line = Polyline(polylineId: PolylineId(points), points: routeCoords, color: CColors.primary, width: 5, startCap: Cap.roundCap, endCap: Cap.roundCap);
+        polylines = polylines.where((e) => e.polylineId.value != points).toSet()..add(line);
+      }
+    }
+    notifyListeners();
+  }
+
+  List<LatLng> _decodePolyline(String encoded) {
+    List<LatLng> polyline = [];
+    int index = 0, len = encoded.length;
+    int lat = 0, lng = 0;
+
+    while (index < len) {
+      int b, shift = 0, result = 0;
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+      lat += dlat;
+
+      shift = 0;
+      result = 0;
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+      lng += dlng;
+
+      polyline.add(LatLng(lat / 1e5, lng / 1e5));
+    }
+    return polyline;
+  }
+
+  Future<void> updateActiveZiaraat({required ZiaraatModel activeZiaraat}) async {
+    var data = (await userCollection.doc(user!.uid).get()).data()!;
+    destinations = List.from(data[CommonField.selectedZiaraat.name]).map((e) => ZiaraatModel.fromMap(e)).toList();
+    await userCollection.doc(user!.uid).update({CommonField.selectedZiaraat.name: destinations.map((e) => e.title_en == activeZiaraat.title_en ? activeZiaraat.toMap() : e.toMap()).toList()});
+  }
+
+  Future<void> showMoreOptions({required BuildContext context}) async {
+    overlayEntry = OverlayEntry(
+      canSizeOverlay: true,
+      builder:
+          (context) => Center(
+            child: CompositedTransformFollower(
+              link: layerLink,
+              showWhenUnlinked: false,
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  width: SizeConfig.w(110),
+                  padding: SizeConfig.symmetric(horizontal: 12, vertical: 16),
+                  decoration: BoxDecoration(color: const Color(0xFF212029), borderRadius: BorderRadius.circular(SizeConfig.r(32))),
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(LocaleKeys.ziaraat_history.tr(), style: CTextStyle.w500(fontSize: 10, color: Colors.white)),
+                        Padding(
+                          padding: SizeConfig.only(top: 16, bottom: 20),
+                          child: GestureDetector(
+                            onTap: hideMoreOptions,
+                            child: Row(
+                              children: [
+                                CustomImage(path: 'assets/svg/ziaraat/listen.svg', imageType: ImageType.svg, size: SizeConfig.w(20), margin: SizeConfig.only(right: 10)),
+                                Text(LocaleKeys.listen.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: SizeConfig.only(bottom: 10),
+                          child: GestureDetector(
+                            onTap: () {
+                              hideMoreOptions();
+                              showDialog(context: context, builder: (context) => ZiaraatReadingDetailDialog(ziaraat: activeZiaraat!));
+                            },
+                            child: Row(
+                              children: [
+                                CustomImage(path: 'assets/svg/ziaraat/read.svg', imageType: ImageType.svg, fit: BoxFit.fitHeight, size: SizeConfig.w(20), margin: SizeConfig.only(right: 10)),
+                                Text(LocaleKeys.read.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+    );
+    Overlay.of(context).insert(overlayEntry!);
+  }
+
+  void hideMoreOptions() {
+    overlayEntry?.remove();
+    overlayEntry = null;
+  }
+
+  void startListing(String detail) async {
+    //Todo:: In Next Version
+    // await flutterTts.speak(detail);
+    // isListening = true;
+    // notifyListeners();
+  }
+
+  void stopListing() async {
+    await flutterTts.stop();
+    isListening = false;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    hideMoreOptions();
+    _positionStream?.cancel();
+    super.dispose();
+  }
+}

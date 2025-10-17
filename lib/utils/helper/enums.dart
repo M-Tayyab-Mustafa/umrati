@@ -2,34 +2,63 @@ part of 'constants.dart';
 
 enum Gender { male, female, unknown }
 
-enum BackgroundType { empty, logo, logoWithBackButton, logoWithSkip }
+enum BackgroundType { empty, logo, logoWithSkip, titleWithBackButton }
 
-enum BottomNavTabs { profile, umra, home, ziarat, settings }
+enum TitleType { empty, backArrow }
 
-enum ZiaratCities { mecca, medina, taif, other }
+enum BottomNavTabs { home, profile, askMufti, settings }
 
-enum ZiaratDestinationsCreationOptions { auto, manual }
+enum ZiaraatCities { mecca, medina, taif, other }
 
-enum CollectionNames { users, settings }
+enum ZiaraatDestinationsCreationOptions { auto, manual }
+
+enum CollectionNames { users, settings, plans, subscriptions, histories, messages }
+
+enum StorageFolderNames {
+  profileImages('profile_images');
+
+  final String name;
+
+  const StorageFolderNames(this.name);
+}
 
 enum MapMarkerId { userLocation, destination }
 
+enum UserActivityType { tawaf, umrah, ziaraat }
+
 enum CommonDoc {
   alKaba('al_kaba'),
+  meeqaat('meeqaat'),
+  keys('keys'),
   constants('constants'),
   safaMarwa('safa_marwa'),
-  ziarat('ziarat');
+  safaMarwaRunningPoints('safa_marwa_running_points'),
+  ziaraat('ziaraat');
 
   final String name;
 
   const CommonDoc(this.name);
 }
 
+enum PlanType { individual, group }
+
 enum CommonField {
   isInTawaf('isInTawaf'),
+  points('points'),
+  threeMonths('3_months'),
+  alHajarAlAswad('al_hajar_al_aswad'),
+  matafGreenLight('mataf_green_light'),
+  alHajarToMatafThreshold('al_hajar_to_mataf_threshold'),
+  oneYear('1_year'),
+  regions('regions'),
+  symbols('symbols'),
+  messages('messages'),
+  currencyCode('currency_code'),
   googleMapKey('google_map_key'),
   startingPoint('startingPoint'),
-  selectedZiarat('selected_ziarat');
+  stripePublishableKey('stripe_publishable_key'),
+  stripeSecretKey('stripe_secret_key'),
+  selectedZiaraat('selected_ziaraat');
 
   final String name;
 
@@ -37,19 +66,31 @@ enum CommonField {
 }
 
 enum Dua {
-  round1('رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ'),
-  round2('اللَّهُمَّ اغْفِرْ لِي وَارْحَمْنِي وَاهْدِنِي وَعَافِنِي وَارْزُقْنِي'),
-  round3('اللَّهُمَّ اجْعَلْنِي مِنَ التَّوَّابِينَ وَاجْعَلْنِي مِنَ الْمُتَطَهِّرِينَ'),
-  round4('اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالآخِرَةِ'),
-  round5('اللَّهُمَّ حَبِّبْ إِلَيَّ الإِيمَانَ وَزَيِّنْهُ فِي قَلْبِي وَكَرِّهْ إِلَيَّ الْكُفْرَ وَالْفُسُوقَ وَالْعِصْيَانَ'),
-  round6('اللَّهُمَّ اجْعَلْ هَذَا الْبَلَدَ آمِنًا مُطْمَئِنًّا وَارْزُقْ أَهْلَهُ مِنَ الثَّمَرَاتِ'),
-  round7('اللَّهُمَّ اخْتِمْ لَنَا بِالسَّعَادَةِ وَاجْعَلْ عَاقِبَتَنَا إِلَى خَيْرٍ'),
-  goingToMarwa(
-    'اللَّهُمَّ اسْتَعْمِلْنِي بِسُنَّةِ نَبِيِّكَ مُحَمَّدٍ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ، وَتَوَفَّنِي عَلَىٰ مِلَّتِهِ، وَأَعِذْنِي مِنْ مُضِلَّاتِ الْفِتَنِ بِرَحْمَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ۔',
-  ),
-  goingToSafa('بِسْمِ اللَّهِ، أَبْدَأُ بِمَا بَدَأَ اللَّهُ بِهِ، إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللَّهِ۔');
+  round1('رَبِّ اغْفِرْلِیْ وَتُبْ عَلَیَّ اِنَّکَ اَنْتَ التَّوَّابُ الرَّحِيْمُ'),
+  round2('رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً، وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ'),
+  round3('رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا وَهَبْ لَنَا مِنْ لَدُنْكَ رَحْمَةً'),
+  round4('اَللّٰھُمَّ اکْفِنِیْ بِحَلَالِکَ عَنْ حَرَامِکَ وَاَغْنِنِیْ بِفَضْلِکَ عَمَّنْ سِوَاکَ'),
+  round5('اَللّٰھُمَّ اِنِّیْ اَسْأَلُکَ الْھُدٰی وَالتُّقٰی وَالْعَفَافَ وَالغِنٰی'),
+  round6('اَللّٰھُمَّ اِنِّیْ اَسْأَلُکَ رِزْقًا طَیِّبًا وَعِلْمًا نَافِعًا وَعَمَلًا مُتَقَـبَّلًا'),
+  saiRound1('اَللّٰھُمَّ لَکَ الْحَمْدُ کَالَّذِیْ تَـقُوْلُ وَخَیْرًا مِّمَّا نَقُولُ'),
+  saiRound2('اَللّٰھُمَّ لَقِّنِی حُجَّۃَ الْاِیْمَانِ عِنْدَ الْمَمَاتِ'),
+  saiRound3('یَاحَیُّ یَاقَـیُّومُ بِرَحْمَتِکَ اَسْتَغِیْثُ اَصْلِحْ لِی شَأْنِی کُلَّہٗ وَلَا تَکِلْنِی اِلٰی نَفْسِیْ طَرْفَۃَ عَیْنٍ'),
+  saiRound4('اَللّٰھُمَّ اجْعَلْ اَوْسَعَ رِزْقِکَ عَلَیَّ عِنْدَ کِـبَرِ سِنِّی وَانْقِطَاعِ عُمْرِیْ'),
+  saiRound5('اَللّٰھُمَّ اھْدِنِیْ وَسَدِّدْنِی'),
+  saiRound6('اَللّٰھُمَّ اَعِنَّا عَلٰی ذِکْرِکَ وَشُکْرِکَ وَحُسْنِ عِبَادَتِکَ');
 
   final String dua;
 
   const Dua(this.dua);
 }
+
+enum IstilaamDua {
+  round1('بِسْمِ اللّٰهِ وَاللّٰهُ أكْبَرُ اَللّٰهُمَّ إيْمَانًا بِكَ وَتَصْدِيْقًا بِكِتابِكَ وَوَفَاءً بِعَهْدِكَ وَاتِّباعًا لِّسُنَّةِ نَبِيِّكَ صَلَّى اللّٰهُ عَلَيْهِ وسَلَّمَ'),
+  otherRounds('بِسْمِ اللّٰهِ وَاللّٰهُ أكْبَرُ');
+
+  final String dua;
+
+  const IstilaamDua(this.dua);
+}
+
+enum HistoryType { umrah, tawaf, ziaraat }

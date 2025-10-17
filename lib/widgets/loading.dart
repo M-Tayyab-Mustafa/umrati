@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../utils/theme/colors.dart';
+import '../export.dart';
 
 class Loading extends StatelessWidget {
   const Loading({super.key, this.height, this.width, this.color});

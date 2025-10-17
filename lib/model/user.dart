@@ -1,32 +1,32 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
+import '../export.dart';
 
 class UserModel {
   final String uid;
   final String name;
   final String email;
+  final String country_code;
   final String phone;
   final String photo;
   final String gender;
-  final bool is_doing_ziarat;
-  final int tawafCircleCount;
-  final int saiRoundCount;
-  final bool isOneSideSaiRunCompleted;
-  final String? created_at;
-  final String? updated_at;
-  final _timer = DateTime.now().toIso8601String();
+  final String password;
+  final num total_umrah_done;
+  final bool is_premium;
+  final String? subscription_id;
+  final Timestamp? created_at;
+  final Timestamp? updated_at;
 
   UserModel({
     required this.uid,
     required this.name,
     required this.email,
+    required this.country_code,
     required this.phone,
     required this.photo,
     required this.gender,
-    this.is_doing_ziarat = false,
-    this.isOneSideSaiRunCompleted = false,
-    this.tawafCircleCount = 0,
-    this.saiRoundCount = 0,
+    required this.password,
+    this.is_premium = false,
+    this.total_umrah_done = 0,
+    this.subscription_id,
     this.created_at,
     this.updated_at,
   });
@@ -35,46 +35,49 @@ class UserModel {
     String? uid,
     String? name,
     String? email,
+    String? country_code,
     String? phone,
     String? photo,
     String? gender,
-    bool? is_doing_ziarat,
-    bool? isOneSideSaiRunCompleted,
-    int? tawafCircleCount,
-    int? saiRoundCount,
-    String? created_at,
-    String? updated_at,
+    String? password,
+    bool? is_premium,
+    num? total_umrah_done,
+    String? subscription_id,
+    Timestamp? created_at,
+    Timestamp? updated_at,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
       name: name ?? this.name,
       email: email ?? this.email,
+      is_premium: is_premium ?? this.is_premium,
+      country_code: country_code ?? this.country_code,
       phone: phone ?? this.phone,
       photo: photo ?? this.photo,
       gender: gender ?? this.gender,
-      is_doing_ziarat: is_doing_ziarat ?? this.is_doing_ziarat,
-      tawafCircleCount: tawafCircleCount ?? this.tawafCircleCount,
-      isOneSideSaiRunCompleted: isOneSideSaiRunCompleted ?? this.isOneSideSaiRunCompleted,
-      saiRoundCount: saiRoundCount ?? this.saiRoundCount,
+      password: password ?? this.password,
+      total_umrah_done: total_umrah_done ?? this.total_umrah_done,
+      subscription_id: subscription_id ?? this.subscription_id,
       created_at: created_at ?? this.created_at,
       updated_at: updated_at ?? this.updated_at,
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({FieldValue? created_at, FieldValue? updated_at}) {
     return <String, dynamic>{
       'uid': uid,
       'name': name,
       'email': email,
+      'is_premium': is_premium,
+      'country_code': country_code,
       'phone': phone,
       'photo': photo,
       'gender': gender,
-      'is_doing_ziarat': is_doing_ziarat,
-      'tawaf_circle_count': tawafCircleCount,
-      'is_one_side_sai_run_completed': isOneSideSaiRunCompleted,
-      'sai_round_count': saiRoundCount,
-      'created_at': created_at ?? _timer,
-      'updated_at': updated_at ?? _timer,
+      'password': password,
+      'total_umrah_done': total_umrah_done,
+      'subscription_id': subscription_id,
+      'created_at': created_at ?? this.created_at?.millisecondsSinceEpoch,
+      'updated_at': updated_at ?? this.updated_at?.millisecondsSinceEpoch,
     };
   }
 
@@ -84,14 +87,15 @@ class UserModel {
       name: map['name']?.toString() ?? '',
       email: map['email']?.toString() ?? '',
       phone: map['phone']?.toString() ?? '',
+      is_premium: map['is_premium'] ?? false,
+      country_code: map['country_code']?.toString() ?? '',
       photo: map['photo']?.toString() ?? '',
       gender: map['gender']?.toString() ?? '',
-      is_doing_ziarat: map['is_doing_ziarat'] ?? false,
-      isOneSideSaiRunCompleted: map['is_one_side_sai_run_completed'] ?? false,
-      tawafCircleCount: map['tawaf_circle_count'] ?? 0,
-      saiRoundCount: map['sai_round_count'] ?? 0,
-      created_at: map['created_at']?.toString() ?? '',
-      updated_at: map['updated_at']?.toString() ?? '',
+      password: map['password']?.toString() ?? '',
+      total_umrah_done: map['total_umrah_done'] ?? 0,
+      subscription_id: map['subscription_id']?.toString() ?? '',
+      created_at: map['created_at'].runtimeType == int ? Timestamp.fromMillisecondsSinceEpoch(map['created_at']) : map['created_at'],
+      updated_at: map['updated_at'].runtimeType == int ? Timestamp.fromMillisecondsSinceEpoch(map['updated_at']) : map['updated_at'],
     );
   }
 
@@ -101,7 +105,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, email: $email, phone: $phone, photo: $photo, gender: $gender, tawaf_circle_count: $tawafCircleCount, sai_round_count: $saiRoundCount, is_one_side_sai_run_completed: $isOneSideSaiRunCompleted, is_doing_ziarat: $is_doing_ziarat, created_at: $created_at, updated_at: $updated_at)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, is_premium: $is_premium, password: $password, phone: $phone, country_code: $country_code, photo: $photo, gender: $gender, total_umrah_done: $total_umrah_done, subscription_id: $subscription_id, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -112,12 +116,13 @@ class UserModel {
         other.name == name &&
         other.email == email &&
         other.phone == phone &&
+        other.is_premium == is_premium &&
+        other.country_code == country_code &&
         other.photo == photo &&
         other.gender == gender &&
-        other.isOneSideSaiRunCompleted == isOneSideSaiRunCompleted &&
-        other.tawafCircleCount == tawafCircleCount &&
-        other.saiRoundCount == saiRoundCount &&
-        other.is_doing_ziarat == is_doing_ziarat &&
+        other.password == password &&
+        other.total_umrah_done == total_umrah_done &&
+        other.subscription_id == subscription_id &&
         other.created_at == created_at &&
         other.updated_at == updated_at;
   }
@@ -128,12 +133,13 @@ class UserModel {
         name.hashCode ^
         email.hashCode ^
         phone.hashCode ^
+        is_premium.hashCode ^
+        country_code.hashCode ^
         photo.hashCode ^
         gender.hashCode ^
-        isOneSideSaiRunCompleted.hashCode ^
-        tawafCircleCount.hashCode ^
-        saiRoundCount.hashCode ^
-        is_doing_ziarat.hashCode ^
+        password.hashCode ^
+        total_umrah_done.hashCode ^
+        subscription_id.hashCode ^
         created_at.hashCode ^
         updated_at.hashCode;
   }

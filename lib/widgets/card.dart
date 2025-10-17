@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../utils/helper/constants.dart';
-import '../utils/theme/colors.dart';
+import '../export.dart';
 
 class BasicCard extends StatelessWidget {
   const BasicCard({
@@ -42,7 +39,7 @@ class BasicCard extends StatelessWidget {
         width: width,
         padding: padding ?? EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: backgroundColor ?? Colors.transparent,
+          color: backgroundColor ?? (backgroundGradient != null ? null : Colors.transparent),
           gradient: backgroundGradient,
           border: Border.all(color: borderColor ?? CColors.primary, width: borderWidth ?? 2),
           borderRadius: BorderRadius.circular(borderRadius ?? 16),
