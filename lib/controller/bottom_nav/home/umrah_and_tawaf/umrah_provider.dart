@@ -166,13 +166,10 @@ class UmrahNotifier extends ChangeNotifier {
 
   Future<void> _startTawaf() async {
     startingPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
-    // var constantsDoc = await settingsCollection.doc(CommonDoc.constants.name).get();
-    // LatLng alHajarAlAswadLatLng = LatLng(constantsDoc.get(CommonField.alHajarAlAswad.name)!['lat'], constantsDoc.get(CommonField.alHajarAlAswad.name)!['lng']);
-    // LatLng matafGreenLightLatLng = LatLng(constantsDoc.get(CommonField.matafGreenLight.name)!['lat'], constantsDoc.get(CommonField.matafGreenLight.name)!['lng']);
-    // var threshold = num.parse(constantsDoc.get(CommonField.alHajarToMatafThreshold.name).toString());
-    LatLng alHajarAlAswadLatLng = LatLng(21.422651430493204, 39.82622509166598);
-    LatLng matafGreenLightLatLng = LatLng(21.42276755004554, 39.82620239563855);
-    var threshold = num.parse('20');
+    var constantsDoc = await settingsCollection.doc(CommonDoc.constants.name).get();
+    LatLng alHajarAlAswadLatLng = LatLng(constantsDoc.get(CommonField.alHajarAlAswad.name)!['lat'], constantsDoc.get(CommonField.alHajarAlAswad.name)!['lng']);
+    LatLng matafGreenLightLatLng = LatLng(constantsDoc.get(CommonField.matafGreenLight.name)!['lat'], constantsDoc.get(CommonField.matafGreenLight.name)!['lng']);
+    var threshold = num.parse(constantsDoc.get(CommonField.alHajarToMatafThreshold.name).toString());
     await _checkReachedNearTheGreenLight(alHajarAlAswadLatLng: alHajarAlAswadLatLng, matafGreenLightLatLng: matafGreenLightLatLng, threshold: threshold);
     tawafCircleCompletionPercent = 0;
     notifyListeners();
@@ -206,9 +203,8 @@ class UmrahNotifier extends ChangeNotifier {
   Future<void> _initializeTawafLocationTracking() async {
     try {
       positionStreamSubscription?.cancel();
-      // var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
-      // var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
-      var kabaLatLng = LatLng(31.2568019, 74.2239854);
+      var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
+      var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
       // Start listening to position updates
       positionStreamSubscription = Geolocator.getPositionStream(
         locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
