@@ -25,6 +25,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(safaMarwaProvider);
     var uProvider = ref.watch(umrahProvider);
+    var safaMarwaDistance = SizeConfig.h(SizeConfig.screenHeight);
     return Background(
       logoAlign: Alignment.center,
       backgroundType: BackgroundType.logoWithSkip,
@@ -67,7 +68,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
                     child: Padding(
                       padding: SizeConfig.symmetric(vertical: 16),
                       child: SizedBox(
-                        height: SizeConfig.screenHeight,
+                        height: safaMarwaDistance,
                         width: SizeConfig.screenWidth,
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -76,24 +77,17 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
                             Expanded(
                               child: Builder(
                                 builder: (context) {
-                                  final height = SizeConfig.h(SizeConfig.screenHeight);
                                   final trackWidth = SizeConfig.w(250);
                                   final trackerSize = SizeConfig.h(40);
                                   return Stack(
                                     children: [
                                       Center(
                                         child: CustomPaint(
-                                          size: Size(trackWidth, height),
-                                          painter: _VerticalDashedAreaPainter(
-                                            lineSpacing: trackWidth - SizeConfig.w(15),
-                                            dashWidth: SizeConfig.w(15),
-                                            dashHeight: SizeConfig.h(4),
-                                            lineColor: Colors.black,
-                                            fillColor: Colors.transparent,
-                                          ),
+                                          size: Size(trackWidth, safaMarwaDistance),
+                                          painter: _VerticalDashedAreaPainter(lineSpacing: trackWidth - SizeConfig.w(15), dashWidth: SizeConfig.w(15), dashHeight: SizeConfig.h(4), lineColor: Colors.black, fillColor: Colors.transparent),
                                         ),
                                       ),
-                                      Align(alignment: Alignment.center, child: _AreaToRunFast(width: trackWidth)),
+                                      Align(alignment: Alignment.bottomCenter, child: _AreaToRunFast(width: trackWidth, height: safaMarwaDistance, provider: provider)),
                                       Column(
                                         children: [
                                           Padding(padding: SizeConfig.only(top: 8), child: Text(LocaleKeys.marwa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
@@ -116,10 +110,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
                                           decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
                                           child: Padding(
                                             padding: SizeConfig.only(top: provider.isOneSideSaiRunCompleted ? 4 : 0, bottom: provider.isOneSideSaiRunCompleted ? 0 : 4),
-                                            child: Transform.rotate(
-                                              angle: provider.isOneSideSaiRunCompleted ? (pi / 2) : (3 * pi / 2),
-                                              child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.w(20)),
-                                            ),
+                                            child: Transform.rotate(angle: provider.isOneSideSaiRunCompleted ? (pi / 2) : (3 * pi / 2), child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.w(20))),
                                           ),
                                         ),
                                       ),
@@ -176,21 +167,11 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          '$duaTitle${ref.read(umrahProvider.notifier).user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}',
-          style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal),
-        ),
+        Text('$duaTitle${ref.read(umrahProvider.notifier).user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}', style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal)),
         BasicCard(
           margin: SizeConfig.symmetric(vertical: 8, horizontal: 16),
           backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
-          child: Center(
-            child: Text(
-              dua,
-              style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: provider.saiRoundCount < 6 ? Helper.arabicTextFontFamily : null),
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.rtl,
-            ),
-          ),
+          child: Center(child: Text(dua, style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: provider.saiRoundCount < 6 ? Helper.arabicTextFontFamily : null), textAlign: TextAlign.center, textDirection: TextDirection.rtl)),
         ),
       ],
     );
@@ -245,21 +226,26 @@ class _VerticalDashedAreaPainter extends CustomPainter {
 }
 
 class _AreaToRunFast extends StatelessWidget {
-  const _AreaToRunFast({required this.width});
+  const _AreaToRunFast({required this.width, required this.height, required this.provider});
   final double width;
+  final double height;
+  final SafaMarwaNotifier provider;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: SizeConfig.h(SizeConfig.screenHeight * 0.56),
+      height: height,
       width: width,
-      child: Stack(
-        children: [
-          Container(color: CColors.primary.withValues(alpha: 0.15), margin: SizeConfig.symmetric(horizontal: 10)),
-          Align(alignment: Alignment.centerLeft, child: Container(color: CColors.secondary, width: SizeConfig.w(20))),
-          Align(alignment: Alignment.centerRight, child: Container(color: CColors.secondary, width: SizeConfig.w(20))),
-          Center(child: Text(LocaleKeys.area_to_run_fast.tr(), style: CTextStyle.w300(color: Colors.white, fontSize: 16))),
-        ],
+      child: Padding(
+        padding: EdgeInsets.only(bottom: height * 0.29, top: height * 0.50),
+        child: Stack(
+          children: [
+            Container(color: CColors.primary.withValues(alpha: 0.15), margin: SizeConfig.symmetric(horizontal: 10)),
+            Align(alignment: Alignment.centerLeft, child: Container(color: CColors.secondary, width: SizeConfig.w(20))),
+            Align(alignment: Alignment.centerRight, child: Container(color: CColors.secondary, width: SizeConfig.w(20))),
+            Center(child: Text(LocaleKeys.area_to_run_fast.tr(), style: CTextStyle.w300(color: Colors.white, fontSize: 16))),
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'export.dart';
 import 'view/splash.dart';
+// import 'view/splash.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,18 +9,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Payment.instance.initializePayments();
-  runApp(
-    ProviderScope(
-      child: EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('ur', 'PK')],
-        path: 'assets/translations',
-        fallbackLocale: Locale('en', 'US'),
-        saveLocale: true,
-        assetLoader: CodegenLoader(),
-        child: MainApp(),
-      ),
-    ),
-  );
+  runApp(ProviderScope(child: EasyLocalization(supportedLocales: const [Locale('en', 'US'), Locale('ur', 'PK')], path: 'assets/translations', fallbackLocale: Locale('en', 'US'), saveLocale: true, assetLoader: CodegenLoader(), child: MainApp())));
 }
 
 class MainApp extends StatefulWidget {
@@ -46,13 +36,6 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     CTextStyle.init(context);
     SizeConfig.init(context);
-    return MaterialApp(
-      locale: context.locale,
-      supportedLocales: context.supportedLocales,
-      localizationsDelegates: context.localizationDelegates,
-      debugShowCheckedModeBanner: false,
-      home: SplashPage(),
-      color: CColors.primary,
-    );
+    return MaterialApp(locale: context.locale, supportedLocales: context.supportedLocales, localizationsDelegates: context.localizationDelegates, debugShowCheckedModeBanner: false, home: SplashPage(), color: CColors.primary);
   }
 }

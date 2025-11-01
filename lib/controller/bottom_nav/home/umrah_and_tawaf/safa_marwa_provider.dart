@@ -90,10 +90,7 @@ class SafaMarwaNotifier extends ChangeNotifier {
   }
 
   Future<void> _updateRoundCount() async {
-    await showGeneralDialog(
-      context: context,
-      pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true),
-    );
+    await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.now_please_pray_while_facing_kibla.tr(), withContinueButton: true));
     saiRoundCount++;
     if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
     if (isOneSideSaiRunCompleted) {
@@ -133,5 +130,30 @@ class SafaMarwaNotifier extends ChangeNotifier {
     cancelPositionStreamSubscription();
     scrollController.dispose();
     super.dispose();
+  }
+
+  Timer? timer;
+  void updateOneSideSaiRunCompletionPercent() {
+    timer?.cancel();
+    oneSideRunCompletionPercent = 0.0;
+    isOneSideSaiRunCompleted = false;
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (isOneSideSaiRunCompleted) {
+        oneSideRunCompletionPercent -= 0.1;
+        if (oneSideRunCompletionPercent <= 0.1) {
+          isOneSideSaiRunCompleted = false;
+        }
+      } else {
+        oneSideRunCompletionPercent += 0.1;
+        if (oneSideRunCompletionPercent >= 1) {
+          isOneSideSaiRunCompleted = true;
+        }
+      }
+      notifyListeners();
+      if (scrollController.hasClients) {
+        var position = scrollController.position.maxScrollExtent * (1 - oneSideRunCompletionPercent);
+        scrollController.animateTo(position, duration: Duration(milliseconds: 100), curve: Curves.easeInOut);
+      }
+    });
   }
 }

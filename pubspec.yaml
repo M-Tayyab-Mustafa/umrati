@@ -38,6 +38,7 @@ dependencies:
   uuid_plus: ^0.1.0
   webview_flutter: ^4.13.0
   sensors_plus: ^7.0.0
+  flutter_compass: ^0.8.1
   flutter_pay_buttons:
     git:
       url: https://github.com/M-Tayyab-Mustafa/flutter_pay_buttons
