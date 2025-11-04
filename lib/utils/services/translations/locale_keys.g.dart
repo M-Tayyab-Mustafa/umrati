@@ -158,6 +158,9 @@ abstract class  LocaleKeys {
   static const pause_tracker = 'pause_tracker';
   static const start_tracker = 'start_tracker';
   static const tawaf_tracker = 'tawaf_tracker';
+  static const round_no = 'round_no';
+  static const count = 'count';
+  static const count_increase_tip = 'count_increase_tip';
   static const istilaam_time = 'istilaam_time';
   static const start_tawaf = 'start_tawaf';
   static const starting_point = 'starting_point';

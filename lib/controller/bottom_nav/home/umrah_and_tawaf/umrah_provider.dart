@@ -1,3 +1,5 @@
+import 'package:fluttertoast/fluttertoast.dart';
+
 import '../../../../export.dart';
 
 // Provider for TawafNotifier using ChangeNotifier
@@ -70,8 +72,7 @@ class UmrahNotifier extends ChangeNotifier {
     ref.read(meeqaatTwoTasksProvider.notifier).updateLoading(true);
     user = (await LocalStorageManager.getUser(fromFirebase: true))!;
     if (userActivityType == UserActivityType.umrah) {
-      final querySnapshot =
-          await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('is_doing', isEqualTo: true), Filter('type', isEqualTo: UserActivityType.umrah.name))).get();
+      final querySnapshot = await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('is_doing', isEqualTo: true), Filter('type', isEqualTo: UserActivityType.umrah.name))).get();
       if (querySnapshot.docs.isNotEmpty) {
         final doc = querySnapshot.docs.first.reference;
         umrahModel = HistoryModel.fromMap((await doc.get()).data()!);
@@ -165,89 +166,90 @@ class UmrahNotifier extends ChangeNotifier {
   }
 
   Future<void> _startTawaf() async {
-    startingPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
-    var constantsDoc = await settingsCollection.doc(CommonDoc.constants.name).get();
-    LatLng alHajarAlAswadLatLng = LatLng(constantsDoc.get(CommonField.alHajarAlAswad.name)!['lat'], constantsDoc.get(CommonField.alHajarAlAswad.name)!['lng']);
-    LatLng matafGreenLightLatLng = LatLng(constantsDoc.get(CommonField.matafGreenLight.name)!['lat'], constantsDoc.get(CommonField.matafGreenLight.name)!['lng']);
-    var threshold = num.parse(constantsDoc.get(CommonField.alHajarToMatafThreshold.name).toString());
-    await _checkReachedNearTheGreenLight(alHajarAlAswadLatLng: alHajarAlAswadLatLng, matafGreenLightLatLng: matafGreenLightLatLng, threshold: threshold);
-    tawafCircleCompletionPercent = 0;
-    notifyListeners();
-    try {
-      await _initializeTawafLocationTracking();
-    } catch (e, stack) {
-      debugPrint('Error requesting permission: $e\n$stack');
-      _pauseTracker();
-    }
+    await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
+    // startingPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
+    // var constantsDoc = await settingsCollection.doc(CommonDoc.constants.name).get();
+    // LatLng alHajarAlAswadLatLng = LatLng(constantsDoc.get(CommonField.alHajarAlAswad.name)!['lat'], constantsDoc.get(CommonField.alHajarAlAswad.name)!['lng']);
+    // LatLng matafGreenLightLatLng = LatLng(constantsDoc.get(CommonField.matafGreenLight.name)!['lat'], constantsDoc.get(CommonField.matafGreenLight.name)!['lng']);
+    // var threshold = num.parse(constantsDoc.get(CommonField.alHajarToMatafThreshold.name).toString());
+    // await _checkReachedNearTheGreenLight(alHajarAlAswadLatLng: alHajarAlAswadLatLng, matafGreenLightLatLng: matafGreenLightLatLng, threshold: threshold);
+    // tawafCircleCompletionPercent = 0;
+    // notifyListeners();
+    // try {
+    //   await _initializeTawafLocationTracking();
+    // } catch (e, stack) {
+    //   debugPrint('Error requesting permission: $e\n$stack');
+    //   _pauseTracker();
+    // }
   }
 
-  Future<void> _checkReachedNearTheGreenLight({required LatLng alHajarAlAswadLatLng, required LatLng matafGreenLightLatLng, required num threshold}) async {
-    try {
-      await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
-      // var isUserInBetweenAlHajarAndMataf =
-      //     Helper.distanceToVector(alHajarAlAswadLatLng, matafGreenLightLatLng, LatLng(startingPosition!.latitude, startingPosition!.longitude)) <= threshold.toDouble();
-      // if (isUserInBetweenAlHajarAndMataf) return;
-      // var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
-      // if (result == true) {
-      //   errorToast(LocaleKeys.you_are_not_near_the_green_light.tr());
-      //   await _checkReachedNearTheGreenLight(alHajarAlAswadLatLng: alHajarAlAswadLatLng, matafGreenLightLatLng: matafGreenLightLatLng, threshold: threshold);
-      // } else {
-      //   goToHome();
-      // }
-    } catch (e) {
-      log(e.toString());
-    }
-  }
+  // Future<void> _checkReachedNearTheGreenLight({required LatLng alHajarAlAswadLatLng, required LatLng matafGreenLightLatLng, required num threshold}) async {
+  //   try {
+  // await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
+  // var isUserInBetweenAlHajarAndMataf =
+  //     Helper.distanceToVector(alHajarAlAswadLatLng, matafGreenLightLatLng, LatLng(startingPosition!.latitude, startingPosition!.longitude)) <= threshold.toDouble();
+  // if (isUserInBetweenAlHajarAndMataf) return;
+  // var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
+  // if (result == true) {
+  //   errorToast(LocaleKeys.you_are_not_near_the_green_light.tr());
+  //   await _checkReachedNearTheGreenLight(alHajarAlAswadLatLng: alHajarAlAswadLatLng, matafGreenLightLatLng: matafGreenLightLatLng, threshold: threshold);
+  // } else {
+  //   goToHome();
+  // }
+  // } catch (e) {
+  //   log(e.toString());
+  // }
+  // }
 
   // Method to request location permissions and initialize Tawaf
   Future<void> _initializeTawafLocationTracking() async {
-    try {
-      positionStreamSubscription?.cancel();
-      var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
-      var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
-      // Start listening to position updates
-      positionStreamSubscription = Geolocator.getPositionStream(
-        locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
-      ).listen((position) => _updateLocation(position, startingPosition!, kabaLatLng));
-    } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
-    }
+    // try {
+    //   positionStreamSubscription?.cancel();
+    //   var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
+    //   var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
+    //   // Start listening to position updates
+    //   positionStreamSubscription = Geolocator.getPositionStream(
+    //     locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
+    //   ).listen((position) => _updateLocation(position, startingPosition!, kabaLatLng));
+    // } catch (e) {
+    //   if (kDebugMode) log(e.toString());
+    //   errorToast(e.toString());
+    // }
   }
 
   // Method to update location and track Tawaf progress
-  Future<void> _updateLocation(Position currentPosition, Position startingPosition, LatLng kabaLatLng) async {
-    // Keep 12 meters distance minimum from kaba.
-    var distance = Geolocator.distanceBetween(currentPosition.latitude, currentPosition.longitude, kabaLatLng.latitude, kabaLatLng.longitude);
-    if (distance < 12) return;
-    // Exit early if Tawaf is not active or subscription is null
-    if (umrahModel == null || positionStreamSubscription == null) {
-      _cancelPositionStreamSubscription();
-      return;
-    }
+  // Future<void> _updateLocation(Position currentPosition, Position startingPosition, LatLng kabaLatLng) async {
+  // // Keep 12 meters distance minimum from kaba.
+  // var distance = Geolocator.distanceBetween(currentPosition.latitude, currentPosition.longitude, kabaLatLng.latitude, kabaLatLng.longitude);
+  // if (distance < 12) return;
+  // // Exit early if Tawaf is not active or subscription is null
+  // if (umrahModel == null || positionStreamSubscription == null) {
+  //   _cancelPositionStreamSubscription();
+  //   return;
+  // }
 
-    final currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
-    final startingLatLng = LatLng(startingPosition.latitude, startingPosition.longitude);
+  // final currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
+  // final startingLatLng = LatLng(startingPosition.latitude, startingPosition.longitude);
 
-    // Calculate bearings from Kaaba to starting and current positions
-    double startBearing = Helper.calculateBearing(kabaLatLng, startingLatLng);
-    double currentBearing = Helper.calculateBearing(kabaLatLng, currentLatLng);
+  // // Calculate bearings from Kaaba to starting and current positions
+  // double startBearing = Helper.calculateBearing(kabaLatLng, startingLatLng);
+  // double currentBearing = Helper.calculateBearing(kabaLatLng, currentLatLng);
 
-    // Calculate progress angle in anti-clockwise direction
-    double progressAngle = Helper.antiClockwiseDelta(startBearing, currentBearing);
-    if (!isRoundCompleted) tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
-    if (tawafCircleCompletionPercent >= 0.5 && tawafCircleCompletionPercent <= 0.8) hasDoneHalfCircle = true;
-    if (tawafCircleCompletionPercent >= 0.985 && !hasDoneHalfCircle) tawafCircleCompletionPercent = 0;
-    if (tawafCircleCompletionPercent >= 0.985 && hasDoneHalfCircle) {
-      isRoundCompleted = true;
-      hasDoneHalfCircle = false;
-      tawafCircleCount++;
-      if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
-      updateUmrahModel(umrahModel!.copyWith(tawaf_circle_count: tawafCircleCount));
-      tawafCircleCompletionPercent = 0;
-    }
-    notifyListeners();
-  }
+  // // Calculate progress angle in anti-clockwise direction
+  // double progressAngle = Helper.antiClockwiseDelta(startBearing, currentBearing);
+  // if (!isRoundCompleted) tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
+  // if (tawafCircleCompletionPercent >= 0.5 && tawafCircleCompletionPercent <= 0.8) hasDoneHalfCircle = true;
+  // if (tawafCircleCompletionPercent >= 0.985 && !hasDoneHalfCircle) tawafCircleCompletionPercent = 0;
+  // if (tawafCircleCompletionPercent >= 0.985 && hasDoneHalfCircle) {
+  //   isRoundCompleted = true;
+  //   hasDoneHalfCircle = false;
+  //   tawafCircleCount++;
+  //   if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
+  //   updateUmrahModel(umrahModel!.copyWith(tawaf_circle_count: tawafCircleCount));
+  //   tawafCircleCompletionPercent = 0;
+  // }
+  // notifyListeners();
+  // }
 
   //Todo:: Remove After Testing...
   void debugSkipTawaf() async {
@@ -260,8 +262,16 @@ class UmrahNotifier extends ChangeNotifier {
   }
 
   // Method to start the next Tawaf round
-  startNextRound() {
+  startNextRound() async {
     isRoundCompleted = false;
+    notifyListeners();
+  }
+
+  void completeRound() async {
+    isRoundCompleted = true;
+    tawafCircleCount++;
+    if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
+    updateUmrahModel(umrahModel!.copyWith(tawaf_circle_count: tawafCircleCount));
     notifyListeners();
   }
 
@@ -402,6 +412,8 @@ class UmrahNotifier extends ChangeNotifier {
     await doc.set(umrah.copyWith(uid: doc.id).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp()));
     umrahModel = HistoryModel.fromMap((await doc.get()).data()!);
   }
+
+  void onCountTap() => Fluttertoast.showToast(msg: LocaleKeys.count_increase_tip.tr(), gravity: ToastGravity.BOTTOM, toastLength: Toast.LENGTH_SHORT);
 
   @override
   void dispose() {
