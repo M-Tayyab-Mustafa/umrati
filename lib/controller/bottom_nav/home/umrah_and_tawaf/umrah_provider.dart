@@ -1,5 +1,3 @@
-import 'package:fluttertoast/fluttertoast.dart';
-
 import '../../../../export.dart';
 
 // Provider for TawafNotifier using ChangeNotifier
@@ -145,7 +143,7 @@ class UmrahNotifier extends ChangeNotifier {
     notifyListeners();
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.are_you_sure_you_want_to_pause_tracking.tr()));
     if (result != true) return;
-    ref.read(safaMarwaProvider.notifier).cancelPositionStreamSubscription();
+    // ref.read(safaMarwaProvider.notifier).cancelPositionStreamSubscription();
     _cancelPositionStreamSubscription();
     isTrackerPaused = true;
     isLoading = false;

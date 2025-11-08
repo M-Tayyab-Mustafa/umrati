@@ -9,7 +9,7 @@ class CTextStyle {
           ? SizeConfig.sp(1)
           : fontFamily == Helper.urduTextFontFamily
           ? SizeConfig.sp(6)
-          : SizeConfig.sp(3);
+          : SizeConfig.sp(8);
 
   static get getFontFamily => isLTR(_context) ? Helper.englishTextFontFamily : Helper.urduTextFontFamily;
 

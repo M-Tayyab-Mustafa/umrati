@@ -157,8 +157,11 @@ abstract class  LocaleKeys {
   static const supplications = 'supplications';
   static const pause_tracker = 'pause_tracker';
   static const start_tracker = 'start_tracker';
+  static const sai_tracker = 'sai_tracker';
   static const tawaf_tracker = 'tawaf_tracker';
-  static const round_no = 'round_no';
+  static const tawaf_counter = 'tawaf_counter';
+  static const completed = 'completed';
+  static const round = 'round';
   static const count = 'count';
   static const count_increase_tip = 'count_increase_tip';
   static const istilaam_time = 'istilaam_time';

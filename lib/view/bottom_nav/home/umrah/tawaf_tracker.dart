@@ -17,143 +17,148 @@ class TawafTrackerPage extends ConsumerWidget {
       showEmblem: false,
       margin: SizeConfig.only(top: kToolbarHeight * 0.5),
       titleMargin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
-      titleWidget: Center(),
+      title: LocaleKeys.tawaf_counter.tr(),
+      titleAlignment: isLTR(context) ? Alignment(-0.1, 0) : Alignment(0.1, 0),
       titleType: TitleType.backArrow,
-      child: Stack(
+      child: Column(
         children: [
-          Align(
-            alignment: Alignment(0, provider.tawafCircleCount == 7 ? -0.85 : -0.5),
-            child: SizedBox(
-              height: SizeConfig.h(340),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final double size = SizeConfig.w(290);
-                  final double centralContentSize = size * 0.8;
-                  // final double trackingIndicatorSize = size * 0.16;
-                  // final double tawafCounterSize = size * 0.32;
-                  // final double radius = size * 0.5;
-                  // final Offset center = Offset(radius, radius);
-                  // final double angle = -2 * pi * provider.tawafCircleCompletionPercent + pi;
-                  // final double trackerDX = center.dx + radius * cos(angle);
-                  // final double trackerDY = center.dy + radius * sin(angle);
-                  // final double tawafCountAngle = -2 * pi * 0 + pi;
-                  // final double tawafCountDX = center.dx + radius * cos(tawafCountAngle);
-                  // final double tawafCountDY = center.dy + radius * sin(tawafCountAngle);
-                  return Stack(
-                    children: [
-                      // Center(child: CustomPaint(size: Size(size, size), painter: DashedCirclePainter(primaryColor: CColors.primary, gradientRadiusFactor: provider.tawafCircleCompletionPercent))),
-                      // if ((provider.tawafCircleCount != 0 || provider.umrahModel != null) && provider.tawafCircleCount < 7)
-                      //   Positioned(
-                      //     left: (constraints.maxWidth - size) / 2 + trackerDX - (trackingIndicatorSize / 2),
-                      //     top: (constraints.maxHeight - size) / 2 + trackerDY - (trackingIndicatorSize / 2),
-                      //     child: Container(
-                      //       width: trackingIndicatorSize,
-                      //       height: trackingIndicatorSize,
-                      //       decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
-                      //       child: Padding(padding: SizeConfig.only(left: 5), child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.w(20))),
-                      //     ),
-                      //   ),
-                      // if (provider.tawafCircleCount > 0 && provider.tawafCircleCount < 7)
-                      //   Positioned(
-                      //     left: (constraints.maxWidth - size) / 2 + tawafCountDX - (tawafCounterSize / 2),
-                      //     top: (constraints.maxHeight - size) / 2 + tawafCountDY - (tawafCounterSize / 2),
-                      //     child: SizedBox(
-                      //       width: tawafCounterSize,
-                      //       height: tawafCounterSize,
-                      //       child: Stack(
-                      //         children: [
-                      //           Center(child: CustomImage(width: tawafCounterSize, height: tawafCounterSize, path: 'assets/svg/tawaf_counter_bg.svg', imageType: ImageType.svg, fit: BoxFit.fill)),
-                      //           Center(child: Padding(padding: SizeConfig.only(bottom: 3), child: Text(provider.tawafCircleCount.toString(), style: CTextStyle.w900(fontSize: 20, color: CColors.primary)))),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ),
-                      Center(
-                        child: switch (provider.tawafCircleCount) {
-                          7 => Container(
-                            width: centralContentSize * 1.1,
-                            padding: SizeConfig.all(8),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              gradient: CColors.trackingGradient,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: CColors.primary),
-                              boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
-                            ),
-                            child: Container(
-                              padding: SizeConfig.all(16),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
+          // Align(
+          //   alignment: Alignment(0, provider.tawafCircleCount == 7 ? -0.85 : -0.5),
+          //   child: SizedBox(
+          //     height: SizeConfig.h(340),
+          //     child: LayoutBuilder(
+          //       builder: (context, constraints) {
+          //         // final double trackingIndicatorSize = size * 0.16;
+          //         // final double tawafCounterSize = size * 0.32;
+          //         // final double radius = size * 0.5;
+          //         // final Offset center = Offset(radius, radius);
+          //         // final double angle = -2 * pi * provider.tawafCircleCompletionPercent + pi;
+          //         // final double trackerDX = center.dx + radius * cos(angle);
+          //         // final double trackerDY = center.dy + radius * sin(angle);
+          //         // final double tawafCountAngle = -2 * pi * 0 + pi;
+          //         // final double tawafCountDX = center.dx + radius * cos(tawafCountAngle);
+          //         // final double tawafCountDY = center.dy + radius * sin(tawafCountAngle);
+          //         return Stack(
+          //           children: [
+          //             // Center(child: CustomPaint(size: Size(size, size), painter: DashedCirclePainter(primaryColor: CColors.primary, gradientRadiusFactor: provider.tawafCircleCompletionPercent))),
+          //             // if ((provider.tawafCircleCount != 0 || provider.umrahModel != null) && provider.tawafCircleCount < 7)
+          //             //   Positioned(
+          //             //     left: (constraints.maxWidth - size) / 2 + trackerDX - (trackingIndicatorSize / 2),
+          //             //     top: (constraints.maxHeight - size) / 2 + trackerDY - (trackingIndicatorSize / 2),
+          //             //     child: Container(
+          //             //       width: trackingIndicatorSize,
+          //             //       height: trackingIndicatorSize,
+          //             //       decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
+          //             //       child: Padding(padding: SizeConfig.only(left: 5), child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.w(20))),
+          //             //     ),
+          //             //   ),
+          //             // if (provider.tawafCircleCount > 0 && provider.tawafCircleCount < 7)
+          //             //   Positioned(
+          //             //     left: (constraints.maxWidth - size) / 2 + tawafCountDX - (tawafCounterSize / 2),
+          //             //     top: (constraints.maxHeight - size) / 2 + tawafCountDY - (tawafCounterSize / 2),
+          //             //     child: SizedBox(
+          //             //       width: tawafCounterSize,
+          //             //       height: tawafCounterSize,
+          //             //       child: Stack(
+          //             //         children: [
+          //             //           Center(child: CustomImage(width: tawafCounterSize, height: tawafCounterSize, path: 'assets/svg/tawaf_counter_bg.svg', imageType: ImageType.svg, fit: BoxFit.fill)),
+          //             //           Center(child: Padding(padding: SizeConfig.only(bottom: 3), child: Text(provider.tawafCircleCount.toString(), style: CTextStyle.w900(fontSize: 20, color: CColors.primary)))),
+          //             //         ],
+          //             //       ),
+          //             //     ),
+          //             //   ),
+
+          //           ],
+          //         );
+          //       },
+          //     ),
+          //   ),
+          // ),
+          Expanded(
+            child: Center(
+              child: switch (provider.tawafCircleCount) {
+                7 => Container(
+                  width: SizeConfig.h(270) * 1.1,
+                  padding: SizeConfig.all(8),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    gradient: CColors.trackingGradient,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: CColors.primary),
+                    boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
+                  ),
+                  child: Container(
+                    padding: SizeConfig.symmetric(vertical: 16, horizontal: 28),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomImage(path: 'assets/svg/complete_check.svg', imageType: ImageType.svg, size: SizeConfig.w(150), margin: SizeConfig.only(bottom: 8)),
+                        Text(LocaleKeys.seven_rounds_completed.tr(), style: CTextStyle.w800(fontSize: 20, color: Colors.white), textAlign: TextAlign.center),
+                      ],
+                    ),
+                  ),
+                ),
+                _ => GestureDetector(
+                  onTap: (provider.isRoundCompleted) ? provider.startNextRound : null,
+                  child: Container(
+                    width: SizeConfig.h(290),
+                    padding: SizeConfig.all(4),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(gradient: CColors.trackingGradient, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.3), blurRadius: 30, offset: Offset(0, 5))]),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(gradient: CColors.trackingSecondaryGradient, shape: BoxShape.circle),
+                      child:
+                          (provider.isRoundCompleted)
+                              ? Stack(
                                 children: [
-                                  CustomImage(path: 'assets/svg/complete_check.svg', imageType: ImageType.svg, size: SizeConfig.w(size * 0.25), margin: SizeConfig.only(bottom: 8)),
-                                  Text(LocaleKeys.seven_rounds_completed.tr(), style: CTextStyle.w800(fontSize: 20, color: Colors.white), textAlign: TextAlign.center),
+                                  Center(child: Opacity(opacity: 0.1, child: CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: SizeConfig.h(250), margin: SizeConfig.only(bottom: 12)))),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      CustomImage(path: 'assets/svg/istilaam_time.svg', imageType: ImageType.svg, height: SizeConfig.w(100), margin: SizeConfig.only(bottom: 12)),
+                                      Text(LocaleKeys.istilaam_time.tr(), style: CTextStyle.w900(fontSize: 22)),
+                                    ],
+                                  ),
+                                ],
+                              )
+                              : Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment(0, -0.2),
+                                    child: FittedBox(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Center(child: Text(provider.tawafCircleCount.toString(), style: CTextStyle.w600(fontSize: 90, color: CColors.primary))),
+                                          Center(child: Text('${LocaleKeys.completed.tr()}${isLTR(context) ? ' ' : '                     '}${LocaleKeys.round.tr()}', style: CTextStyle.w900(fontSize: 20))),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment(0, 0.7),
+                                    child: GestureDetector(
+                                      onTap: provider.onCountTap,
+                                      onLongPress: provider.completeRound,
+                                      child: Container(
+                                        height: SizeConfig.w(120),
+                                        width: SizeConfig.w(120),
+                                        decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.2), blurRadius: 5, offset: Offset(0, 5))]),
+                                        child: Center(child: FittedBox(child: Text(LocaleKeys.count.tr(), style: CTextStyle.w700(fontSize: 22, color: Colors.white)))),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                          ),
-                          _ => GestureDetector(
-                            onTap: (provider.isRoundCompleted) ? provider.startNextRound : null,
-                            child: Container(
-                              width: centralContentSize,
-                              padding: SizeConfig.all(8),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(gradient: CColors.trackingGradient, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))]),
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(gradient: CColors.trackingSecondaryGradient, shape: BoxShape.circle),
-                                child:
-                                    (provider.isRoundCompleted)
-                                        ? Stack(
-                                          children: [
-                                            Center(child: Opacity(opacity: 0.1, child: CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: centralContentSize * 0.8, margin: SizeConfig.only(bottom: 12)))),
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                CustomImage(path: 'assets/svg/istilaam_time.svg', imageType: ImageType.svg, height: SizeConfig.w(80), margin: SizeConfig.only(bottom: 12)),
-                                                Text(LocaleKeys.istilaam_time.tr(), style: CTextStyle.w900(fontSize: 16)),
-                                              ],
-                                            ),
-                                          ],
-                                        )
-                                        : Stack(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment(0, -0.25),
-                                              child: FittedBox(
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [Center(child: Text(provider.tawafCircleCount.toString(), style: CTextStyle.w600(fontSize: 70))), Center(child: Text(LocaleKeys.round_no.tr(), style: CTextStyle.w900(fontSize: 16)))],
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment(0, 0.9),
-                                              child: GestureDetector(
-                                                onTap: provider.onCountTap,
-                                                onLongPress: provider.completeRound,
-                                                child: Container(
-                                                  height: SizeConfig.w(90),
-                                                  width: SizeConfig.w(90),
-                                                  decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.2), blurRadius: 5, offset: Offset(0, 5))]),
-                                                  child: Center(child: FittedBox(child: Text(LocaleKeys.count.tr(), style: CTextStyle.w700(fontSize: 17, color: Colors.white)))),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                              ),
-                            ),
-                          ),
-                        },
-                      ),
-                    ],
-                  );
-                },
-              ),
+                    ),
+                  ),
+                ),
+              },
             ),
           ),
           Align(alignment: Alignment.bottomCenter, child: Padding(padding: SizeConfig.only(left: 16, right: 16, bottom: kToolbarHeight * 0.5), child: _buildDuaWidget(context: context, provider: provider))),

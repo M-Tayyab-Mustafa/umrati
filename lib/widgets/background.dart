@@ -80,10 +80,7 @@ class Background<T> extends StatelessWidget {
             if (showEmblem)
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Opacity(
-                  opacity: 0.15,
-                  child: CustomImage(path: 'assets/svg/emblem.svg', imageType: ImageType.svg, color: CColors.primary, height: SizeConfig.h(190), width: SizeConfig.w(SizeConfig.screenWidth)),
-                ),
+                child: Opacity(opacity: 0.15, child: CustomImage(path: 'assets/svg/emblem.svg', imageType: ImageType.svg, color: CColors.primary, height: SizeConfig.h(190), width: SizeConfig.w(SizeConfig.screenWidth))),
               ),
             SizedBox(
               height: SizeConfig.screenHeight,
@@ -102,19 +99,13 @@ class Background<T> extends StatelessWidget {
                               GestureDetector(
                                 onTap: () async {
                                   if (onPopInvokedWithResult != null) {
-                                    var dialogResult = await showGeneralDialog(
-                                      context: context,
-                                      pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: popConfirmationTitle ?? ''),
-                                    );
+                                    var dialogResult = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: popConfirmationTitle ?? ''));
                                     if (dialogResult == true) Navigator.pop(context);
                                   } else {
                                     Navigator.pop(context);
                                   }
                                 },
-                                child: Transform.rotate(
-                                  angle: isLTR(context) ? 0 : -(pi / 180 * 180),
-                                  child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: SizeConfig.w(25), margin: SizeConfig.only(left: 16)),
-                                ),
+                                child: Transform.rotate(angle: isLTR(context) ? 0 : -(pi / 180 * 180), child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: SizeConfig.w(25), margin: SizeConfig.only(left: 16))),
                               ),
                               Expanded(
                                 child: Padding(
@@ -136,13 +127,7 @@ class Background<T> extends StatelessWidget {
                                   Expanded(
                                     child: Align(
                                       alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
-                                      child: CustomImage(
-                                        margin: logoMargin ?? SizeConfig.zero,
-                                        path: DefaultImages.logoWithName,
-                                        imageType: ImageType.svg,
-                                        fit: BoxFit.fitWidth,
-                                        width: SizeConfig.w(SizeConfig.screenWidth * 0.45),
-                                      ),
+                                      child: CustomImage(margin: logoMargin ?? SizeConfig.zero, path: DefaultImages.logoWithName, imageType: ImageType.svg, fit: BoxFit.fitWidth, width: SizeConfig.w(SizeConfig.screenWidth * 0.45)),
                                     ),
                                   ),
                                   if (backgroundType == BackgroundType.logoWithSkip)
@@ -151,10 +136,7 @@ class Background<T> extends StatelessWidget {
                                     else
                                       Padding(
                                         padding: skipMargin ?? SizeConfig.only(right: isLTR(context) ? 16 : 0, left: isLTR(context) ? 0 : 16),
-                                        child: GestureDetector(
-                                          onTap: onSkipTap,
-                                          child: Text(LocaleKeys.skip.tr(), style: CTextStyle.w400(fontSize: 20, color: CColors.primary, decoration: TextDecoration.underline)),
-                                        ),
+                                        child: GestureDetector(onTap: onSkipTap, child: Text(LocaleKeys.skip.tr(), style: CTextStyle.w400(fontSize: 20, color: CColors.primary, decoration: TextDecoration.underline))),
                                       ),
                                 ],
                               ),
@@ -166,32 +148,26 @@ class Background<T> extends StatelessWidget {
                                   child: switch (titleType) {
                                     TitleType.empty => titleWidget ?? Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 18)),
                                     TitleType.backArrow => Row(
-                                      crossAxisAlignment:
-                                          title != null
-                                              ? Helper.getAlignment(context, title ?? '', titleStyle ?? CTextStyle.w500(fontSize: isLTR(context) ? 18 : 22), SizeConfig.screenWidth - 32)
-                                              : CrossAxisAlignment.center,
+                                      crossAxisAlignment: title != null ? Helper.getAlignment(context, title ?? '', titleStyle ?? CTextStyle.w500(fontSize: isLTR(context) ? 18 : 22), SizeConfig.screenWidth - 32) : CrossAxisAlignment.center,
                                       children: [
                                         GestureDetector(
                                           onTap: () async {
                                             if (onPopInvokedWithResult != null) {
-                                              var dialogResult = await showGeneralDialog(
-                                                context: context,
-                                                pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: popConfirmationTitle ?? ''),
-                                              );
+                                              var dialogResult = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: popConfirmationTitle ?? ''));
                                               if (dialogResult == true) Navigator.pop(context);
                                             } else {
                                               Navigator.pop(context);
                                             }
                                           },
-                                          child: Transform.rotate(
-                                            angle: isLTR(context) ? 0 : pi / 180 * 180,
-                                            child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: 30),
-                                          ),
+                                          child: Transform.rotate(angle: isLTR(context) ? 0 : pi / 180 * 180, child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: 30)),
                                         ),
                                         Expanded(
-                                          child: Padding(
-                                            padding: SizeConfig.only(left: isLTR(context) ? 4 : 0, right: isLTR(context) ? 0 : 4),
-                                            child: titleWidget ?? Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 18)),
+                                          child: Align(
+                                            alignment: titleAlignment ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
+                                            child: Padding(
+                                              padding: SizeConfig.only(left: isLTR(context) ? 4 : 0, right: isLTR(context) ? 0 : 4),
+                                              child: titleWidget ?? Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 18)),
+                                            ),
                                           ),
                                         ),
                                       ],

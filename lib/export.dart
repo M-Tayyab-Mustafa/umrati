@@ -119,3 +119,4 @@ export 'package:webview_flutter/webview_flutter.dart' hide X509Certificate;
 export 'package:cached_network_image/cached_network_image.dart';
 export 'package:flutter_svg/svg.dart';
 export 'package:pinput/pinput.dart';
+export 'package:fluttertoast/fluttertoast.dart';
