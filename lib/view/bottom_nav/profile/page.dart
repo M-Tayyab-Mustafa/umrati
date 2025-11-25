@@ -27,7 +27,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       title: LocaleKeys.profile.tr(),
       titleAlignment: Alignment.center,
       titleStyle: CTextStyle.w500(fontSize: 22, letterSpacing: 2),
-      margin: SizeConfig.only(left: 16, right: 16, bottom: 50),
+      margin: ScaledEdgeInsets.only(left: 16, right: 16, bottom: 50),
       child:
           provider.isLoading
               ? Loading()
@@ -38,9 +38,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   children: [
                     Center(
                       child: Container(
-                        margin: SizeConfig.only(top: 32),
-                        height: SizeConfig.h(120),
-                        width: SizeConfig.h(120),
+                        margin: ScaledEdgeInsets.only(top: 32),
+                        height: 120.pr,
+                        width: 120.pr,
                         child: Stack(
                           children: [
                             Center(
@@ -48,8 +48,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                 enableBorder: true,
                                 border: Border.all(color: CColors.primary, width: 2),
                                 borderRadius: BorderRadius.circular(160),
-                                height: SizeConfig.h(100),
-                                width: SizeConfig.h(100),
+                                height: 100.pr,
+                                width: 100.pr,
                                 path: provider.user!.photo.isNotEmpty ? provider.user!.photo : provider.localImagePath,
                                 imageType: provider.user!.photo.isNotEmpty ? ImageType.network : ImageType.png,
                                 fit: BoxFit.cover,
@@ -60,10 +60,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               child: GestureDetector(
                                 onTap: ref.read(profileProvider.notifier).onProfileImageTap,
                                 child: Container(
-                                  height: SizeConfig.h(20),
-                                  width: SizeConfig.w(40),
+                                  height: 20.pr,
+                                  width: 40.pr,
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(32), color: Colors.white),
-                                  child: CustomImage(path: 'assets/svg/camera.svg', imageType: ImageType.svg, size: SizeConfig.w(15), fit: BoxFit.scaleDown),
+                                  child: CustomImage(path: 'assets/svg/camera.svg', imageType: ImageType.svg, size: 15.pr, fit: BoxFit.scaleDown),
                                 ),
                               ),
                             ),
@@ -78,21 +78,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
-                              margin: SizeConfig.only(top: 16),
-                              padding: SizeConfig.symmetric(horizontal: 12, vertical: 4),
+                              margin: ScaledEdgeInsets.only(top: 16),
+                              padding: ScaledEdgeInsets.symmetric(horizontal: 12, vertical: 4),
                               decoration: BoxDecoration(color: CColors.paleYellow, borderRadius: BorderRadius.circular(32)),
                               child: Text(LocaleKeys.premium.tr(), style: CTextStyle.w500(fontSize: 14)),
                             ),
                             if (provider.daysRemaining < 4)
                               Padding(
-                                padding: SizeConfig.only(top: 8),
+                                padding: ScaledEdgeInsets.only(top: 8),
                                 child: Text.rich(
                                   TextSpan(
                                     children: [
-                                      WidgetSpan(
-                                        alignment: PlaceholderAlignment.middle,
-                                        child: Text('${provider.daysRemaining} ${LocaleKeys.days_of_premium_remaining.tr()}  ', style: CTextStyle.w400(fontSize: 12)),
-                                      ),
+                                      WidgetSpan(alignment: PlaceholderAlignment.middle, child: Text('${provider.daysRemaining} ${LocaleKeys.days_of_premium_remaining.tr()}  ', style: CTextStyle.w400(fontSize: 12))),
                                       WidgetSpan(alignment: PlaceholderAlignment.middle, child: GestureDetector(onTap: provider.renew, child: Text(LocaleKeys.renew.tr(), style: CTextStyle.w500()))),
                                     ],
                                   ),
@@ -103,7 +100,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         ),
                       ),
                     Padding(
-                      padding: SizeConfig.symmetric(vertical: 16),
+                      padding: ScaledEdgeInsets.symmetric(vertical: 16),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -113,17 +110,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       ),
                     ),
                     PhoneNumberTextField(controller: provider.numberController, readOnly: true),
-                    CTextField(margin: SizeConfig.symmetric(vertical: 20), controller: provider.emailController, labelText: LocaleKeys.email.tr(), readOnly: true),
-                    CTextField(
-                      onTap: provider.updateName,
-                      controller: provider.nameController,
-                      labelText: LocaleKeys.name.tr(),
-                      readOnly: true,
-                      suffixIcon: CustomImage(path: 'assets/svg/edit.svg', imageType: ImageType.svg, size: SizeConfig.w(20)),
-                    ),
-                    Padding(padding: SizeConfig.only(top: 20), child: Text(LocaleKeys.select_your_gender.tr(), style: CTextStyle.w500(fontSize: 17))),
+                    CTextField(margin: ScaledEdgeInsets.symmetric(vertical: 20), controller: provider.emailController, labelText: LocaleKeys.email.tr(), readOnly: true),
+                    CTextField(onTap: provider.updateName, controller: provider.nameController, labelText: LocaleKeys.name.tr(), readOnly: true, suffixIcon: CustomImage(path: 'assets/svg/edit.svg', imageType: ImageType.svg, size: 20.pr)),
+                    Padding(padding: ScaledEdgeInsets.only(top: 20), child: Text(LocaleKeys.select_your_gender.tr(), style: CTextStyle.w500(fontSize: 17))),
                     Padding(
-                      padding: SizeConfig.only(top: 8, bottom: 16),
+                      padding: ScaledEdgeInsets.only(top: 8, bottom: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -140,7 +131,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                       : 'assets/svg/gender/un_selected_male_ur.svg',
                               imageType: ImageType.svg,
                               fit: BoxFit.fill,
-                              size: SizeConfig.h(100),
+                              size: 100.pr,
                             ),
                           ),
                           Expanded(
@@ -156,7 +147,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                       : 'assets/svg/gender/un_selected_female_ur.svg',
                               imageType: ImageType.svg,
                               fit: BoxFit.fill,
-                              size: SizeConfig.h(100),
+                              size: 100.pr,
                             ),
                           ),
                         ],
@@ -166,28 +157,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       onTap: ref.read(profileProvider.notifier).onDeleteAccountTap,
                       child: Row(
                         children: [
-                          CustomImage(
-                            path: 'assets/svg/trash.svg',
-                            imageType: ImageType.svg,
-                            size: SizeConfig.w(20),
-                            margin: SizeConfig.only(right: isLTR(context) ? 16 : 0, left: isLTR(context) ? 0 : 16),
-                          ),
+                          CustomImage(path: 'assets/svg/trash.svg', imageType: ImageType.svg, size: 20.pr, margin: ScaledEdgeInsets.only(right: isLTR(context) ? 16 : 0, left: isLTR(context) ? 0 : 16)),
                           Text(LocaleKeys.delete_account.tr(), style: CTextStyle.w500()),
                         ],
                       ),
                     ),
                     Padding(
-                      padding: SizeConfig.only(top: 22, bottom: 20),
+                      padding: ScaledEdgeInsets.only(top: 22, bottom: 20),
                       child: GestureDetector(
                         onTap: ref.read(profileProvider.notifier).onLogoutTap,
                         child: Row(
                           children: [
-                            CustomImage(
-                              path: 'assets/svg/logout.svg',
-                              imageType: ImageType.svg,
-                              size: SizeConfig.w(20),
-                              margin: SizeConfig.only(right: isLTR(context) ? 16 : 0, left: isLTR(context) ? 0 : 16),
-                            ),
+                            CustomImage(path: 'assets/svg/logout.svg', imageType: ImageType.svg, size: 20.pr, margin: ScaledEdgeInsets.only(right: isLTR(context) ? 16 : 0, left: isLTR(context) ? 0 : 16)),
                             Text(LocaleKeys.logout.tr(), style: CTextStyle.w500()),
                           ],
                         ),

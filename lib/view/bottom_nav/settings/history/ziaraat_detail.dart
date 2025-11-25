@@ -24,13 +24,13 @@ class _ZiaraatDetailPageState extends ConsumerState<ZiaraatDetailPage> {
     return Background(
       showEmblem: false,
       backgroundType: BackgroundType.logo,
-      margin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
+      margin: ScaledEdgeInsets.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(padding: SizeConfig.only(top: 16), child: Text('${LocaleKeys.your_current_location.tr()}:', style: CTextStyle.w500(fontSize: 22))),
+          Padding(padding: ScaledEdgeInsets.only(top: 16), child: Text('${LocaleKeys.your_current_location.tr()}:', style: CTextStyle.w500(fontSize: 22))),
           Text(provider.myCurrentLocation, style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal)),
-          Padding(padding: SizeConfig.only(top: 16), child: Text(LocaleKeys.your_ziaraat_destinations.tr(), style: CTextStyle.w500(fontSize: 20))),
+          Padding(padding: ScaledEdgeInsets.only(top: 16), child: Text(LocaleKeys.your_ziaraat_destinations.tr(), style: CTextStyle.w500(fontSize: 20))),
           Expanded(
             child:
                 provider.isLoading
@@ -41,7 +41,7 @@ class _ZiaraatDetailPageState extends ConsumerState<ZiaraatDetailPage> {
                           ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            padding: SizeConfig.zero,
+                            padding: ScaledEdgeInsets.zero,
                             itemCount: provider.ziaraatHistory!.completedZiaraats.length,
                             itemBuilder: (context, index) {
                               var ziaraat = provider.ziaraatHistory!.completedZiaraats[index];
@@ -51,7 +51,7 @@ class _ZiaraatDetailPageState extends ConsumerState<ZiaraatDetailPage> {
                           ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            padding: SizeConfig.zero,
+                            padding: ScaledEdgeInsets.zero,
                             itemCount: provider.ziaraatHistory!.remainingZiaraats.length,
                             itemBuilder: (context, index) {
                               var ziaraat = provider.ziaraatHistory!.remainingZiaraats[index];
@@ -64,19 +64,12 @@ class _ZiaraatDetailPageState extends ConsumerState<ZiaraatDetailPage> {
           ),
           if (!provider.isLoading)
             Padding(
-              padding: SizeConfig.only(bottom: 32),
+              padding: ScaledEdgeInsets.only(bottom: 32),
               child: Row(
                 children: [
-                  CButton(
-                    onTap: () => Navigator.pop(context),
-                    title: LocaleKeys.go_back.tr(),
-                    useTitleWidth: true,
-                    backgroundColor: CColors.secondaryBackground,
-                    borderColor: CColors.primary,
-                    titleColor: CColors.primary,
-                  ),
+                  CButton(width: 110.pr, onTap: () => Navigator.pop(context), title: LocaleKeys.go_back.tr(), useTitleWidth: true, backgroundColor: CColors.secondaryBackground, borderColor: CColors.primary, titleColor: CColors.primary),
                   Spacer(),
-                  if (!provider.ziaraatHistory!.isCompleted) CButton(onTap: provider.resume, title: LocaleKeys.resume_ziaraat.tr()),
+                  if (!provider.ziaraatHistory!.isCompleted) CButton(width: 150.pr, onTap: provider.resume, title: LocaleKeys.resume_ziaraat.tr()),
                 ],
               ),
             ),

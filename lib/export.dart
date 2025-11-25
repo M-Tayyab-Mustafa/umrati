@@ -120,3 +120,4 @@ export 'package:cached_network_image/cached_network_image.dart';
 export 'package:flutter_svg/svg.dart';
 export 'package:pinput/pinput.dart';
 export 'package:fluttertoast/fluttertoast.dart';
+export 'package:url_launcher/url_launcher.dart';

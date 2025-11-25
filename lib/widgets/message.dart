@@ -15,13 +15,10 @@ class MessageCard extends StatelessWidget {
         Align(
           alignment: Alignment.centerRight,
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: SizeConfig.w(SizeConfig.screenWidth * 0.6)),
+            constraints: BoxConstraints(maxWidth: 400.pr),
             child: Container(
-              padding: SizeConfig.symmetric(vertical: 8, horizontal: 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(SizeConfig.r(12)), topRight: Radius.circular(SizeConfig.r(12)), bottomLeft: Radius.circular(SizeConfig.r(12))),
-                color: CColors.primary,
-              ),
+              padding: ScaledEdgeInsets.symmetric(vertical: 8, horizontal: 10),
+              decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(12.pr), topRight: Radius.circular(12.pr), bottomLeft: Radius.circular(12.pr)), color: CColors.primary),
               child: Text(message.question, style: CTextStyle.w400(color: Colors.white, fontSize: 14)),
             ),
           ),
@@ -29,13 +26,10 @@ class MessageCard extends StatelessWidget {
         Align(
           alignment: Alignment.centerLeft,
           child: Container(
-            width: SizeConfig.w(SizeConfig.screenWidth * 0.7),
-            margin: SizeConfig.symmetric(vertical: 16),
-            padding: SizeConfig.symmetric(vertical: 8, horizontal: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(topRight: Radius.circular(SizeConfig.r(12)), bottomRight: Radius.circular(SizeConfig.r(12)), topLeft: Radius.circular(SizeConfig.r(12))),
-              color: Colors.white,
-            ),
+            width: 400.pr,
+            margin: ScaledEdgeInsets.symmetric(vertical: 16),
+            padding: ScaledEdgeInsets.symmetric(vertical: 8, horizontal: 10),
+            decoration: BoxDecoration(borderRadius: BorderRadius.only(topRight: Radius.circular(12.pr), bottomRight: Radius.circular(12.pr), topLeft: Radius.circular(12.pr)), color: Colors.white),
             child: Column(
               children: [
                 Align(alignment: isLTR(context) ? Alignment.centerLeft : Alignment.centerRight, child: Text(message.answer, style: CTextStyle.w400(fontSize: 14))),
@@ -43,13 +37,13 @@ class MessageCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
-                      padding: SizeConfig.only(top: 16),
+                      padding: ScaledEdgeInsets.only(top: 16),
                       child: Directionality(
                         textDirection: TextDirection.ltr,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            CustomImage(onTap: onCopyTap, path: 'assets/svg/copy.svg', imageType: ImageType.svg, size: SizeConfig.w(18), color: CColors.charcoalBlack),
+                            CustomImage(onTap: onCopyTap, path: 'assets/svg/copy.svg', imageType: ImageType.svg, size: 18.pr, color: CColors.charcoalBlack),
                             // CustomImage(
                             //   margin: EdgeInsets.symmetric(horizontal: 16),
                             //   path: 'assets/svg/speaker.svg',
@@ -63,7 +57,7 @@ class MessageCard extends StatelessWidget {
                               onTap: onLikeTap,
                               path: message.isLiked ? 'assets/svg/liked.svg' : 'assets/svg/un_liked.svg',
                               imageType: ImageType.svg,
-                              size: SizeConfig.w(18),
+                              size: 18.pr,
                               color: message.isLiked ? CColors.primary : CColors.charcoalBlack,
                             ),
                           ],

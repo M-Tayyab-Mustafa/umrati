@@ -23,7 +23,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   List<PlanModel> plans = [];
   late PlanModel selectedPlan;
   late UserModel user;
-  final panelController = SlidingUpPanelController(value: SlidingUpPanelStatus.collapsed);
+  // final panelController = SlidingUpPanelController(value: SlidingUpPanelStatus.collapsed);
   bool showThreeMonthPlans = true;
   final TextEditingController keyController = TextEditingController();
   String userRegion = 'US';
@@ -52,7 +52,8 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     isSubscribing = true;
     notifyListeners();
     try {
-      panelController.anchor();
+      // panelController.anchor();
+      await _subscribePlan();
       isSubscribing = false;
       notifyListeners();
     } catch (e) {
@@ -91,32 +92,20 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       if ((await query.get()).docs.isNotEmpty) {
         doc = (await query.get()).docs.first.reference;
         var userIds = List<String>.from((await doc.get()).get('user_ids'));
-        await doc.set(
-          SubscriptionModel(
-            uid: doc.id,
-            user_ids: userIds,
-            plan: selectedPlan,
-          ).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp(), expire_at: FieldValue.serverTimestamp()),
-        );
+        await doc.set(SubscriptionModel(uid: doc.id, user_ids: userIds, plan: selectedPlan).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp(), expire_at: FieldValue.serverTimestamp()));
         final expireAt = (await doc.get()).get('expire_at') as Timestamp;
         await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: selectedPlan.duration)).millisecondsSinceEpoch)});
         infoToast('Plan Updated Successfully');
       } else {
         doc = subscriptionCollection.doc();
-        await doc.set(
-          SubscriptionModel(
-            uid: doc.id,
-            user_ids: [user.uid],
-            plan: selectedPlan,
-          ).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp(), expire_at: FieldValue.serverTimestamp()),
-        );
+        await doc.set(SubscriptionModel(uid: doc.id, user_ids: [user.uid], plan: selectedPlan).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp(), expire_at: FieldValue.serverTimestamp()));
         final expireAt = (await doc.get()).get('expire_at') as Timestamp;
         await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: selectedPlan.duration)).millisecondsSinceEpoch)});
         infoToast('Plan Subscribed Successfully');
       }
       Helper.userSubscription = SubscriptionModel.fromMap((await doc.get()).data()!);
       await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id, is_premium: true));
-      ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
+      Navigator.canPop(context);
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -173,36 +162,36 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     }
   }
 
-  Future<void> onJazzCashTap() async {
-    isLoadingJazzCashPaymentMethod = true;
-    notifyListeners();
-    await Payment.instance.makePaymentByJazzCash(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
-    panelController.collapse();
-    isLoadingJazzCashPaymentMethod = false;
-    notifyListeners();
-  }
+  // Future<void> onJazzCashTap() async {
+  //   isLoadingJazzCashPaymentMethod = true;
+  //   notifyListeners();
+  //   await Payment.instance.makePaymentByJazzCash(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+  //   panelController.collapse();
+  //   isLoadingJazzCashPaymentMethod = false;
+  //   notifyListeners();
+  // }
 
-  Future<void> onEasyPaisaTap() async {
-    isLoadingEasyPaisaPaymentMethod = true;
-    notifyListeners();
-    await Payment.instance.makePaymentByEasyPaisa(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
-    panelController.collapse();
-    isLoadingEasyPaisaPaymentMethod = false;
-    notifyListeners();
-  }
+  // Future<void> onEasyPaisaTap() async {
+  //   isLoadingEasyPaisaPaymentMethod = true;
+  //   notifyListeners();
+  //   await Payment.instance.makePaymentByEasyPaisa(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+  //   panelController.collapse();
+  //   isLoadingEasyPaisaPaymentMethod = false;
+  //   notifyListeners();
+  // }
 
-  Future<void> onCardTab() async {
-    isLoadingStripePaymentMethod = true;
-    notifyListeners();
-    await Payment.instance.makeStripePayment(userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
-    panelController.collapse();
-    isLoadingStripePaymentMethod = false;
-    notifyListeners();
-  }
+  // Future<void> onCardTab() async {
+  //   isLoadingStripePaymentMethod = true;
+  //   notifyListeners();
+  //   await Payment.instance.makeStripePayment(userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+  //   panelController.collapse();
+  //   isLoadingStripePaymentMethod = false;
+  //   notifyListeners();
+  // }
 
   @override
   void dispose() {
-    panelController.dispose();
+    // panelController.dispose();
     super.dispose();
   }
 }

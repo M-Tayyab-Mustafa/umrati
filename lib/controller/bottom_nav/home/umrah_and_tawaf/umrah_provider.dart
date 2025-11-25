@@ -56,7 +56,10 @@ class UmrahNotifier extends ChangeNotifier {
 
   void onPopInvokedWithResult(bool didPop, result) async {
     if (canPop || didPop) return;
-    var dialogResult = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.exit_umrah_confirmation.tr()));
+    var dialogResult = await showGeneralDialog(
+      context: context,
+      pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: userActivityType == UserActivityType.umrah ? LocaleKeys.exit_umrah_confirmation.tr() : LocaleKeys.exit_tawaf_confirmation.tr()),
+    );
     if (dialogResult == true) {
       canPop = true;
       Navigator.pop(context);
@@ -65,6 +68,8 @@ class UmrahNotifier extends ChangeNotifier {
 
   // Initialize TawafNotifier
   Future<void> initialization(UserActivityType userActivityType) async {
+    isLoading = true;
+    notifyListeners();
     canPop = false;
     this.userActivityType = userActivityType;
     ref.read(meeqaatTwoTasksProvider.notifier).updateLoading(true);
@@ -100,6 +105,8 @@ class UmrahNotifier extends ChangeNotifier {
 
     if (umrahModel != null && hasDoneBeforeMeeqaatTasks && hasReachedMeeqaat && hasDoneAfterMeeqaatTasks && tawafCircleCount < 7) await _startTawaf();
     if (context.mounted) ref.read(meeqaatTwoTasksProvider.notifier).updateLoading(false);
+    isLoading = false;
+    if (context.mounted) notifyListeners();
   }
 
   Future<void> _fromTawaf() async {

@@ -29,32 +29,16 @@ class _BottomNavigationPageState extends ConsumerState<BottomNavigationPage> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding: SizeConfig.symmetric(horizontal: 16),
+                  padding: ScaledEdgeInsets.symmetric(horizontal: 16),
                   child: Container(
-                    height: SizeConfig.h(55),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                      border: Border.all(color: CColors.primary),
-                    ),
+                    height: 55.pr,
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)), border: Border.all(color: CColors.primary)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
+                        Expanded(child: BottomNavItem(onTap: () => provider.onBottomNavTap.call(BottomNavTabs.home), isSelected: BottomNavTabs.home == provider.selectedTab, icon: 'assets/svg/bottom_nav/home.svg', title: LocaleKeys.home.tr())),
                         Expanded(
-                          child: BottomNavItem(
-                            onTap: () => provider.onBottomNavTap.call(BottomNavTabs.home),
-                            isSelected: BottomNavTabs.home == provider.selectedTab,
-                            icon: 'assets/svg/bottom_nav/home.svg',
-                            title: LocaleKeys.home.tr(),
-                          ),
-                        ),
-                        Expanded(
-                          child: BottomNavItem(
-                            onTap: () => provider.onBottomNavTap.call(BottomNavTabs.profile),
-                            isSelected: BottomNavTabs.profile == provider.selectedTab,
-                            icon: 'assets/svg/bottom_nav/profile.svg',
-                            title: LocaleKeys.profile.tr(),
-                          ),
+                          child: BottomNavItem(onTap: () => provider.onBottomNavTap.call(BottomNavTabs.profile), isSelected: BottomNavTabs.profile == provider.selectedTab, icon: 'assets/svg/bottom_nav/profile.svg', title: LocaleKeys.profile.tr()),
                         ),
                         Expanded(
                           child: BottomNavItem(

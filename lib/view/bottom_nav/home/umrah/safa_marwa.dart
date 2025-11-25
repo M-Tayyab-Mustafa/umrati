@@ -30,18 +30,18 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
       logoAlign: Alignment.center,
       backgroundType: BackgroundType.logoWithSkip,
       onSkipTap: provider.debugSkipSafaMarwa,
-      titleMargin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
+      titleMargin: ScaledEdgeInsets.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
       titleType: TitleType.backArrow,
-      titleWidget: Padding(padding: SizeConfig.only(right: isLTR(context) ? 28 : 0, left: isLTR(context) ? 0 : 28), child: CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: SizeConfig.w(40))),
+      titleWidget: Padding(padding: ScaledEdgeInsets.only(right: isLTR(context) ? 28 : 0, left: isLTR(context) ? 0 : 28), child: CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: 40.pr)),
       showEmblem: false,
-      margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: kToolbarHeight * 0.5),
+      margin: ScaledEdgeInsets.only(top: kToolbarHeight * 0.5, bottom: kToolbarHeight * 0.5),
       child: Column(
         children: [
           Padding(padding: const EdgeInsets.only(top: 8), child: Text(provider.saiRoundCount % 2 == 0 ? LocaleKeys.safa.tr() : LocaleKeys.marwa.tr(), style: CTextStyle.w500(color: CColors.charcoalBlack, fontSize: 22))),
           Expanded(
             child: Container(
-              width: SizeConfig.w(300),
-              padding: SizeConfig.all(4),
+              width: 280.pr,
+              padding: ScaledEdgeInsets.all(4),
               alignment: Alignment.center,
               decoration: BoxDecoration(gradient: CColors.trackingGradient, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.3), blurRadius: 30, offset: Offset(0, 5))]),
               child: Container(
@@ -67,8 +67,8 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
                         onTap: provider.onCountTap,
                         onLongPress: provider.updateRoundCount,
                         child: Container(
-                          height: SizeConfig.w(120),
-                          width: SizeConfig.w(120),
+                          height: 100.pr,
+                          width: 100.pr,
                           decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.2), blurRadius: 5, offset: Offset(0, 5))]),
                           child: Center(child: FittedBox(child: Text(LocaleKeys.count.tr(), style: CTextStyle.w700(fontSize: 22, color: Colors.white)))),
                         ),
@@ -87,7 +87,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
           //         SingleChildScrollView(
           //           controller: provider.scrollController,
           //           child: Padding(
-          //             padding: SizeConfig.symmetric(vertical: 16),
+          //             padding: ScaledEdgeInsets.symmetric(vertical: 16),
           //             child: SizedBox(
           //               height: safaMarwaDistance,
           //               width: SizeConfig.screenWidth,
@@ -111,11 +111,11 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
           //                             Align(alignment: Alignment.bottomCenter, child: _AreaToRunFast(width: trackWidth, height: safaMarwaDistance, provider: provider)),
           //                             Column(
           //                               children: [
-          //                                 Padding(padding: SizeConfig.only(top: 8), child: Text(LocaleKeys.marwa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
+          //                                 Padding(padding: ScaledEdgeInsets.only(top: 8), child: Text(LocaleKeys.marwa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
           //                                 Spacer(),
           //                                 Column(
           //                                   children: [
-          //                                     Padding(padding: SizeConfig.only(bottom: 8), child: Text(LocaleKeys.safa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
+          //                                     Padding(padding: ScaledEdgeInsets.only(bottom: 8), child: Text(LocaleKeys.safa.tr(), style: CTextStyle.w800(color: CColors.deepTeal, fontSize: 20))),
           //                                     CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: SizeConfig.w(50)),
           //                                   ],
           //                                 ),
@@ -130,7 +130,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
           //                                 height: trackerSize,
           //                                 decoration: BoxDecoration(shape: BoxShape.circle, gradient: CColors.solidButtonGradient, boxShadow: primaryShadows),
           //                                 child: Padding(
-          //                                   padding: SizeConfig.only(top: provider.isOneSideSaiRunCompleted ? 4 : 0, bottom: provider.isOneSideSaiRunCompleted ? 0 : 4),
+          //                                   padding: ScaledEdgeInsets.only(top: provider.isOneSideSaiRunCompleted ? 4 : 0, bottom: provider.isOneSideSaiRunCompleted ? 0 : 4),
           //                                   child: Transform.rotate(angle: provider.isOneSideSaiRunCompleted ? (pi / 2) : (3 * pi / 2), child: CustomImage(path: 'assets/svg/play.svg', imageType: ImageType.svg, height: SizeConfig.w(20))),
           //                                 ),
           //                               ),
@@ -140,7 +140,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
           //                       },
           //                     ),
           //                   ),
-          //                   Padding(padding: SizeConfig.only(top: 10), child: Text(LocaleKeys.starting_point.tr(), style: CTextStyle.w400(color: CColors.deepTeal))),
+          //                   Padding(padding: ScaledEdgeInsets.only(top: 10), child: Text(LocaleKeys.starting_point.tr(), style: CTextStyle.w400(color: CColors.deepTeal))),
           //                 ],
           //               ),
           //             ),
@@ -190,7 +190,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
       children: [
         Text('$duaTitle${ref.read(umrahProvider.notifier).user?.gender == Gender.female.name ? ' (${LocaleKeys.in_low_voice.tr()})' : ''}', style: CTextStyle.w600(fontSize: 18, color: CColors.deepTeal)),
         BasicCard(
-          margin: SizeConfig.symmetric(vertical: 8, horizontal: 16),
+          margin: ScaledEdgeInsets.symmetric(vertical: 8, horizontal: 16),
           backgroundColor: CColors.duaBackground.withValues(alpha: 0.2),
           child: Center(child: Text(dua, style: CTextStyle.w500(fontSize: 16, color: CColors.deepTeal, fontFamily: provider.saiRoundCount < 6 ? Helper.arabicTextFontFamily : null), textAlign: TextAlign.center, textDirection: TextDirection.rtl)),
         ),
@@ -261,7 +261,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
 //         padding: EdgeInsets.only(bottom: height * 0.29, top: height * 0.50),
 //         child: Stack(
 //           children: [
-//             Container(color: CColors.primary.withValues(alpha: 0.15), margin: SizeConfig.symmetric(horizontal: 10)),
+//             Container(color: CColors.primary.withValues(alpha: 0.15), margin: ScaledEdgeInsets.symmetric(horizontal: 10)),
 //             Align(alignment: Alignment.centerLeft, child: Container(color: CColors.secondary, width: SizeConfig.w(20))),
 //             Align(alignment: Alignment.centerRight, child: Container(color: CColors.secondary, width: SizeConfig.w(20))),
 //             Center(child: Text(LocaleKeys.area_to_run_fast.tr(), style: CTextStyle.w300(color: Colors.white, fontSize: 16))),

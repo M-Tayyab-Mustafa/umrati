@@ -9,39 +9,32 @@ class ZiaraatReadingDetailDialog extends StatefulWidget {
 }
 
 class _ZiaraatReadingDetailDialogState extends State<ZiaraatReadingDetailDialog> {
-  double fontSize = SizeConfig.sp(10);
+  double fontSize = 10.sp;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(SizeConfig.r(8))),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.pr)),
       title: Row(
         children: [
           if (!isLTR(context)) const Spacer(),
           GestureDetector(
             onTap: () => Navigator.pop(context),
-            child: Container(
-              decoration: BoxDecoration(color: CColors.charcoalBlack, shape: BoxShape.circle),
-              padding: SizeConfig.all(4),
-              child: Icon(Icons.close_rounded, color: Colors.white, size: SizeConfig.w(18)),
-            ),
+            child: Container(decoration: BoxDecoration(color: CColors.charcoalBlack, shape: BoxShape.circle), padding: ScaledEdgeInsets.all(4), child: Icon(Icons.close_rounded, color: Colors.white, size: 18.pr)),
           ),
           if (isLTR(context)) const Spacer(),
         ],
       ),
-      contentPadding: SizeConfig.symmetric(horizontal: 16),
+      contentPadding: ScaledEdgeInsets.symmetric(horizontal: 16),
       content: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: SizeConfig.w(SizeConfig.screenHeight * 0.7)),
+        constraints: BoxConstraints(maxHeight: 500.pr),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Align(
               alignment: isLTR(context) ? Alignment.centerLeft : Alignment.centerRight,
-              child: Padding(
-                padding: SizeConfig.only(bottom: 8),
-                child: Text(isLTR(context) ? widget.ziaraat.title_en : widget.ziaraat.title_ur, style: CTextStyle.w500(fontSize: fontSize + 6), maxLines: 2, overflow: TextOverflow.ellipsis),
-              ),
+              child: Padding(padding: ScaledEdgeInsets.only(bottom: 8), child: Text(isLTR(context) ? widget.ziaraat.title_en : widget.ziaraat.title_ur, style: CTextStyle.w500(fontSize: fontSize + 6), maxLines: 2, overflow: TextOverflow.ellipsis)),
             ),
             ScrollbarTheme(
               data: ScrollbarThemeData(
@@ -53,10 +46,10 @@ class _ZiaraatReadingDetailDialogState extends State<ZiaraatReadingDetailDialog>
                 interactive: true,
                 trackVisibility: true,
                 thumbVisibility: true,
-                radius: Radius.circular(SizeConfig.r(16)),
+                radius: Radius.circular(16.pr),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: SizeConfig.symmetric(horizontal: 8),
+                    padding: ScaledEdgeInsets.symmetric(horizontal: 8),
                     child: Text(
                       (isLTR(context)
                               ? widget.ziaraat.detail_en.isEmpty
@@ -73,27 +66,19 @@ class _ZiaraatReadingDetailDialogState extends State<ZiaraatReadingDetailDialog>
               ),
             ),
             Padding(
-              padding: SizeConfig.symmetric(horizontal: 16, vertical: 4),
+              padding: ScaledEdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.text_decrease, size: SizeConfig.w(20)),
+                  Icon(Icons.text_decrease, size: 20.pr),
                   Expanded(
                     child: SliderTheme(
-                      data: SliderTheme.of(context).copyWith(trackHeight: SizeConfig.w(1), thumbShape: RoundSliderThumbShape(enabledThumbRadius: SizeConfig.r(6))),
-                      child: Slider(
-                        value: fontSize,
-                        min: SizeConfig.sp(10),
-                        max: SizeConfig.sp(20),
-                        onChanged: increaseSize,
-                        thumbColor: CColors.primary,
-                        activeColor: CColors.charcoalBlack,
-                        inactiveColor: CColors.charcoalBlack,
-                      ),
+                      data: SliderTheme.of(context).copyWith(trackHeight: 1.pr, thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.pr)),
+                      child: Slider(value: fontSize, min: 10.sp, max: 20.sp, onChanged: increaseSize, thumbColor: CColors.primary, activeColor: CColors.charcoalBlack, inactiveColor: CColors.charcoalBlack),
                     ),
                   ),
-                  Icon(Icons.text_increase, size: SizeConfig.w(24)),
+                  Icon(Icons.text_increase, size: 24.pr),
                 ],
               ),
             ),

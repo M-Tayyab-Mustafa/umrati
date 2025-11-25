@@ -28,13 +28,10 @@ class _SelectLanguagePageState extends ConsumerState<SelectLanguagePage> {
         children: [
           BasicCard(
             onTap: ref.read(selectLanguageProvider.notifier).changeLanguageTap,
-            margin: SizeConfig.only(top: 70, bottom: 40),
+            margin: ScaledEdgeInsets.only(top: 70, bottom: 40),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(ref.watch(selectLanguageProvider).selectedLanguage.tr(), style: CTextStyle.w600(fontSize: 16)),
-                Text(LocaleKeys.change_the_language.tr(), style: CTextStyle.w600(color: CColors.primary, fontSize: 16)),
-              ],
+              children: [Text(ref.watch(selectLanguageProvider).selectedLanguage.tr(), style: CTextStyle.w600(fontSize: 16)), Text(LocaleKeys.change_the_language.tr(), style: CTextStyle.w600(color: CColors.primary, fontSize: 16))],
             ),
           ),
           CButton(onTap: ref.read(selectLanguageProvider.notifier).continueTap, title: LocaleKeys.continued.tr(), titleWithIcon: true),

@@ -21,7 +21,7 @@ class _ZiaraatHistoryPageState extends ConsumerState<ZiaraatHistoryPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(historyProvider);
     return Background(
-      margin: SizeConfig.zero,
+      margin: ScaledEdgeInsets.zero,
       backgroundType: BackgroundType.titleWithBackButton,
       logoAlign: Alignment.center,
       title: LocaleKeys.ziaraat.tr(),
@@ -32,8 +32,8 @@ class _ZiaraatHistoryPageState extends ConsumerState<ZiaraatHistoryPage> {
               ? Center(child: Text(LocaleKeys.no_history_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
               : GridView.builder(
                 shrinkWrap: true,
-                padding: SizeConfig.symmetric(vertical: 20, horizontal: 16),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: SizeConfig.w(30), crossAxisSpacing: SizeConfig.w(30)),
+                padding: ScaledEdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 30.pr, crossAxisSpacing: 30.pr),
                 itemCount: provider.ziaraatHistories.length,
                 itemBuilder: (context, index) {
                   var history = provider.ziaraatHistories[index];
@@ -47,8 +47,8 @@ class _ZiaraatHistoryPageState extends ConsumerState<ZiaraatHistoryPage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             CustomImage(
-                              margin: SizeConfig.only(right: 8),
-                              size: SizeConfig.w(25),
+                              margin: ScaledEdgeInsets.only(right: 8),
+                              size: 25.pr,
                               imageType: ImageType.svg,
                               color: CColors.primary,
                               path: switch (_getZiaraatCity(history.ziaraatCity)) {
@@ -63,18 +63,13 @@ class _ZiaraatHistoryPageState extends ConsumerState<ZiaraatHistoryPage> {
                         ),
                         Expanded(
                           child: Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(text: '${history.completedZiaraats.length}'),
-                                TextSpan(text: '/${history.total}', style: CTextStyle.w600(fontSize: 30, color: CColors.deepTeal.withValues(alpha: 0.5))),
-                              ],
-                            ),
+                            TextSpan(children: [TextSpan(text: '${history.completedZiaraats.length}'), TextSpan(text: '/${history.total}', style: CTextStyle.w600(fontSize: 30, color: CColors.deepTeal.withValues(alpha: 0.5)))]),
                             style: CTextStyle.w600(fontSize: 70, color: CColors.deepTeal, height: 1),
                           ),
                         ),
                         CButton(
-                          padding: SizeConfig.zero,
-                          margin: SizeConfig.only(top: 4),
+                          padding: ScaledEdgeInsets.zero,
+                          margin: ScaledEdgeInsets.only(top: 4),
                           onTap: () => provider.onViewZiaraatTap(history),
                           title: LocaleKeys.view.tr(),
                           borderRadius: BorderRadius.circular(40),

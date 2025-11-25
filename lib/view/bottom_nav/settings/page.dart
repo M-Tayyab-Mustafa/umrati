@@ -24,9 +24,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       showEmblem: false,
       backgroundType: BackgroundType.logo,
       logoAlign: Alignment.center,
-      margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: 60),
+      margin: ScaledEdgeInsets.only(top: kToolbarHeight * 0.5, bottom: 60),
       child: Padding(
-        padding: SizeConfig.only(top: kToolbarHeight * 0.5),
+        padding: ScaledEdgeInsets.only(top: kToolbarHeight * 0.5),
         child: Column(
           children: [
             Expanded(
@@ -57,7 +57,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   children: [
                     Text(LocaleKeys.buy_premium.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.primary)),
                     Padding(
-                      padding: SizeConfig.only(top: 15),
+                      padding: ScaledEdgeInsets.only(top: 15),
                       child: Row(
                         children: [
                           Expanded(
@@ -66,37 +66,31 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                CustomImage(margin: SizeConfig.only(bottom: 10), path: 'assets/svg/settings/kaba_no_ads.png', height: SizeConfig.h(50), imageType: ImageType.png, fit: BoxFit.fill),
+                                CustomImage(margin: ScaledEdgeInsets.only(bottom: 10), path: 'assets/svg/settings/kaba_no_ads.png', height: 50.pr, imageType: ImageType.png, fit: BoxFit.fill),
                                 Text(LocaleKeys.ads_free_journey.tr(), style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal), textAlign: TextAlign.center),
                               ],
                             ),
                           ),
-                          SizedBox(width: SizeConfig.w(8)),
+                          SizedBox(width: 8.pr),
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                CustomImage(margin: SizeConfig.only(bottom: 10), path: 'assets/svg/settings/more_ziaraats.png', height: SizeConfig.h(50), imageType: ImageType.png, fit: BoxFit.fill),
+                                CustomImage(margin: ScaledEdgeInsets.only(bottom: 10), path: 'assets/svg/settings/more_ziaraats.png', height: 50.pr, imageType: ImageType.png, fit: BoxFit.fill),
                                 Text(LocaleKeys.more_ziaraat_destinations.tr(), style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal), textAlign: TextAlign.center),
                               ],
                             ),
                           ),
-                          SizedBox(width: SizeConfig.w(8)),
+                          SizedBox(width: 8.pr),
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                CustomImage(
-                                  margin: SizeConfig.only(bottom: 10),
-                                  path: 'assets/svg/settings/unlimited_history.png',
-                                  height: SizeConfig.h(50),
-                                  imageType: ImageType.png,
-                                  fit: BoxFit.fill,
-                                ),
+                                CustomImage(margin: ScaledEdgeInsets.only(bottom: 10), path: 'assets/svg/settings/unlimited_history.png', height: 50.pr, imageType: ImageType.png, fit: BoxFit.fill),
                                 Text(LocaleKeys.unlimited_history.tr(), style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal), textAlign: TextAlign.center),
                               ],
                             ),
