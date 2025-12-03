@@ -26,23 +26,21 @@ class HistoryNotifier extends ChangeNotifier {
     notifyListeners();
     user = await LocalStorageManager.getUser();
     if (historyType == HistoryType.umrah) {
-      final query =
-          (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.umrah.name))).get()).docs
-              .map((history) => HistoryModel.fromMap(history.data()))
-              .toList();
+      final query = (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.umrah.name))).get()).docs.map((history) => HistoryModel.fromMap(history.data())).toList();
       umrahHistories = groupBy(query, (history) {
         var time = history.created_at!.toDate();
         return DateTime(time.year, time.month, time.day);
       });
+      final sortedKeys = umrahHistories.keys.toList()..sort((a, b) => b.compareTo(a));
+      umrahHistories = {for (var key in sortedKeys) key: umrahHistories[key]!};
     } else if (historyType == HistoryType.tawaf) {
-      final query =
-          (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.tawaf.name))).get()).docs
-              .map((history) => HistoryModel.fromMap(history.data()))
-              .toList();
+      final query = (await historyCollection.where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.tawaf.name))).get()).docs.map((history) => HistoryModel.fromMap(history.data())).toList();
       tawafHistories = groupBy(query, (history) {
         var time = history.created_at!.toDate();
         return DateTime(time.year, time.month, time.day);
       });
+      final sortedKeys = tawafHistories.keys.toList()..sort((a, b) => b.compareTo(a));
+      tawafHistories = {for (var key in sortedKeys) key: tawafHistories[key]!};
     } else {
       var query = await historyCollection
           .where(Filter.and(Filter('user_id', isEqualTo: user!.uid), Filter('type', isEqualTo: UserActivityType.ziaraat.name)))
