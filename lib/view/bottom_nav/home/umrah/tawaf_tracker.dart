@@ -9,7 +9,7 @@ class TawafTrackerPage extends ConsumerWidget {
     var provider = ref.watch(umrahProvider);
     return Background(
       canPop: provider.canPop,
-      popConfirmationTitle: LocaleKeys.exit_umrah_confirmation.tr(),
+      popConfirmationTitle: provider.userActivityType == UserActivityType.umrah ? LocaleKeys.exit_umrah_confirmation.tr() : LocaleKeys.exit_tawaf_confirmation.tr(),
       onPopInvokedWithResult: provider.onPopInvokedWithResult,
       logoAlign: Alignment.center,
       backgroundType: provider.tawafCircleCount == 7 ? BackgroundType.logo : BackgroundType.logoWithSkip,
