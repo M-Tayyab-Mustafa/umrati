@@ -28,7 +28,7 @@ class SocialLoginService {
     try {
       final appleCredential = await SignInWithApple.getAppleIDCredential(
         scopes: AppleIDAuthorizationScopes.values,
-        webAuthenticationOptions: WebAuthenticationOptions(clientId: 'com.mightysofts.umrati.service', redirectUri: Uri.parse('https://umrati-ec453.firebaseapp.com/__/auth/handler')),
+        webAuthenticationOptions: WebAuthenticationOptions(clientId: 'com.umrati.umrah.guide.app.service', redirectUri: Uri.parse('https://umrati-ec453.firebaseapp.com/__/auth/handler')),
       ).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       final oauthCredential = OAuthProvider("apple.com").credential(idToken: appleCredential.identityToken, accessToken: appleCredential.authorizationCode);
       await linkWithCredentials(context: context, credential: oauthCredential, email: appleCredential.email ?? '');
@@ -93,14 +93,9 @@ class SocialLoginService {
           country_code: '',
           gender: '',
         );
-        await _auth.currentUser
-            ?.linkWithCredential(EmailAuthProvider.credential(email: userCredential.user!.email!, password: user.password))
-            .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+        await _auth.currentUser?.linkWithCredential(EmailAuthProvider.credential(email: userCredential.user!.email!, password: user.password)).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       } else {
-        var querySnapshot = await userCollection
-            .where('email', isEqualTo: userCredential.user!.email!)
-            .get()
-            .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+        var querySnapshot = await userCollection.where('email', isEqualTo: userCredential.user!.email!).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
         user = UserModel.fromMap(querySnapshot.docs.first.data());
       }
       await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());

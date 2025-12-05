@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" package="com.mightysofts.umrati">
+    xmlns:tools="http://schemas.android.com/tools" package="com.umrati.umrah.guide.app">
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -41,7 +41,7 @@
 
         <!-- Apple -->
         <activity
-            android:name="com.mightysofts.umrati.sign_in_with_apple.SignInWithAppleCallback"
+            android:name="com.umrati.umrah.guide.app.sign_in_with_apple.SignInWithAppleCallback"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

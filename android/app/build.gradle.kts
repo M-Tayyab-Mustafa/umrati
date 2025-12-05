@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.mightysofts.umrati"
+    namespace = "com.umrati.umrah.guide.app"
     compileSdk = 36
     ndkVersion = "27.0.12077973"
 
@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.mightysofts.umrati"
+        applicationId = "com.umrati.umrah.guide.app"
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

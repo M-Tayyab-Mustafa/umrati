@@ -1,49 +1,34 @@
 {
   "project_info": {
-    "project_number": "422094310480",
-    "project_id": "umrati-ec453",
-    "storage_bucket": "umrati-ec453.firebasestorage.app"
+    "project_number": "626725934618",
+    "project_id": "umrati-app",
+    "storage_bucket": "umrati-app.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:422094310480:android:82a7c480abedba2b04d555",
+        "mobilesdk_app_id": "1:626725934618:android:8cd57734cf04650a1ee3a3",
         "android_client_info": {
-          "package_name": "com.mightysofts.umrati"
+          "package_name": "com.umrati.umrah.guide.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "422094310480-s9opo7tvle3l83k3fm0c9vuidmb0kl98.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.mightysofts.umrati",
-            "certificate_hash": "19d0f11eacc391237a52eb50879cb323f85fb2f5"
-          }
-        },
-        {
-          "client_id": "422094310480-7243b3855h47a2h37lc7g1r0v6b5mcnd.apps.googleusercontent.com",
+          "client_id": "626725934618-n915cp2rddm88u4j6r2uj2fff49a28f1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAhFG9V782qk9gWpsh4qqiDLxWE2I5QOqk"
+          "current_key": "AIzaSyByVmQwpwmvQtkxf4XrUSOEC-bdVsRfRaA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "422094310480-7243b3855h47a2h37lc7g1r0v6b5mcnd.apps.googleusercontent.com",
+              "client_id": "626725934618-n915cp2rddm88u4j6r2uj2fff49a28f1.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "422094310480-ulfu76ta97gusud3u389ckb53v1hcvlq.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.mightysofts.umrati"
-              }
             }
           ]
         }
