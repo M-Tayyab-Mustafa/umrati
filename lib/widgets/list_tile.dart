@@ -21,7 +21,7 @@ class CListTile extends ConsumerWidget {
     return BasicCard(
       borderWidth: 3,
       onTap: onTap,
-      margin: margin ?? ScaledEdgeInsets.only(bottom: 22, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
+      margin: margin ?? ScaledEdgeInsets.only(bottom: 14, left: screenSize.width * 0.06, right: screenSize.width * 0.06),
       padding: padding,
       height: height,
       width: width,

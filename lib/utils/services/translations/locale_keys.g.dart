@@ -78,6 +78,7 @@ abstract class  LocaleKeys {
   static const price = 'price';
   static const duration = 'duration';
   static const give_feedback = 'give_feedback';
+  static const privacy_policy = 'privacy_policy';
   static const history = 'history';
   static const buy_premium = 'buy_premium';
   static const buy = 'buy';

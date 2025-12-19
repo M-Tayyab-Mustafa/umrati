@@ -28,11 +28,15 @@ class SettingsNotifier extends ChangeNotifier {
   Future<void> onGiveFeedbackTap() async {
     final String phone = "03390706666";
     final Uri url = Uri.parse("https://wa.me/$phone");
-
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
-      print("Could not launch WhatsApp.");
+    }
+  }
+
+  Future<void> onTermsAndConditionsTap() async {
+    final Uri url = Uri.parse("https://sites.google.com/view/umrati-umrah-guidance-app/home");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
     }
   }
 

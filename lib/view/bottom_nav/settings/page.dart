@@ -42,6 +42,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.secondary, fontSize: 16)),
                     ),
                     CListTile(onTap: provider.onGiveFeedbackTap, title: LocaleKeys.give_feedback.tr(), icon: 'assets/svg/settings/feed_back.svg'),
+                    CListTile(onTap: provider.onTermsAndConditionsTap, title: LocaleKeys.privacy_policy.tr(), icon: 'assets/svg/settings/policy.svg'),
                   ],
                 ),
               ),
