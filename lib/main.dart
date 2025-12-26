@@ -10,14 +10,7 @@ Future<void> main() async {
   await Payment.instance.initializePayments();
   runApp(
     ProviderScope(
-      child: EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('ur', 'PK')],
-        path: 'assets/translations',
-        fallbackLocale: Locale('en', 'US'),
-        saveLocale: true,
-        assetLoader: CodegenLoader(),
-        child: MainApp(),
-      ),
+      child: EasyLocalization(supportedLocales: const [Locale('en', 'US'), Locale('ur', 'PK')], path: 'assets/translations', fallbackLocale: Locale('en', 'US'), saveLocale: true, assetLoader: CodegenLoader(), child: MainApp()),
     ),
   );
 }
@@ -51,6 +44,12 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
       debugShowCheckedModeBanner: false,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+          child: child!,
+        );
+      },
       home: SplashPage(),
       color: CColors.primary,
     );
