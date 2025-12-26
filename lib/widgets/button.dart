@@ -8,6 +8,7 @@ class CButton extends StatelessWidget {
     this.margin,
     this.padding,
     this.height,
+    this.width,
     this.useTitleWidth = false,
     this.fontSize,
     this.iconSize,
@@ -29,6 +30,7 @@ class CButton extends StatelessWidget {
   final Color? borderColor;
   final Color? backgroundColor;
   final double? height;
+  final double? width;
   final double? fontSize;
   final double? iconSize;
   final BorderRadiusGeometry? borderRadius;
@@ -50,25 +52,20 @@ class CButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double buttonSize =
-        title != null
-            ? Helper.getTextSize(title!, style ?? CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13)).width +
-                SizeConfig.w(50) +
-                (titleWithIcon ? SizeConfig.w(iconSize ?? 25) : 0)
-            : 0;
+    final double buttonSize = title != null ? Helper.getTextSize(title!, style ?? CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13)).width + 50.pr + (titleWithIcon ? (iconSize ?? 25).pr : 0) : 0;
     return Padding(
       padding: margin ?? EdgeInsets.zero,
       child: GestureDetector(
         onTap: !isEnabled || isLoading ? null : onTap,
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            minHeight: SizeConfig.h(height ?? 45),
-            maxHeight: SizeConfig.h(height ?? 50),
-            minWidth: useTitleWidth ? SizeConfig.w(32 + buttonSize) : SizeConfig.w(200),
-            maxWidth: useTitleWidth ? SizeConfig.w(32 + buttonSize) : SizeConfig.w(buttonSize < 200 ? 200 : buttonSize + 20),
+            minHeight: (height ?? 45).pr,
+            maxHeight: (height ?? 50).pr,
+            minWidth: width?.pr ?? (useTitleWidth ? (32 + buttonSize).pr : 200.pr),
+            maxWidth: width?.pr ?? (useTitleWidth ? (32 + buttonSize).pr : (buttonSize < 200 ? 200 : buttonSize + 20).pr),
           ),
           child: Container(
-            padding: padding ?? SizeConfig.symmetric(horizontal: 20),
+            padding: padding ?? ScaledEdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
               shape: shape ?? BoxShape.rectangle,
               border: Border.all(color: borderColor ?? CColors.primary, width: 1),
@@ -79,7 +76,7 @@ class CButton extends StatelessWidget {
             ),
             child:
                 isLoading
-                    ? Loading(height: SizeConfig.h(30), width: SizeConfig.h(30), color: Colors.white)
+                    ? Loading(height: 30.pr, width: 30.pr, color: Colors.white)
                     : title != null
                     ? titleWithIcon
                         ? Directionality(
@@ -88,17 +85,11 @@ class CButton extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(title!, style: style ?? CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13), maxLines: 1, overflow: TextOverflow.ellipsis),
-                              Transform.rotate(
-                                angle: isLTR(context) ? 0 : pi / 180 * 180,
-                                child: CustomImage(margin: SizeConfig.only(left: 12), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: SizeConfig.w(iconSize ?? 24)),
-                              ),
+                              Transform.rotate(angle: isLTR(context) ? 0 : pi / 180 * 180, child: CustomImage(margin: ScaledEdgeInsets.only(left: 12), path: DefaultImages.longArrowForward, imageType: ImageType.svg, width: (iconSize ?? 24).pr)),
                             ],
                           ),
                         )
-                        : Align(
-                          alignment: Alignment.center,
-                          child: Text(title!, style: style ?? CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13), maxLines: 1, overflow: TextOverflow.ellipsis),
-                        )
+                        : Align(alignment: Alignment.center, child: Text(title!, style: style ?? CTextStyle.w500(color: titleColor ?? Colors.white, fontSize: fontSize ?? 13), maxLines: 1, overflow: TextOverflow.ellipsis))
                     : child!,
           ),
         ),

@@ -16,29 +16,23 @@ class CMarker extends StatelessWidget {
       children: [
         SizedBox(
           height: size,
-          width: SizeConfig.w(20),
+          width: 20.pr,
           child: Stack(
             children: [
-              Center(child: Container(width: SizeConfig.w(2), decoration: BoxDecoration(color: indicatorColor ?? CColors.primary))),
-              Center(child: Container(width: SizeConfig.w(12), decoration: BoxDecoration(color: indicatorColor ?? CColors.primary, shape: BoxShape.circle))),
+              Center(child: Container(width: 2.pr, decoration: BoxDecoration(color: indicatorColor ?? CColors.primary))),
+              Center(child: Container(width: 12.pr, decoration: BoxDecoration(color: indicatorColor ?? CColors.primary, shape: BoxShape.circle))),
             ],
           ),
         ),
         Expanded(
           child: Container(
-            height: SizeConfig.h(size / 1.5),
-            padding: SizeConfig.symmetric(horizontal: 8),
-            decoration: BoxDecoration(color: color ?? CColors.primary, borderRadius: BorderRadius.circular(SizeConfig.r(3))),
+            height: (size / 1.5).pr,
+            padding: ScaledEdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(color: color ?? CColors.primary, borderRadius: BorderRadius.circular(3.pr)),
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    title,
-                    style: CTextStyle.w400(color: titleColor ?? Colors.white, fontSize: 14),
-                    maxLines: 1,
-                    textDirection: textDirection ?? languageDirection(context),
-                    textAlign: isLTR(context) ? TextAlign.left : TextAlign.right,
-                  ),
+                  child: Text(title, style: CTextStyle.w400(color: titleColor ?? Colors.white, fontSize: 14), maxLines: 1, textDirection: textDirection ?? languageDirection(context), textAlign: isLTR(context) ? TextAlign.left : TextAlign.right),
                 ),
                 if (distance != null) Directionality(textDirection: TextDirection.ltr, child: Text('$distance Km', style: CTextStyle.w400(color: Colors.white, fontSize: 14), maxLines: 1)),
               ],

@@ -1,4 +1,4 @@
-package com.mightysofts.umrati;
+package com.umrati.umrah.guide.app;
 
 import io.flutter.embedding.android.FlutterFragmentActivity;
 

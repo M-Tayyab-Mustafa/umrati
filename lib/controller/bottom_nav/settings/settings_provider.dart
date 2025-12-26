@@ -1,5 +1,4 @@
 import '../../../export.dart';
-import '../../../view/bottom_nav/settings/give_feedback.dart';
 import '../../../view/bottom_nav/settings/history/page.dart';
 import '../../../view/language/language.dart';
 import '../../../view/subscription/page.dart';
@@ -26,7 +25,20 @@ class SettingsNotifier extends ChangeNotifier {
 
   Future<void> onChangeTheLanguageTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const LanguagePage(isUpdatingLanguage: true)));
 
-  Future<void> onGiveFeedbackTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const GiveFeedbackPage()));
+  Future<void> onGiveFeedbackTap() async {
+    final String phone = "03390706666";
+    final Uri url = Uri.parse("https://wa.me/$phone");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> onTermsAndConditionsTap() async {
+    final Uri url = Uri.parse("https://sites.google.com/view/umrati-umrah-guidance-app/home");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    }
+  }
 
   Future<void> onBuyPremiumTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
 

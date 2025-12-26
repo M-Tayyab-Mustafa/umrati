@@ -22,7 +22,7 @@ class _GiveFeedbackPageState extends ConsumerState<GiveFeedbackPage> {
     var provider = ref.watch(giveFeedbackProvider);
     return Background(
       resizeToAvoidBottomInset: true,
-      margin: SizeConfig.zero,
+      margin: ScaledEdgeInsets.zero,
       showEmblem: false,
       backgroundType: BackgroundType.titleWithBackButton,
       title: LocaleKeys.give_feedback.tr(),
@@ -32,12 +32,12 @@ class _GiveFeedbackPageState extends ConsumerState<GiveFeedbackPage> {
               ? Loading()
               : SingleChildScrollView(
                 child: Padding(
-                  padding: SizeConfig.only(top: 20),
+                  padding: ScaledEdgeInsets.only(top: 20),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CTextField(
-                        margin: SizeConfig.symmetric(horizontal: 16),
+                        margin: ScaledEdgeInsets.symmetric(horizontal: 16),
                         controller: provider.emailController,
                         labelText: LocaleKeys.email.tr(),
                         textDirection: TextDirection.ltr,
@@ -46,22 +46,17 @@ class _GiveFeedbackPageState extends ConsumerState<GiveFeedbackPage> {
                         hintText: LocaleKeys.your_email_here.tr(),
                       ),
                       PhoneNumberTextField(
-                        margin: SizeConfig.symmetric(horizontal: 16, vertical: 25),
+                        margin: ScaledEdgeInsets.symmetric(horizontal: 16, vertical: 25),
                         withCountryCodePicker: true,
                         initialCountryCode: provider.selectedCountry,
                         onChanged: (value) => Helper.fixPhoneFormate(value, provider.numberController),
                         updateSelectedCountry: provider.updateSelectedCountry,
                         controller: provider.numberController,
                       ),
-                      CTextField(margin: SizeConfig.symmetric(horizontal: 16), controller: provider.nameController, labelText: LocaleKeys.name.tr(), hintText: LocaleKeys.your_name_here.tr()),
-                      CTextField(
-                        margin: SizeConfig.symmetric(horizontal: 16, vertical: 25),
-                        controller: provider.subjectController,
-                        labelText: LocaleKeys.subject.tr(),
-                        hintText: LocaleKeys.what_your_feedback_is_about.tr(),
-                      ),
-                      CTextField(margin: SizeConfig.symmetric(horizontal: 16), controller: provider.feedbackController, maxLines: 10, hintText: LocaleKeys.type_your_feedback_here.tr()),
-                      CButton(isLoading: provider.isLoading, margin: SizeConfig.symmetric(vertical: 40), onTap: provider.submit, title: LocaleKeys.submit.tr(), titleWithIcon: true),
+                      CTextField(margin: ScaledEdgeInsets.symmetric(horizontal: 16), controller: provider.nameController, labelText: LocaleKeys.name.tr(), hintText: LocaleKeys.your_name_here.tr()),
+                      CTextField(margin: ScaledEdgeInsets.symmetric(horizontal: 16, vertical: 25), controller: provider.subjectController, labelText: LocaleKeys.subject.tr(), hintText: LocaleKeys.what_your_feedback_is_about.tr()),
+                      CTextField(margin: ScaledEdgeInsets.symmetric(horizontal: 16), controller: provider.feedbackController, maxLines: 10, hintText: LocaleKeys.type_your_feedback_here.tr()),
+                      CButton(isLoading: provider.isLoading, margin: ScaledEdgeInsets.symmetric(vertical: 40), onTap: provider.submit, title: LocaleKeys.submit.tr(), titleWithIcon: true),
                     ],
                   ),
                 ),

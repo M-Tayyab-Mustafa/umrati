@@ -13,11 +13,11 @@ class StartConfirmationDialog extends StatelessWidget {
           Center(child: Container(decoration: BoxDecoration(color: Colors.black26))),
           Center(
             child: Container(
-              height: SizeConfig.h(fromUmrah ? SizeConfig.screenHeight * 0.5 : SizeConfig.screenHeight * 0.4),
-              margin: SizeConfig.symmetric(horizontal: SizeConfig.screenWidth * 0.08),
+              height: (fromUmrah ? 450 : 400).pr,
+              margin: ScaledEdgeInsets.symmetric(horizontal: 32),
               decoration: BoxDecoration(
                 color: fromUmrah ? CColors.secondaryBackground : Colors.white,
-                borderRadius: BorderRadius.circular(SizeConfig.r(20)),
+                borderRadius: BorderRadius.circular(20.pr),
                 border: Border.all(color: CColors.primary, width: 2),
                 boxShadow: primaryShadows.map((e) => e.copyWith(blurRadius: 30)).toList(),
               ),
@@ -25,31 +25,19 @@ class StartConfirmationDialog extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: SizeConfig.only(top: SizeConfig.screenHeight * 0.05, left: 16, right: 16),
+                      padding: ScaledEdgeInsets.only(top: 28, left: 16, right: 16),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            fromUmrah ? LocaleKeys.umrah_start_detail.tr() : LocaleKeys.please_reach_safa_start_point.tr(),
-                            style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal),
-                            textAlign: TextAlign.center,
-                          ),
-                          Expanded(
-                            child: CustomImage(
-                              margin: SizeConfig.symmetric(vertical: SizeConfig.screenHeight * 0.03),
-                              path: fromUmrah ? 'assets/png/home/green_light.png' : 'assets/png/home/safa_marwa.png',
-                              imageType: ImageType.png,
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
+                          Text(fromUmrah ? LocaleKeys.umrah_start_detail.tr() : LocaleKeys.please_reach_safa_start_point.tr(), style: CTextStyle.w900(fontSize: 20, color: CColors.deepTeal), textAlign: TextAlign.center),
+                          Expanded(child: CustomImage(margin: ScaledEdgeInsets.symmetric(vertical: 16), path: fromUmrah ? 'assets/png/home/green_light.png' : 'assets/png/home/safa_marwa.png', imageType: ImageType.png, fit: BoxFit.fitWidth)),
                         ],
                       ),
                     ),
                   ),
                   CButton(
-                    margin: SizeConfig.only(left: 16, right: 16, bottom: 20),
+                    margin: ScaledEdgeInsets.only(left: 16, right: 16, bottom: 20),
                     height: 45,
-
                     title: LocaleKeys.yes_i_have_reached.tr(),
                     onTap: () => Navigator.pop(dialogContext, true),
                     style: CTextStyle.w400(fontSize: 13, color: Colors.white),

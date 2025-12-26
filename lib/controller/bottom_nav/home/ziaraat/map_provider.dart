@@ -56,19 +56,11 @@ class MapPageNotifier extends ChangeNotifier {
 
       destinations = history!.remainingZiaraats;
       activeZiaraat = history!.remainingZiaraats.first;
-      markers.add(
-        Marker(
-          markerId: MarkerId(MapMarkerId.destination.name),
-          position: LatLng(activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble()),
-          icon: await _loadCustomIcon('assets/png/map/destination.png'),
-        ),
-      );
+      markers.add(Marker(markerId: MarkerId(MapMarkerId.destination.name), position: LatLng(activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble()), icon: await _loadCustomIcon('assets/png/map/destination.png')));
 
       notifyListeners();
       _positionStream?.cancel();
-      _positionStream = Geolocator.getPositionStream(
-        locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter),
-      ).listen((position) => _updateLocation(position));
+      _positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter)).listen((position) => _updateLocation(position));
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -82,10 +74,7 @@ class MapPageNotifier extends ChangeNotifier {
     var distance = Geolocator.distanceBetween(position.latitude, position.longitude, activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble());
     if (distance < 20) {
       _positionStream?.cancel();
-      await showGeneralDialog(
-        context: context,
-        pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.ziaraat_completion_message.tr(), withContinueButton: true),
-      );
+      await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.ziaraat_completion_message.tr(), withContinueButton: true));
       destinations.removeAt(0);
       history = history!.copyWith(remainingZiaraats: destinations, completedZiaraats: [...history!.completedZiaraats, activeZiaraat!]);
       await historyCollection.doc(history!.uid).update(history!.toMap(updatedAt: FieldValue.serverTimestamp()));
@@ -98,18 +87,11 @@ class MapPageNotifier extends ChangeNotifier {
         return ref.read(ziaraatProvider.notifier).reset();
       } else {
         activeZiaraat = destinations.first;
-        _positionStream = Geolocator.getPositionStream(
-          locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter),
-        ).listen((position) => _updateLocation(position));
+        _positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter)).listen((position) => _updateLocation(position));
       }
       markers =
-          markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet()..add(
-            Marker(
-              markerId: MarkerId(MapMarkerId.destination.name),
-              position: LatLng(activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble()),
-              icon: await _loadCustomIcon('assets/png/map/destination.png'),
-            ),
-          );
+          markers.where((e) => e.markerId.value != MapMarkerId.destination.name).toSet()
+            ..add(Marker(markerId: MarkerId(MapMarkerId.destination.name), position: LatLng(activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble()), icon: await _loadCustomIcon('assets/png/map/destination.png')));
     }
     await _getRoutePolyline(LatLng(position.latitude + 0.000007, position.longitude), LatLng(activeZiaraat!.lat.toDouble(), activeZiaraat!.lng.toDouble()));
     if (context.mounted) notifyListeners();
@@ -180,9 +162,9 @@ class MapPageNotifier extends ChangeNotifier {
               child: Material(
                 color: Colors.transparent,
                 child: Container(
-                  width: SizeConfig.w(110),
-                  padding: SizeConfig.symmetric(horizontal: 12, vertical: 16),
-                  decoration: BoxDecoration(color: const Color(0xFF212029), borderRadius: BorderRadius.circular(SizeConfig.r(32))),
+                  width: 110.pr,
+                  padding: ScaledEdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  decoration: BoxDecoration(color: const Color(0xFF212029), borderRadius: BorderRadius.circular(32.pr)),
                   child: Directionality(
                     textDirection: TextDirection.ltr,
                     child: Column(
@@ -191,19 +173,19 @@ class MapPageNotifier extends ChangeNotifier {
                       children: [
                         Text(LocaleKeys.ziaraat_history.tr(), style: CTextStyle.w500(fontSize: 10, color: Colors.white)),
                         Padding(
-                          padding: SizeConfig.only(top: 16, bottom: 20),
+                          padding: ScaledEdgeInsets.only(top: 16, bottom: 20),
                           child: GestureDetector(
                             onTap: hideMoreOptions,
                             child: Row(
                               children: [
-                                CustomImage(path: 'assets/svg/ziaraat/listen.svg', imageType: ImageType.svg, size: SizeConfig.w(20), margin: SizeConfig.only(right: 10)),
+                                CustomImage(path: 'assets/svg/ziaraat/listen.svg', imageType: ImageType.svg, size: 20.pr, margin: ScaledEdgeInsets.only(right: 10)),
                                 Text(LocaleKeys.listen.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
                               ],
                             ),
                           ),
                         ),
                         Padding(
-                          padding: SizeConfig.only(bottom: 10),
+                          padding: ScaledEdgeInsets.only(bottom: 10),
                           child: GestureDetector(
                             onTap: () {
                               hideMoreOptions();
@@ -211,7 +193,7 @@ class MapPageNotifier extends ChangeNotifier {
                             },
                             child: Row(
                               children: [
-                                CustomImage(path: 'assets/svg/ziaraat/read.svg', imageType: ImageType.svg, fit: BoxFit.fitHeight, size: SizeConfig.w(20), margin: SizeConfig.only(right: 10)),
+                                CustomImage(path: 'assets/svg/ziaraat/read.svg', imageType: ImageType.svg, fit: BoxFit.fitHeight, size: 20.pr, margin: ScaledEdgeInsets.only(right: 10)),
                                 Text(LocaleKeys.read.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
                               ],
                             ),

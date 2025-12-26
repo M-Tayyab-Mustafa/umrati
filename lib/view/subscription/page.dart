@@ -29,9 +29,9 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
           children: [
             Text('3 ${LocaleKeys.months.tr()}', style: CTextStyle.w500(fontSize: 18, color: Colors.black)),
             Padding(
-              padding: SizeConfig.symmetric(horizontal: 8),
+              padding: ScaledEdgeInsets.symmetric(horizontal: 8),
               child: SizedBox(
-                height: SizeConfig.w(30),
+                height: 30.pr,
                 child: FittedBox(
                   child: Switch(
                     value: !provider.showThreeMonthPlans,
@@ -48,8 +48,8 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
           ],
         ),
         titleType: provider.isRenewingPlan ? TitleType.backArrow : TitleType.empty,
-        titleMargin: SizeConfig.symmetric(horizontal: 20, vertical: 25),
-        margin: SizeConfig.only(top: kToolbarHeight / 2),
+        titleMargin: ScaledEdgeInsets.symmetric(horizontal: 20, vertical: 25),
+        margin: ScaledEdgeInsets.only(top: kToolbarHeight / 2),
         logoAlign: Alignment.topCenter,
         child:
             provider.isLoading
@@ -82,16 +82,12 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                                   ),
                                 ),
                                 if (!provider.isRenewingPlan)
-                                  BasicCard(
-                                    onTap: provider.enterKeyDialog,
-                                    backgroundColor: CColors.duaBackground,
-                                    child: Text(LocaleKeys.enter_access_key_prompt.tr(), style: CTextStyle.w500(color: CColors.primary, fontSize: 14)),
-                                  ),
+                                  BasicCard(onTap: provider.enterKeyDialog, backgroundColor: CColors.duaBackground, child: Text(LocaleKeys.enter_access_key_prompt.tr(), style: CTextStyle.w500(color: CColors.primary, fontSize: 14))),
                               ],
                             ),
                           ),
                         ),
-                        SlidingUpPanelWidget(controlHeight: 0, anchor: 0.4, panelController: provider.panelController, child: PaymentSheet()),
+                        // SlidingUpPanelWidget(controlHeight: 0, anchor: 0.4, panelController: provider.panelController, child: PaymentSheet()),
                       ],
                     );
                   },

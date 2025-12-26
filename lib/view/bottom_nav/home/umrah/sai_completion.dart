@@ -11,15 +11,15 @@ class SaiCompletionPage extends ConsumerWidget {
       backgroundType: BackgroundType.logo,
       title: '',
       titleType: TitleType.backArrow,
-      margin: SizeConfig.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
+      margin: ScaledEdgeInsets.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
       showEmblem: false,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
-            height: SizeConfig.w(280),
-            width: SizeConfig.w(280),
-            padding: SizeConfig.all(16),
+            height: 280.pr,
+            width: 280.pr,
+            padding: ScaledEdgeInsets.all(16),
             decoration: BoxDecoration(
               gradient: CColors.trackingGradient,
               shape: BoxShape.circle,
@@ -28,17 +28,14 @@ class SaiCompletionPage extends ConsumerWidget {
             ),
             child: Container(
               alignment: Alignment.center,
-              padding: SizeConfig.all(16),
+              padding: ScaledEdgeInsets.all(16),
               decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CustomImage(path: 'assets/svg/complete_check.svg', imageType: ImageType.svg, size: SizeConfig.w(80)),
-                  Padding(
-                    padding: SizeConfig.only(top: 10),
-                    child: Text(LocaleKeys.your_sai_has_completed.tr(), style: CTextStyle.w800(fontSize: 22, color: Colors.white), textAlign: TextAlign.center),
-                  ),
+                  CustomImage(path: 'assets/svg/complete_check.svg', imageType: ImageType.svg, size: 110.pr),
+                  Padding(padding: ScaledEdgeInsets.only(top: 10), child: Text(LocaleKeys.your_sai_has_completed.tr(), style: CTextStyle.w800(fontSize: 22, color: Colors.white), textAlign: TextAlign.center)),
                 ],
               ),
             ),
@@ -47,10 +44,7 @@ class SaiCompletionPage extends ConsumerWidget {
             title: provider.user?.gender == Gender.female.name ? LocaleKeys.perform_taqsir.tr() : LocaleKeys.shave_the_head.tr(),
             isSelected: provider.isShavedHead,
             onTap: provider.toggleShaveTheHead,
-            child: Text(
-              provider.user?.gender == Gender.female.name ? LocaleKeys.trim_a_small_portion.tr() : LocaleKeys.shave_the_head_description.tr(),
-              style: CTextStyle.w400(color: CColors.primary, fontSize: 14),
-            ),
+            child: Text(provider.user?.gender == Gender.female.name ? LocaleKeys.trim_a_small_portion.tr() : LocaleKeys.shave_the_head_description.tr(), style: CTextStyle.w400(color: CColors.primary, fontSize: 14)),
           ),
           CButton(isLoading: provider.isLoading, title: LocaleKeys.continued.tr(), titleWithIcon: true, onTap: ref.read(umrahProvider).umrahCompleted),
         ],

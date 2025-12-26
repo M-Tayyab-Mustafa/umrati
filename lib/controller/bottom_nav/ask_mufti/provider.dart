@@ -30,13 +30,13 @@ class AskMuftiNotifier extends ChangeNotifier {
   }
 
   Future<void> send() async {
-    if (queryController.text.isEmpty) {
+    if (queryController.text.trim().isEmpty) {
       errorToast(LocaleKeys.field_cant_be_empty.tr());
       return;
     }
     final newMessage = MessageModel(
       id: Uuid().v4(),
-      question: queryController.text,
+      question: queryController.text.trim(),
       answer: LocaleKeys.bot_is_typing.tr(),
       isLiked: false,
       isGeneratingAnswer: true,
@@ -77,11 +77,7 @@ class AskMuftiNotifier extends ChangeNotifier {
     try {
       Uri uri = Uri.parse('https://automate.robustcraft.io/webhook/pdf-rag');
       final body = {'gender': user!.gender, 'question': message.question};
-      final response = await post(
-        uri,
-        body: jsonEncode(body),
-        headers: {'content-type': 'application/json'},
-      ).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      final response = await post(uri, body: jsonEncode(body), headers: {'content-type': 'application/json'}).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       final responseBody = jsonDecode(response.body);
       if (response.statusCode == 200) {
         messages.last = MessageModel.fromMap(responseBody['output']).copyWith(id: message.id, created_at: Timestamp.now(), updated_at: Timestamp.now());

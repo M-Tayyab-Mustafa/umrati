@@ -30,7 +30,9 @@ class _StartTawafPageState extends ConsumerState<UmrahPage> {
     var provider = ref.watch(umrahProvider);
     ref.read(umrahProvider.notifier).context = context;
     ref.read(umrahProvider.notifier).ref = ref;
-    if (!provider.hasDoneBeforeMeeqaatTasks) {
+    if (provider.isLoading) {
+      return Background(child: const Loading());
+    } else if (!provider.hasDoneBeforeMeeqaatTasks) {
       return MeeqaatTwoTasksPage();
     } else if (!provider.hasReachedMeeqaat) {
       return MeeqaatPage();

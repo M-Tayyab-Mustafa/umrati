@@ -23,24 +23,17 @@ class _MeeqaatPageState extends ConsumerState<MeeqaatPage> {
       showEmblem: false,
       backgroundType: BackgroundType.logo,
       titleType: TitleType.backArrow,
-      margin: SizeConfig.only(top: SizeConfig.screenHeight * 0.1, left: 16, right: 16),
+      margin: ScaledEdgeInsets.only(top: SizeConfig.mediaQuery.size.height * 0.1, left: 16, right: 16),
       title: '${LocaleKeys.distance_from_meeqaat.tr()}:',
-      titleMargin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: 20),
+      titleMargin: ScaledEdgeInsets.only(top: kToolbarHeight * 0.5, bottom: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(LocaleKeys.dhul_huayfah.tr(), style: CTextStyle.w400(color: CColors.primary, fontSize: 18)),
-          Padding(padding: SizeConfig.only(top: 10, bottom: 20), child: TimeLine(items: [(provider.distance ?? '0 km'), (provider.time ?? '0 min')])),
+          Padding(padding: ScaledEdgeInsets.only(top: 10, bottom: 20), child: TimeLine(items: [(provider.distance ?? '0 km'), (provider.time ?? '0 min')])),
           Text('${LocaleKeys.your_current_location.tr()}:', style: CTextStyle.w500(fontSize: 18)),
-          Padding(padding: SizeConfig.only(top: 10, bottom: 30), child: Text(provider.location, style: CTextStyle.w400(fontSize: 15))),
-          Center(
-            child: CButton(
-              isLoading: provider.isLoading,
-              title: LocaleKeys.continue_your_remaining_3_tasks.tr(),
-              fontSize: 14,
-              onTap: ref.read(locationFetchProvider.notifier).onContinueYourRemainingTasks,
-            ),
-          ),
+          Padding(padding: ScaledEdgeInsets.only(top: 10, bottom: 30), child: Text(provider.location, style: CTextStyle.w400(fontSize: 15))),
+          Center(child: CButton(isLoading: provider.isLoading, title: LocaleKeys.continue_your_remaining_3_tasks.tr(), fontSize: 14, onTap: ref.read(locationFetchProvider.notifier).onContinueYourRemainingTasks)),
         ],
       ),
     );

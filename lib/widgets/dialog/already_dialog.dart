@@ -13,37 +13,26 @@ class AlreadyDialog extends StatelessWidget {
           Center(child: Container(decoration: BoxDecoration(color: Colors.black26))),
           Center(
             child: Container(
-              height: SizeConfig.screenHeight * 0.35,
-              padding: SizeConfig.symmetric(vertical: SizeConfig.screenHeight * 0.0),
-              margin: SizeConfig.symmetric(horizontal: SizeConfig.screenWidth * 0.08),
-              decoration: BoxDecoration(
-                color: CColors.secondaryBackground,
-                borderRadius: BorderRadius.circular(SizeConfig.r(20)),
-                border: Border.all(color: CColors.primary, width: 2),
-                boxShadow: primaryShadows.map((e) => e.copyWith(blurRadius: 30)).toList(),
-              ),
+              height: 300.pr,
+              padding: ScaledEdgeInsets.zero,
+              margin: ScaledEdgeInsets.symmetric(horizontal: 32),
+              decoration: BoxDecoration(color: CColors.secondaryBackground, borderRadius: BorderRadius.circular(20.pr), border: Border.all(color: CColors.primary, width: 2), boxShadow: primaryShadows.map((e) => e.copyWith(blurRadius: 30)).toList()),
               child: Column(
                 children: [
-                  CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: SizeConfig.h(80), padding: SizeConfig.only(top: 10)),
+                  CustomImage(path: 'assets/svg/kabaa.svg', imageType: ImageType.svg, height: 80.pr, padding: ScaledEdgeInsets.only(top: 10)),
                   Expanded(
                     child: Padding(
-                      padding: SizeConfig.symmetric(horizontal: SizeConfig.screenWidth * 0.1),
-                      child: Center(
-                        child: Text(
-                          isDoingUmrah ? LocaleKeys.already_in_umrah.tr() : LocaleKeys.already_in_ziaraats.tr(),
-                          style: CTextStyle.w900(fontSize: 16, color: CColors.deepTeal),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                      padding: ScaledEdgeInsets.symmetric(horizontal: 28),
+                      child: Center(child: Text(isDoingUmrah ? LocaleKeys.already_in_umrah.tr() : LocaleKeys.already_in_ziaraats.tr(), style: CTextStyle.w900(fontSize: 16, color: CColors.deepTeal), textAlign: TextAlign.center)),
                     ),
                   ),
                   Padding(
-                    padding: SizeConfig.only(bottom: 20),
+                    padding: ScaledEdgeInsets.only(bottom: 20),
                     child: Row(
                       children: [
                         Expanded(
                           child: Padding(
-                            padding: SizeConfig.only(left: isLTR(dialogContext) ? 20 : 16, right: isLTR(dialogContext) ? 16 : 20),
+                            padding: ScaledEdgeInsets.only(left: isLTR(dialogContext) ? 20 : 16, right: isLTR(dialogContext) ? 16 : 20),
                             child: CButton(
                               backgroundColor: CColors.secondaryBackground,
                               borderColor: CColors.primary,
@@ -57,7 +46,7 @@ class AlreadyDialog extends StatelessWidget {
                         ),
                         Expanded(
                           child: Padding(
-                            padding: SizeConfig.only(left: isLTR(dialogContext) ? 16 : 20, right: isLTR(dialogContext) ? 20 : 16),
+                            padding: ScaledEdgeInsets.only(left: isLTR(dialogContext) ? 16 : 20, right: isLTR(dialogContext) ? 20 : 16),
                             child: CButton(height: 45, title: LocaleKeys.continued.tr(), onTap: () => Navigator.pop(dialogContext, true), style: CTextStyle.w400(fontSize: 12, color: Colors.white)),
                           ),
                         ),

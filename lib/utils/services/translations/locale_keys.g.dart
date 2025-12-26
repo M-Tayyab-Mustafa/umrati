@@ -49,6 +49,7 @@ abstract class  LocaleKeys {
   static const these_3_tasks_can_be_done_even_before_meeqaat = 'these_3_tasks_can_be_done_even_before_meeqaat';
   static const two_nafl_prayer = 'two_nafl_prayer';
   static const exit_umrah_confirmation = 'exit_umrah_confirmation';
+  static const exit_tawaf_confirmation = 'exit_tawaf_confirmation';
   static const intention_niyyah = 'intention_niyyah';
   static const talbiyah = 'talbiyah';
   static const tasks_done = 'tasks_done';
@@ -77,6 +78,7 @@ abstract class  LocaleKeys {
   static const price = 'price';
   static const duration = 'duration';
   static const give_feedback = 'give_feedback';
+  static const privacy_policy = 'privacy_policy';
   static const history = 'history';
   static const buy_premium = 'buy_premium';
   static const buy = 'buy';
@@ -157,7 +159,15 @@ abstract class  LocaleKeys {
   static const supplications = 'supplications';
   static const pause_tracker = 'pause_tracker';
   static const start_tracker = 'start_tracker';
+  static const sai_tracker = 'sai_tracker';
   static const tawaf_tracker = 'tawaf_tracker';
+  static const tawaf_counter = 'tawaf_counter';
+  static const completed = 'completed';
+  static const round = 'round';
+  static const count = 'count';
+  static const next = 'next';
+  static const istilaam_tip = 'istilaam_tip';
+  static const count_increase_tip = 'count_increase_tip';
   static const istilaam_time = 'istilaam_time';
   static const start_tawaf = 'start_tawaf';
   static const starting_point = 'starting_point';

@@ -21,7 +21,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       showEmblem: false,
       backgroundType: BackgroundType.logo,
       logoAlign: Alignment.center,
-      margin: SizeConfig.only(top: kToolbarHeight * 0.5, bottom: 50, left: 16, right: 16),
+      margin: ScaledEdgeInsets.only(top: kToolbarHeight * 0.5, bottom: 50, left: 16, right: 16),
       child: Column(
         children: [
           _Card(onTap: ref.read(homeProvider).onUmrahTap, title: LocaleKeys.umrah.tr(), description: LocaleKeys.start_your_umrah_from_here.tr(), image: 'assets/png/home/umrah.png'),
@@ -44,17 +44,17 @@ class _Card extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return BasicCard(
       onTap: onTap,
-      margin: SizeConfig.symmetric(vertical: 18),
-      padding: SizeConfig.only(top: 16, bottom: 16, right: 16),
-      height: SizeConfig.h(140),
+      margin: ScaledEdgeInsets.symmetric(vertical: 18),
+      padding: ScaledEdgeInsets.only(top: 16, bottom: 16, right: 16),
+      height: 140.pr,
       borderColor: CColors.grey,
       boxShadow: greyShadows,
       child: Row(
         children: [
-          CustomImage(height: SizeConfig.h(120), width: SizeConfig.w(100), path: image, fit: BoxFit.fill, imageType: ImageType.png),
+          CustomImage(height: 120.pr, width: 100.pr, path: image, fit: BoxFit.fill, imageType: ImageType.png),
           Expanded(
             child: Padding(
-              padding: SizeConfig.symmetric(horizontal: 8),
+              padding: ScaledEdgeInsets.symmetric(horizontal: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,11 +63,8 @@ class _Card extends ConsumerWidget {
                     children: [
                       Text(title, style: CTextStyle.w600(fontSize: 22, color: CColors.deepTeal), maxLines: 1),
                       Padding(
-                        padding: SizeConfig.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
-                        child: Transform.rotate(
-                          angle: isLTR(context) ? 0 : pi / 180 * 180,
-                          child: CustomImage(path: DefaultImages.longArrowForward, size: SizeConfig.w(25), color: CColors.deepTeal, imageType: ImageType.svg),
-                        ),
+                        padding: ScaledEdgeInsets.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
+                        child: Transform.rotate(angle: isLTR(context) ? 0 : pi / 180 * 180, child: CustomImage(path: DefaultImages.longArrowForward, size: 25.pr, color: CColors.deepTeal, imageType: ImageType.svg)),
                       ),
                     ],
                   ),

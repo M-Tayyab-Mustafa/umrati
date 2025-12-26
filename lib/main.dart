@@ -1,5 +1,6 @@
 import 'export.dart';
 import 'view/splash.dart';
+// import 'view/splash.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

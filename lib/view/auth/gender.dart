@@ -22,7 +22,7 @@ class _SelectGenderPageState extends ConsumerState<SelectGenderPage> {
       backgroundType: BackgroundType.logoWithSkip,
       isSkipLoading: provider.isUpdatingGender,
       onSkipTap: provider.skip,
-      titleMargin: SizeConfig.only(top: 50, bottom: 40),
+      titleMargin: ScaledEdgeInsets.only(top: 50, bottom: 40),
       titleAlignment: Alignment.center,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,7 +44,7 @@ class _SelectGenderPageState extends ConsumerState<SelectGenderPage> {
                           : 'assets/svg/gender/un_selected_male_ur.svg',
                   imageType: ImageType.svg,
                   fit: BoxFit.fill,
-                  height: SizeConfig.w(140),
+                  height: 140.pr,
                 ),
               ),
               Expanded(
@@ -60,12 +60,12 @@ class _SelectGenderPageState extends ConsumerState<SelectGenderPage> {
                           : 'assets/svg/gender/un_selected_female_ur.svg',
                   imageType: ImageType.svg,
                   fit: BoxFit.fill,
-                  height: SizeConfig.w(140),
+                  height: 140.pr,
                 ),
               ),
             ],
           ),
-          CButton(isLoading: provider.isUpdatingGender, onTap: provider.continueTap, margin: SizeConfig.only(top: 40), title: LocaleKeys.continued.tr(), titleWithIcon: true),
+          CButton(isLoading: provider.isUpdatingGender, onTap: provider.continueTap, margin: ScaledEdgeInsets.only(top: 40), title: LocaleKeys.continued.tr(), titleWithIcon: true),
         ],
       ),
     );
