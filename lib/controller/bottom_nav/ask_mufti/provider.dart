@@ -76,7 +76,7 @@ class AskMuftiNotifier extends ChangeNotifier {
   _createBotApiCall(MessageModel message) async {
     try {
       Uri uri = Uri.parse('https://automate.robustcraft.io/webhook/pdf-rag');
-      final body = {'gender': user!.gender, 'question': message.question};
+      final body = {'gender': user!.gender, 'question': message.question, 'user_id': user!.uid};
       final response = await post(uri, body: jsonEncode(body), headers: {'content-type': 'application/json'}).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       final responseBody = jsonDecode(response.body);
       if (response.statusCode == 200) {

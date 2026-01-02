@@ -14,10 +14,13 @@ class ManualSelection extends ConsumerWidget {
       child: Column(
         children: [
           Expanded(
-            child:
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 provider.ziaraats.isEmpty
                     ? Center(child: Text(LocaleKeys.ziaraat_not_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
                     : ListView.builder(
+                      shrinkWrap: true,
                       padding: ScaledEdgeInsets.zero,
                       itemCount: provider.ziaraats.length,
                       itemBuilder: (context, index) {
@@ -31,6 +34,9 @@ class ManualSelection extends ConsumerWidget {
                         );
                       },
                     ),
+                if (!(provider.user?.is_premium ?? false)) CButton(isLoading: provider.isLoading, onTap: provider.onLoadMoreTap, margin: ScaledEdgeInsets.only(top: 32), title: LocaleKeys.load_more.tr()),
+              ],
+            ),
           ),
           if (provider.selectedZiaraat.isNotEmpty) CButton(isLoading: provider.isLoading, onTap: provider.createZiaraatRoute, margin: ScaledEdgeInsets.only(bottom: 64), title: LocaleKeys.start_your_ziaraat.tr()),
         ],

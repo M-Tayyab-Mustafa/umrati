@@ -50,8 +50,50 @@ class ProfileNotifier extends ChangeNotifier {
     if (context.mounted) notifyListeners();
   }
 
+  Future<XFile?> _pickImage(BuildContext context) async {
+    return await showModalBottomSheet<XFile?>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return Container(
+          padding: ScaledEdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(padding: ScaledEdgeInsets.only(bottom: 10), child: Text(LocaleKeys.choose_image.tr(), style: CTextStyle.w900(fontSize: 18))),
+              _PickOption(
+                icon: Icons.camera_alt_rounded,
+                title: LocaleKeys.camera.tr(),
+                subtitle: LocaleKeys.take_a_new_photo.tr(),
+                onTap: () async {
+                  final photo = await picker.pickImage(source: ImageSource.camera);
+                  Navigator.pop(context, photo);
+                },
+              ),
+
+              Padding(
+                padding: ScaledEdgeInsets.only(bottom: 24),
+                child: _PickOption(
+                  icon: Icons.photo_library_rounded,
+                  title: LocaleKeys.gallery.tr(),
+                  subtitle: LocaleKeys.select_from_gallery.tr(),
+                  onTap: () async {
+                    final photo = await picker.pickImage(source: ImageSource.gallery);
+                    Navigator.pop(context, photo);
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Future<void> onProfileImageTap() async {
-    final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+    final XFile? photo = await _pickImage(context);
     if (photo != null) {
       var croppedFile = await cropper.cropImage(
         sourcePath: photo.path,
@@ -98,10 +140,10 @@ class ProfileNotifier extends ChangeNotifier {
     if (result == true) {
       isLoading = true;
       notifyListeners();
-      await userCollection.doc(user!.uid).delete();
-      await LocalStorageManager.clearStorage();
       try {
         await FirebaseAuth.instance.currentUser?.delete();
+        await userCollection.doc(user!.uid).delete();
+        await LocalStorageManager.clearStorage();
         ref.read(loginProvider.notifier).resetPage();
         ref.read(loginProvider.notifier).phoneNumberController.clear();
         ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
@@ -161,5 +203,32 @@ class ProfileNotifier extends ChangeNotifier {
     emailController.dispose();
     nameController.dispose();
     super.dispose();
+  }
+}
+
+class _PickOption extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _PickOption({required this.icon, required this.title, required this.subtitle, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Row(
+          children: [
+            Container(padding: const EdgeInsets.all(14), decoration: BoxDecoration(color: CColors.primary.withValues(alpha: 0.1), shape: BoxShape.circle), child: Icon(icon, color: CColors.primary, size: 26)),
+            const SizedBox(width: 16),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)), Text(subtitle, style: TextStyle(fontSize: 13, color: Colors.grey.shade600))]),
+          ],
+        ),
+      ),
+    );
   }
 }

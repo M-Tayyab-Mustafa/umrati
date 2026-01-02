@@ -9,11 +9,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Payment.instance.initializePayments();
-  runApp(
-    ProviderScope(
-      child: EasyLocalization(supportedLocales: const [Locale('en', 'US'), Locale('ur', 'PK')], path: 'assets/translations', fallbackLocale: Locale('en', 'US'), saveLocale: true, assetLoader: CodegenLoader(), child: MainApp()),
-    ),
-  );
+  runApp(ProviderScope(child: EasyLocalization(supportedLocales: const [Locale('en', 'US'), Locale('ur', 'PK')], path: 'assets/translations', fallbackLocale: Locale('en', 'US'), saveLocale: true, assetLoader: CodegenLoader(), child: MainApp())));
 }
 
 class MainApp extends StatefulWidget {
@@ -32,6 +28,7 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    Payment.instance.paymentSettingSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -39,17 +36,14 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     CTextStyle.init(context);
-    SizeConfig.init(context);
+    SizeConfig.initialization(context);
     return MaterialApp(
       locale: context.locale,
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
       debugShowCheckedModeBanner: false,
       builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
-          child: child!,
-        );
+        return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)), child: child!);
       },
       home: SplashPage(),
       color: CColors.primary,

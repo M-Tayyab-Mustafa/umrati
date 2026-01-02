@@ -20,6 +20,7 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
   @override
   Widget build(BuildContext context) {
     final provider = ref.watch(subscriptionProvider);
+    SizeConfig.initialization(context);
     return IgnorePointer(
       ignoring: provider.isSubscribing,
       child: Background(
@@ -87,7 +88,7 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                             ),
                           ),
                         ),
-                        // SlidingUpPanelWidget(controlHeight: 0, anchor: 0.4, panelController: provider.panelController, child: PaymentSheet()),
+                        SlidingUpPanelWidget(controlHeight: 0, anchor: 0.4, panelController: provider.panelController, child: PaymentSheet()),
                       ],
                     );
                   },

@@ -37,6 +37,7 @@ export 'model/ziaraat.dart';
 export 'model/history.dart';
 export 'model/ziaraat_history.dart';
 export 'model/message.dart';
+export 'model/payment_settings.dart';
 
 //* Controller
 export 'controller/splash/provider.dart';
@@ -121,3 +122,4 @@ export 'package:flutter_svg/svg.dart';
 export 'package:pinput/pinput.dart';
 export 'package:fluttertoast/fluttertoast.dart';
 export 'package:url_launcher/url_launcher.dart';
+export 'package:font_awesome_flutter/font_awesome_flutter.dart';

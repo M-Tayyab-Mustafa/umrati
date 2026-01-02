@@ -17,6 +17,7 @@ class _BottomNavigationPageState extends ConsumerState<BottomNavigationPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(bottomNavProvider);
+    CTextStyle.init(context);
     return Scaffold(
       body: PopScope(
         canPop: provider.canPop,

@@ -191,6 +191,13 @@ abstract class  LocaleKeys {
   static const your_ziaraat_destinations = 'your_ziaraat_destinations';
   static const start_your_ziaraat = 'start_your_ziaraat';
   static const top_ziaraat_destination_of = 'top_ziaraat_destination_of';
+  static const load_more = 'load_more';
+  static const choose_image = 'choose_image';
+  static const camera = 'camera';
+  static const take_a_new_photo = 'take_a_new_photo';
+  static const choose_payment_method = 'choose_payment_method';
+  static const gallery = 'gallery';
+  static const select_from_gallery = 'select_from_gallery';
   static const go_back = 'go_back';
   static const confirmation_dialog = 'confirmation_dialog';
   static const auto_generate_description = 'auto_generate_description';
