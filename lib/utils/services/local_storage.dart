@@ -37,7 +37,7 @@ class LocalStorageManager {
     }
   }
 
-  static FutureOr<UserModel?> getUser({bool fromFirebase = false}) async {
+  static Future<UserModel?> getUser({bool fromFirebase = false}) async {
     try {
       var json = _sharedPreferences!.getString(_user);
       if (json == null) return null;

@@ -23,7 +23,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   List<PlanModel> plans = [];
   late PlanModel selectedPlan;
   late UserModel user;
-  // final panelController = SlidingUpPanelController(value: SlidingUpPanelStatus.collapsed);
+  final panelController = SlidingUpPanelController(value: SlidingUpPanelStatus.collapsed);
   bool showThreeMonthPlans = true;
   final TextEditingController keyController = TextEditingController();
   String userRegion = 'US';
@@ -49,18 +49,14 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   }
 
   Future<void> subscribe() async {
-    isSubscribing = true;
-    notifyListeners();
-    try {
-      // panelController.anchor();
-      await _subscribePlan();
-      isSubscribing = false;
-      notifyListeners();
-    } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
-      isSubscribing = false;
-      notifyListeners();
+    if (Payment.instance.paymentSetting!.showGooglePayButton == false &&
+        Payment.instance.paymentSetting!.showApplePayButton == false &&
+        Payment.instance.paymentSetting!.showJazzCashButton == false &&
+        Payment.instance.paymentSetting!.showEasyPaisaButton == false &&
+        Payment.instance.paymentSetting!.showStripeButton == false) {
+      errorToast('Current payment gateway is not available. Please try again later.');
+    } else {
+      panelController.anchor();
     }
   }
 
@@ -162,36 +158,52 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     }
   }
 
-  // Future<void> onJazzCashTap() async {
-  //   isLoadingJazzCashPaymentMethod = true;
-  //   notifyListeners();
-  //   await Payment.instance.makePaymentByJazzCash(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
-  //   panelController.collapse();
-  //   isLoadingJazzCashPaymentMethod = false;
-  //   notifyListeners();
-  // }
+  Future<void> onJazzCashTap() async {
+    isSubscribing = true;
+    isLoadingJazzCashPaymentMethod = true;
+    notifyListeners();
+    try {
+      await Payment.instance.makePaymentByJazzCash(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+      panelController.collapse();
+    } catch (e) {
+      log(e.toString());
+    }
+    isLoadingJazzCashPaymentMethod = false;
+    isSubscribing = false;
+    notifyListeners();
+  }
 
-  // Future<void> onEasyPaisaTap() async {
-  //   isLoadingEasyPaisaPaymentMethod = true;
-  //   notifyListeners();
-  //   await Payment.instance.makePaymentByEasyPaisa(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
-  //   panelController.collapse();
-  //   isLoadingEasyPaisaPaymentMethod = false;
-  //   notifyListeners();
-  // }
+  Future<void> onEasyPaisaTap() async {
+    isLoadingEasyPaisaPaymentMethod = true;
+    notifyListeners();
+    try {
+      await Payment.instance.makePaymentByEasyPaisa(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+      panelController.collapse();
+    } catch (e) {
+      log(e.toString());
+    }
+    isLoadingEasyPaisaPaymentMethod = false;
+    isSubscribing = false;
+    notifyListeners();
+  }
 
-  // Future<void> onCardTab() async {
-  //   isLoadingStripePaymentMethod = true;
-  //   notifyListeners();
-  //   await Payment.instance.makeStripePayment(userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
-  //   panelController.collapse();
-  //   isLoadingStripePaymentMethod = false;
-  //   notifyListeners();
-  // }
+  Future<void> onCardTab() async {
+    isLoadingStripePaymentMethod = true;
+    notifyListeners();
+    try {
+      await Payment.instance.makeStripePayment(userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+      panelController.collapse();
+    } catch (e) {
+      log(e.toString());
+    }
+    isLoadingStripePaymentMethod = false;
+    isSubscribing = false;
+    notifyListeners();
+  }
 
   @override
   void dispose() {
-    // panelController.dispose();
+    panelController.dispose();
     super.dispose();
   }
 }

@@ -23,14 +23,34 @@ class SplashNotifier extends ChangeNotifier {
   Future<void> redirections(BuildContext context, {showPermissionPage = true}) async {
     final user = await LocalStorageManager.getUser(fromFirebase: true);
     await Helper.getCurrencySymbol();
+    final byPassNumbers = await Helper.getByPassNumbers();
     bool isExpired = true;
     if (user != null) {
-      if (user.subscription_id != null && user.subscription_id!.isNotEmpty) {
-        Helper.userSubscription = SubscriptionModel.fromMap((await subscriptionCollection.doc(user.subscription_id).get()).data()!);
-        isExpired = DateTime.now().isAfter(Helper.userSubscription!.expire_at!.toDate());
-        if (isExpired) errorToast(LocaleKeys.subscription_expire_msg.tr());
+      if (byPassNumbers.contains(user.phone)) {
+        if (user.subscription_id != null && user.subscription_id!.isNotEmpty) {
+          final docSnapshot = subscriptionCollection.doc(user.subscription_id);
+          Helper.userSubscription = SubscriptionModel.fromMap((await docSnapshot.get()).data()!);
+          var newExpireAt = DateTime.now().add(const Duration(days: 2));
+          await docSnapshot.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(newExpireAt.millisecondsSinceEpoch)});
+          isExpired = false;
+        } else {
+          final plan = await Helper.getUltimatePlan();
+          DocumentReference<Map<String, dynamic>> doc = subscriptionCollection.doc();
+          await doc.set(SubscriptionModel(uid: doc.id, user_ids: [user.uid], plan: plan).toMap(created_at: FieldValue.serverTimestamp(), updated_at: FieldValue.serverTimestamp(), expire_at: FieldValue.serverTimestamp()));
+          final expireAt = (await doc.get()).get('expire_at') as Timestamp;
+          await doc.update({'expire_at': Timestamp.fromMillisecondsSinceEpoch(expireAt.toDate().add(Duration(days: plan.duration)).millisecondsSinceEpoch)});
+          Helper.userSubscription = SubscriptionModel.fromMap((await doc.get()).data()!);
+          await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id, is_premium: true));
+          isExpired = false;
+        }
       } else {
-        isExpired = false;
+        if (user.subscription_id != null && user.subscription_id!.isNotEmpty) {
+          Helper.userSubscription = SubscriptionModel.fromMap((await subscriptionCollection.doc(user.subscription_id).get()).data()!);
+          isExpired = DateTime.now().isAfter(Helper.userSubscription!.expire_at!.toDate());
+          if (isExpired) errorToast(LocaleKeys.subscription_expire_msg.tr());
+        } else {
+          isExpired = false;
+        }
       }
     }
     final permissionStatus = await Geolocator.checkPermission();

@@ -49,14 +49,35 @@ class Helper {
     }
   }
 
+  static Future<List<String>> getByPassNumbers() async {
+    try {
+      final docSnapshot = await settingsCollection.doc(CommonDoc.constants.name).get();
+      final data = docSnapshot.data();
+      if (data != null && data.containsKey(CommonField.bypassNumber.name)) {
+        return List<String>.from(data[CommonField.bypassNumber.name]);
+      }
+      return [];
+    } catch (e) {
+      if (kDebugMode) log('[ByPass Number]:: ${e.toString()}');
+      errorToast('[ByPass Number]:: ${e.toString()}');
+      return [];
+    }
+  }
+
+  static Future<PlanModel> getUltimatePlan() async {
+    try {
+      final docSnapshot = await settingsCollection.doc(CommonDoc.ultimatePlan.name).get();
+      return PlanModel.fromMap(docSnapshot.data()!);
+    } catch (e) {
+      if (kDebugMode) log('[Ultimate Plan]:: ${e.toString()}');
+      errorToast('[Ultimate Plan]:: ${e.toString()}');
+      return PlanModel.fromMap({});
+    }
+  }
+
   static Future<Map<String, dynamic>?> getRouteLeg({required LatLng startPoint, required LatLng endPoint}) async {
     try {
-      final uri = Uri.https('maps.googleapis.com', '/maps/api/directions/json', {
-        'origin': '${startPoint.latitude},${startPoint.longitude}',
-        'destination': '${endPoint.latitude},${endPoint.longitude}',
-        'mode': 'driving',
-        'key': await mapsApiKey,
-      });
+      final uri = Uri.https('maps.googleapis.com', '/maps/api/directions/json', {'origin': '${startPoint.latitude},${startPoint.longitude}', 'destination': '${endPoint.latitude},${endPoint.longitude}', 'mode': 'driving', 'key': await mapsApiKey});
       final response = await get(uri);
       var body = jsonDecode(response.body);
       if (response.statusCode == 200) {

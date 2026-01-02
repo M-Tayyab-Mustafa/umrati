@@ -1,6 +1,7 @@
 import '../../../../export.dart';
 import '../../../../view/bottom_nav/home/ziaraat/map.dart';
 import '../../../../view/bottom_nav/home/ziaraat/page.dart';
+import '../../../../view/subscription/page.dart';
 
 final ziaraatProvider = ChangeNotifierProvider.autoDispose<ZiaraatNotifier>((ref) => ZiaraatNotifier());
 
@@ -152,21 +153,16 @@ class ZiaraatNotifier extends ChangeNotifier {
     if (context.mounted) notifyListeners();
   }
 
+  void onLoadMoreTap() async {
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
+  }
+
   void createZiaraatRoute() async {
     isLoading = true;
     notifyListeners();
     var ziaraats = selectedDestinationsCreationOption == ZiaraatDestinationsCreationOptions.auto ? sortedZiaraats : selectedZiaraat;
     var doc = historyCollection.doc();
-    var ziaraatHistory = ZiaraatHistoryModel(
-      uid: doc.id,
-      isCompleted: false,
-      userId: user!.uid,
-      total: ziaraats.length,
-      ziaraatCity: selectedCity!.name,
-      type: UserActivityType.ziaraat.name,
-      remainingZiaraats: ziaraats,
-      completedZiaraats: [],
-    );
+    var ziaraatHistory = ZiaraatHistoryModel(uid: doc.id, isCompleted: false, userId: user!.uid, total: ziaraats.length, ziaraatCity: selectedCity!.name, type: UserActivityType.ziaraat.name, remainingZiaraats: ziaraats, completedZiaraats: []);
     await doc.set(ziaraatHistory.toMap(createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp()));
     isLoading = false;
     notifyListeners();

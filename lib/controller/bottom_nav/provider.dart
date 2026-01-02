@@ -1,3 +1,5 @@
+import 'package:umrati/view/subscription/page.dart';
+
 import '../../export.dart';
 import '../../view/bottom_nav/home/page.dart';
 import '../../view/bottom_nav/profile/page.dart';
@@ -20,6 +22,7 @@ class BottomNavNotifier extends ChangeNotifier {
   Timer? bounceTimer;
 
   void onBottomNavTap(BottomNavTabs selectedOption) async {
+    var user = await LocalStorageManager.getUser();
     var previousTab = selectedTab;
     selectedTab = selectedOption;
     switch (selectedOption) {
@@ -31,7 +34,12 @@ class BottomNavNotifier extends ChangeNotifier {
         break;
       case BottomNavTabs.askMufti:
         child = const SizedBox.shrink();
-        await Navigator.push(context, MaterialPageRoute(builder: (context) => const AskMuftiPage()));
+        if (user!.is_premium) {
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => const AskMuftiPage()));
+        } else {
+          errorToast('Only Premium Users Can Access Ask Mufti Feature');
+          await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
+        }
         onBottomNavTap(previousTab);
         break;
 

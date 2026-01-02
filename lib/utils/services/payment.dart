@@ -4,12 +4,16 @@ class Payment {
   Payment._internal();
   static Payment? _instance;
   static Payment get instance => _instance ??= Payment._internal();
-  DocumentSnapshot<Map<String, dynamic>>? keysDoc;
+  PaymentSettingsModel? paymentSetting;
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? paymentSettingSubscription;
 
   Future<void> initializePayments() async {
     try {
-      keysDoc = await settingsCollection.doc(CommonDoc.keys.name).get();
-      Stripe.publishableKey = keysDoc?.get(CommonField.stripePublishableKey.name) ?? '';
+      paymentSettingSubscription?.cancel();
+      paymentSettingSubscription = settingsCollection.doc(CommonDoc.paymentSettings.name).snapshots().listen((event) {
+        paymentSetting = PaymentSettingsModel.fromMap(event.data()!);
+        if (paymentSetting!.showStripeButton) Stripe.publishableKey = paymentSetting?.stripePublishableKey ?? '';
+      });
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
@@ -21,7 +25,7 @@ class Payment {
       var currencyCode = (await settingsCollection.doc(CommonDoc.constants.name).get()).get(CommonField.currencyCode.name)[userRegion].toString();
       final response = await post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
-        headers: {'Authorization': 'Bearer ${keysDoc?.get(CommonField.stripeSecretKey.name)}', 'Content-Type': 'application/x-www-form-urlencoded'},
+        headers: {'Authorization': 'Bearer ${paymentSetting!.stripeSecretKey}', 'Content-Type': 'application/x-www-form-urlencoded'},
         body: {'amount': (num.parse(amount) * 100).toString(), 'currency': currencyCode.toLowerCase(), 'payment_method_types[]': 'card'},
       );
       final paymentIntent = jsonDecode(response.body);
@@ -31,12 +35,7 @@ class Payment {
         return;
       }
       await Stripe.instance.initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: paymentIntent!['client_secret'],
-          merchantDisplayName: 'Test Shop',
-          allowsDelayedPaymentMethods: false,
-          appearance: PaymentSheetAppearance(),
-        ),
+        paymentSheetParameters: SetupPaymentSheetParameters(paymentIntentClientSecret: paymentIntent!['client_secret'], merchantDisplayName: 'Test Shop', allowsDelayedPaymentMethods: false, appearance: PaymentSheetAppearance()),
       );
       await Stripe.instance.presentPaymentSheet();
       onSuccess();
@@ -64,9 +63,17 @@ class Payment {
           "&pp_ReturnURL=$returnUrl"
           "&pp_Description=TestPayment"
           "&pp_Language=EN";
-      final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => _PaymentWebView(paymentUrl: paymentUrl)));
-      if (result == true) onSuccess();
-      errorToast("⚠️ Payment Failed");
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => CommonPaymentWebView(paymentUrl: paymentUrl, isSuccess: (url) => url.contains("pp_ResponseCode=000"), isFailure: (url) => url.contains("pp_ResponseCode") && !url.contains("pp_ResponseCode=000"))),
+      );
+      if (result == true) {
+        onSuccess();
+      } else if (result == false) {
+        errorToast("⚠️ Payment Failed");
+      } else {
+        errorToast("Payment cancelled");
+      }
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast("⚠️ Payment Error: $e");
@@ -76,18 +83,28 @@ class Payment {
   Future<void> makePaymentByEasyPaisa({required BuildContext context, required String userRegion, required String amount, required void Function() onSuccess}) async {
     try {
       final String storeId = "12345";
+      final String redirectUrl = 'https://yourdomain.com/callback';
       final String orderRefNum = DateTime.now().millisecondsSinceEpoch.toString();
       final String paymentUrl =
           "https://easypaystg.easypaisa.com.pk/easypay/Index.jsf?"
           "storeId=$storeId"
           "&amount=$amount"
-          "&postBackURL=https://yourdomain.com/callback"
+          "&postBackURL=$redirectUrl"
           "&orderRefNum=$orderRefNum"
           "&expiryDate=2025-12-31%2023:59:59"
           "&autoRedirect=1";
-      final result = await Navigator.push(context, MaterialPageRoute(builder: (_) => _PaymentWebView(paymentUrl: paymentUrl)));
-      if (result == true) onSuccess();
-      errorToast("⚠️ Payment Failed");
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => CommonPaymentWebView(paymentUrl: paymentUrl, isSuccess: (url) => url.contains("responseCode=000"), isFailure: (url) => url.contains("responseCode") && !url.contains("responseCode=000"))),
+      );
+
+      if (result == true) {
+        onSuccess();
+      } else if (result == false) {
+        errorToast("⚠️ Payment Failed");
+      } else {
+        errorToast("Payment cancelled");
+      }
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast("⚠️ Payment Error: $e");
@@ -95,31 +112,50 @@ class Payment {
   }
 }
 
-class _PaymentWebView extends StatefulWidget {
+class CommonPaymentWebView extends StatefulWidget {
   final String paymentUrl;
-  const _PaymentWebView({required this.paymentUrl});
+  final bool Function(String url) isSuccess;
+  final bool Function(String url) isFailure;
+
+  const CommonPaymentWebView({required this.paymentUrl, required this.isSuccess, required this.isFailure, super.key});
 
   @override
-  State<_PaymentWebView> createState() => _PaymentWebViewState();
+  State<CommonPaymentWebView> createState() => _CommonPaymentWebViewState();
 }
 
-class _PaymentWebViewState extends State<_PaymentWebView> {
+class _CommonPaymentWebViewState extends State<CommonPaymentWebView> {
   late final WebViewController _controller;
+  bool _isCompleted = false;
 
   @override
   void initState() {
     super.initState();
+
     _controller =
         WebViewController()
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..setNavigationDelegate(
             NavigationDelegate(
-              onPageFinished: (url) {
-                if (url.contains("SUCCESS") || url.contains("000")) {
-                  Navigator.pop(context, true);
-                } else if (url.contains("FAILED")) {
-                  Navigator.pop(context, false);
+              onNavigationRequest: (request) {
+                final url = request.url;
+
+                if (_isCompleted) {
+                  return NavigationDecision.prevent;
                 }
+
+                if (widget.isSuccess(url)) {
+                  _isCompleted = true;
+                  Navigator.pop(context, true);
+                  return NavigationDecision.prevent;
+                }
+
+                if (widget.isFailure(url)) {
+                  _isCompleted = true;
+                  Navigator.pop(context, false);
+                  return NavigationDecision.prevent;
+                }
+
+                return NavigationDecision.navigate;
               },
             ),
           )
