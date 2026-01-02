@@ -9,14 +9,33 @@ class PaymentSheet extends ConsumerWidget {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Container(
-        decoration: ShapeDecoration(color: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30)))),
+        decoration: ShapeDecoration(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+        ),
         child: Padding(
           padding: ScaledEdgeInsets.all(16),
           child: Column(
             children: [
-              Padding(padding: ScaledEdgeInsets.only(bottom: 16), child: Center(child: Container(width: 40.pr, height: 5.pr, decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(10))))),
-              Padding(padding: ScaledEdgeInsets.only(bottom: 32), child: Text(LocaleKeys.choose_payment_method.tr(), textAlign: TextAlign.center, style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.grey.shade800))),
-              if (Payment.instance.paymentSetting!.showApplePayButton)
+              Padding(
+                padding: ScaledEdgeInsets.only(bottom: 16),
+                child: Center(
+                  child: Container(
+                    width: 40.pr,
+                    height: 5.pr,
+                    decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(10)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: ScaledEdgeInsets.only(bottom: 32),
+                child: Text(
+                  LocaleKeys.choose_payment_method.tr(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold, color: Colors.grey.shade800),
+                ),
+              ),
+              if (Payment.instance.paymentSetting!.showApplePayButton && Platform.isIOS)
                 ApplePayButton(
                   margin: EdgeInsets.zero,
                   merchantId: Payment.instance.paymentSetting!.appleMerchantId,
