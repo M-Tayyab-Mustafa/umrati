@@ -21,7 +21,7 @@ class _UmrahHistoryPageState extends ConsumerState<UmrahHistoryPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(historyProvider);
     return Background(
-      margin: ScaledEdgeInsets.zero,
+      margin: EdgeInsets.zero,
       backgroundType: BackgroundType.titleWithBackButton,
       logoAlign: Alignment.center,
       title: LocaleKeys.umrah.tr(),
@@ -31,7 +31,7 @@ class _UmrahHistoryPageState extends ConsumerState<UmrahHistoryPage> {
               : provider.umrahHistories.isEmpty
               ? Center(child: Text(LocaleKeys.no_history_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
               : ListView.builder(
-                padding: ScaledEdgeInsets.zero,
+                padding: EdgeInsets.zero,
                 itemCount: provider.umrahHistories.length,
                 itemBuilder: (context, index) {
                   var histories = provider.umrahHistories.values.toList()[index];

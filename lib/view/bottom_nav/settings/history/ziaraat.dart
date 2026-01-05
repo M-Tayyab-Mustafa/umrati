@@ -21,7 +21,7 @@ class _ZiaraatHistoryPageState extends ConsumerState<ZiaraatHistoryPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(historyProvider);
     return Background(
-      margin: ScaledEdgeInsets.zero,
+      margin: EdgeInsets.zero,
       backgroundType: BackgroundType.titleWithBackButton,
       logoAlign: Alignment.center,
       title: LocaleKeys.ziaraat.tr(),
@@ -32,8 +32,8 @@ class _ZiaraatHistoryPageState extends ConsumerState<ZiaraatHistoryPage> {
               ? Center(child: Text(LocaleKeys.no_history_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
               : GridView.builder(
                 shrinkWrap: true,
-                padding: ScaledEdgeInsets.symmetric(vertical: 20, horizontal: 16),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 30.pr, crossAxisSpacing: 30.pr),
+                padding: context.edgeInsets(vertical: 20, horizontal: 16),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: context.h(20), crossAxisSpacing: context.w(20), childAspectRatio: 0.91),
                 itemCount: provider.ziaraatHistories.length,
                 itemBuilder: (context, index) {
                   var history = provider.ziaraatHistories[index];
@@ -47,8 +47,8 @@ class _ZiaraatHistoryPageState extends ConsumerState<ZiaraatHistoryPage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             CustomImage(
-                              margin: ScaledEdgeInsets.only(right: 8),
-                              size: 25.pr,
+                              margin: context.edgeInsets(right: 8),
+                              size: context.h(20),
                               imageType: ImageType.svg,
                               color: CColors.primary,
                               path: switch (_getZiaraatCity(history.ziaraatCity)) {
@@ -67,15 +67,7 @@ class _ZiaraatHistoryPageState extends ConsumerState<ZiaraatHistoryPage> {
                             style: CTextStyle.w600(fontSize: 70, color: CColors.deepTeal, height: 1),
                           ),
                         ),
-                        CButton(
-                          padding: ScaledEdgeInsets.zero,
-                          margin: ScaledEdgeInsets.only(top: 4),
-                          onTap: () => provider.onViewZiaraatTap(history),
-                          title: LocaleKeys.view.tr(),
-                          borderRadius: BorderRadius.circular(40),
-                          height: 30,
-                          useTitleWidth: true,
-                        ),
+                        CButton(padding: EdgeInsets.zero, margin: context.edgeInsets(top: 4), onTap: () => provider.onViewZiaraatTap(history), title: LocaleKeys.view.tr(), borderRadius: BorderRadius.circular(40), height: 30, useTitleWidth: true),
                       ],
                     ),
                   );

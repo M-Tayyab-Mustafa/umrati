@@ -13,13 +13,13 @@ class ZiaraatCityCard extends StatelessWidget {
       onTap: onTap,
       boxShadow: isSelected ? null : [],
       borderColor: isSelected ? null : CColors.greyShade2,
-      borderWidth: 3.pr,
+      borderWidth: context.w(3),
       child: Column(
         children: [
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                return CustomImage(margin: ScaledEdgeInsets.only(bottom: 10), path: icon, size: constraints.maxHeight.pr, imageType: ImageType.svg, fit: BoxFit.fitHeight, color: isSelected ? CColors.primary : CColors.greyShade2);
+                return CustomImage(margin: context.edgeInsets(bottom: 10), path: icon, size: constraints.maxHeight, imageType: ImageType.svg, fit: BoxFit.fitHeight, color: isSelected ? CColors.primary : CColors.greyShade2);
               },
             ),
           ),

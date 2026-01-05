@@ -21,7 +21,7 @@ class _AskMuftiPageState extends ConsumerState<AskMuftiPage> {
   Widget build(BuildContext context) {
     var provider = ref.watch(askMuftiProvider);
     return Background(
-      margin: ScaledEdgeInsets.zero,
+      margin: EdgeInsets.zero,
       resizeToAvoidBottomInset: true,
       showEmblem: false,
       backgroundType: BackgroundType.titleWithBackButton,
@@ -37,7 +37,7 @@ class _AskMuftiPageState extends ConsumerState<AskMuftiPage> {
                     ? Center(child: Text(LocaleKeys.how_can_i_help_you.tr(), style: CTextStyle.w500(fontSize: 25, color: CColors.primary)))
                     : ListView.builder(
                       shrinkWrap: true,
-                      padding: ScaledEdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                      padding: context.edgeInsets(vertical: 16, horizontal: 16),
                       controller: provider.scrollController,
                       itemCount: provider.messages.length,
                       itemBuilder: (context, index) {
@@ -47,7 +47,7 @@ class _AskMuftiPageState extends ConsumerState<AskMuftiPage> {
                     ),
           ),
           CTextField(
-            margin: ScaledEdgeInsets.only(left: 16, right: 16, bottom: 16),
+            margin: context.edgeInsets(left: 16, right: 16, bottom: 16),
             onTap: provider.onFieldTap,
             controller: provider.queryController,
             boxShadow: [],
@@ -55,7 +55,7 @@ class _AskMuftiPageState extends ConsumerState<AskMuftiPage> {
             borderRadius: 20,
             hintText: LocaleKeys.type_your_problem_here.tr(),
             onSuffixTap: provider.send,
-            suffixIcon: Transform.rotate(angle: isLTR(context) ? 0 : pi / 180 * 180, child: CustomImage(path: 'assets/svg/send.svg', imageType: ImageType.svg, size: 20.pr, color: CColors.primary)),
+            suffixIcon: Transform.rotate(angle: isLTR(context) ? 0 : pi / 180 * 180, child: CustomImage(path: 'assets/svg/send.svg', imageType: ImageType.svg, size: context.r(20), color: CColors.primary)),
           ),
         ],
       ),

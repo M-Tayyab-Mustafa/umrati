@@ -297,6 +297,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.2"
+  equatable:
+    dependency: transitive
+    description:
+      name: equatable
+      sha256: "3e0141505477fd8ad55d6eb4e7776d3fe8430be8e497ccb1521370c3f21a3e2b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.8"
   facebook_auth_desktop:
     dependency: transitive
     description:
@@ -503,10 +511,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_pay_buttons
-      sha256: bba72b34b36a803f04e37d8994ea8dc3a809da2bab67591c6644fcb766eda529
+      sha256: "43fa60138f7fe95725a3b4f4f759098be9898865ec0ebac2b27cc8507f2e7ca2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.4"
+    version: "0.0.5"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -523,6 +531,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.6.1"
+  flutter_screenutil_plus:
+    dependency: "direct main"
+    description:
+      name: flutter_screenutil_plus
+      sha256: "7dde74263a609565e2fcea7af2aabdf05f58845f3e3ddf1e503ce39e3a7ec082"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   flutter_secure_storage:
     dependency: transitive
     description:
@@ -1161,18 +1177,18 @@ packages:
     dependency: transitive
     description:
       name: pay
-      sha256: "83b15697797f8013bd7693193b9f657bacfe40c5d0a31d4e084caed5fe22d29c"
+      sha256: e012871f065c188e4c275e30b0000c174f6df99101ef137f9cc52ed13fad80e8
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.1"
+    version: "3.3.0"
   pay_android:
     dependency: transitive
     description:
       name: pay_android
-      sha256: d3e7d72e8be7f65dd8f0d3fd36a7c0357d94b504163b7dd6eed5e99f6f32405d
+      sha256: "27dab62d564290aea584b6b39dbbda390b935d6d7296b54bc28de65579bfb049"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.1"
+    version: "3.2.0"
   pay_ios:
     dependency: transitive
     description:
@@ -1851,5 +1867,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.9.0 <4.0.0"
+  dart: ">=3.10.4 <4.0.0"
   flutter: ">=3.35.0"

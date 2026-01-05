@@ -21,8 +21,8 @@ class _LocationPermissionPageState extends ConsumerState<LocationPermissionPage>
       titleAlignment: Alignment.center,
       onSkipTap: ref.read(locationPermissionProvider.notifier).skip,
       title: LocaleKeys.the_umrati_app_needs_location_access_without_it_it_cant.tr(),
-      titleStyle: CTextStyle.w400(fontSize: 20),
-      titleMargin: ScaledEdgeInsets.only(top: 30, bottom: 4, right: 16),
+      titleStyle: CTextStyle.w500(fontSize: 18),
+      titleMargin: context.edgeInsets(top: 30, bottom: 4, right: 16),
       child: Column(
         children: [
           _basicCard(icon: 'assets/svg/location_permission/tawaf_sai.svg', title: LocaleKeys.track_tawaf_or_sai.tr()),
@@ -30,7 +30,7 @@ class _LocationPermissionPageState extends ConsumerState<LocationPermissionPage>
           _basicCard(icon: 'assets/svg/location_permission/navigation.svg', title: LocaleKeys.provide_accurate_navigation.tr()),
           CButton(
             isLoading: ref.watch(locationPermissionProvider).isLoading,
-            margin: ScaledEdgeInsets.only(top: 48),
+            margin: context.edgeInsets(top: 48),
             titleWithIcon: true,
             title: LocaleKeys.turn_it_on_to_get_full_support.tr(),
             onTap: ref.read(locationPermissionProvider.notifier).continueTab,
@@ -42,8 +42,11 @@ class _LocationPermissionPageState extends ConsumerState<LocationPermissionPage>
 
   _basicCard({required String icon, required String title}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [CustomImage(margin: EdgeInsets.only(right: 8), size: 30.pr, path: icon, imageType: ImageType.svg), Expanded(child: Text(title, style: CTextStyle.w400(fontSize: 18)))]),
+      padding: context.edgeInsets(vertical: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [CustomImage(margin: context.edgeInsets(right: 8), size: context.r(25), path: icon, imageType: ImageType.svg), Expanded(child: Text(title, style: CTextStyle.w400(fontSize: 16)))],
+      ),
     );
   }
 }

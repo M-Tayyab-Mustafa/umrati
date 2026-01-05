@@ -41,10 +41,10 @@ class PaymentButton extends StatelessWidget {
         onTap: isLoading ? () {} : onTap,
         child: Container(
           // Dimensions and padding of the button
-          height: height?.pr ?? _buttonSize.pr,
-          width: width?.pr,
-          padding: ScaledEdgeInsets.symmetric(horizontal: 20),
-          decoration: BoxDecoration(color: backgroundColor ?? Colors.black, borderRadius: BorderRadius.circular(cornersRadius?.pr ?? 10.pr)),
+          height: height?.h ?? _buttonSize.h,
+          width: width?.w,
+          padding: context.edgeInsets(horizontal: 20),
+          decoration: BoxDecoration(color: backgroundColor ?? Colors.black, borderRadius: BorderRadius.circular(cornersRadius?.r ?? 10.r)),
           child:
               isLoading
                   ? Loading()
@@ -56,11 +56,11 @@ class PaymentButton extends StatelessWidget {
                         Container(
                           padding: iconPadding ?? EdgeInsets.zero,
                           decoration: BoxDecoration(shape: BoxShape.circle, color: iconBackgroundColor ?? Colors.transparent),
-                          height: 22.pr,
-                          width: 22.pr,
+                          height: context.r(22),
+                          width: context.r(22),
                           child: FittedBox(child: icon != null ? icon! : CustomImage(path: iconPath!, imageType: iconType ?? ImageType.svg)),
                         ),
-                      Padding(padding: ScaledEdgeInsets.only(left: 10), child: Text(title, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w600, letterSpacing: 0.5.sp, wordSpacing: 1.sp))),
+                      Padding(padding: context.edgeInsets(left: 10), child: Text(title, style: TextStyle(color: Colors.white, fontSize: 14.sp, fontWeight: FontWeight.w600, letterSpacing: 0.5.sp, wordSpacing: 1.sp))),
                     ],
                   ),
         ),

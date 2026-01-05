@@ -13,8 +13,8 @@ class PlanWidget extends ConsumerWidget {
         onTap: () => ref.read(subscriptionProvider.notifier).selectPlan(plan),
         borderColor: CColors.grey,
         backgroundGradient: CColors.planCardBackgroundGradient,
-        margin: ScaledEdgeInsets.only(bottom: 32, left: 16, right: 16),
-        padding: ScaledEdgeInsets.all(32),
+        margin: context.edgeInsets(bottom: 32, left: 16, right: 16),
+        padding: context.edgeInsets(all: 32),
         child: Row(
           children: [
             Expanded(
@@ -24,7 +24,7 @@ class PlanWidget extends ConsumerWidget {
                 children: [
                   Text(isLTR(context) ? plan.name_en : plan.name_ur, style: CTextStyle.w500(color: CColors.darkIndigo, fontSize: 20)),
                   Padding(
-                    padding: ScaledEdgeInsets.only(top: 32),
+                    padding: context.edgeInsets(top: 32),
                     child: switch (plan.has_discount) {
                       true => Column(
                         mainAxisSize: MainAxisSize.min,
@@ -45,13 +45,13 @@ class PlanWidget extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Transform.rotate(angle: pi / 2, child: CustomImage(path: 'assets/svg/go_forward.svg', imageType: ImageType.svg, color: CColors.deepTeal, size: 20.pr)),
+                  Transform.rotate(angle: pi / 2, child: CustomImage(path: 'assets/svg/go_forward.svg', imageType: ImageType.svg, color: CColors.deepTeal, size: context.r(20))),
                   CButton(
                     isLoading: ref.watch(subscriptionProvider).isSubscribing,
                     onTap: onSubscribe,
-                    margin: ScaledEdgeInsets.only(top: 24),
+                    margin: context.edgeInsets(top: 24),
                     titleWithIcon: true,
-                    padding: isLTR(context) ? null : ScaledEdgeInsets.only(right: 16),
+                    padding: isLTR(context) ? null : context.edgeInsets(right: 16),
                     title: LocaleKeys.buy.tr(),
                     iconSize: 20,
                     useTitleWidth: true,
@@ -67,14 +67,14 @@ class PlanWidget extends ConsumerWidget {
         onTap: () => ref.read(subscriptionProvider.notifier).selectPlan(plan),
         borderColor: CColors.grey,
         backgroundGradient: CColors.planCardBackgroundGradient,
-        margin: ScaledEdgeInsets.only(bottom: 32, left: 16, right: 16),
-        padding: ScaledEdgeInsets.all(16),
+        margin: context.edgeInsets(bottom: 32, left: 16, right: 16),
+        padding: context.edgeInsets(all: 16),
         child: Row(
           children: [
             Text(isLTR(context) ? plan.name_en : plan.name_ur, style: CTextStyle.w400(color: CColors.darkIndigo, fontSize: 18)),
             Expanded(
               child: Padding(
-                padding: ScaledEdgeInsets.only(left: 16),
+                padding: context.edgeInsets(left: 16),
                 child: ShaderMask(blendMode: BlendMode.srcIn, shaderCallback: (rect) => CColors.planTextGradient.createShader(rect), child: Text(plan.member_count_label, style: CTextStyle.w900(color: Colors.white, fontSize: 16))),
               ),
             ),

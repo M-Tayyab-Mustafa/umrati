@@ -1,21 +1,7 @@
 import '../export.dart';
 
 class BasicCard extends StatelessWidget {
-  const BasicCard({
-    super.key,
-    this.margin,
-    this.padding,
-    this.height,
-    this.width,
-    required this.child,
-    this.backgroundColor,
-    this.backgroundGradient,
-    this.borderColor,
-    this.borderWidth,
-    this.borderRadius,
-    this.boxShadow,
-    this.onTap,
-  });
+  const BasicCard({super.key, this.margin, this.padding, this.height, this.width, required this.child, this.backgroundColor, this.backgroundGradient, this.borderColor, this.borderWidth, this.borderRadius, this.boxShadow, this.onTap});
   final EdgeInsets? margin;
   final EdgeInsets? padding;
   final double? height;
@@ -37,12 +23,12 @@ class BasicCard extends StatelessWidget {
         margin: margin ?? EdgeInsets.zero,
         height: height,
         width: width,
-        padding: padding ?? EdgeInsets.all(16.0),
+        padding: padding ?? context.edgeInsets(all: 16),
         decoration: BoxDecoration(
           color: backgroundColor ?? (backgroundGradient != null ? null : Colors.transparent),
           gradient: backgroundGradient,
-          border: Border.all(color: borderColor ?? CColors.primary, width: borderWidth ?? 2),
-          borderRadius: BorderRadius.circular(borderRadius ?? 16),
+          border: Border.all(color: borderColor ?? CColors.primary, width: context.w(borderWidth ?? 2)),
+          borderRadius: BorderRadius.circular(context.r(borderRadius ?? 16)),
           boxShadow: boxShadow ?? primaryShadows,
         ),
         child: child,

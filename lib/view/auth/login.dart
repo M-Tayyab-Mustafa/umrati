@@ -28,27 +28,27 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PhoneNumberTextField(
-              margin: ScaledEdgeInsets.only(top: 40),
+              margin: context.edgeInsets(top: 40),
               controller: provider.phoneNumberController,
               onChanged: (value) => Helper.fixPhoneFormate(value, provider.phoneNumberController),
               initialCountryCode: provider.selectedCountry,
               updateSelectedCountry: provider.updateSelectedCountry,
               withCountryCodePicker: true,
             ),
-            CButton(isLoading: provider.isSendingOTP || provider.isSocialLogin, onTap: provider.sendTheOTP, margin: ScaledEdgeInsets.only(top: 35), titleWithIcon: true, title: LocaleKeys.verify_now.tr()),
-            Padding(padding: ScaledEdgeInsets.symmetric(vertical: 40), child: Divider()),
+            CButton(isLoading: provider.isSendingOTP || provider.isSocialLogin, onTap: provider.sendTheOTP, margin: context.edgeInsets(top: 35), titleWithIcon: true, title: LocaleKeys.verify_now.tr()),
+            Padding(padding: context.edgeInsets(vertical: 40), child: Divider()),
             Padding(
-              padding: ScaledEdgeInsets.symmetric(horizontal: 30),
+              padding: context.edgeInsets(horizontal: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Padding(padding: ScaledEdgeInsets.only(left: 15, bottom: 15), child: Text(LocaleKeys.or_continue_with.tr(), style: CTextStyle.w500())),
+                  Padding(padding: context.edgeInsets(left: 15, bottom: 15), child: Text(LocaleKeys.or_continue_with.tr(), style: CTextStyle.w500())),
                   Row(
                     children: [
-                      Expanded(child: CustomImage(onTap: provider.googleLogin, path: 'assets/svg/google_with_border.svg', imageType: ImageType.svg, width: 100.pr)),
+                      Expanded(child: CustomImage(onTap: provider.googleLogin, path: 'assets/svg/google_with_border.svg', imageType: ImageType.svg, width: context.w(100))),
                       // Expanded(child: CustomImage(onTap: provider.facebookLogin, path: 'assets/svg/facebook_with_border.svg', imageType: ImageType.svg, width: SizeConfig.w(100))),
-                      Expanded(child: CustomImage(onTap: provider.appleLogin, path: 'assets/svg/apple_with_border.svg', imageType: ImageType.svg, width: 100.pr)),
+                      Expanded(child: CustomImage(onTap: provider.appleLogin, path: 'assets/svg/apple_with_border.svg', imageType: ImageType.svg, width: context.w(100))),
                     ],
                   ),
                 ],

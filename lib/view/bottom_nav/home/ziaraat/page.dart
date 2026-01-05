@@ -27,16 +27,16 @@ class _CitiesPageState extends ConsumerState<ZiaraatPage> {
       logoAlign: Alignment.center,
       title: LocaleKeys.select_ziaraat_cities.tr(),
       titleType: TitleType.backArrow,
-      titleMargin: ScaledEdgeInsets.symmetric(vertical: kToolbarHeight * 0.5),
-      margin: ScaledEdgeInsets.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
+      titleMargin: context.edgeInsets(vertical: kToolbarHeight * 0.5),
+      margin: context.edgeInsets(top: kToolbarHeight * 0.5, left: 16, right: 16),
       child: Column(
         children: [
           GridView.count(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            mainAxisSpacing: 30.pr,
-            crossAxisSpacing: 30.pr,
+            mainAxisSpacing: context.h(30),
+            crossAxisSpacing: context.w(30),
             children: [
               ZiaraatCityCard(icon: 'assets/svg/ziaraat/mecca.svg', title: LocaleKeys.Mecca.tr(), isSelected: provider.selectedCity == ZiaraatCities.mecca, onTap: () => provider.updateSelectedCity(ZiaraatCities.mecca)),
               ZiaraatCityCard(icon: 'assets/svg/ziaraat/medina.svg', title: LocaleKeys.medina.tr(), isSelected: provider.selectedCity == ZiaraatCities.medina, onTap: () => provider.updateSelectedCity(ZiaraatCities.medina)),
@@ -44,7 +44,7 @@ class _CitiesPageState extends ConsumerState<ZiaraatPage> {
               ZiaraatCityCard(icon: 'assets/svg/ziaraat/other.svg', title: LocaleKeys.others.tr(), isSelected: provider.selectedCity == ZiaraatCities.other, onTap: () => provider.updateSelectedCity(ZiaraatCities.other)),
             ],
           ),
-          if (provider.selectedCity != null) CButton(onTap: provider.goToDestinationGenerationPage, margin: ScaledEdgeInsets.only(top: 64), title: LocaleKeys.proceed_forward.tr()),
+          if (provider.selectedCity != null) CButton(onTap: provider.goToDestinationGenerationPage, margin: context.edgeInsets(top: 64), title: LocaleKeys.proceed_forward.tr()),
         ],
       ),
     );

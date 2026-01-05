@@ -26,15 +26,15 @@ class _MeeqaatTwoTasksPageState extends ConsumerState<MeeqaatTwoTasksPage> {
       isSkipLoading: provider.isLoading,
       titleType: TitleType.backArrow,
       showEmblem: false,
-      margin: ScaledEdgeInsets.only(top: kToolbarHeight * 0.8, left: 16, right: 16),
+      margin: context.edgeInsets(top: kToolbarHeight * 0.8, left: 16, right: 16),
       onSkipTap: provider.skip,
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(padding: ScaledEdgeInsets.only(top: 20), child: Center(child: Text(LocaleKeys.two_before_meeqaat.tr(), style: CTextStyle.w600(fontSize: 14, color: CColors.deepTeal)))),
-            CheckBoxCard(margin: ScaledEdgeInsets.symmetric(vertical: 20), onTap: ref.read(meeqaatTwoTasksProvider).updateCleanlinessChecked, title: LocaleKeys.cleanliness.tr(), isSelected: provider.isCleanlinessChecked),
+            Padding(padding: context.edgeInsets(top: 20), child: Center(child: Text(LocaleKeys.two_before_meeqaat.tr(), style: CTextStyle.w600(fontSize: 14, color: CColors.deepTeal)))),
+            CheckBoxCard(margin: context.edgeInsets(vertical: 20), onTap: ref.read(meeqaatTwoTasksProvider).updateCleanlinessChecked, title: LocaleKeys.cleanliness.tr(), isSelected: provider.isCleanlinessChecked),
             CheckBoxCard(
-              margin: ScaledEdgeInsets.only(bottom: 40),
+              margin: context.edgeInsets(bottom: 40),
               title: provider.user?.gender == Gender.female.name ? LocaleKeys.wear_abaya.tr() : LocaleKeys.ihram.tr(),
               isSelected: provider.isIhramChecked,
               onTap: ref.read(meeqaatTwoTasksProvider).updateIhramChecked,

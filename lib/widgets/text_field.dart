@@ -152,15 +152,15 @@ class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
     return CTextField(
       readOnly: widget.readOnly,
       labelText: LocaleKeys.number.tr(),
-      margin: widget.margin ?? ScaledEdgeInsets.zero,
+      margin: widget.margin ?? EdgeInsets.zero,
       controller: widget.controller,
       onChanged: widget.onChanged,
       keyboardType: TextInputType.phone,
       hintText: LocaleKeys.your_number_here.tr(),
       inputFormatters: [UsPhoneNumberFormatter()],
       maxLength: numberDigits + 1,
-      prefixMargin: ScaledEdgeInsets.only(left: 16, top: 0),
-      suffixMargin: ScaledEdgeInsets.only(left: 16, top: 0),
+      prefixMargin: context.edgeInsets(left: 16, top: 0),
+      suffixMargin: context.edgeInsets(left: 16, top: 0),
       textDirection: TextDirection.ltr,
       prefixIcon: widget.withCountryCodePicker && isLTR(context) ? _countryCodePicker : null,
       suffixIcon: widget.withCountryCodePicker && !isLTR(context) ? _countryCodePicker : null,
@@ -177,9 +177,9 @@ class _PhoneNumberTextFieldState extends State<PhoneNumberTextField> {
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CustomImage(path: 'assets/png/${countryCode!.flagUri!}', imageType: ImageType.png, size: 25.pr),
-            Padding(padding: ScaledEdgeInsets.only(left: 12), child: CustomImage(path: 'assets/svg/arrow_down.svg', imageType: ImageType.svg, height: 6.pr, width: 15.pr)),
-            Padding(padding: ScaledEdgeInsets.only(left: 4), child: Text(countryCode.dialCode!, style: CTextStyle.w500(fontSize: 13, color: CColors.greyShade1))),
+            CustomImage(path: 'assets/png/${countryCode!.flagUri!}', imageType: ImageType.png, size: context.r(25)),
+            Padding(padding: context.edgeInsets(left: 12), child: CustomImage(path: 'assets/svg/arrow_down.svg', imageType: ImageType.svg, height: context.h(6), width: context.w(15))),
+            Padding(padding: context.edgeInsets(left: 4), child: Text(countryCode.dialCode!, style: CTextStyle.w500(fontSize: 13, color: CColors.greyShade1))),
           ],
         );
       },

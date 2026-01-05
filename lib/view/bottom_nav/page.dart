@@ -17,7 +17,6 @@ class _BottomNavigationPageState extends ConsumerState<BottomNavigationPage> {
   @override
   Widget build(BuildContext context) {
     var provider = ref.watch(bottomNavProvider);
-    CTextStyle.init(context);
     return Scaffold(
       body: PopScope(
         canPop: provider.canPop,
@@ -30,9 +29,9 @@ class _BottomNavigationPageState extends ConsumerState<BottomNavigationPage> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding: ScaledEdgeInsets.symmetric(horizontal: 16),
+                  padding: context.edgeInsets(horizontal: 16),
                   child: Container(
-                    height: 55.pr,
+                    height: context.h(45),
                     decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)), border: Border.all(color: CColors.primary)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -146,7 +146,9 @@ class MapPageNotifier extends ChangeNotifier {
   }
 
   Future<void> updateActiveZiaraat({required ZiaraatModel activeZiaraat}) async {
-    var data = (await userCollection.doc(user!.uid).get()).data()!;
+    var data = (await userCollection.doc(user!.uid).get()).data();
+    if (data == null) return;
+    if (data[CommonField.selectedZiaraat.name] == null) return;
     destinations = List.from(data[CommonField.selectedZiaraat.name]).map((e) => ZiaraatModel.fromMap(e)).toList();
     await userCollection.doc(user!.uid).update({CommonField.selectedZiaraat.name: destinations.map((e) => e.title_en == activeZiaraat.title_en ? activeZiaraat.toMap() : e.toMap()).toList()});
   }
@@ -162,9 +164,9 @@ class MapPageNotifier extends ChangeNotifier {
               child: Material(
                 color: Colors.transparent,
                 child: Container(
-                  width: 110.pr,
-                  padding: ScaledEdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                  decoration: BoxDecoration(color: const Color(0xFF212029), borderRadius: BorderRadius.circular(32.pr)),
+                  width: context.w(110),
+                  padding: context.edgeInsets(horizontal: 12, vertical: 16),
+                  decoration: BoxDecoration(color: const Color(0xFF212029), borderRadius: BorderRadius.circular(context.r(32))),
                   child: Directionality(
                     textDirection: TextDirection.ltr,
                     child: Column(
@@ -173,19 +175,19 @@ class MapPageNotifier extends ChangeNotifier {
                       children: [
                         Text(LocaleKeys.ziaraat_history.tr(), style: CTextStyle.w500(fontSize: 10, color: Colors.white)),
                         Padding(
-                          padding: ScaledEdgeInsets.only(top: 16, bottom: 20),
+                          padding: context.edgeInsets(top: 16, bottom: 20),
                           child: GestureDetector(
                             onTap: hideMoreOptions,
                             child: Row(
                               children: [
-                                CustomImage(path: 'assets/svg/ziaraat/listen.svg', imageType: ImageType.svg, size: 20.pr, margin: ScaledEdgeInsets.only(right: 10)),
+                                CustomImage(path: 'assets/svg/ziaraat/listen.svg', imageType: ImageType.svg, size: context.r(15), margin: context.edgeInsets(right: 10)),
                                 Text(LocaleKeys.listen.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
                               ],
                             ),
                           ),
                         ),
                         Padding(
-                          padding: ScaledEdgeInsets.only(bottom: 10),
+                          padding: context.edgeInsets(bottom: 10),
                           child: GestureDetector(
                             onTap: () {
                               hideMoreOptions();
@@ -193,7 +195,7 @@ class MapPageNotifier extends ChangeNotifier {
                             },
                             child: Row(
                               children: [
-                                CustomImage(path: 'assets/svg/ziaraat/read.svg', imageType: ImageType.svg, fit: BoxFit.fitHeight, size: 20.pr, margin: ScaledEdgeInsets.only(right: 10)),
+                                CustomImage(path: 'assets/svg/ziaraat/read.svg', imageType: ImageType.svg, fit: BoxFit.fitHeight, size: context.r(15), margin: context.edgeInsets(right: 10)),
                                 Text(LocaleKeys.read.tr(), style: CTextStyle.w900(fontSize: 14, color: Colors.white)),
                               ],
                             ),

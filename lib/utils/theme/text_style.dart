@@ -2,16 +2,15 @@ import '../../export.dart';
 
 class CTextStyle {
   CTextStyle._();
-  static BuildContext? _context;
-  static init(BuildContext context) => _context = context;
+  static BuildContext? context;
   static double increaseSizeForFontFamily(String? fontFamily) =>
       fontFamily == Helper.englishTextFontFamily
           ? 1.sp
           : fontFamily == Helper.urduTextFontFamily
-          ? 6.sp
+          ? 3.sp
           : 8.sp;
 
-  static get getFontFamily => isLTR(_context) ? Helper.englishTextFontFamily : Helper.urduTextFontFamily;
+  static get getFontFamily => isLTR(context) ? Helper.englishTextFontFamily : Helper.urduTextFontFamily;
 
   static TextStyle w100({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w100,

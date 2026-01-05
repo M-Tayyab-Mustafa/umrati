@@ -57,12 +57,12 @@ class ProfileNotifier extends ChangeNotifier {
       isScrollControlled: true,
       builder: (context) {
         return Container(
-          padding: ScaledEdgeInsets.symmetric(vertical: 20),
+          padding: context.edgeInsets(vertical: 20),
           decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: const BorderRadius.vertical(top: Radius.circular(24))),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(padding: ScaledEdgeInsets.only(bottom: 10), child: Text(LocaleKeys.choose_image.tr(), style: CTextStyle.w900(fontSize: 18))),
+              Padding(padding: context.edgeInsets(bottom: 10), child: Text(LocaleKeys.choose_image.tr(), style: CTextStyle.w900(fontSize: 18))),
               _PickOption(
                 icon: Icons.camera_alt_rounded,
                 title: LocaleKeys.camera.tr(),
@@ -74,7 +74,7 @@ class ProfileNotifier extends ChangeNotifier {
               ),
 
               Padding(
-                padding: ScaledEdgeInsets.only(bottom: 24),
+                padding: context.edgeInsets(bottom: 24),
                 child: _PickOption(
                   icon: Icons.photo_library_rounded,
                   title: LocaleKeys.gallery.tr(),

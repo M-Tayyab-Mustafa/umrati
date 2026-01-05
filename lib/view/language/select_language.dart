@@ -28,7 +28,7 @@ class _SelectLanguagePageState extends ConsumerState<SelectLanguagePage> {
         children: [
           BasicCard(
             onTap: ref.read(selectLanguageProvider.notifier).changeLanguageTap,
-            margin: ScaledEdgeInsets.only(top: 70, bottom: 40),
+            margin: context.edgeInsets(top: 70, bottom: 40),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [Text(ref.watch(selectLanguageProvider).selectedLanguage.tr(), style: CTextStyle.w600(fontSize: 16)), Text(LocaleKeys.change_the_language.tr(), style: CTextStyle.w600(color: CColors.primary, fontSize: 16))],

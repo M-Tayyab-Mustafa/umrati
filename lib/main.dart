@@ -1,6 +1,5 @@
 import 'export.dart';
 import 'view/splash.dart';
-// import 'view/splash.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,18 +34,20 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    CTextStyle.init(context);
-    SizeConfig.initialization(context);
-    return MaterialApp(
-      locale: context.locale,
-      supportedLocales: context.supportedLocales,
-      localizationsDelegates: context.localizationDelegates,
-      debugShowCheckedModeBanner: false,
-      builder: (context, child) {
-        return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)), child: child!);
-      },
-      home: SplashPage(),
-      color: CColors.primary,
+    CTextStyle.context = context;
+    return ScreenUtilPlusInit(
+      designSize: const Size(360, 690),
+      child: MaterialApp(
+        locale: context.locale,
+        supportedLocales: context.supportedLocales,
+        localizationsDelegates: context.localizationDelegates,
+        debugShowCheckedModeBanner: false,
+        builder: (context, child) {
+          return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling), child: child!);
+        },
+        home: SplashPage(),
+        color: CColors.primary,
+      ),
     );
   }
 }

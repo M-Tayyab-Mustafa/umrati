@@ -13,19 +13,18 @@ class ChooseDestinations extends ConsumerWidget {
       logoAlign: Alignment.center,
       title: LocaleKeys.please_select_one_option_to_continue_your_ziaraat.tr(),
       titleType: TitleType.backArrow,
-      titleMargin: ScaledEdgeInsets.symmetric(vertical: kToolbarHeight * 0.5),
-      margin: ScaledEdgeInsets.only(top: kToolbarHeight * 0.5, left: 16, right: 16),
+      titleMargin: context.edgeInsets(vertical: kToolbarHeight * 0.5),
+      margin: context.edgeInsets(top: kToolbarHeight * 0.5, left: 16, right: 16),
       child: SingleChildScrollView(
         child: Column(
           children: [
             BasicCard(
-              height: 130.pr,
-              width: SizeConfig.mediaQuery.size.width,
+              height: context.h(110),
               onTap: () => ref.read(ziaraatProvider.notifier).updateSelectedDestinationsCreationOption(ZiaraatDestinationsCreationOptions.auto),
-              padding: ScaledEdgeInsets.all(20),
+              padding: context.edgeInsets(all: 20),
               borderColor: isAutoSelected ? null : CColors.greyShade2,
               boxShadow: isAutoSelected ? null : [],
-              borderWidth: 3.pr,
+              borderWidth: context.r(3),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,14 +35,13 @@ class ChooseDestinations extends ConsumerWidget {
               ),
             ),
             BasicCard(
-              height: 130.pr,
-              width: SizeConfig.mediaQuery.size.width,
+              height: context.h(110),
               onTap: () => ref.read(ziaraatProvider.notifier).updateSelectedDestinationsCreationOption(ZiaraatDestinationsCreationOptions.manual),
-              margin: ScaledEdgeInsets.symmetric(vertical: 30),
-              padding: ScaledEdgeInsets.all(20),
+              margin: context.edgeInsets(vertical: 30),
+              padding: context.edgeInsets(all: 20),
               borderColor: isManualSelected ? CColors.primary : CColors.greyShade2,
               boxShadow: isManualSelected ? null : [],
-              borderWidth: 3.pr,
+              borderWidth: context.r(3),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +51,7 @@ class ChooseDestinations extends ConsumerWidget {
                 ],
               ),
             ),
-            if (ref.watch(ziaraatProvider).selectedDestinationsCreationOption != null) CButton(margin: ScaledEdgeInsets.only(top: 64), isLoading: provider.isLoading, onTap: provider.generateZiaraat, title: LocaleKeys.proceed_forward.tr()),
+            if (ref.watch(ziaraatProvider).selectedDestinationsCreationOption != null) CButton(margin: context.edgeInsets(top: 64), isLoading: provider.isLoading, onTap: provider.generateZiaraat, title: LocaleKeys.proceed_forward.tr()),
           ],
         ),
       ),

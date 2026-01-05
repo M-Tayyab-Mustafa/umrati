@@ -48,6 +48,7 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   }
 
   void showIhramTutorial() async {
+    if (user == null) return;
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => IhramTutorialDialog(gender: user!.gender));
     if (result == true) {
       isIhramChecked = true;
@@ -103,19 +104,13 @@ class IhramTutorialDialog extends StatelessWidget {
                           ),
                     ),
                     Container(
-                      margin: ScaledEdgeInsets.only(top: screenSize.height * 0.07),
-                      padding: ScaledEdgeInsets.only(top: 20, bottom: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: CColors.primary, width: 2),
-                        boxShadow: primaryShadows.map((e) => e.copyWith(blurRadius: 30)).toList(),
-                      ),
+                      margin: context.edgeInsets(top: screenSize.height * 0.07),
+                      padding: context.edgeInsets(top: 20, bottom: 20),
+                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: CColors.primary, width: 2), boxShadow: primaryShadows.map((e) => e.copyWith(blurRadius: 30)).toList()),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (gender == Gender.female.name)
-                            Padding(padding: ScaledEdgeInsets.only(bottom: 20), child: Text(LocaleKeys.no_face_veil_or_gloves.tr(), style: CTextStyle.w600(color: CColors.primary))),
+                          if (gender == Gender.female.name) Padding(padding: context.edgeInsets(bottom: 20), child: Text(LocaleKeys.no_face_veil_or_gloves.tr(), style: CTextStyle.w600(color: CColors.primary))),
                           CustomImage(
                             path: gender == Gender.male.name ? 'assets/png/ihram_tutorial.png' : 'assets/png/abaya_tutorial.png',
                             imageType: ImageType.png,

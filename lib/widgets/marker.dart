@@ -16,19 +16,19 @@ class CMarker extends StatelessWidget {
       children: [
         SizedBox(
           height: size,
-          width: 20.pr,
+          width: context.w(20),
           child: Stack(
             children: [
-              Center(child: Container(width: 2.pr, decoration: BoxDecoration(color: indicatorColor ?? CColors.primary))),
-              Center(child: Container(width: 12.pr, decoration: BoxDecoration(color: indicatorColor ?? CColors.primary, shape: BoxShape.circle))),
+              Center(child: Container(width: context.w(2), decoration: BoxDecoration(color: indicatorColor ?? CColors.primary))),
+              Center(child: Container(width: context.w(12), decoration: BoxDecoration(color: indicatorColor ?? CColors.primary, shape: BoxShape.circle))),
             ],
           ),
         ),
         Expanded(
           child: Container(
-            height: (size / 1.5).pr,
-            padding: ScaledEdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(color: color ?? CColors.primary, borderRadius: BorderRadius.circular(3.pr)),
+            height: context.h(size / 1.5),
+            padding: context.edgeInsets(horizontal: 8),
+            decoration: BoxDecoration(color: color ?? CColors.primary, borderRadius: BorderRadius.circular(context.r(3))),
             child: Row(
               children: [
                 Expanded(

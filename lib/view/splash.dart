@@ -17,11 +17,6 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(gradient: LinearGradient(colors: [CColors.lightGrey.withValues(alpha: 0.20), CColors.primary.withValues(alpha: 0.20), CColors.primary.withValues(alpha: 0.15)])),
-        child: Center(child: CustomImage(path: 'assets/svg/logo.svg', imageType: ImageType.svg, size: 300.pr, fit: BoxFit.fitWidth)),
-      ),
-    );
+    return Background(showEmblem: false, child: Center(child: CustomImage(path: 'assets/svg/logo.svg', imageType: ImageType.svg, size: context.r(200), fit: BoxFit.fitWidth)));
   }
 }

@@ -51,46 +51,24 @@ class Background<T> extends StatelessWidget {
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         body: Stack(
           children: [
-            // Opacity(opacity: 0.1, child: CustomImage(path: 'assets/png/background.png', imageType: ImageType.png, height: SizeConfig.screenHeight, width: SizeConfig.screenWidth, fit: BoxFit.fill)),
-            // Container(
-            //   height: SizeConfig.screenHeight,
-            //   width: SizeConfig.screenWidth,
-            //   decoration: BoxDecoration(
-            //     gradient: LinearGradient(
-            //       colors: [Color(0x73737300).withValues(alpha: 0.05), Color.fromARGB(255, 168, 255, 178).withValues(alpha: 0.25)],
-            //       stops: [0.3, 1],
-            //       begin: Alignment.centerLeft,
-            //       end: Alignment.centerRight,
-            //     ),
-            //   ),
-            // ),
-            CustomImage(path: 'assets/svg/background_layer.svg', imageType: ImageType.svg, height: SizeConfig.mediaQuery.size.height, width: SizeConfig.mediaQuery.size.width, fit: BoxFit.fill),
-            // Opacity(
-            //   opacity: 0.6,
-            //   child: CustomImage(
-            //     path: 'assets/svg/islamic_pattern.svg',
-            //     imageType: ImageType.svg,
-            //     fit: BoxFit.cover,
-            // height: SizeConfig.mediaQuery.size.height,
-            // width: SizeConfig.mediaQuery.size.width,
-            //     color: Colors.white,
-            //   ),
-            // ),
-            // Opacity(opacity: 0.3, child: CustomImage(path: 'assets/svg/modal.svg', imageType: ImageType.svg, fit: BoxFit.cover, height: SizeConfig.mediaQuery.size.height, width: SizeConfig.mediaQuery.size.width)),
+            CustomImage(path: 'assets/svg/background_layer.svg', imageType: ImageType.svg, height: MediaQuery.sizeOf(context).height, width: MediaQuery.sizeOf(context).width, fit: BoxFit.fill),
             if (showEmblem)
-              Align(alignment: Alignment.bottomCenter, child: Opacity(opacity: 0.15, child: CustomImage(path: 'assets/svg/emblem.svg', imageType: ImageType.svg, color: CColors.primary, height: 190.pr, width: SizeConfig.mediaQuery.size.width))),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Opacity(opacity: 0.15, child: CustomImage(path: 'assets/svg/emblem.svg', imageType: ImageType.svg, color: CColors.primary, height: context.h(140), width: MediaQuery.sizeOf(context).width)),
+              ),
             SizedBox(
-              height: SizeConfig.mediaQuery.size.height,
-              width: SizeConfig.mediaQuery.size.width,
+              height: MediaQuery.sizeOf(context).height,
+              width: MediaQuery.sizeOf(context).width,
               child: SafeArea(
                 child: Padding(
-                  padding: margin ?? ScaledEdgeInsets.symmetric(vertical: 64, horizontal: 16),
+                  padding: margin ?? context.edgeInsets(vertical: 64, horizontal: 16),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       switch (backgroundType) {
                         BackgroundType.titleWithBackButton => SizedBox(
-                          height: kToolbarHeight.pr,
+                          height: context.h(kToolbarHeight),
                           child: Row(
                             children: [
                               GestureDetector(
@@ -102,11 +80,11 @@ class Background<T> extends StatelessWidget {
                                     Navigator.pop(context);
                                   }
                                 },
-                                child: Transform.rotate(angle: isLTR(context) ? 0 : -(pi / 180 * 180), child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: 25.pr, margin: ScaledEdgeInsets.only(left: 16))),
+                                child: Transform.rotate(angle: isLTR(context) ? 0 : -(pi / 180 * 180), child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: context.r(25), margin: context.edgeInsets(left: 16))),
                               ),
                               Expanded(
                                 child: Padding(
-                                  padding: ScaledEdgeInsets.only(right: isLTR(context) ? 40 : 0, left: isLTR(context) ? 0 : 40),
+                                  padding: context.edgeInsets(right: isLTR(context) ? 40 : 0, left: isLTR(context) ? 0 : 40),
                                   child: Align(
                                     alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
                                     child: Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 20)),
@@ -124,7 +102,7 @@ class Background<T> extends StatelessWidget {
                                   Expanded(
                                     child: Align(
                                       alignment: logoAlign ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
-                                      child: CustomImage(margin: logoMargin ?? ScaledEdgeInsets.zero, path: DefaultImages.logoWithName, imageType: ImageType.svg, fit: BoxFit.fitWidth, width: (SizeConfig.mediaQuery.size.width * 0.45).pr),
+                                      child: CustomImage(margin: logoMargin ?? EdgeInsets.zero, path: DefaultImages.logoWithName, imageType: ImageType.svg, fit: BoxFit.fitWidth, width: context.r(190)),
                                     ),
                                   ),
                                   if (backgroundType == BackgroundType.logoWithSkip)
@@ -132,8 +110,8 @@ class Background<T> extends StatelessWidget {
                                       SizedBox.shrink()
                                     else
                                       Padding(
-                                        padding: skipMargin ?? ScaledEdgeInsets.only(right: isLTR(context) ? 16 : 0, left: isLTR(context) ? 0 : 16),
-                                        child: GestureDetector(onTap: onSkipTap, child: Text(LocaleKeys.skip.tr(), style: CTextStyle.w400(fontSize: 20, color: CColors.primary, decoration: TextDecoration.underline))),
+                                        padding: skipMargin ?? context.edgeInsets(right: isLTR(context) ? 16 : 0, left: isLTR(context) ? 0 : 16),
+                                        child: GestureDetector(onTap: onSkipTap, child: Text(LocaleKeys.skip.tr(), style: CTextStyle.w400(fontSize: 22, color: CColors.primary, decoration: TextDecoration.underline))),
                                       ),
                                 ],
                               ),
@@ -141,11 +119,11 @@ class Background<T> extends StatelessWidget {
                               Align(
                                 alignment: titleAlignment ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
                                 child: Padding(
-                                  padding: titleMargin ?? ScaledEdgeInsets.only(top: 20),
+                                  padding: titleMargin ?? context.edgeInsets(top: 20),
                                   child: switch (titleType) {
-                                    TitleType.empty => titleWidget ?? Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 18)),
+                                    TitleType.empty => titleWidget ?? Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 20)),
                                     TitleType.backArrow => Row(
-                                      crossAxisAlignment: title != null ? Helper.getAlignment(context, title ?? '', titleStyle ?? CTextStyle.w500(fontSize: isLTR(context) ? 18 : 22), SizeConfig.mediaQuery.size.width - 32) : CrossAxisAlignment.center,
+                                      crossAxisAlignment: title != null ? Helper.getAlignment(context, title ?? '', titleStyle ?? CTextStyle.w500(fontSize: 20), MediaQuery.sizeOf(context).width - 32) : CrossAxisAlignment.center,
                                       children: [
                                         GestureDetector(
                                           onTap: () async {
@@ -156,13 +134,13 @@ class Background<T> extends StatelessWidget {
                                               Navigator.pop(context);
                                             }
                                           },
-                                          child: Transform.rotate(angle: isLTR(context) ? 0 : pi / 180 * 180, child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: 30)),
+                                          child: Transform.rotate(angle: isLTR(context) ? 0 : pi / 180 * 180, child: CustomImage(path: 'assets/svg/arrow_backward.svg', imageType: ImageType.svg, size: context.w(25))),
                                         ),
                                         Expanded(
                                           child: Align(
                                             alignment: titleAlignment ?? (isLTR(context) ? Alignment.centerLeft : Alignment.centerRight),
                                             child: Padding(
-                                              padding: ScaledEdgeInsets.only(left: isLTR(context) ? 4 : 0, right: isLTR(context) ? 0 : 4),
+                                              padding: context.edgeInsets(left: isLTR(context) ? 4 : 0, right: isLTR(context) ? 0 : 4),
                                               child: titleWidget ?? Text(title!, textDirection: languageDirection(context), style: titleStyle ?? CTextStyle.w500(fontSize: 18)),
                                             ),
                                           ),

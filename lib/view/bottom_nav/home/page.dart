@@ -20,7 +20,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       showEmblem: false,
       backgroundType: BackgroundType.logo,
       logoAlign: Alignment.center,
-      margin: ScaledEdgeInsets.only(top: kToolbarHeight * 0.5, bottom: 50, left: 16, right: 16),
+      logoMargin: context.edgeInsets(bottom: 16),
+      margin: context.edgeInsets(top: 16, bottom: 50, left: 16, right: 16),
       child: Column(
         children: [
           FutureBuilder(
@@ -54,17 +55,17 @@ class _Card extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return BasicCard(
       onTap: onTap,
-      margin: ScaledEdgeInsets.symmetric(vertical: 18),
-      padding: ScaledEdgeInsets.only(top: 16, bottom: 16, right: 16),
-      height: 140.pr,
+      margin: context.edgeInsets(vertical: 16),
+      padding: context.edgeInsets(top: 16, bottom: 16, right: 16),
+      height: context.h(120),
       borderColor: CColors.grey,
       boxShadow: greyShadows,
       child: Row(
         children: [
-          CustomImage(height: 120.pr, width: 100.pr, path: image, fit: BoxFit.fill, imageType: ImageType.png),
+          CustomImage(height: context.h(120), width: context.w(100), path: image, fit: BoxFit.fill, imageType: ImageType.png),
           Expanded(
             child: Padding(
-              padding: ScaledEdgeInsets.symmetric(horizontal: 8),
+              padding: context.edgeInsets(horizontal: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,8 +74,8 @@ class _Card extends ConsumerWidget {
                     children: [
                       Text(title, style: CTextStyle.w600(fontSize: 22, color: CColors.deepTeal), maxLines: 1),
                       Padding(
-                        padding: ScaledEdgeInsets.only(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
-                        child: Transform.rotate(angle: isLTR(context) ? 0 : pi / 180 * 180, child: CustomImage(path: DefaultImages.longArrowForward, size: 25.pr, color: CColors.deepTeal, imageType: ImageType.svg)),
+                        padding: context.edgeInsets(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8),
+                        child: Transform.rotate(angle: isLTR(context) ? 0 : pi / 180 * 180, child: CustomImage(path: DefaultImages.longArrowForward, size: context.r(25), color: CColors.deepTeal, imageType: ImageType.svg)),
                       ),
                     ],
                   ),

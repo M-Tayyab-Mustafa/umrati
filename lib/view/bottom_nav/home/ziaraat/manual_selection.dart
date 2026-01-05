@@ -7,10 +7,10 @@ class ManualSelection extends ConsumerWidget {
     var provider = ref.watch(ziaraatProvider);
     return Background(
       showEmblem: false,
-      title: '${_cityName(provider.selectedCity!)} ${LocaleKeys.top_ziaraat_destination_of.tr()}',
+      title: '${LocaleKeys.top_ziaraat_destination_of.tr()} ${_cityName(provider.selectedCity!)}',
       titleType: TitleType.backArrow,
-      titleMargin: ScaledEdgeInsets.symmetric(vertical: kToolbarHeight * 0.5),
-      margin: ScaledEdgeInsets.only(left: 16, right: 16),
+      titleMargin: context.edgeInsets(vertical: kToolbarHeight * 0.5),
+      margin: context.edgeInsets(left: 16, right: 16),
       child: Column(
         children: [
           Expanded(
@@ -19,26 +19,28 @@ class ManualSelection extends ConsumerWidget {
               children: [
                 provider.ziaraats.isEmpty
                     ? Center(child: Text(LocaleKeys.ziaraat_not_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
-                    : ListView.builder(
-                      shrinkWrap: true,
-                      padding: ScaledEdgeInsets.zero,
-                      itemCount: provider.ziaraats.length,
-                      itemBuilder: (context, index) {
-                        var ziaraat = provider.ziaraats[index];
-                        return BasicCard(
-                          margin: ScaledEdgeInsets.only(bottom: 20),
-                          onTap: () => provider.updateSelectedZiaraat(ziaraat),
-                          borderColor: provider.selectedZiaraat.contains(ziaraat) ? null : CColors.greyShade3,
-                          boxShadow: provider.selectedZiaraat.contains(ziaraat) ? null : [],
-                          child: Directionality(textDirection: getTextDirection(isLTR(context) ? ziaraat.title_en : ziaraat.title_ur), child: Text(isLTR(context) ? ziaraat.title_en : ziaraat.title_ur, style: CTextStyle.w500(fontSize: 14))),
-                        );
-                      },
+                    : Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        itemCount: provider.ziaraats.length,
+                        itemBuilder: (context, index) {
+                          var ziaraat = provider.ziaraats[index];
+                          return BasicCard(
+                            margin: context.edgeInsets(bottom: 20),
+                            onTap: () => provider.updateSelectedZiaraat(ziaraat),
+                            borderColor: provider.selectedZiaraat.contains(ziaraat) ? null : CColors.greyShade3,
+                            boxShadow: provider.selectedZiaraat.contains(ziaraat) ? null : [],
+                            child: Directionality(textDirection: getTextDirection(isLTR(context) ? ziaraat.title_en : ziaraat.title_ur), child: Text(isLTR(context) ? ziaraat.title_en : ziaraat.title_ur, style: CTextStyle.w500(fontSize: 14))),
+                          );
+                        },
+                      ),
                     ),
-                if (!(provider.user?.is_premium ?? false)) CButton(isLoading: provider.isLoading, onTap: provider.onLoadMoreTap, margin: ScaledEdgeInsets.only(top: 32), title: LocaleKeys.load_more.tr()),
+                if (!(provider.user?.is_premium ?? false)) CButton(isLoading: provider.isLoading, onTap: provider.onLoadMoreTap, margin: context.edgeInsets(top: 32), title: LocaleKeys.load_more.tr()),
               ],
             ),
           ),
-          if (provider.selectedZiaraat.isNotEmpty) CButton(isLoading: provider.isLoading, onTap: provider.createZiaraatRoute, margin: ScaledEdgeInsets.only(bottom: 64), title: LocaleKeys.start_your_ziaraat.tr()),
+          if (provider.selectedZiaraat.isNotEmpty) CButton(margin: context.edgeInsets(top: 16, bottom: 64), isLoading: provider.isLoading, onTap: provider.createZiaraatRoute, title: LocaleKeys.start_your_ziaraat.tr()),
         ],
       ),
     );

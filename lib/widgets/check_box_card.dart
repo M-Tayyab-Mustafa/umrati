@@ -12,7 +12,7 @@ class CheckBoxCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BasicCard(
       boxShadow: [],
-      margin: margin ?? ScaledEdgeInsets.zero,
+      margin: margin ?? EdgeInsets.zero,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,7 +25,7 @@ class CheckBoxCard extends StatelessWidget {
                   onTap: onTap,
                   child: Row(
                     children: [
-                      Expanded(child: Padding(padding: ScaledEdgeInsets.only(left: isLTR(context) ? 10 : 0, right: isLTR(context) ? 0 : 10), child: Text(title, style: CTextStyle.w600(fontSize: 16, color: CColors.primary)))),
+                      Expanded(child: Padding(padding: context.edgeInsets(left: isLTR(context) ? 8 : 0, right: isLTR(context) ? 0 : 8), child: Text(title, style: CTextStyle.w600(fontSize: 16, color: CColors.primary)))),
                       // CustomImage(path: isLTR(context) ? 'assets/svg/go_forward.svg' : 'assets/svg/go_backward.svg', height: 20, width: 8, imageType: ImageType.svg),
                     ],
                   ),
@@ -33,7 +33,7 @@ class CheckBoxCard extends StatelessWidget {
               ),
             ],
           ),
-          if (child != null) Padding(padding: ScaledEdgeInsets.only(left: 30, right: 20), child: GestureDetector(onTap: onTap, child: child!)),
+          if (child != null) Padding(padding: context.edgeInsets(left: 30, right: 20), child: GestureDetector(onTap: onTap, child: child!)),
         ],
       ),
     );

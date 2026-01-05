@@ -42,7 +42,7 @@ class _ZiaraatMapPageState extends ConsumerState<ZiaraatMapPage> {
                 onTap: () => Navigator.pop(context),
                 child: Container(
                   decoration: BoxDecoration(color: CColors.charcoalBlack, shape: BoxShape.circle),
-                  child: CustomImage(margin: ScaledEdgeInsets.all(10), path: 'assets/svg/go_backward.svg', color: Colors.white, imageType: ImageType.svg, size: 20.pr),
+                  child: CustomImage(margin: context.edgeInsets(all: 10), path: 'assets/svg/go_backward.svg', color: Colors.white, imageType: ImageType.svg, size: context.r(20)),
                 ),
               ),
             ),
@@ -51,10 +51,10 @@ class _ZiaraatMapPageState extends ConsumerState<ZiaraatMapPage> {
                 alignment: Alignment(0.9, -0.9),
                 child: GestureDetector(
                   onTap: () => provider.showMoreOptions(context: context),
-                  child: Directionality(textDirection: TextDirection.ltr, child: CustomImage(path: isLTR(context) ? 'assets/svg/ziaraat/more_options.svg' : 'assets/svg/ziaraat/more_options_ur.svg', imageType: ImageType.svg, size: 40.pr)),
+                  child: Directionality(textDirection: TextDirection.ltr, child: CustomImage(path: isLTR(context) ? 'assets/svg/ziaraat/more_options.svg' : 'assets/svg/ziaraat/more_options_ur.svg', imageType: ImageType.svg, size: context.r(40))),
                 ),
               ),
-            Align(alignment: Alignment(0.42, -0.92), child: CompositedTransformTarget(link: provider.layerLink, child: SizedBox(height: 20.pr, width: 20.pr))),
+            Align(alignment: Alignment(0.42, -0.92), child: CompositedTransformTarget(link: provider.layerLink, child: SizedBox(height: context.r(20), width: context.r(20)))),
             _BottomSheet(),
           ],
         ),
@@ -68,19 +68,19 @@ class _BottomSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(mapPageProvider);
     return SlidingUpPanelWidget(
-      controlHeight: 150.pr,
+      controlHeight: context.h(120),
       panelController: provider.panelController,
       onTap: provider.hideMoreOptions,
       child: Container(
-        decoration: ShapeDecoration(color: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(30.pr)))),
+        decoration: ShapeDecoration(color: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(context.r(30))))),
         child: SafeArea(
           child: Padding(
-            padding: ScaledEdgeInsets.symmetric(vertical: 10),
+            padding: context.edgeInsets(vertical: 8),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: getTextDirection(isLTR(context) ? provider.activeZiaraat?.title_en ?? '' : provider.activeZiaraat?.title_ur ?? '') == TextDirection.rtl ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
-                Center(child: CustomImage(path: 'assets/svg/arrow_up.svg', imageType: ImageType.svg, width: 20.pr)),
+                Center(child: CustomImage(path: 'assets/svg/arrow_up.svg', imageType: ImageType.svg, width: context.w(20))),
                 _ZiaraatDetailCard(
                   title: isLTR(context) ? provider.activeZiaraat?.title_en ?? '' : provider.activeZiaraat?.title_ur ?? '',
                   time: provider.activeZiaraat?.time ?? '0 m',
@@ -90,7 +90,7 @@ class _BottomSheet extends ConsumerWidget {
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
-                      padding: ScaledEdgeInsets.zero,
+                      padding: EdgeInsets.zero,
                       itemCount: provider.destinations.sublist(1).length,
                       itemBuilder: (context, index) {
                         var ziaraat = provider.destinations.sublist(1)[index];
@@ -118,32 +118,32 @@ class _ZiaraatDetailCard extends ConsumerWidget {
     return Directionality(
       textDirection: getTextDirection(title),
       child: Padding(
-        padding: ScaledEdgeInsets.symmetric(horizontal: 20),
+        padding: context.edgeInsets(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(padding: ScaledEdgeInsets.only(top: 15), child: Text('${LocaleKeys.your.tr()} ${index + 1} ${LocaleKeys.ziaraat.tr()}', style: CTextStyle.w500(fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis)),
-            Padding(padding: ScaledEdgeInsets.symmetric(vertical: 4), child: Text(title, style: CTextStyle.w500(), maxLines: 2, overflow: TextOverflow.ellipsis)),
+            Padding(padding: context.edgeInsets(top: 5), child: Text('${LocaleKeys.your.tr()} ${index + 1} ${LocaleKeys.ziaraat.tr()}', style: CTextStyle.w500(fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis)),
+            Padding(padding: context.edgeInsets(vertical: 4), child: Text(title, style: CTextStyle.w500(), maxLines: 2, overflow: TextOverflow.ellipsis)),
             Directionality(
               textDirection: TextDirection.ltr,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CustomImage(margin: ScaledEdgeInsets.only(right: 5), path: 'assets/png/map/destination.png', imageType: ImageType.png, width: 11.pr, fit: BoxFit.fitWidth),
+                  CustomImage(margin: context.edgeInsets(right: 5), path: 'assets/png/map/destination.png', imageType: ImageType.png, width: context.w(11), fit: BoxFit.fitWidth),
                   Text('$distance Km', style: CTextStyle.w400(fontSize: 12, color: CColors.primary), maxLines: 1, overflow: TextOverflow.ellipsis),
                   if (time.isNotEmpty)
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        CustomImage(margin: ScaledEdgeInsets.only(left: 80, right: 5), path: 'assets/svg/clock.svg', imageType: ImageType.svg, width: 18.pr, fit: BoxFit.fitWidth),
+                        CustomImage(margin: context.edgeInsets(left: 80, right: 5), path: 'assets/svg/clock.svg', imageType: ImageType.svg, width: context.w(18), fit: BoxFit.fitWidth),
                         Text(time, style: CTextStyle.w400(fontSize: 12, color: CColors.primary), maxLines: 1, overflow: TextOverflow.ellipsis),
                       ],
                     ),
                 ],
               ),
             ),
-            Padding(padding: ScaledEdgeInsets.only(top: 16), child: Divider(color: CColors.charcoalBlack, thickness: 1, radius: BorderRadius.circular(16.pr))),
+            Padding(padding: context.edgeInsets(top: 16), child: Divider(color: CColors.charcoalBlack, thickness: 1, radius: BorderRadius.circular(context.r(16)))),
           ],
         ),
       ),

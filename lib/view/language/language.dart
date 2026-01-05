@@ -28,15 +28,15 @@ class _LanguagePageState extends ConsumerState<LanguagePage> {
       titleType: TitleType.backArrow,
       backgroundType: BackgroundType.logo,
       logoAlign: provider.isUpdatingLanguage ? Alignment.center : Alignment.centerLeft,
-      margin: ScaledEdgeInsets.only(top: kToolbarHeight, left: 16, right: 16),
-      titleMargin: ScaledEdgeInsets.symmetric(vertical: 20),
+      margin: context.edgeInsets(top: kToolbarHeight, left: 16, right: 16),
+      titleMargin: context.edgeInsets(vertical: 20),
       child: Column(
         children: [
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: provider.languages.length,
-              padding: ScaledEdgeInsets.zero,
+              padding: EdgeInsets.zero,
               itemBuilder: (context, index) {
                 bool isSelected = provider.languages[index] == provider.selectedLanguage;
                 return GestureDetector(
@@ -44,7 +44,7 @@ class _LanguagePageState extends ConsumerState<LanguagePage> {
                   child: Directionality(
                     textDirection: getTextDirection(provider.languages[index].tr()),
                     child: BasicCard(
-                      margin: ScaledEdgeInsets.only(top: index != 0 ? 20 : 0),
+                      margin: context.edgeInsets(top: index != 0 ? 20 : 0),
                       borderColor: isSelected ? CColors.primary : CColors.lightGrey,
                       boxShadow: isSelected ? null : [],
                       child: Text(provider.languages[index].tr(), style: CTextStyle.w600(fontSize: 16)),
@@ -54,7 +54,7 @@ class _LanguagePageState extends ConsumerState<LanguagePage> {
               },
             ),
           ),
-          CButton(margin: ScaledEdgeInsets.only(bottom: kToolbarHeight), onTap: ref.read(languageProvider.notifier).continueTap, title: LocaleKeys.continued.tr(), titleWithIcon: true),
+          CButton(margin: context.edgeInsets(bottom: kToolbarHeight), onTap: ref.read(languageProvider.notifier).continueTap, title: LocaleKeys.continued.tr(), titleWithIcon: true),
         ],
       ),
     );

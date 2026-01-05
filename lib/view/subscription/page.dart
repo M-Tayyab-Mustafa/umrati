@@ -20,7 +20,6 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
   @override
   Widget build(BuildContext context) {
     final provider = ref.watch(subscriptionProvider);
-    SizeConfig.initialization(context);
     return IgnorePointer(
       ignoring: provider.isSubscribing,
       child: Background(
@@ -30,9 +29,9 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
           children: [
             Text('3 ${LocaleKeys.months.tr()}', style: CTextStyle.w500(fontSize: 18, color: Colors.black)),
             Padding(
-              padding: ScaledEdgeInsets.symmetric(horizontal: 8),
+              padding: context.edgeInsets(horizontal: 8),
               child: SizedBox(
-                height: 30.pr,
+                height: context.h(25),
                 child: FittedBox(
                   child: Switch(
                     value: !provider.showThreeMonthPlans,
@@ -49,8 +48,8 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
           ],
         ),
         titleType: provider.isRenewingPlan ? TitleType.backArrow : TitleType.empty,
-        titleMargin: ScaledEdgeInsets.symmetric(horizontal: 20, vertical: 25),
-        margin: ScaledEdgeInsets.only(top: kToolbarHeight / 2),
+        titleMargin: context.edgeInsets(horizontal: 20, vertical: 25),
+        margin: context.edgeInsets(top: kToolbarHeight / 2),
         logoAlign: Alignment.topCenter,
         child:
             provider.isLoading
