@@ -12,7 +12,7 @@ class Payment {
       paymentSettingSubscription?.cancel();
       paymentSettingSubscription = settingsCollection.doc(CommonDoc.paymentSettings.name).snapshots().listen((event) {
         paymentSetting = PaymentSettingsModel.fromMap(event.data()!);
-        if (paymentSetting!.showStripeButton) Stripe.publishableKey = paymentSetting?.stripePublishableKey ?? '';
+        Stripe.publishableKey = paymentSetting?.stripePublishableKey ?? '';
       });
     } catch (e) {
       if (kDebugMode) log(e.toString());
