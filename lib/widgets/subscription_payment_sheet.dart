@@ -32,6 +32,7 @@ class PaymentSheet extends ConsumerWidget {
               if (Payment.instance.paymentSetting!.showGooglePayButton)
                 GooglePayButton(
                   margin: context.edgeInsets(top: 16),
+                  publicKey: Payment.instance.paymentSetting!.googlePublicKey,
                   merchantId: Payment.instance.paymentSetting!.googleMerchantId,
                   merchantName: Payment.instance.paymentSetting!.googleMerchantName,
                   width: MediaQuery.sizeOf(context).width,

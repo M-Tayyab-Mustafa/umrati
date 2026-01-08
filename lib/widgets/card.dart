@@ -1,7 +1,22 @@
 import '../export.dart';
 
 class BasicCard extends StatelessWidget {
-  const BasicCard({super.key, this.margin, this.padding, this.height, this.width, required this.child, this.backgroundColor, this.backgroundGradient, this.borderColor, this.borderWidth, this.borderRadius, this.boxShadow, this.onTap});
+  const BasicCard({
+    super.key,
+    this.margin,
+    this.padding,
+    this.height,
+    this.width,
+    required this.child,
+    this.backgroundColor,
+    this.backgroundGradient,
+    this.borderColor,
+    this.borderWidth,
+    this.borderRadius,
+    this.boxShadow,
+    this.onTap,
+    this.alignment = Alignment.center,
+  });
   final EdgeInsets? margin;
   final EdgeInsets? padding;
   final double? height;
@@ -14,6 +29,7 @@ class BasicCard extends StatelessWidget {
   final double? borderRadius;
   final List<BoxShadow>? boxShadow;
   final VoidCallback? onTap;
+  final Alignment alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +39,7 @@ class BasicCard extends StatelessWidget {
         margin: margin ?? EdgeInsets.zero,
         height: height,
         width: width,
+        alignment: alignment,
         padding: padding ?? context.edgeInsets(all: 16),
         decoration: BoxDecoration(
           color: backgroundColor ?? (backgroundGradient != null ? null : Colors.transparent),

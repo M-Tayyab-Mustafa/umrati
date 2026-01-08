@@ -50,17 +50,14 @@ class Payment {
 
   Future<void> makePaymentByJazzCash({required BuildContext context, required String userRegion, required String amount, required void Function() onSuccess}) async {
     try {
-      final String merchantId = "MC12345";
-      final String returnUrl = "https://sandbox.jazzcash.com.pk/ReturnUrl";
-      final String transactionRef = DateTime.now().millisecondsSinceEpoch.toString();
       final String paymentUrl =
           "https://sandbox.jazzcash.com.pk/CustomerPortal/transactionmanagement/merchantform/?"
           "pp_Version=1.1"
           "&pp_TxnType=MWALLET"
-          "&pp_MerchantID=$merchantId"
+          "&pp_MerchantID=${paymentSetting?.jazzCashMerchantId}"
           "&pp_Amount=$amount"
-          "&pp_TxnRefNo=$transactionRef"
-          "&pp_ReturnURL=$returnUrl"
+          "&pp_TxnRefNo=${DateTime.now().millisecondsSinceEpoch.toString()}"
+          "&pp_ReturnURL=${paymentSetting?.jazzCashReturnUrl}"
           "&pp_Description=TestPayment"
           "&pp_Language=EN";
       final result = await Navigator.push(
@@ -82,15 +79,12 @@ class Payment {
 
   Future<void> makePaymentByEasyPaisa({required BuildContext context, required String userRegion, required String amount, required void Function() onSuccess}) async {
     try {
-      final String storeId = "12345";
-      final String redirectUrl = 'https://yourdomain.com/callback';
-      final String orderRefNum = DateTime.now().millisecondsSinceEpoch.toString();
       final String paymentUrl =
           "https://easypaystg.easypaisa.com.pk/easypay/Index.jsf?"
-          "storeId=$storeId"
+          "storeId=${paymentSetting?.easyPaisaStoreId}"
           "&amount=$amount"
-          "&postBackURL=$redirectUrl"
-          "&orderRefNum=$orderRefNum"
+          "&postBackURL=${paymentSetting?.easyPaisaReturnUrl}"
+          "&orderRefNum=${DateTime.now().millisecondsSinceEpoch.toString()}"
           "&expiryDate=2025-12-31%2023:59:59"
           "&autoRedirect=1";
       final result = await Navigator.push(

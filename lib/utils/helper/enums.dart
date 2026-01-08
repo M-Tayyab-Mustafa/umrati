@@ -29,7 +29,6 @@ enum UserActivityType { tawaf, umrah, ziaraat }
 enum CommonDoc {
   alKaba('al_kaba'),
   meeqaat('meeqaat'),
-  keys('keys'),
   paymentSettings('payment_settings'),
   ultimatePlan('ultimate_plan'),
   constants('constants'),

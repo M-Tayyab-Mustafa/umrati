@@ -7,6 +7,7 @@ class PaymentSettingsModel {
   final bool showGooglePayButton;
   final String googleMerchantId;
   final String googleMerchantName;
+  final String googlePublicKey;
   final bool showJazzCashButton;
   final String jazzCashMerchantId;
   final String jazzCashReturnUrl;
@@ -23,6 +24,7 @@ class PaymentSettingsModel {
     required this.showGooglePayButton,
     required this.googleMerchantId,
     required this.googleMerchantName,
+    required this.googlePublicKey,
     required this.showJazzCashButton,
     required this.jazzCashMerchantId,
     required this.jazzCashReturnUrl,
@@ -41,6 +43,7 @@ class PaymentSettingsModel {
     bool? showGooglePayButton,
     String? googleMerchantId,
     String? googleMerchantName,
+    String? googlePublicKey,
     bool? showJazzCashButton,
     String? jazzCashMerchantId,
     String? jazzCashReturnUrl,
@@ -58,6 +61,7 @@ class PaymentSettingsModel {
       showGooglePayButton: showGooglePayButton ?? this.showGooglePayButton,
       googleMerchantId: googleMerchantId ?? this.googleMerchantId,
       googleMerchantName: googleMerchantName ?? this.googleMerchantName,
+      googlePublicKey: googlePublicKey ?? this.googlePublicKey,
       showJazzCashButton: showJazzCashButton ?? this.showJazzCashButton,
       jazzCashMerchantId: jazzCashMerchantId ?? this.jazzCashMerchantId,
       jazzCashReturnUrl: jazzCashReturnUrl ?? this.jazzCashReturnUrl,
@@ -78,6 +82,7 @@ class PaymentSettingsModel {
       'showGooglePayButton': showGooglePayButton,
       'googleMerchantId': googleMerchantId,
       'googleMerchantName': googleMerchantName,
+      'googlePublicKey': googlePublicKey,
       'showJazzCashButton': showJazzCashButton,
       'jazzCashMerchantId': jazzCashMerchantId,
       'jazzCashReturnUrl': jazzCashReturnUrl,
@@ -98,6 +103,7 @@ class PaymentSettingsModel {
       showGooglePayButton: map['showGooglePayButton'] ?? false,
       googleMerchantId: map['googleMerchantId']?.toString() ?? '',
       googleMerchantName: map['googleMerchantName']?.toString() ?? '',
+      googlePublicKey: map['googlePublicKey']?.toString() ?? '',
       showJazzCashButton: map['showJazzCashButton'] ?? false,
       jazzCashMerchantId: map['jazzCashMerchantId']?.toString() ?? '',
       jazzCashReturnUrl: map['jazzCashReturnUrl']?.toString() ?? '',
@@ -116,7 +122,7 @@ class PaymentSettingsModel {
 
   @override
   String toString() {
-    return 'PaymentSettingsModel(showApplePayButton: $showApplePayButton, appleMerchantId: $appleMerchantId, appleMerchantName: $appleMerchantName, showGooglePayButton: $showGooglePayButton, googleMerchantId: $googleMerchantId, googleMerchantName: $googleMerchantName, showJazzCashButton: $showJazzCashButton, jazzCashMerchantId: $jazzCashMerchantId, jazzCashReturnUrl: $jazzCashReturnUrl, showEasyPaisaButton: $showEasyPaisaButton, easyPaisaStoreId: $easyPaisaStoreId, easyPaisaReturnUrl: $easyPaisaReturnUrl, showStripeButton: $showStripeButton, stripePublishableKey: $stripePublishableKey, stripeSecretKey: $stripeSecretKey)';
+    return 'PaymentSettingsModel(showApplePayButton: $showApplePayButton, appleMerchantId: $appleMerchantId, appleMerchantName: $appleMerchantName, showGooglePayButton: $showGooglePayButton, googleMerchantId: $googleMerchantId, googleMerchantName: $googleMerchantName, googlePublicKey: $googlePublicKey, showJazzCashButton: $showJazzCashButton, jazzCashMerchantId: $jazzCashMerchantId, jazzCashReturnUrl: $jazzCashReturnUrl, showEasyPaisaButton: $showEasyPaisaButton, easyPaisaStoreId: $easyPaisaStoreId, easyPaisaReturnUrl: $easyPaisaReturnUrl, showStripeButton: $showStripeButton, stripePublishableKey: $stripePublishableKey, stripeSecretKey: $stripeSecretKey)';
   }
 
   @override
@@ -129,6 +135,7 @@ class PaymentSettingsModel {
         other.showGooglePayButton == showGooglePayButton &&
         other.googleMerchantId == googleMerchantId &&
         other.googleMerchantName == googleMerchantName &&
+        other.googlePublicKey == googlePublicKey &&
         other.showJazzCashButton == showJazzCashButton &&
         other.jazzCashMerchantId == jazzCashMerchantId &&
         other.jazzCashReturnUrl == jazzCashReturnUrl &&
@@ -148,6 +155,7 @@ class PaymentSettingsModel {
         showGooglePayButton.hashCode ^
         googleMerchantId.hashCode ^
         googleMerchantName.hashCode ^
+        googlePublicKey.hashCode ^
         showJazzCashButton.hashCode ^
         jazzCashMerchantId.hashCode ^
         jazzCashReturnUrl.hashCode ^

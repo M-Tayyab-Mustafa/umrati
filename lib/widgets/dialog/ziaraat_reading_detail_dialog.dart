@@ -15,15 +15,12 @@ class _ZiaraatReadingDetailDialogState extends State<ZiaraatReadingDetailDialog>
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(context.r(8))),
-      title: Row(
-        children: [
-          if (isLTR(context)) const Spacer(),
-          GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(decoration: BoxDecoration(color: CColors.charcoalBlack, shape: BoxShape.circle), padding: context.edgeInsets(all: 4), child: Icon(Icons.close_rounded, color: Colors.white, size: context.r(12))),
-          ),
-          if (!isLTR(context)) const Spacer(),
-        ],
+      title: Align(
+        alignment: isLTR(context) ? Alignment.centerRight : Alignment.centerLeft,
+        child: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Container(decoration: BoxDecoration(color: CColors.charcoalBlack, shape: BoxShape.circle), padding: context.edgeInsets(all: 4), child: Icon(Icons.close_rounded, color: Colors.white, size: context.r(12))),
+        ),
       ),
       contentPadding: context.edgeInsets(horizontal: 16),
       content: ConstrainedBox(

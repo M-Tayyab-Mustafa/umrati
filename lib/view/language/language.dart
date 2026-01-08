@@ -44,6 +44,7 @@ class _LanguagePageState extends ConsumerState<LanguagePage> {
                   child: Directionality(
                     textDirection: getTextDirection(provider.languages[index].tr()),
                     child: BasicCard(
+                      alignment: getTextDirection(provider.languages[index].tr()) == TextDirection.ltr ? Alignment.centerLeft : Alignment.centerRight,
                       margin: context.edgeInsets(top: index != 0 ? 20 : 0),
                       borderColor: isSelected ? CColors.primary : CColors.lightGrey,
                       boxShadow: isSelected ? null : [],
