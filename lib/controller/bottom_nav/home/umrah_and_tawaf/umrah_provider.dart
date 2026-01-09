@@ -256,16 +256,6 @@ class UmrahNotifier extends ChangeNotifier {
   // notifyListeners();
   // }
 
-  //Todo:: Remove After Testing...
-  void debugSkipTawaf() async {
-    isRoundCompleted = true;
-    tawafCircleCount++;
-    tawafCircleCompletionPercent = 0;
-    notifyListeners();
-    if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
-    await updateUmrahModel(umrahModel!.copyWith(tawaf_circle_count: tawafCircleCount));
-  }
-
   // Method to start the next Tawaf round
   startNextRound() async {
     isRoundCompleted = false;

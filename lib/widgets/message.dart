@@ -19,7 +19,7 @@ class MessageCard extends StatelessWidget {
             child: Container(
               padding: context.edgeInsets(vertical: 8, horizontal: 10),
               decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(context.r(12)), topRight: Radius.circular(context.r(12)), bottomLeft: Radius.circular(context.r(12))), color: CColors.primary),
-              child: Text(message.question, style: CTextStyle.w400(color: Colors.white, fontSize: 14)),
+              child: Directionality(textDirection: getTextDirection(message.answer), child: Text(message.question, style: CTextStyle.w400(color: Colors.white, fontSize: 14))),
             ),
           ),
         ),
@@ -32,7 +32,7 @@ class MessageCard extends StatelessWidget {
             decoration: BoxDecoration(borderRadius: BorderRadius.only(topRight: Radius.circular(context.r(12)), bottomRight: Radius.circular(context.r(12)), topLeft: Radius.circular(context.r(12))), color: Colors.white),
             child: Column(
               children: [
-                Align(alignment: isLTR(context) ? Alignment.centerLeft : Alignment.centerRight, child: Text(message.answer, style: CTextStyle.w400(fontSize: 14))),
+                Directionality(textDirection: getTextDirection(message.answer), child: Align(alignment: isLTR(context) ? Alignment.centerLeft : Alignment.centerRight, child: Text(message.answer, style: CTextStyle.w400(fontSize: 14)))),
                 if (!message.isGeneratingAnswer)
                   Align(
                     alignment: Alignment.centerLeft,
@@ -44,14 +44,6 @@ class MessageCard extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             CustomImage(onTap: onCopyTap, path: 'assets/svg/copy.svg', imageType: ImageType.svg, size: context.r(18), color: CColors.charcoalBlack),
-                            // CustomImage(
-                            //   margin: EdgeInsets.symmetric(horizontal: 16),
-                            //   path: 'assets/svg/speaker.svg',
-                            //   onTap: onSpeakTap,
-                            //   imageType: ImageType.svg,
-                            //   size: 25,
-                            //   color: CColors.charcoalBlack,
-                            // ),
                             CustomImage(
                               margin: EdgeInsets.symmetric(horizontal: 16),
                               onTap: onLikeTap,

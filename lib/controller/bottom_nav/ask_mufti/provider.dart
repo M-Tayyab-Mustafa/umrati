@@ -16,6 +16,7 @@ class AskMuftiNotifier extends ChangeNotifier {
   UserModel? user;
   bool isLoading = false;
   ScrollController scrollController = ScrollController();
+  bool isSendingMessage = false;
 
   Future<void> initialization() async {
     isLoading = true;
@@ -34,6 +35,11 @@ class AskMuftiNotifier extends ChangeNotifier {
       errorToast(LocaleKeys.field_cant_be_empty.tr());
       return;
     }
+    if (isSendingMessage) {
+      errorToast(LocaleKeys.bot_is_typing.tr());
+      return;
+    }
+    isSendingMessage = true;
     final newMessage = MessageModel(
       id: Uuid().v4(),
       question: queryController.text.trim(),
@@ -88,8 +94,10 @@ class AskMuftiNotifier extends ChangeNotifier {
       } else {
         throw Exception(LocaleKeys.something_went_wrong_please_try_again_later.tr());
       }
+
       if (kDebugMode) log(responseBody.toString());
       if (context.mounted) notifyListeners();
+      isSendingMessage = false;
     } catch (exception) {
       if (context.mounted) notifyListeners();
       if (kDebugMode) log(exception.toString());

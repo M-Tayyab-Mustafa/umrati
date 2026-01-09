@@ -114,17 +114,6 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   void onCountTap() => Fluttertoast.showToast(msg: LocaleKeys.count_increase_tip.tr(), gravity: ToastGravity.BOTTOM, toastLength: Toast.LENGTH_SHORT);
 
-  //Todo:: Remove After Testing...
-  void debugSkipSafaMarwa() async {
-    // if (umrahModel.is_one_side_sai_run_completed) {
-    //   isOneSideSaiRunCompleted = false;
-    //   await _updateRoundCount();
-    // } else {
-    //   isOneSideSaiRunCompleted = true;
-    //   await _updateRoundCount();
-    // }
-  }
-
   // void cancelPositionStreamSubscription() {
   //   positionStreamSubscription?.cancel();
   //   positionStreamSubscription = null;

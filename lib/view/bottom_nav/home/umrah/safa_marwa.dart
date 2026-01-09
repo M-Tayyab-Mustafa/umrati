@@ -24,8 +24,7 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
 
     return Background(
       logoAlign: Alignment.center,
-      backgroundType: BackgroundType.logoWithSkip,
-      onSkipTap: provider.debugSkipSafaMarwa,
+      backgroundType: BackgroundType.logo,
       titleMargin: context.edgeInsets(top: kToolbarHeight * 0.5, left: 16, right: 16),
       titleType: TitleType.backArrow,
       titleWidget: Padding(padding: context.edgeInsets(right: isLTR(context) ? 28 : 0, left: isLTR(context) ? 0 : 28), child: CustomImage(path: 'assets/svg/mountain.svg', imageType: ImageType.svg, height: context.h(40))),

@@ -177,7 +177,10 @@ class MapPageNotifier extends ChangeNotifier {
                         Padding(
                           padding: context.edgeInsets(top: 16, bottom: 20),
                           child: GestureDetector(
-                            onTap: hideMoreOptions,
+                            onTap: () {
+                              hideMoreOptions();
+                              errorToast(LocaleKeys.this_feature_will_available_in_future_release.tr());
+                            },
                             child: Row(
                               children: [
                                 CustomImage(path: 'assets/svg/ziaraat/listen.svg', imageType: ImageType.svg, size: context.r(15), margin: context.edgeInsets(right: 10)),
