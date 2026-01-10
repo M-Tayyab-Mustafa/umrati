@@ -34,6 +34,8 @@
 	<string>We need your location to calculate distance.</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
+	<key>SKAdNetworkItems</key>
+	<array/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

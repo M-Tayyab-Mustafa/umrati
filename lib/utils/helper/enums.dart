@@ -53,6 +53,7 @@ enum CommonField {
   oneYear('1_year'),
   regions('regions'),
   symbols('symbols'),
+  inAppProducts('in_app_products'),
   bypassNumber('bypass_number'),
   messages('messages'),
   currencyCode('currency_code'),

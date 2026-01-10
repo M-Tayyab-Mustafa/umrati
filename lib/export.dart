@@ -124,3 +124,4 @@ export 'package:fluttertoast/fluttertoast.dart';
 export 'package:url_launcher/url_launcher.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
+export 'package:in_app_purchase/in_app_purchase.dart';

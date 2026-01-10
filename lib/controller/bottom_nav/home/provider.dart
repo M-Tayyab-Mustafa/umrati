@@ -16,7 +16,7 @@ class HomeNotifier extends ChangeNotifier {
     if (user!.is_premium) {
       await Navigator.push(context, MaterialPageRoute(builder: (context) => const UmrahPage()));
     } else {
-      errorToast('Only Premium Users Can Access Umrah Feature');
+      errorToast(LocaleKeys.premium_feature_warning.tr());
       await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
     }
   }

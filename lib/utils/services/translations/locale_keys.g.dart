@@ -25,6 +25,9 @@ abstract class  LocaleKeys {
   static const dark_mode = 'dark_mode';
   static const coming_soon = 'coming_soon';
   static const this_feature_will_available_in_future_release = 'this_feature_will_available_in_future_release';
+  static const in_app_purchase_not_available = 'in_app_purchase_not_available';
+  static const selected_plan_not_available = 'selected_plan_not_available';
+  static const premium_feature_warning = 'premium_feature_warning';
   static const otp_verification = 'otp_verification';
   static const phone_number = 'phone_number';
   static const enter_access_key_prompt = 'enter_access_key_prompt';

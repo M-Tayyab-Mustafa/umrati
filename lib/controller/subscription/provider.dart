@@ -39,25 +39,44 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       }
       plans = docs.map((planDoc) => PlanModel.fromMap(planDoc.data())).toList()..sort((a, b) => a.amount.compareTo(b.amount));
       await Future.delayed(const Duration(milliseconds: 400));
+      plans = await Helper.loadProducts(plans: plans);
       selectedPlan = plans.first;
       isLoading = false;
-      notifyListeners();
+      if (context.mounted) notifyListeners();
     } catch (e) {
       if (kDebugMode) log(e.toString());
       errorToast(e.toString());
     }
+    Helper.listenPurchases((purchase) async {
+      if (purchase.pendingCompletePurchase) {
+        await Helper.iap.completePurchase(purchase);
+      }
+      await _subscribePlan();
+    });
   }
 
   Future<void> subscribe() async {
-    if (Payment.instance.paymentSetting!.showGooglePayButton == false &&
-        Payment.instance.paymentSetting!.showApplePayButton == false &&
-        Payment.instance.paymentSetting!.showJazzCashButton == false &&
-        Payment.instance.paymentSetting!.showEasyPaisaButton == false &&
-        Payment.instance.paymentSetting!.showStripeButton == false) {
-      errorToast('Current payment gateway is not available. Please try again later.');
-    } else {
-      panelController.anchor();
+    // if (Payment.instance.paymentSetting!.showGooglePayButton == false &&
+    //     Payment.instance.paymentSetting!.showApplePayButton == false &&
+    //     Payment.instance.paymentSetting!.showJazzCashButton == false &&
+    //     Payment.instance.paymentSetting!.showEasyPaisaButton == false &&
+    //     Payment.instance.paymentSetting!.showStripeButton == false) {
+    //   errorToast('Current payment gateway is not available. Please try again later.');
+    // } else {
+    // panelController.anchor();
+    if (!(await Helper.iap.isAvailable())) {
+      if (kDebugMode) log(LocaleKeys.in_app_purchase_not_available.tr());
+      errorToast(LocaleKeys.in_app_purchase_not_available.tr());
+      return;
     }
+    if (selectedPlan.productDetails == null) {
+      if (kDebugMode) log(LocaleKeys.selected_plan_not_available.tr());
+      errorToast(LocaleKeys.selected_plan_not_available.tr());
+      return;
+    }
+
+    await Helper.iap.buyNonConsumable(purchaseParam: PurchaseParam(productDetails: selectedPlan.productDetails!));
+    // }
   }
 
   void selectPlan(PlanModel plan) {
@@ -204,6 +223,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   @override
   void dispose() {
     panelController.dispose();
+    Helper.disposeInAppPurchaseSubscription();
     super.dispose();
   }
 }

@@ -37,7 +37,7 @@ class BottomNavNotifier extends ChangeNotifier {
         if (user!.is_premium) {
           await Navigator.push(context, MaterialPageRoute(builder: (context) => const AskMuftiPage()));
         } else {
-          errorToast('Only Premium Users Can Access Ask Mufti Feature');
+          errorToast(LocaleKeys.premium_feature_warning.tr());
           await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
         }
         onBottomNavTap(previousTab);

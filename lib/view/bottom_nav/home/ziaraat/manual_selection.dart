@@ -14,31 +14,33 @@ class ManualSelection extends ConsumerWidget {
       child: Column(
         children: [
           Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
+            child:
                 provider.ziaraats.isEmpty
                     ? Center(child: Text(LocaleKeys.ziaraat_not_found.tr(), style: CTextStyle.w500(fontSize: 22), textAlign: TextAlign.center))
-                    : Expanded(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        itemCount: provider.ziaraats.length,
-                        itemBuilder: (context, index) {
-                          var ziaraat = provider.ziaraats[index];
-                          return BasicCard(
-                            margin: context.edgeInsets(bottom: 20),
-                            onTap: () => provider.updateSelectedZiaraat(ziaraat),
-                            borderColor: provider.selectedZiaraat.contains(ziaraat) ? null : CColors.greyShade3,
-                            boxShadow: provider.selectedZiaraat.contains(ziaraat) ? null : [],
-                            child: Directionality(textDirection: getTextDirection(isLTR(context) ? ziaraat.title_en : ziaraat.title_ur), child: Text(isLTR(context) ? ziaraat.title_en : ziaraat.title_ur, style: CTextStyle.w500(fontSize: 14))),
-                          );
-                        },
+                    : SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: provider.ziaraats.length,
+                            itemBuilder: (context, index) {
+                              var ziaraat = provider.ziaraats[index];
+                              return BasicCard(
+                                margin: context.edgeInsets(bottom: 20),
+                                onTap: () => provider.updateSelectedZiaraat(ziaraat),
+                                borderColor: provider.selectedZiaraat.contains(ziaraat) ? null : CColors.greyShade3,
+                                boxShadow: provider.selectedZiaraat.contains(ziaraat) ? null : [],
+                                child: Directionality(textDirection: getTextDirection(isLTR(context) ? ziaraat.title_en : ziaraat.title_ur), child: Text(isLTR(context) ? ziaraat.title_en : ziaraat.title_ur, style: CTextStyle.w500(fontSize: 14))),
+                              );
+                            },
+                          ),
+                          if (!(provider.user?.is_premium ?? false)) CButton(isLoading: provider.isLoading, onTap: provider.onLoadMoreTap, margin: context.edgeInsets(top: 32), title: LocaleKeys.load_more.tr()),
+                        ],
                       ),
                     ),
-                if (!(provider.user?.is_premium ?? false)) CButton(isLoading: provider.isLoading, onTap: provider.onLoadMoreTap, margin: context.edgeInsets(top: 32), title: LocaleKeys.load_more.tr()),
-              ],
-            ),
           ),
           if (provider.selectedZiaraat.isNotEmpty) CButton(margin: context.edgeInsets(top: 16, bottom: 64), isLoading: provider.isLoading, onTap: provider.createZiaraatRoute, title: LocaleKeys.start_your_ziaraat.tr()),
         ],

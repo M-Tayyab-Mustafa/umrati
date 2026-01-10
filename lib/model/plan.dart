@@ -3,7 +3,7 @@ import '../export.dart';
 class PlanModel {
   final String id;
   final num amount;
-  final num discount_amount;
+  final num discount;
   final String name_en;
   final String name_ur;
   final int members;
@@ -11,12 +11,13 @@ class PlanModel {
   final int duration;
   final List<String> regions;
   final String type;
-  final bool has_discount;
+  final String productId;
+  final ProductDetails? productDetails;
 
   PlanModel({
     required this.id,
     required this.amount,
-    required this.discount_amount,
+    required this.discount,
     required this.name_en,
     required this.name_ur,
     required this.members,
@@ -24,26 +25,15 @@ class PlanModel {
     required this.duration,
     required this.regions,
     required this.type,
-    required this.has_discount,
+    required this.productId,
+    this.productDetails,
   });
 
-  PlanModel copyWith({
-    String? id,
-    num? amount,
-    num? discount_amount,
-    String? name_en,
-    String? name_ur,
-    int? members,
-    String? member_count_label,
-    int? duration,
-    List<String>? regions,
-    String? type,
-    bool? has_discount,
-  }) {
+  PlanModel copyWith({String? id, num? amount, num? discount, String? name_en, String? name_ur, int? members, String? member_count_label, int? duration, List<String>? regions, String? type, String? productId, ProductDetails? productDetails}) {
     return PlanModel(
       id: id ?? this.id,
       amount: amount ?? this.amount,
-      discount_amount: discount_amount ?? this.discount_amount,
+      discount: discount ?? this.discount,
       name_en: name_en ?? this.name_en,
       name_ur: name_ur ?? this.name_ur,
       members: members ?? this.members,
@@ -51,7 +41,8 @@ class PlanModel {
       duration: duration ?? this.duration,
       regions: regions ?? this.regions,
       type: type ?? this.type,
-      has_discount: has_discount ?? this.has_discount,
+      productId: productId ?? this.productId,
+      productDetails: productDetails ?? this.productDetails,
     );
   }
 
@@ -59,7 +50,7 @@ class PlanModel {
     return <String, dynamic>{
       'id': id,
       'amount': amount,
-      'discount_amount': discount_amount,
+      'discount': discount,
       'name_en': name_en,
       'name_ur': name_ur,
       'members': members,
@@ -67,7 +58,7 @@ class PlanModel {
       'duration': duration,
       'regions': regions,
       'type': type,
-      'has_discount': has_discount,
+      'product_id': productId,
     };
   }
 
@@ -75,7 +66,7 @@ class PlanModel {
     return PlanModel(
       id: map['id'],
       amount: map['amount'],
-      discount_amount: map['discount_amount'],
+      discount: map['discount'],
       name_en: map['name_en'].toString(),
       name_ur: map['name_ur'].toString(),
       members: int.tryParse(map['members'].toString()) ?? 1,
@@ -83,7 +74,7 @@ class PlanModel {
       duration: int.tryParse(map['duration'].toString()) ?? 0,
       regions: List<String>.from(map['regions']),
       type: map['type']?.toString() ?? 'individual',
-      has_discount: map['has_discount'] ?? false,
+      productId: map['product_id']?.toString() ?? '',
     );
   }
 
@@ -93,7 +84,7 @@ class PlanModel {
 
   @override
   String toString() {
-    return 'PlanModel(id: $id, amount: $amount, discount_amount: $discount_amount, name_en: $name_en, name_ur: $name_ur, members: $members, member_count_label: $member_count_label, duration: $duration, regions: $regions, type: $type, has_discount: $has_discount)';
+    return 'PlanModel(id: $id, amount: $amount, discount: $discount, name_en: $name_en, name_ur: $name_ur, members: $members, member_count_label: $member_count_label, duration: $duration, regions: $regions, type: $type, product_id: $productId, productDetails: $productDetails)';
   }
 
   @override
@@ -102,7 +93,7 @@ class PlanModel {
 
     return other.id == id &&
         other.amount == amount &&
-        other.discount_amount == discount_amount &&
+        other.discount == discount &&
         other.name_en == name_en &&
         other.name_ur == name_ur &&
         other.members == members &&
@@ -110,21 +101,12 @@ class PlanModel {
         other.duration == duration &&
         listEquals(other.regions, regions) &&
         other.type == type &&
-        other.has_discount == has_discount;
+        other.productId == productId &&
+        other.productDetails == productDetails;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        amount.hashCode ^
-        discount_amount.hashCode ^
-        name_en.hashCode ^
-        name_ur.hashCode ^
-        members.hashCode ^
-        member_count_label.hashCode ^
-        duration.hashCode ^
-        regions.hashCode ^
-        type.hashCode ^
-        has_discount.hashCode;
+    return id.hashCode ^ amount.hashCode ^ discount.hashCode ^ name_en.hashCode ^ name_ur.hashCode ^ members.hashCode ^ member_count_label.hashCode ^ duration.hashCode ^ regions.hashCode ^ type.hashCode ^ productId.hashCode ^ productDetails.hashCode;
   }
 }

@@ -14,42 +14,59 @@ class PlanWidget extends ConsumerWidget {
         borderColor: CColors.grey,
         backgroundGradient: CColors.planCardBackgroundGradient,
         margin: context.edgeInsets(bottom: 32, left: 16, right: 16),
-        padding: context.edgeInsets(all: 32),
-        child: Row(
+        padding: context.edgeInsets(horizontal: 20, bottom: 24, top: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(isLTR(context) ? plan.name_en : plan.name_ur, style: CTextStyle.w500(color: CColors.darkIndigo, fontSize: 20)),
-                  Padding(
-                    padding: context.edgeInsets(top: 32),
-                    child: switch (plan.has_discount) {
-                      true => Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('$currencySymbol ${plan.discount_amount}', style: CTextStyle.w400(color: CColors.darkIndigo, fontSize: 20)),
-                          Text('$currencySymbol ${plan.amount}', style: CTextStyle.w400(color: CColors.greyShade1, fontSize: 14, decoration: TextDecoration.lineThrough)),
-                        ],
+            Row(
+              children: [
+                Text(isLTR(context) ? plan.name_en : plan.name_ur, style: CTextStyle.w500(color: CColors.darkIndigo, fontSize: 20)),
+                if (plan.discount > 0)
+                  Container(
+                    margin: context.edgeInsets(left: isLTR(context) ? 16 : 0, right: isLTR(context) ? 0 : 16),
+                    width: 45.w,
+                    height: 45.w,
+                    padding: context.edgeInsets(all: 8),
+                    decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle, boxShadow: [BoxShadow(color: CColors.buttonShadow, blurRadius: 5, offset: Offset(0, 2))]),
+                    child: Center(
+                      child: FittedBox(
+                        child: Text.rich(
+                          TextSpan(text: 'Save', children: [TextSpan(text: '\n${plan.discount}% ', style: CTextStyle.w700(color: Colors.white, fontSize: 16))], style: CTextStyle.w500(color: Colors.white, fontSize: 11)),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      _ => Text('$currencySymbol ${plan.amount}', style: CTextStyle.w400(color: CColors.darkIndigo, fontSize: 20)),
-                    },
-                  ),
-                ],
-              ),
+                    ),
+                  )
+                else
+                  Container(margin: context.edgeInsets(left: isLTR(context) ? 16 : 0, right: isLTR(context) ? 0 : 16), width: 45.w, height: 45.w, padding: context.edgeInsets(all: 10)),
+                Spacer(),
+                Transform.rotate(angle: pi / 2, child: CustomImage(path: 'assets/svg/go_forward.svg', imageType: ImageType.svg, color: CColors.deepTeal, size: context.r(20))),
+              ],
             ),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
+            Padding(
+              padding: context.edgeInsets(top: 16),
+              child: Row(
                 children: [
-                  Transform.rotate(angle: pi / 2, child: CustomImage(path: 'assets/svg/go_forward.svg', imageType: ImageType.svg, color: CColors.deepTeal, size: context.r(20))),
+                  Expanded(
+                    child:
+                        plan.discount > 0
+                            ? Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('$currencySymbol ${Helper.getDiscountedAmount(plan.amount, plan.discount)}', style: CTextStyle.w400(color: CColors.darkIndigo, fontSize: 20)),
+                                Text('$currencySymbol ${plan.amount}', style: CTextStyle.w400(color: CColors.greyShade1, fontSize: 14, decoration: TextDecoration.lineThrough)),
+                              ],
+                            )
+                            : Text('$currencySymbol ${plan.amount}', style: CTextStyle.w400(color: CColors.darkIndigo, fontSize: 20)),
+                  ),
+
                   CButton(
+                    height: 30.h,
+                    width: 85.w,
                     isLoading: ref.watch(subscriptionProvider).isSubscribing,
                     onTap: onSubscribe,
-                    margin: context.edgeInsets(top: 24),
+                    margin: context.edgeInsets(left: isLTR(context) ? 16 : 0, right: isLTR(context) ? 0 : 16),
                     titleWithIcon: true,
                     padding: isLTR(context) ? null : context.edgeInsets(right: 16),
                     title: LocaleKeys.buy.tr(),

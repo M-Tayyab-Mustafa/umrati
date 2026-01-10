@@ -1,13 +1,19 @@
 import '../../../export.dart';
 
 class Helper {
+  static final InAppPurchase iap = InAppPurchase.instance;
+  static StreamSubscription<List<PurchaseDetails>>? inAppPurchaseSubscription;
+
+  static disposeInAppPurchaseSubscription() {
+    inAppPurchaseSubscription?.cancel();
+    inAppPurchaseSubscription = null;
+  }
+
   static const englishTextFontFamily = 'Roboto';
   static const urduTextFontFamily = 'Jameel Noori Nastaleeq Regular';
   static const arabicTextFontFamily = 'Traditional Arabic Regular';
-
   static double degToRad(double degrees) => degrees * pi / 180;
   static double radToDeg(double rad) => rad * 180 / pi;
-
   static const double earthRadiusInMeters = 6371000;
 
   static String formatePhoneNumber(String phoneNumber, String dialCode) {
@@ -22,6 +28,31 @@ class Helper {
       errorToast('[Currency symbol]:: ${e.toString()}');
     }
   }
+
+  static Future<List<PlanModel>> loadProducts({required List<PlanModel> plans}) async {
+    final response = await iap.queryProductDetails(plans.map((plan) => plan.productId).toSet());
+    if (response.error != null) {
+      if (kDebugMode) log('In app products error: ${response.error?.message}');
+      errorToast('In app products error: ${response.error?.message}');
+    }
+    return plans.map((plan) => plan.copyWith(productDetails: response.productDetails.firstOrNull)).toList();
+  }
+
+  static void listenPurchases(ValueChanged verifyPurchase) {
+    inAppPurchaseSubscription?.cancel();
+    inAppPurchaseSubscription = iap.purchaseStream.listen((purchases) {
+      for (final purchase in purchases) {
+        if (purchase.status == PurchaseStatus.purchased || purchase.status == PurchaseStatus.restored) {
+          verifyPurchase.call(purchase);
+        } else if (purchase.status == PurchaseStatus.error) {
+          if (kDebugMode) log('Purchase error: ${purchase.error?.message}');
+          errorToast('Purchase error: ${purchase.error?.message}');
+        }
+      }
+    });
+  }
+
+  static num getDiscountedAmount(num amount, num discount) => (amount - (amount * ((discount / 100))).floor()).floor();
 
   static String timeoutError = LocaleKeys.timeout_error.tr();
 
