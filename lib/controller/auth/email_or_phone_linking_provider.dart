@@ -11,7 +11,7 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
   BuildContext get context => _context!;
   set context(BuildContext value) => _context = value;
 
-  Gender selectedGender = Gender.unknown;
+  Gender selectedGender = Gender.male;
   bool isUpdatingGender = false;
   UserModel? user;
   var phoneNumberUtil = PhoneNumberUtil.instance;
