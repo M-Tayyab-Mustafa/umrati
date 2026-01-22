@@ -1,7 +1,7 @@
 import '../../export.dart';
 import '../../view/auth/otp.dart';
 
-final loginProvider = ChangeNotifierProvider.autoDispose<LoginNotifier>((ref) => LoginNotifier());
+final loginProvider = ChangeNotifierProvider<LoginNotifier>((ref) => LoginNotifier());
 
 class LoginNotifier extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -59,7 +59,16 @@ class LoginNotifier extends ChangeNotifier {
             timeout: const Duration(seconds: _otpTimeOutDuration),
             forceResendingToken: _forceResendingToken,
             verificationCompleted: _verificationCompleted,
-            verificationFailed: _verificationFailed,
+            verificationFailed: (e) {
+              isSendingOTP = false;
+              notifyListeners();
+              if (bounceTimer != null) {
+                bounceTimer?.cancel();
+                bounceTimer = null;
+                notifyListeners();
+              }
+              _firebaseAuthExceptionHandler(e);
+            },
             codeSent: (verificationId, forceResendingToken) => _onCodeSent(context, verificationId, forceResendingToken),
             codeAutoRetrievalTimeout: _codeAutoRetrievalTimeout,
           )
@@ -145,7 +154,16 @@ class LoginNotifier extends ChangeNotifier {
             timeout: const Duration(seconds: _otpTimeOutDuration),
             forceResendingToken: _forceResendingToken,
             verificationCompleted: _verificationCompleted,
-            verificationFailed: _verificationFailed,
+            verificationFailed: (e) {
+              isSendingOTP = false;
+              notifyListeners();
+              if (bounceTimer != null) {
+                bounceTimer?.cancel();
+                bounceTimer = null;
+                notifyListeners();
+              }
+              _firebaseAuthExceptionHandler(e);
+            },
             codeSent: (verificationId, forceResendingToken) => _onCodeSent(context, verificationId, forceResendingToken),
             codeAutoRetrievalTimeout: _codeAutoRetrievalTimeout,
           )
@@ -185,11 +203,7 @@ class LoginNotifier extends ChangeNotifier {
     } on FirebaseAuthException catch (e) {
       isVerifyingOTP = false;
       notifyListeners();
-      if (e.code == 'unknown') {
-        errorToast(LocaleKeys.some_thing_went_wrong.tr());
-      } else {
-        errorToast(e.message.toString());
-      }
+      _firebaseAuthExceptionHandler(e);
     } catch (e) {
       appLog(e.toString());
       isVerifyingOTP = false;
@@ -201,19 +215,99 @@ class LoginNotifier extends ChangeNotifier {
     }
   }
 
-  void _verificationFailed(FirebaseAuthException error) {
-    isSendingOTP = false;
-    notifyListeners();
+  void _firebaseAuthExceptionHandler(FirebaseAuthException error) {
     appLog('Code: ${error.code}, Message: ${error.message}');
-    if (error.code == 'unknown') {
-      errorToast(LocaleKeys.some_thing_went_wrong.tr());
-    } else {
-      errorToast(error.message?.replaceAll('-', ' ').split(' ').map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '').join(' ') ?? 'Verification failed.');
-      if (bounceTimer != null) {
-        bounceTimer?.cancel();
-        bounceTimer = null;
-        notifyListeners();
-      }
+    switch (error.code) {
+      case 'missing-phone-number':
+        errorToast(LocaleKeys.missing_phone_number.tr());
+        break;
+      case 'invalid-phone-number':
+        errorToast(LocaleKeys.invalid_phone_number.tr());
+        break;
+      case 'missing-verification-code':
+        errorToast(LocaleKeys.missing_verification_code.tr());
+        break;
+      case 'invalid-verification-code':
+        errorToast(LocaleKeys.invalid_verification_code.tr());
+        break;
+      case 'missing-verification-id':
+        errorToast(LocaleKeys.missing_verification_id.tr());
+        break;
+      case 'invalid-verification-id':
+        errorToast(LocaleKeys.invalid_verification_id.tr());
+        break;
+      case 'code-expired':
+        errorToast(LocaleKeys.code_expired.tr());
+        break;
+      case 'captcha-check-failed':
+        errorToast(LocaleKeys.captcha_check_failed.tr());
+        break;
+      case 'quota-exceeded':
+        errorToast(LocaleKeys.quota_exceeded.tr());
+        break;
+      case 'app-not-verified':
+        errorToast(LocaleKeys.app_not_verified.tr());
+        break;
+      case 'invalid-email':
+        errorToast(LocaleKeys.invalid_email.tr());
+        break;
+      case 'user-disabled':
+        errorToast(LocaleKeys.user_disabled.tr());
+        break;
+      case 'user-not-found':
+        errorToast(LocaleKeys.user_not_found.tr());
+        break;
+      case 'wrong-password':
+        errorToast(LocaleKeys.wrong_password.tr());
+        break;
+      case 'email-already-in-use':
+        errorToast(LocaleKeys.email_already_in_use.tr());
+        break;
+      case 'weak-password':
+        errorToast(LocaleKeys.weak_password.tr());
+        break;
+      case 'expired-action-code':
+        errorToast(LocaleKeys.expired_action_code.tr());
+        break;
+      case 'invalid-action-code':
+        errorToast(LocaleKeys.invalid_action_code.tr());
+        break;
+      case 'account-exists-with-different-credential':
+        errorToast(LocaleKeys.account_exists_with_different_credential.tr());
+        break;
+      case 'invalid-credential':
+        errorToast(LocaleKeys.invalid_credential.tr());
+        break;
+      case 'credential-already-in-use':
+        errorToast(LocaleKeys.credential_already_in_use.tr());
+        break;
+      case 'provider-already-linked':
+        errorToast(LocaleKeys.provider_already_linked.tr());
+        break;
+      case 'no-such-provider':
+        errorToast(LocaleKeys.no_such_provider.tr());
+        break;
+      case 'requires-recent-login':
+        errorToast(LocaleKeys.requires_recent_login.tr());
+        break;
+      case 'multi-factor-auth-required':
+      case 'second-factor-required':
+        errorToast(LocaleKeys.multi_factor_auth_required.tr());
+        break;
+      case 'too-many-requests':
+        errorToast(LocaleKeys.too_many_requests.tr());
+        break;
+      case 'network-request-failed':
+        errorToast(LocaleKeys.network_request_failed.tr());
+        break;
+      case 'operation-not-allowed':
+        errorToast(LocaleKeys.operation_not_allowed.tr());
+        break;
+      case 'internal-error':
+        errorToast(LocaleKeys.internal_error.tr());
+        break;
+      default:
+        errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
   }
 

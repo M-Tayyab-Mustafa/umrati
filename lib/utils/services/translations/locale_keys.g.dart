@@ -227,5 +227,35 @@ abstract class  LocaleKeys {
   static const do_these_5_ihram_related_tasks = 'do_these_5_ihram_related_tasks';
   static const ziaraat_not_found = 'ziaraat_not_found';
   static const you_are_not_near_the_green_light = 'you_are_not_near_the_green_light';
+  static const missing_phone_number = 'missing_phone_number';
+  static const invalid_phone_number = 'invalid_phone_number';
+  static const missing_verification_code = 'missing_verification_code';
+  static const invalid_verification_code = 'invalid_verification_code';
+  static const missing_verification_id = 'missing_verification_id';
+  static const invalid_verification_id = 'invalid_verification_id';
+  static const code_expired = 'code_expired';
+  static const captcha_check_failed = 'captcha_check_failed';
+  static const quota_exceeded = 'quota_exceeded';
+  static const app_not_verified = 'app_not_verified';
+  static const invalid_email = 'invalid_email';
+  static const user_disabled = 'user_disabled';
+  static const user_not_found = 'user_not_found';
+  static const wrong_password = 'wrong_password';
+  static const email_already_in_use = 'email_already_in_use';
+  static const weak_password = 'weak_password';
+  static const expired_action_code = 'expired_action_code';
+  static const invalid_action_code = 'invalid_action_code';
+  static const account_exists_with_different_credential = 'account_exists_with_different_credential';
+  static const invalid_credential = 'invalid_credential';
+  static const credential_already_in_use = 'credential_already_in_use';
+  static const provider_already_linked = 'provider_already_linked';
+  static const no_such_provider = 'no_such_provider';
+  static const requires_recent_login = 'requires_recent_login';
+  static const multi_factor_auth_required = 'multi_factor_auth_required';
+  static const too_many_requests = 'too_many_requests';
+  static const network_request_failed = 'network_request_failed';
+  static const operation_not_allowed = 'operation_not_allowed';
+  static const internal_error = 'internal_error';
+  static const authentication_failed = 'authentication_failed';
 
 }

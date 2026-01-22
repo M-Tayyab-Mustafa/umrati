@@ -1,6 +1,6 @@
 import '../../export.dart';
 
-final emailOrPhoneLinkingProvider = ChangeNotifierProvider.autoDispose<EmailOrPhoneLinkingNotifier>((ref) => EmailOrPhoneLinkingNotifier());
+final emailOrPhoneLinkingProvider = ChangeNotifierProvider<EmailOrPhoneLinkingNotifier>((ref) => EmailOrPhoneLinkingNotifier());
 
 class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
   Gender selectedGender = Gender.male;

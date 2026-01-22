@@ -15,6 +15,11 @@
         <!-- Google Map -->
         <meta-data
             android:name="com.google.android.geo.API_KEY" android:value="@string/google_key" />
+        
+        <meta-data
+            android:name="com.google.firebase.auth.api.gms.safetynet"
+            android:value="true"/>
+
         <!-- Facebook -->
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
