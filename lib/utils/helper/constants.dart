@@ -30,7 +30,7 @@ TextDirection languageDirection(BuildContext context) {
 }
 
 appLog(String message, [String? name]) {
-  if (kDebugMode) log(e.toString(), name: name ?? '');
+  if (kDebugMode) log(message, name: name ?? '');
 }
 
 TextDirection getTextDirection(String text) {

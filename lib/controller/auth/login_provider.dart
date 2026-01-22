@@ -29,7 +29,7 @@ class LoginNotifier extends ChangeNotifier {
   var otpController = TextEditingController();
 
   resetPage() {
-    countDown = _otpTimeOutDuration ;
+    countDown = _otpTimeOutDuration;
     bounceTimer?.cancel();
     isSendingOTP = false;
     isVerifyingOTP = false;
@@ -46,7 +46,7 @@ class LoginNotifier extends ChangeNotifier {
         errorToast(phoneError);
         return;
       }
-      final phoneNumberFormateError = validatePhoneNumber(phoneNumberController.text, selectedCountry.code ?? 'US');
+      final phoneNumberFormateError = validatePhoneNumber(Helper.formatePhoneNumber(phoneNumberController.text, selectedCountry.dialCode!), selectedCountry.code!);
       if (phoneNumberFormateError != null) {
         errorToast(phoneNumberFormateError);
         return;
