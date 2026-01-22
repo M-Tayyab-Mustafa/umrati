@@ -1,32 +1,19 @@
 import '../../export.dart';
 import '../../view/auth/otp.dart';
 
-final loginProvider = ChangeNotifierProvider<LoginNotifier>((ref) => LoginNotifier());
+final loginProvider = ChangeNotifierProvider.autoDispose<LoginNotifier>((ref) => LoginNotifier());
 
 class LoginNotifier extends ChangeNotifier {
-  //* Instances
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  // bool isSkipping = false;
-
-  BuildContext? _context;
-  BuildContext get context => _context!;
-  set context(BuildContext value) => _context = value;
-
-  WidgetRef? _ref;
-  WidgetRef get ref => _ref!;
-  set ref(WidgetRef value) => _ref = value;
-
   void _codeAutoRetrievalTimeout(verificationId) => _verificationId = verificationId;
 
-  //* Login Variables
   bool isSendingOTP = false;
   bool isSocialLogin = false;
   var phoneNumberController = TextEditingController();
   CountryCode selectedCountry = CountryCode.fromDialCode('+92');
-
+  int sendOTPTimeMultiplier = 1;
   bool isLinkingAccount = false;
 
-  //* OTP Time Out Duration
   static const int _otpTimeOutDuration = 90;
   int _countDown = _otpTimeOutDuration;
   int get countDown => _countDown;
@@ -35,7 +22,6 @@ class LoginNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  //* OTP
   int? _forceResendingToken;
   String? _verificationId;
   bool isVerifyingOTP = false;
@@ -43,7 +29,7 @@ class LoginNotifier extends ChangeNotifier {
   var otpController = TextEditingController();
 
   resetPage() {
-    countDown = _otpTimeOutDuration;
+    countDown = _otpTimeOutDuration ;
     bounceTimer?.cancel();
     isSendingOTP = false;
     isVerifyingOTP = false;
@@ -52,41 +38,17 @@ class LoginNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  //* Skip Login
-  // Future<void> skip() async {
-  //   try {
-  //     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog());
-  //     if (result == false || result == null) return;
-  //     isSkipping = true;
-  //     notifyListeners();
-  //     var userCredential = await _auth.signInAnonymously().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-  //     UserModel user = UserModel(
-  //       uid: userCredential.user!.uid,
-  //       name: userCredential.user!.displayName ?? '',
-  //       email: userCredential.user!.email ?? '',
-  //       photo: userCredential.user!.photoURL ?? '',
-  //       phone: '',
-  //       country_code: '',
-  //       gender: '',
-  //     );
-  //     await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
-  //     isSkipping = false;
-  //     notifyListeners();
-  //     Navigator.popUntil(context, (route) => route.isFirst);
-  //     ref.read(splashProvider).redirections(context,ref);
-  //   } catch (e) {
-  //     if (kDebugMode) log(e.toString());
-  //     errorToast(e.toString());
-  //   }
-  // }
-
-  //* Send OTP To Phone Number
-  Future<void> sendTheOTP([bool isLinkingAccount = false]) async {
+  Future<void> sendTheOTP(BuildContext context, [bool isLinkingAccount = false]) async {
     try {
       this.isLinkingAccount = isLinkingAccount;
       final phoneError = simpleFieldValidation(phoneNumberController.text, LocaleKeys.phone_number.tr(), context);
       if (phoneError != null) {
         errorToast(phoneError);
+        return;
+      }
+      final phoneNumberFormateError = validatePhoneNumber(phoneNumberController.text, selectedCountry.code ?? 'US');
+      if (phoneNumberFormateError != null) {
+        errorToast(phoneNumberFormateError);
         return;
       }
       isSendingOTP = true;
@@ -98,69 +60,69 @@ class LoginNotifier extends ChangeNotifier {
             forceResendingToken: _forceResendingToken,
             verificationCompleted: _verificationCompleted,
             verificationFailed: _verificationFailed,
-            codeSent: _onCodeSent,
+            codeSent: (verificationId, forceResendingToken) => _onCodeSent(context, verificationId, forceResendingToken),
             codeAutoRetrievalTimeout: _codeAutoRetrievalTimeout,
           )
           .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
   }
 
-  //* Update Selected Country Code
   void updateSelectedCountry(CountryCode selectedCountry) async {
     this.selectedCountry = selectedCountry;
     notifyListeners();
   }
 
-  //* Google Login
-  void googleLogin() async {
+  void googleLogin(BuildContext context, WidgetRef ref) async {
     try {
       isSocialLogin = true;
       notifyListeners();
-      await SocialLoginService.instance.signInWithGoogle(context);
+      await SocialLoginService.instance.signInWithGoogle(context, ref);
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     } finally {
       isSocialLogin = false;
       notifyListeners();
     }
   }
 
-  //* Facebook Login
-  void facebookLogin() async {
+  void facebookLogin(BuildContext context, WidgetRef ref) async {
     try {
       isSocialLogin = true;
       notifyListeners();
-      await SocialLoginService.instance.signInWithFacebook(context);
+      await SocialLoginService.instance.signInWithFacebook(context, ref);
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
+      isSocialLogin = false;
+      notifyListeners();
     } finally {
       isSocialLogin = false;
       notifyListeners();
     }
   }
 
-  //* Apple Login
-  void appleLogin() async {
+  void appleLogin(BuildContext context, WidgetRef ref) async {
     try {
       isSocialLogin = true;
       notifyListeners();
-      await SocialLoginService.instance.signInWithApple(context);
+      await SocialLoginService.instance.signInWithApple(context, ref);
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
+      isSocialLogin = false;
+      notifyListeners();
     } finally {
       isSocialLogin = false;
       notifyListeners();
     }
   }
 
-  //* OTP Resend Verification Code Timer
   void _startBounceTimer() {
+    bounceTimer?.cancel();
     bounceTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_countDown < 1) {
         bounceTimer?.cancel();
@@ -173,9 +135,9 @@ class LoginNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  //* OTP Resend Verification Code
-  void resendOTP() async {
+  void resendOTP(BuildContext context) async {
     try {
+      sendOTPTimeMultiplier++;
       _startBounceTimer();
       await _auth
           .verifyPhoneNumber(
@@ -184,18 +146,17 @@ class LoginNotifier extends ChangeNotifier {
             forceResendingToken: _forceResendingToken,
             verificationCompleted: _verificationCompleted,
             verificationFailed: _verificationFailed,
-            codeSent: _onCodeSent,
+            codeSent: (verificationId, forceResendingToken) => _onCodeSent(context, verificationId, forceResendingToken),
             codeAutoRetrievalTimeout: _codeAutoRetrievalTimeout,
           )
           .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
   }
 
-  //* OTP Verified
-  void verifyOTP() async {
+  void verifyOTP(BuildContext context, WidgetRef ref) async {
     var otpError = simpleFieldValidation(LocaleKeys.otp_verification.tr(), otpController.text, context);
     if (otpError != null) {
       errorToast(otpError);
@@ -213,16 +174,7 @@ class LoginNotifier extends ChangeNotifier {
       } else {
         var userCredential = await _auth.signInWithCredential(credential).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
         if (userCredential.additionalUserInfo!.isNewUser) {
-          UserModel user = UserModel(
-            uid: userCredential.user!.uid,
-            phone: userCredential.user!.phoneNumber ?? '',
-            country_code: selectedCountry.dialCode ?? '',
-            name: '',
-            email: '',
-            photo: '',
-            password: Helper.generateRandomId(),
-            gender: '',
-          );
+          UserModel user = UserModel(uid: userCredential.user!.uid, phone: userCredential.user!.phoneNumber ?? '', country_code: selectedCountry.dialCode ?? '', name: '', email: '', photo: '', password: Helper.generateRandomId(), gender: '');
           await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
           ref.read(splashProvider.notifier).redirections(context);
         } else {
@@ -233,40 +185,52 @@ class LoginNotifier extends ChangeNotifier {
     } on FirebaseAuthException catch (e) {
       isVerifyingOTP = false;
       notifyListeners();
-      errorToast(e.message.toString());
+      if (e.code == 'unknown') {
+        errorToast(LocaleKeys.some_thing_went_wrong.tr());
+      } else {
+        errorToast(e.message.toString());
+      }
     } catch (e) {
-      if (kDebugMode) log(e.toString());
+      appLog(e.toString());
       isVerifyingOTP = false;
       notifyListeners();
-      errorToast(e.toString());
-    }
-  }
-
-  void _verificationFailed(error) {
-    log('Error: ${error.code}');
-    errorToast(error.message?.replaceAll('-', ' ').split(' ').map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '').join(' ') ?? 'Verification failed.');
-    if (isSendingOTP) {
-      isSendingOTP = false;
-      notifyListeners();
-    }
-    if (bounceTimer != null) {
-      bounceTimer?.cancel();
-      bounceTimer = null;
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
+    } finally {
+      isVerifyingOTP = false;
       notifyListeners();
     }
   }
 
-  void _onCodeSent(verificationId, forceResendingToken) async {
+  void _verificationFailed(FirebaseAuthException error) {
+    isSendingOTP = false;
+    notifyListeners();
+    appLog('Code: ${error.code}, Message: ${error.message}');
+    if (error.code == 'unknown') {
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
+    } else {
+      errorToast(error.message?.replaceAll('-', ' ').split(' ').map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '').join(' ') ?? 'Verification failed.');
+      if (bounceTimer != null) {
+        bounceTimer?.cancel();
+        bounceTimer = null;
+        notifyListeners();
+      }
+    }
+  }
+
+  void _onCodeSent(BuildContext context, verificationId, forceResendingToken) async {
+    isSendingOTP = false;
+    notifyListeners();
     _verificationId = verificationId;
     _forceResendingToken = forceResendingToken;
-    if (isSendingOTP) {
-      _startBounceTimer();
-      var isAutoPop = await Navigator.push(context, MaterialPageRoute(builder: (_) => OTPPage()));
-      if (isAutoPop != true) resetPage();
-    }
+    _startBounceTimer();
+    var isAutoPop = await Navigator.push(context, MaterialPageRoute(builder: (_) => OTPPage()));
+    if (isAutoPop != true) resetPage();
   }
 
-  void _verificationCompleted(phoneAuthCredential) {}
+  void _verificationCompleted(phoneAuthCredential) {
+    isSendingOTP = false;
+    notifyListeners();
+  }
 
   @override
   void dispose() {

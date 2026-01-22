@@ -25,7 +25,7 @@ class OTPPage extends ConsumerWidget {
             ],
           ),
           Center(child: Directionality(textDirection: TextDirection.ltr, child: PinInput(controller: provider.otpController, margin: context.edgeInsets(vertical: 30)))),
-          CButton(isLoading: provider.isVerifyingOTP, onTap: provider.verifyOTP, title: LocaleKeys.verify.tr(), titleWithIcon: true),
+          CButton(isLoading: provider.isVerifyingOTP, onTap: () => provider.verifyOTP(context, ref), title: LocaleKeys.verify.tr(), titleWithIcon: true),
 
           if (provider.bounceTimer != null)
             Padding(
@@ -35,7 +35,7 @@ class OTPPage extends ConsumerWidget {
           else
             Padding(
               padding: context.edgeInsets(top: 40, left: 10),
-              child: GestureDetector(onTap: provider.resendOTP, child: Text(LocaleKeys.resend_the_otp.tr(), style: CTextStyle.w500(color: CColors.primary, fontSize: 14, decoration: TextDecoration.underline))),
+              child: GestureDetector(onTap: () => provider.resendOTP(context), child: Text(LocaleKeys.resend_the_otp.tr(), style: CTextStyle.w500(color: CColors.primary, fontSize: 14, decoration: TextDecoration.underline))),
             ),
         ],
       ),

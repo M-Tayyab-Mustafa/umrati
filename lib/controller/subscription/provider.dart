@@ -3,14 +3,6 @@ import '../../export.dart';
 final subscriptionProvider = ChangeNotifierProvider.autoDispose<SubscriptionProviderNotifier>((ref) => SubscriptionProviderNotifier());
 
 class SubscriptionProviderNotifier extends ChangeNotifier {
-  BuildContext? _context;
-  BuildContext get context => _context!;
-  set context(BuildContext value) => _context = value;
-
-  WidgetRef? _ref;
-  WidgetRef get ref => _ref!;
-  set ref(WidgetRef value) => _ref = value;
-
   bool isRenewingPlan = false;
 
   bool isLoading = true;
@@ -28,7 +20,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   final TextEditingController keyController = TextEditingController();
   String userRegion = 'US';
 
-  Future<void> getSubscriptionPlans() async {
+  Future<void> getSubscriptionPlans(BuildContext context) async {
     try {
       user = (await LocalStorageManager.getUser())!;
       userRegion = await Helper.userRegion();
@@ -44,14 +36,14 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       isLoading = false;
       if (context.mounted) notifyListeners();
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
     Helper.listenPurchases((purchase) async {
       if (purchase.pendingCompletePurchase) {
         await Helper.iap.completePurchase(purchase);
       }
-      await _subscribePlan();
+      await _subscribePlan(context);
     });
   }
 
@@ -65,12 +57,12 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     // } else {
     // panelController.anchor();
     if (!(await Helper.iap.isAvailable())) {
-      if (kDebugMode) log(LocaleKeys.in_app_purchase_not_available.tr());
+      appLog(LocaleKeys.in_app_purchase_not_available.tr());
       errorToast(LocaleKeys.in_app_purchase_not_available.tr());
       return;
     }
     if (selectedPlan.productDetails == null) {
-      if (kDebugMode) log(LocaleKeys.selected_plan_not_available.tr());
+      appLog(LocaleKeys.selected_plan_not_available.tr());
       errorToast(LocaleKeys.selected_plan_not_available.tr());
       return;
     }
@@ -84,7 +76,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  FutureOr<void> onPaymentResult(Map<String, dynamic> result) async => await _subscribePlan();
+  FutureOr<void> onPaymentResult(Map<String, dynamic> result, BuildContext context) async => await _subscribePlan(context);
 
   FutureOr<void> togglePlans(bool value) async {
     showThreeMonthPlans = !value;
@@ -98,7 +90,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _subscribePlan() async {
+  Future<void> _subscribePlan(BuildContext context) async {
     isSubscribing = true;
     notifyListeners();
     try {
@@ -122,14 +114,14 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       await LocalStorageManager.saveUser(user.copyWith(subscription_id: doc.id, is_premium: true));
       Navigator.canPop(context);
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
       isSubscribing = false;
       notifyListeners();
     }
   }
 
-  Future<void> enterKeyDialog() async {
+  Future<void> enterKeyDialog(BuildContext context, WidgetRef ref) async {
     keyController.clear();
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => PlanKeyDialog(controller: keyController));
     if (result != true) return;
@@ -140,7 +132,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       final docs = (await query.get()).docs;
       if (docs.isEmpty) {
         errorToast(LocaleKeys.invalid_key.tr());
-        enterKeyDialog();
+        enterKeyDialog(context, ref);
         isSubscribing = false;
         notifyListeners();
         return;
@@ -148,7 +140,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       var subscription = SubscriptionModel.fromMap(docs.first.data());
       if (subscription.user_ids.length == subscription.plan.members) {
         errorToast(LocaleKeys.key_limit_reached.tr());
-        enterKeyDialog();
+        enterKeyDialog(context, ref);
         isSubscribing = false;
         notifyListeners();
         return;
@@ -156,7 +148,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       bool isExpired = DateTime.now().isAfter(subscription.expire_at!.toDate());
       if (isExpired) {
         errorToast(LocaleKeys.subscription_expire_msg.tr());
-        enterKeyDialog();
+        enterKeyDialog(context, ref);
         isSubscribing = false;
         notifyListeners();
         return;
@@ -170,19 +162,19 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
       await LocalStorageManager.saveUser(user.copyWith(subscription_id: subscription.uid));
       ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
       isSubscribing = false;
       notifyListeners();
     }
   }
 
-  Future<void> onJazzCashTap() async {
+  Future<void> onJazzCashTap(BuildContext context) async {
     isSubscribing = true;
     isLoadingJazzCashPaymentMethod = true;
     notifyListeners();
     try {
-      await Payment.instance.makePaymentByJazzCash(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+      await Payment.instance.makePaymentByJazzCash(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: () => _subscribePlan(context));
       panelController.collapse();
     } catch (e) {
       log(e.toString());
@@ -192,11 +184,11 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> onEasyPaisaTap() async {
+  Future<void> onEasyPaisaTap(BuildContext context) async {
     isLoadingEasyPaisaPaymentMethod = true;
     notifyListeners();
     try {
-      await Payment.instance.makePaymentByEasyPaisa(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+      await Payment.instance.makePaymentByEasyPaisa(context: context, userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: () => _subscribePlan(context));
       panelController.collapse();
     } catch (e) {
       log(e.toString());
@@ -206,11 +198,11 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> onCardTab() async {
+  Future<void> onCardTab(BuildContext context) async {
     isLoadingStripePaymentMethod = true;
     notifyListeners();
     try {
-      await Payment.instance.makeStripePayment(userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: _subscribePlan);
+      await Payment.instance.makeStripePayment(userRegion: userRegion, amount: selectedPlan.amount.toString(), onSuccess: () => _subscribePlan(context));
       panelController.collapse();
     } catch (e) {
       log(e.toString());

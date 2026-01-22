@@ -62,8 +62,8 @@ class MapPageNotifier extends ChangeNotifier {
       _positionStream?.cancel();
       _positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: distanceFilter)).listen((position) => _updateLocation(position));
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
   }
 

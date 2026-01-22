@@ -7,10 +7,6 @@ import '../../../view/bottom_nav/home/ziaraat/page.dart';
 final homeProvider = ChangeNotifierProvider.autoDispose<HomeNotifier>((ref) => HomeNotifier());
 
 class HomeNotifier extends ChangeNotifier {
-  WidgetRef? _ref;
-  WidgetRef get ref => _ref!;
-  set ref(WidgetRef value) => _ref = value;
-
   void onUmrahTap(BuildContext context) async {
     var user = await LocalStorageManager.getUser();
     if (user!.is_premium) {

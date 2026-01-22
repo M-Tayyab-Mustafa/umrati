@@ -29,6 +29,10 @@ TextDirection languageDirection(BuildContext context) {
   return isRtl ? TextDirection.rtl : TextDirection.ltr;
 }
 
+appLog(String message, [String? name]) {
+  if (kDebugMode) log(e.toString(), name: name ?? '');
+}
+
 TextDirection getTextDirection(String text) {
   // Regex for different scripts
   final latinRegex = RegExp(r'[A-Za-z]');

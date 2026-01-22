@@ -1,6 +1,5 @@
 import '../../../../export.dart';
 
-// Provider for TawafNotifier using ChangeNotifier
 final umrahProvider = ChangeNotifierProvider.autoDispose<UmrahNotifier>((ref) {
   final notifier = UmrahNotifier();
   ref.onDispose(() {
@@ -18,19 +17,16 @@ class UmrahNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
 
-  // Flag to track if user is currently performing Tawaf
   UserActivityType userActivityType = UserActivityType.umrah;
   bool isLoading = false;
 
   HistoryModel? umrahModel;
 
-  // Flags for Tawaf requirements
   bool isPerformed2RakatsSalah = false;
   bool isDrinkZamzam = false;
 
   StreamSubscription<Position>? positionStreamSubscription;
 
-  // Tawaf round tracking
   bool hasDoneBeforeMeeqaatTasks = false;
   bool hasReachedMeeqaat = false;
   bool hasDoneAfterMeeqaatTasks = false;
@@ -41,11 +37,9 @@ class UmrahNotifier extends ChangeNotifier {
 
   bool isTrackerPaused = false;
 
-  // Completion flags for different stages
   bool showSafaMarwa = false;
   bool isSafaMarwaComplete = false;
 
-  //* umrah Complete
   bool isUmrahCompleted = false;
   bool isShavedHead = false;
   Position? startingPosition;
@@ -66,7 +60,6 @@ class UmrahNotifier extends ChangeNotifier {
     }
   }
 
-  // Initialize TawafNotifier
   Future<void> initialization(UserActivityType userActivityType) async {
     isLoading = true;
     notifyListeners();
@@ -136,7 +129,6 @@ class UmrahNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Method to start or stop Tawaf
   Future<void> pauseAndResumeTracker() async {
     if (!isTrackerPaused) {
       _pauseTracker();
@@ -150,7 +142,7 @@ class UmrahNotifier extends ChangeNotifier {
     notifyListeners();
     var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.are_you_sure_you_want_to_pause_tracking.tr()));
     if (result != true) return;
-    // ref.read(safaMarwaProvider.notifier).cancelPositionStreamSubscription();
+
     _cancelPositionStreamSubscription();
     isTrackerPaused = true;
     isLoading = false;
@@ -172,91 +164,10 @@ class UmrahNotifier extends ChangeNotifier {
 
   Future<void> _startTawaf() async {
     await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
-    // startingPosition = await Geolocator.getCurrentPosition(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation));
-    // var constantsDoc = await settingsCollection.doc(CommonDoc.constants.name).get();
-    // LatLng alHajarAlAswadLatLng = LatLng(constantsDoc.get(CommonField.alHajarAlAswad.name)!['lat'], constantsDoc.get(CommonField.alHajarAlAswad.name)!['lng']);
-    // LatLng matafGreenLightLatLng = LatLng(constantsDoc.get(CommonField.matafGreenLight.name)!['lat'], constantsDoc.get(CommonField.matafGreenLight.name)!['lng']);
-    // var threshold = num.parse(constantsDoc.get(CommonField.alHajarToMatafThreshold.name).toString());
-    // await _checkReachedNearTheGreenLight(alHajarAlAswadLatLng: alHajarAlAswadLatLng, matafGreenLightLatLng: matafGreenLightLatLng, threshold: threshold);
-    // tawafCircleCompletionPercent = 0;
-    // notifyListeners();
-    // try {
-    //   await _initializeTawafLocationTracking();
-    // } catch (e, stack) {
-    //   debugPrint('Error requesting permission: $e\n$stack');
-    //   _pauseTracker();
-    // }
   }
 
-  // Future<void> _checkReachedNearTheGreenLight({required LatLng alHajarAlAswadLatLng, required LatLng matafGreenLightLatLng, required num threshold}) async {
-  //   try {
-  // await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
-  // var isUserInBetweenAlHajarAndMataf =
-  //     Helper.distanceToVector(alHajarAlAswadLatLng, matafGreenLightLatLng, LatLng(startingPosition!.latitude, startingPosition!.longitude)) <= threshold.toDouble();
-  // if (isUserInBetweenAlHajarAndMataf) return;
-  // var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => StartConfirmationDialog());
-  // if (result == true) {
-  //   errorToast(LocaleKeys.you_are_not_near_the_green_light.tr());
-  //   await _checkReachedNearTheGreenLight(alHajarAlAswadLatLng: alHajarAlAswadLatLng, matafGreenLightLatLng: matafGreenLightLatLng, threshold: threshold);
-  // } else {
-  //   goToHome();
-  // }
-  // } catch (e) {
-  //   log(e.toString());
-  // }
-  // }
+  Future<void> _initializeTawafLocationTracking() async {}
 
-  // Method to request location permissions and initialize Tawaf
-  Future<void> _initializeTawafLocationTracking() async {
-    // try {
-    //   positionStreamSubscription?.cancel();
-    //   var alKabaLatLongDoc = await settingsCollection.doc(CommonDoc.alKaba.name).get();
-    //   var kabaLatLng = LatLng(alKabaLatLongDoc.data()!['lat'], alKabaLatLongDoc.data()!['lng']);
-    //   // Start listening to position updates
-    //   positionStreamSubscription = Geolocator.getPositionStream(
-    //     locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation),
-    //   ).listen((position) => _updateLocation(position, startingPosition!, kabaLatLng));
-    // } catch (e) {
-    //   if (kDebugMode) log(e.toString());
-    //   errorToast(e.toString());
-    // }
-  }
-
-  // Method to update location and track Tawaf progress
-  // Future<void> _updateLocation(Position currentPosition, Position startingPosition, LatLng kabaLatLng) async {
-  // // Keep 12 meters distance minimum from kaba.
-  // var distance = Geolocator.distanceBetween(currentPosition.latitude, currentPosition.longitude, kabaLatLng.latitude, kabaLatLng.longitude);
-  // if (distance < 12) return;
-  // // Exit early if Tawaf is not active or subscription is null
-  // if (umrahModel == null || positionStreamSubscription == null) {
-  //   _cancelPositionStreamSubscription();
-  //   return;
-  // }
-
-  // final currentLatLng = LatLng(currentPosition.latitude, currentPosition.longitude);
-  // final startingLatLng = LatLng(startingPosition.latitude, startingPosition.longitude);
-
-  // // Calculate bearings from Kaaba to starting and current positions
-  // double startBearing = Helper.calculateBearing(kabaLatLng, startingLatLng);
-  // double currentBearing = Helper.calculateBearing(kabaLatLng, currentLatLng);
-
-  // // Calculate progress angle in anti-clockwise direction
-  // double progressAngle = Helper.antiClockwiseDelta(startBearing, currentBearing);
-  // if (!isRoundCompleted) tawafCircleCompletionPercent = (progressAngle / 360).clamp(0.0, 1.0);
-  // if (tawafCircleCompletionPercent >= 0.5 && tawafCircleCompletionPercent <= 0.8) hasDoneHalfCircle = true;
-  // if (tawafCircleCompletionPercent >= 0.985 && !hasDoneHalfCircle) tawafCircleCompletionPercent = 0;
-  // if (tawafCircleCompletionPercent >= 0.985 && hasDoneHalfCircle) {
-  //   isRoundCompleted = true;
-  //   hasDoneHalfCircle = false;
-  //   tawafCircleCount++;
-  //   if (await Vibration.hasVibrator()) Vibration.vibrate(pattern: [500, 1000, 500, 2000, 500, 1000, 500, 2000], intensities: [1, 128, 255]);
-  //   updateUmrahModel(umrahModel!.copyWith(tawaf_circle_count: tawafCircleCount));
-  //   tawafCircleCompletionPercent = 0;
-  // }
-  // notifyListeners();
-  // }
-
-  // Method to start the next Tawaf round
   startNextRound() async {
     isRoundCompleted = false;
     notifyListeners();
@@ -270,14 +181,13 @@ class UmrahNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Moves user to Safa-Marwa section after completing Tawaf
   void moveToSafaMarwa() {
     if (userActivityType == UserActivityType.tawaf) {
       _resetTawafData();
       infoToast(LocaleKeys.your_tawaf_has_been_successfully_completed.tr());
       return Navigator.pop(context);
     }
-    // Ensure prerequisites for Safa-Marwa are met
+
     if (!isPerformed2RakatsSalah || !isDrinkZamzam) {
       errorToast(LocaleKeys.please_offer_two_rakat_of_salah_and_drink_zamzam.tr());
       return;
@@ -299,19 +209,16 @@ class UmrahNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Method to toggle 2 Rakats Salah completion
   void perform2RakatsSalah() {
     isPerformed2RakatsSalah = !isPerformed2RakatsSalah;
     notifyListeners();
   }
 
-  // Method to toggle Zamzam drinking completion
   void drinkZamzam() {
     isDrinkZamzam = !isDrinkZamzam;
     notifyListeners();
   }
 
-  // Method to mark Umrah as completed
   void umrahCompleted() async {
     isLoading = true;
     notifyListeners();
@@ -325,7 +232,6 @@ class UmrahNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Method to return to home state
   void goToHome() {
     showSafaMarwa = false;
     isUmrahCompleted = false;
@@ -377,8 +283,8 @@ class UmrahNotifier extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
       return false;
     }
   }
@@ -391,8 +297,8 @@ class UmrahNotifier extends ChangeNotifier {
       notifyListeners();
       await _startTawaf();
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
   }
 

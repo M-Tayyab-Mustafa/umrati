@@ -45,6 +45,8 @@ abstract class  LocaleKeys {
   static const enter_the_otp_you_received_to = 'enter_the_otp_you_received_to';
   static const or_continue_with = 'or_continue_with';
   static const verify_now = 'verify_now';
+  static const not_valid_number = 'not_valid_number';
+  static const some_thing_went_wrong = 'some_thing_went_wrong';
   static const english = 'english';
   static const urdu = 'urdu';
   static const ask_legitimate_needs = 'ask_legitimate_needs';

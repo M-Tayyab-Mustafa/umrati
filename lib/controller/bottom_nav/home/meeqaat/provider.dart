@@ -26,8 +26,8 @@ class MeeqaatLocationFetchProviderNotifier extends ChangeNotifier {
       if (context.mounted) notifyListeners();
       positionStreamSubscription = Geolocator.getPositionStream(locationSettings: LocationSettings(accuracy: LocationAccuracy.bestForNavigation)).listen(_updateLocation);
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
   }
 

@@ -15,8 +15,8 @@ class Payment {
         Stripe.publishableKey = paymentSetting?.stripePublishableKey ?? '';
       });
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
   }
 
@@ -40,10 +40,10 @@ class Payment {
       await Stripe.instance.presentPaymentSheet();
       onSuccess();
     } on StripeException catch (e) {
-      if (kDebugMode) log(e.toString());
+      appLog(e.toString());
       errorToast("⚠️ Payment Error: ${e.error.message}");
     } catch (e) {
-      if (kDebugMode) log(e.toString());
+      appLog(e.toString());
       errorToast("⚠️ Payment Error: $e");
     }
   }
@@ -72,7 +72,7 @@ class Payment {
         errorToast("Payment cancelled");
       }
     } catch (e) {
-      if (kDebugMode) log(e.toString());
+      appLog(e.toString());
       errorToast("⚠️ Payment Error: $e");
     }
   }
@@ -100,7 +100,7 @@ class Payment {
         errorToast("Payment cancelled");
       }
     } catch (e) {
-      if (kDebugMode) log(e.toString());
+      appLog(e.toString());
       errorToast("⚠️ Payment Error: $e");
     }
   }

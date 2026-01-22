@@ -3,14 +3,6 @@ import '../../export.dart';
 final emailOrPhoneLinkingProvider = ChangeNotifierProvider.autoDispose<EmailOrPhoneLinkingNotifier>((ref) => EmailOrPhoneLinkingNotifier());
 
 class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
-  WidgetRef? _ref;
-  WidgetRef get ref => _ref!;
-  set ref(WidgetRef value) => _ref = value;
-
-  BuildContext? _context;
-  BuildContext get context => _context!;
-  set context(BuildContext value) => _context = value;
-
   Gender selectedGender = Gender.male;
   bool isUpdatingGender = false;
   UserModel? user;
@@ -28,7 +20,7 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void linkAccount() async {
+  void linkAccount(BuildContext context, WidgetRef ref) async {
     if ((user?.email ?? '').isEmpty) {
       if (emailController.text.isEmpty) {
         errorToast(LocaleKeys.please_enter_your_email.tr());
@@ -43,13 +35,13 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
         infoToast(LocaleKeys.account_linked_successfully.tr());
         ref.read(splashProvider.notifier).redirections(context);
       } on FirebaseAuthException catch (e) {
-        if (kDebugMode) log(e.toString());
+        appLog(e.toString());
         errorToast(e.message ?? LocaleKeys.something_went_wrong_please_try_again_later.tr());
         isLinkingAccount = false;
         notifyListeners();
       } catch (e) {
-        if (kDebugMode) log(e.toString());
-        errorToast(e.toString());
+        appLog(e.toString());
+        errorToast(LocaleKeys.some_thing_went_wrong.tr());
         isLinkingAccount = false;
         notifyListeners();
       }
@@ -58,14 +50,12 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
       notifyListeners();
       try {
         final provider = ref.read(loginProvider.notifier);
-        provider.context = context;
-        provider.ref = ref;
         provider.phoneNumberController.text = phoneNumberController.text.trim();
         provider.selectedCountry = selectedCountry;
-        await provider.sendTheOTP(true);
+        await provider.sendTheOTP(context, true);
       } catch (e) {
-        if (kDebugMode) log(e.toString());
-        errorToast(e.toString());
+        appLog(e.toString());
+        errorToast(LocaleKeys.some_thing_went_wrong.tr());
         isLinkingAccount = false;
         notifyListeners();
       }

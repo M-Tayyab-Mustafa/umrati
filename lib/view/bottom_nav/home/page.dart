@@ -9,12 +9,6 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   @override
-  void initState() {
-    super.initState();
-    ref.read(homeProvider.notifier).ref = ref;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Background(
       showEmblem: false,

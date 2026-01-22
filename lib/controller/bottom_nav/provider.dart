@@ -9,19 +9,12 @@ import '../../view/bottom_nav/ask_mufti/page.dart';
 final bottomNavProvider = ChangeNotifierProvider.autoDispose<BottomNavNotifier>((ref) => BottomNavNotifier());
 
 class BottomNavNotifier extends ChangeNotifier {
-  BuildContext? _context;
-  BuildContext get context => _context!;
-  set context(BuildContext value) => _context = value;
-
-  WidgetRef? _ref;
-  WidgetRef get ref => _ref!;
-  set ref(WidgetRef value) => _ref = value;
   BottomNavTabs selectedTab = BottomNavTabs.home;
   Widget child = const HomePage();
   bool canPop = false;
   Timer? bounceTimer;
 
-  void onBottomNavTap(BottomNavTabs selectedOption) async {
+  void onBottomNavTap(BuildContext context, BottomNavTabs selectedOption) async {
     var user = await LocalStorageManager.getUser();
     var previousTab = selectedTab;
     selectedTab = selectedOption;
@@ -40,7 +33,7 @@ class BottomNavNotifier extends ChangeNotifier {
           errorToast(LocaleKeys.premium_feature_warning.tr());
           await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
         }
-        onBottomNavTap(previousTab);
+        onBottomNavTap(context, previousTab);
         break;
 
       default:

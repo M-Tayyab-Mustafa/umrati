@@ -8,13 +8,6 @@ class BottomNavigationPage extends ConsumerStatefulWidget {
 
 class _BottomNavigationPageState extends ConsumerState<BottomNavigationPage> {
   @override
-  void initState() {
-    super.initState();
-    ref.read(bottomNavProvider.notifier).context = context;
-    ref.read(bottomNavProvider.notifier).ref = ref;
-  }
-
-  @override
   Widget build(BuildContext context) {
     var provider = ref.watch(bottomNavProvider);
     return Scaffold(
@@ -36,13 +29,20 @@ class _BottomNavigationPageState extends ConsumerState<BottomNavigationPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Expanded(child: BottomNavItem(onTap: () => provider.onBottomNavTap.call(BottomNavTabs.home), isSelected: BottomNavTabs.home == provider.selectedTab, icon: 'assets/svg/bottom_nav/home.svg', title: LocaleKeys.home.tr())),
                         Expanded(
-                          child: BottomNavItem(onTap: () => provider.onBottomNavTap.call(BottomNavTabs.profile), isSelected: BottomNavTabs.profile == provider.selectedTab, icon: 'assets/svg/bottom_nav/profile.svg', title: LocaleKeys.profile.tr()),
+                          child: BottomNavItem(onTap: () => provider.onBottomNavTap.call(context, BottomNavTabs.home), isSelected: BottomNavTabs.home == provider.selectedTab, icon: 'assets/svg/bottom_nav/home.svg', title: LocaleKeys.home.tr()),
                         ),
                         Expanded(
                           child: BottomNavItem(
-                            onTap: () => provider.onBottomNavTap.call(BottomNavTabs.askMufti),
+                            onTap: () => provider.onBottomNavTap.call(context, BottomNavTabs.profile),
+                            isSelected: BottomNavTabs.profile == provider.selectedTab,
+                            icon: 'assets/svg/bottom_nav/profile.svg',
+                            title: LocaleKeys.profile.tr(),
+                          ),
+                        ),
+                        Expanded(
+                          child: BottomNavItem(
+                            onTap: () => provider.onBottomNavTap.call(context, BottomNavTabs.askMufti),
                             isSelected: BottomNavTabs.askMufti == provider.selectedTab,
                             icon: 'assets/svg/bottom_nav/ask_mufti.svg',
                             title: LocaleKeys.ask_mufti.tr(),
@@ -50,7 +50,7 @@ class _BottomNavigationPageState extends ConsumerState<BottomNavigationPage> {
                         ),
                         Expanded(
                           child: BottomNavItem(
-                            onTap: () => provider.onBottomNavTap.call(BottomNavTabs.settings),
+                            onTap: () => provider.onBottomNavTap.call(context, BottomNavTabs.settings),
                             isSelected: BottomNavTabs.settings == provider.selectedTab,
                             icon: 'assets/svg/bottom_nav/settings.svg',
                             title: LocaleKeys.settings.tr(),

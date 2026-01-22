@@ -10,9 +10,9 @@ class _EmailOrPhoneLinkingPageState extends ConsumerState<EmailOrPhoneLinkingPag
   @override
   void initState() {
     super.initState();
-    ref.read(emailOrPhoneLinkingProvider.notifier).initialization();
-    ref.read(emailOrPhoneLinkingProvider.notifier).ref = ref;
-    ref.read(emailOrPhoneLinkingProvider.notifier).context = context;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(emailOrPhoneLinkingProvider.notifier).initialization();
+    });
   }
 
   @override
@@ -34,7 +34,7 @@ class _EmailLinkingPage extends ConsumerWidget {
     return Column(
       children: [
         CTextField(margin: context.edgeInsets(top: screenSize.height * 0.08), controller: ref.read(emailOrPhoneLinkingProvider.notifier).emailController, keyboardType: TextInputType.emailAddress, labelText: LocaleKeys.email.tr()),
-        CButton(isLoading: provider.isLinkingAccount, margin: context.edgeInsets(top: screenSize.height * 0.08), onTap: ref.read(emailOrPhoneLinkingProvider.notifier).linkAccount, title: LocaleKeys.link_account.tr(), titleWithIcon: true),
+        CButton(isLoading: provider.isLinkingAccount, margin: context.edgeInsets(top: screenSize.height * 0.08), onTap: () => provider.linkAccount(context, ref), title: LocaleKeys.link_account.tr(), titleWithIcon: true),
       ],
     );
   }
@@ -55,7 +55,7 @@ class _PhoneLinkingPage extends ConsumerWidget {
           updateSelectedCountry: provider.updateSelectedCountry,
           initialCountryCode: provider.selectedCountry,
         ),
-        CButton(isLoading: provider.isLinkingAccount, onTap: provider.linkAccount, margin: context.edgeInsets(top: 35), titleWithIcon: true, title: LocaleKeys.continued.tr()),
+        CButton(isLoading: provider.isLinkingAccount, onTap: () => provider.linkAccount(context, ref), margin: context.edgeInsets(top: 35), titleWithIcon: true, title: LocaleKeys.continued.tr()),
       ],
     );
   }

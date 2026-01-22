@@ -6,26 +6,15 @@ class GenderNotifier extends ChangeNotifier {
   Gender selectedGender = Gender.male;
   bool isUpdatingGender = false;
 
-  WidgetRef? _ref;
-  WidgetRef get ref => _ref!;
-  set ref(WidgetRef value) => _ref = value;
-
-  BuildContext? _context;
-  BuildContext get context => _context!;
-  set context(BuildContext value) => _context = value;
-
   void updateGender(Gender gender) {
     if (selectedGender == gender) return;
     selectedGender = gender;
     notifyListeners();
   }
 
-  void skip() async {
+  void skip(BuildContext context, WidgetRef ref) async {
     try {
-      var result = await showGeneralDialog(
-        context: context,
-        pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.confirmation_dialog.tr()),
-      );
+      var result = await showGeneralDialog(context: context, pageBuilder: (context, animation, secondaryAnimation) => ConfirmationDialog(title: LocaleKeys.confirmation_dialog.tr()));
       if (result == false || result == null) {
         return;
       }
@@ -37,12 +26,12 @@ class GenderNotifier extends ChangeNotifier {
     } catch (e) {
       isUpdatingGender = false;
       notifyListeners();
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
   }
 
-  void continueTap() async {
+  void continueTap(BuildContext context, WidgetRef ref) async {
     try {
       isUpdatingGender = true;
       notifyListeners();
@@ -52,8 +41,8 @@ class GenderNotifier extends ChangeNotifier {
     } catch (e) {
       isUpdatingGender = false;
       notifyListeners();
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
   }
 }

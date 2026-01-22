@@ -11,10 +11,8 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
   @override
   void initState() {
     super.initState();
-    ref.read(subscriptionProvider).context = context;
-    ref.read(subscriptionProvider).ref = ref;
     ref.read(subscriptionProvider).isRenewingPlan = widget.isRenewingPlan;
-    ref.read(subscriptionProvider.notifier).getSubscriptionPlans();
+    ref.read(subscriptionProvider.notifier).getSubscriptionPlans(context);
   }
 
   @override
@@ -82,7 +80,11 @@ class _SubscriptionPlansPageState extends ConsumerState<SubscriptionPlansPage> w
                                   ),
                                 ),
                                 if (!provider.isRenewingPlan)
-                                  BasicCard(onTap: provider.enterKeyDialog, backgroundColor: CColors.duaBackground, child: Text(LocaleKeys.enter_access_key_prompt.tr(), style: CTextStyle.w500(color: CColors.primary, fontSize: 14))),
+                                  BasicCard(
+                                    onTap: () => provider.enterKeyDialog(context, ref),
+                                    backgroundColor: CColors.duaBackground,
+                                    child: Text(LocaleKeys.enter_access_key_prompt.tr(), style: CTextStyle.w500(color: CColors.primary, fontSize: 14)),
+                                  ),
                               ],
                             ),
                           ),

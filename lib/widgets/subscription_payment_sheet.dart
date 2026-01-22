@@ -27,7 +27,7 @@ class PaymentSheet extends ConsumerWidget {
                     PaymentItem(amount: provider.selectedPlan.amount.toString(), label: '${(provider.selectedPlan.duration / 30).toInt().clamp(1, 12)} ${LocaleKeys.months.tr()}'),
                     PaymentItem(amount: provider.selectedPlan.amount.toString(), label: '${(provider.selectedPlan.duration / 30).toInt().clamp(1, 12)} ${LocaleKeys.months.tr()}', status: PaymentItemStatus.final_price, type: PaymentItemType.total),
                   ],
-                  onPaymentResult: ref.read(subscriptionProvider.notifier).onPaymentResult,
+                  onPaymentResult: (result) => ref.read(subscriptionProvider.notifier).onPaymentResult(result, context),
                 ),
               if (Payment.instance.paymentSetting!.showGooglePayButton)
                 GooglePayButton(
@@ -41,7 +41,7 @@ class PaymentSheet extends ConsumerWidget {
                     PaymentItem(amount: provider.selectedPlan.amount.toString(), label: '${(provider.selectedPlan.duration / 30).toInt().clamp(1, 12)} ${LocaleKeys.months.tr()}'),
                     PaymentItem(amount: provider.selectedPlan.amount.toString(), label: '${(provider.selectedPlan.duration / 30).toInt().clamp(1, 12)} ${LocaleKeys.months.tr()}', status: PaymentItemStatus.final_price, type: PaymentItemType.total),
                   ],
-                  onPaymentResult: ref.read(subscriptionProvider.notifier).onPaymentResult,
+                  onPaymentResult: (result) => ref.read(subscriptionProvider.notifier).onPaymentResult(result, context),
                 ),
               if (provider.userRegion == 'PK' && Payment.instance.paymentSetting!.showJazzCashButton)
                 PaymentButton(
@@ -51,7 +51,7 @@ class PaymentSheet extends ConsumerWidget {
                   iconBackgroundColor: Colors.white,
                   isLoading: provider.isLoadingJazzCashPaymentMethod,
                   margin: context.edgeInsets(top: 16),
-                  onTap: ref.read(subscriptionProvider.notifier).onJazzCashTap,
+                  onTap: () => ref.read(subscriptionProvider.notifier).onJazzCashTap(context),
                   title: 'Pay with Jazz Cash',
                 ),
               if (provider.userRegion == 'PK' && Payment.instance.paymentSetting!.showEasyPaisaButton)
@@ -62,7 +62,7 @@ class PaymentSheet extends ConsumerWidget {
                   iconBackgroundColor: Colors.white,
                   isLoading: provider.isLoadingEasyPaisaPaymentMethod,
                   margin: context.edgeInsets(top: 16),
-                  onTap: ref.read(subscriptionProvider.notifier).onEasyPaisaTap,
+                  onTap: () => ref.read(subscriptionProvider.notifier).onEasyPaisaTap(context),
                   title: 'Pay with Easy Paisa',
                 ),
               if (Payment.instance.paymentSetting!.showStripeButton)
@@ -70,7 +70,7 @@ class PaymentSheet extends ConsumerWidget {
                   icon: FaIcon(FontAwesomeIcons.stripe, color: Colors.white),
                   isLoading: provider.isLoadingStripePaymentMethod,
                   margin: context.edgeInsets(top: 16),
-                  onTap: ref.read(subscriptionProvider.notifier).onCardTab,
+                  onTap: () => ref.read(subscriptionProvider.notifier).onCardTab(context),
                   title: 'Pay with Card',
                 ),
             ],

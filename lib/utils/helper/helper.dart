@@ -24,7 +24,7 @@ class Helper {
     try {
       currencySymbol = (await settingsCollection.doc(CommonDoc.constants.name).get()).data()?[CommonField.symbols.name][(await userRegion())] ?? '\$';
     } catch (e) {
-      if (kDebugMode) log('[Currency symbol]:: ${e.toString()}');
+      appLog(e.toString(), '[Currency symbol]:: ');
       errorToast('[Currency symbol]:: ${e.toString()}');
     }
   }
@@ -32,8 +32,7 @@ class Helper {
   static Future<List<PlanModel>> loadProducts({required List<PlanModel> plans}) async {
     final response = await iap.queryProductDetails(plans.map((plan) => plan.productId).toSet());
     if (response.error != null) {
-      if (kDebugMode) log('In app products error: ${response.error?.message}');
-      errorToast('In app products error: ${response.error?.message}');
+      appLog(response.error?.message ?? '', '[In app products]:: ');
     }
     return plans.map((plan) => plan.copyWith(productDetails: response.productDetails.firstOrNull)).toList();
   }
@@ -45,8 +44,7 @@ class Helper {
         if (purchase.status == PurchaseStatus.purchased || purchase.status == PurchaseStatus.restored) {
           verifyPurchase.call(purchase);
         } else if (purchase.status == PurchaseStatus.error) {
-          if (kDebugMode) log('Purchase error: ${purchase.error?.message}');
-          errorToast('Purchase error: ${purchase.error?.message}');
+          appLog(purchase.error?.message ?? '', '[Purchase error]:: ');
         }
       }
     });
@@ -74,8 +72,7 @@ class Helper {
       var code = (await LocalStorageManager.getUser(fromFirebase: true))?.country_code ?? '+1';
       return (await regions())[code.isNotEmpty ? code : '+1'];
     } catch (e) {
-      if (kDebugMode) log('[User region]:: ${e.toString()}');
-      errorToast('[User region]:: ${e.toString()}');
+      appLog(e.toString(), '[User region]:: ');
       return 'US';
     }
   }
@@ -89,8 +86,7 @@ class Helper {
       }
       return [];
     } catch (e) {
-      if (kDebugMode) log('[ByPass Number]:: ${e.toString()}');
-      errorToast('[ByPass Number]:: ${e.toString()}');
+      appLog(e.toString(), '[ByPass Number]:: ');
       return [];
     }
   }
@@ -100,8 +96,7 @@ class Helper {
       final docSnapshot = await settingsCollection.doc(CommonDoc.ultimatePlan.name).get();
       return PlanModel.fromMap(docSnapshot.data()!);
     } catch (e) {
-      if (kDebugMode) log('[Ultimate Plan]:: ${e.toString()}');
-      errorToast('[Ultimate Plan]:: ${e.toString()}');
+      appLog(e.toString(), '[Ultimate Plan]:: ');
       return PlanModel.fromMap({});
     }
   }
@@ -123,10 +118,10 @@ class Helper {
         log(body.toString());
       }
     } on ClientException catch (e) {
-      if (kDebugMode) log(e.toString());
+      appLog(e.toString());
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
     return null;
   }
@@ -247,8 +242,8 @@ class Helper {
       Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
       return '${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      if (context.mounted) errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
       return '';
     }
   }

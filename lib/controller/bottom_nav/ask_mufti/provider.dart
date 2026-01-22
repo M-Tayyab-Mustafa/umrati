@@ -94,13 +94,12 @@ class AskMuftiNotifier extends ChangeNotifier {
       } else {
         throw Exception(LocaleKeys.something_went_wrong_please_try_again_later.tr());
       }
-
-      if (kDebugMode) log(responseBody.toString());
+      appLog(responseBody.toString());
       if (context.mounted) notifyListeners();
       isSendingMessage = false;
     } catch (exception) {
       if (context.mounted) notifyListeners();
-      if (kDebugMode) log(exception.toString());
+      appLog(exception.toString());
       messages.last = message.copyWith(answer: exception.toString(), isGeneratingAnswer: false);
     }
   }

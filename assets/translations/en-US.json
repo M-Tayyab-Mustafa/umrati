@@ -41,6 +41,8 @@
   "enter_the_otp_you_received_to": "Enter the OTP you received to",
   "or_continue_with": "Or continue with",
   "verify_now":"Verify Now",
+  "not_valid_number": "is not a valid phone number please check your phone number and try again.",
+  "some_thing_went_wrong": "An error occurred while processing your request. Please try again later.",
   "english": "English",
   "urdu": "اردو",
   "ask_legitimate_needs": "Ask for your legitimate needs during this round",

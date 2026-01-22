@@ -121,17 +121,13 @@ class ProfileNotifier extends ChangeNotifier {
       notifyListeners();
       try {
         await FirebaseAuth.instance.signOut();
-      } catch (e) {
-        if (kDebugMode) log(e.toString());
-      }
-      await LocalStorageManager.clearStorage();
-      try {
+        await LocalStorageManager.clearStorage();
         ref.read(loginProvider.notifier).resetPage();
         ref.read(loginProvider.notifier).phoneNumberController.clear();
+        ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
       } catch (e) {
-        if (kDebugMode) log(e.toString());
+        appLog(e.toString());
       }
-      ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
     }
   }
 
@@ -150,12 +146,12 @@ class ProfileNotifier extends ChangeNotifier {
       } on FirebaseAuthException catch (e) {
         isLoading = false;
         notifyListeners();
-        if (kDebugMode) log(e.toString());
+        appLog(e.toString());
         errorToast(e.message ?? LocaleKeys.something_went_wrong_please_try_again_later.tr());
       } catch (e) {
         isLoading = false;
         notifyListeners();
-        if (kDebugMode) log(e.toString());
+        appLog(e.toString());
       }
     }
   }

@@ -37,8 +37,8 @@ class ZiaraatDetailNotifier extends ChangeNotifier {
         sortZiaraats(position: position);
       });
     } catch (e) {
-      if (kDebugMode) log(e.toString());
-      if (context.mounted) errorToast(e.toString());
+      appLog(e.toString());
+      errorToast(LocaleKeys.some_thing_went_wrong.tr());
     }
   }
 
