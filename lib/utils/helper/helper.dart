@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 import '../../../export.dart';
 
 class Helper {
@@ -31,10 +33,13 @@ class Helper {
 
   static Future<List<PlanModel>> loadProducts({required List<PlanModel> plans}) async {
     final response = await iap.queryProductDetails(plans.map((plan) => plan.productId).toSet());
-    if (response.error != null) {
-      appLog(response.error?.message ?? '', '[In app products]:: ');
+    if (response.error != null) appLog(response.error?.message ?? '', '[In app products]:: ');
+    final List<PlanModel> products = [];
+    for (var product in response.productDetails) {
+      final plan = plans.firstWhereOrNull((plan) => plan.productId == product.id);
+      if (plan != null) products.add(plan.copyWith(amount: product.rawPrice, productDetails: product));
     }
-    return plans.map((plan) => plan.copyWith(productDetails: response.productDetails.firstOrNull)).toList();
+    return products;
   }
 
   static void listenPurchases(ValueChanged verifyPurchase) {
