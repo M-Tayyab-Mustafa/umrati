@@ -57,5 +57,6 @@ dependencies {
     implementation("com.google.firebase:firebase-auth") 
     implementation("com.google.android.gms:play-services-auth:20.9.0")
     implementation("com.android.billingclient:billing-ktx:6.1.0")
+    implementation("com.google.android.play:integrity")
     implementation("com.stripe:stripe-android:22.5.0")
 }
