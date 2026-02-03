@@ -12,7 +12,18 @@ enum ZiaraatCities { mecca, medina, taif, other }
 
 enum ZiaraatDestinationsCreationOptions { auto, manual }
 
-enum CollectionNames { users, settings, plans, subscriptions, histories, messages }
+enum CollectionNames {
+  users('users'),
+  settings('settings'),
+  plans('plans'),
+  subscriptions('subscriptions'),
+  histories('histories'),
+  messages('messages'),
+  otp('email_otps');
+
+  final String name;
+  const CollectionNames(this.name);
+}
 
 enum StorageFolderNames {
   profileImages('profile_images');
@@ -54,14 +65,18 @@ enum CommonField {
   regions('regions'),
   symbols('symbols'),
   inAppProducts('in_app_products'),
-  bypassNumber('bypass_number'),
+  bypassEmails('bypass_emails'),
   messages('messages'),
   currencyCode('currency_code'),
   googleMapKey('google_map_key'),
   startingPoint('startingPoint'),
   stripePublishableKey('stripe_publishable_key'),
   stripeSecretKey('stripe_secret_key'),
-  selectedZiaraat('selected_ziaraat');
+  selectedZiaraat('selected_ziaraat'),
+  emailServiceId('email_service_id'),
+  emailTemplateId('email_template_id'),
+  emailPrivateKey('email_private_key'),
+  emailPublicKey('email_public_key');
 
   final String name;
 

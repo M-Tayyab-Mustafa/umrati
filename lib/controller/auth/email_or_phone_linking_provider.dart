@@ -49,10 +49,10 @@ class EmailOrPhoneLinkingNotifier extends ChangeNotifier {
       isLinkingAccount = true;
       notifyListeners();
       try {
-        final provider = ref.read(loginProvider.notifier);
-        provider.phoneNumberController.text = phoneNumberController.text.trim();
-        provider.selectedCountry = selectedCountry;
-        await provider.sendTheOTP(context, true);
+        // final provider = ref.read(loginProvider.notifier);
+        // provider.phoneNumberController.text = phoneNumberController.text.trim();
+        // provider.selectedCountry = selectedCountry;
+        // await provider.sendTheOTP(context, true);
       } catch (e) {
         appLog(e.toString());
         errorToast(LocaleKeys.some_thing_went_wrong.tr());

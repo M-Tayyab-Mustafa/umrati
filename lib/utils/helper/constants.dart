@@ -20,6 +20,7 @@ var historyCollection = FirebaseFirestore.instance.collection(CollectionNames.hi
 var messagesCollection = FirebaseFirestore.instance.collection(CollectionNames.messages.name);
 var subscriptionCollection = FirebaseFirestore.instance.collection(CollectionNames.subscriptions.name);
 var plansCollection = FirebaseFirestore.instance.collection(CollectionNames.plans.name);
+var otpCollection = FirebaseFirestore.instance.collection(CollectionNames.otp.name);
 
 bool isLTR(context) => languageDirection(context) == TextDirection.ltr;
 

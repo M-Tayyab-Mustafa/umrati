@@ -1,5 +1,4 @@
 import '../../export.dart';
-import '../../view/auth/email_or_phone_linking.dart';
 import '../../view/auth/gender.dart';
 import '../../view/auth/login.dart';
 import '../../view/language/select_language.dart';
@@ -23,10 +22,10 @@ class SplashNotifier extends ChangeNotifier {
   Future<void> redirections(BuildContext context, {showPermissionPage = true}) async {
     final user = await LocalStorageManager.getUser(fromFirebase: true);
     await Helper.getCurrencySymbol();
-    final byPassNumbers = await Helper.getByPassNumbers();
+    final byPassEmails = await Helper.getByPassEmails();
     bool isExpired = true;
     if (user != null) {
-      if (byPassNumbers.contains(user.phone)) {
+      if (byPassEmails.contains(user.email.toLowerCase().trim())) {
         if (user.subscription_id != null && user.subscription_id!.isNotEmpty) {
           final docSnapshot = subscriptionCollection.doc(user.subscription_id);
           Helper.userSubscription = SubscriptionModel.fromMap((await docSnapshot.get()).data()!);
@@ -61,8 +60,6 @@ class SplashNotifier extends ChangeNotifier {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
     } else if ((permissionStatus == LocationPermission.deniedForever || permissionStatus == LocationPermission.denied) && showPermissionPage) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LocationPermissionPage()));
-    } else if (user.phone.isEmpty || user.email.isEmpty || user.country_code.isEmpty) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const EmailOrPhoneLinkingPage()));
     } else if (user.gender.isEmpty) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectGenderPage()));
     } else if (isExpired == true) {

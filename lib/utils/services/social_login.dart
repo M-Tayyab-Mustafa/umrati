@@ -78,16 +78,7 @@ class SocialLoginService {
       var userCredential = await _auth.signInWithCredential(credential).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       UserModel user;
       if (userCredential.additionalUserInfo!.isNewUser) {
-        user = UserModel(
-          uid: userCredential.user!.uid,
-          email: userCredential.user!.email!,
-          name: userCredential.user!.displayName ?? '',
-          photo: userCredential.user!.photoURL ?? '',
-          password: Helper.generateRandomId(),
-          phone: '',
-          country_code: '',
-          gender: '',
-        );
+        user = UserModel(uid: userCredential.user!.uid, email: userCredential.user!.email!, name: userCredential.user!.displayName ?? '', photo: userCredential.user!.photoURL ?? '', password: Helper.generateRandomId(), gender: '');
         await _auth.currentUser?.linkWithCredential(EmailAuthProvider.credential(email: userCredential.user!.email!, password: user.password)).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
       } else {
         var querySnapshot = await userCollection.where('email', isEqualTo: userCredential.user!.email!).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);

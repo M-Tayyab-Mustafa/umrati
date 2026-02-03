@@ -21,7 +21,7 @@ class OTPPage extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text('${LocaleKeys.enter_the_otp_you_received_to.tr()}\n', style: CTextStyle.w500(color: CColors.primary, height: 0.5, fontSize: 14)),
-              Directionality(textDirection: TextDirection.ltr, child: Text('${provider.selectedCountry.dialCode} ${provider.phoneNumberController.text}', style: CTextStyle.w500(fontSize: 14))),
+              Directionality(textDirection: TextDirection.ltr, child: Text(provider.emailController.text.trim(), style: CTextStyle.w500(fontSize: 14))),
             ],
           ),
           Center(child: Directionality(textDirection: TextDirection.ltr, child: PinInput(controller: provider.otpController, margin: context.edgeInsets(vertical: 30)))),

@@ -15,7 +15,6 @@ class GiveFeedbackNotifier extends ChangeNotifier {
   UserModel? user;
   CountryCode selectedCountry = CountryCode.fromDialCode('+92');
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController numberController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController subjectController = TextEditingController();
   final TextEditingController feedbackController = TextEditingController();
@@ -25,7 +24,6 @@ class GiveFeedbackNotifier extends ChangeNotifier {
     notifyListeners();
     user = await LocalStorageManager.getUser(fromFirebase: true);
     emailController.text = user!.email;
-    numberController.text = user!.phone.contains(user!.country_code) ? user!.phone.replaceAll(user!.country_code, '') : user!.phone;
     isLoading = false;
     notifyListeners();
   }

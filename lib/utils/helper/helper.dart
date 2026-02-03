@@ -1,10 +1,13 @@
-import 'package:collection/collection.dart';
-
 import '../../../export.dart';
 
 class Helper {
   static final InAppPurchase iap = InAppPurchase.instance;
   static StreamSubscription<List<PurchaseDetails>>? inAppPurchaseSubscription;
+
+  static String generateOTP() {
+    final random = Random.secure();
+    return (100000 + random.nextInt(900000)).toString();
+  }
 
   static disposeInAppPurchaseSubscription() {
     inAppPurchaseSubscription?.cancel();
@@ -22,12 +25,15 @@ class Helper {
     return '$dialCode${phoneNumber.replaceAll(' ', '')}';
   }
 
-  static Future<void> getCurrencySymbol() async {
+  static Future<String> getCurrencySymbol() async {
     try {
-      currencySymbol = (await settingsCollection.doc(CommonDoc.constants.name).get()).data()?[CommonField.symbols.name][(await userRegion())] ?? '\$';
+      final region = await userRegion();
+      currencySymbol = (await settingsCollection.doc(CommonDoc.constants.name).get()).data()?[CommonField.symbols.name][region] ?? '\$';
+      return region;
     } catch (e) {
       appLog(e.toString(), '[Currency symbol]:: ');
       errorToast('[Currency symbol]:: ${e.toString()}');
+      return 'US';
     }
   }
 
@@ -55,6 +61,15 @@ class Helper {
     });
   }
 
+  static Future<EmailJSResponseStatus> sendEmail(String email, String otp) async {
+    final data = (await settingsCollection.doc(CommonDoc.constants.name).get()).data();
+    final serviceId = data?[CommonField.emailServiceId.name] ?? '';
+    final templateId = data?[CommonField.emailTemplateId.name] ?? '';
+    final publicKey = data?[CommonField.emailPublicKey.name] ?? '';
+    final privateKey = data?[CommonField.emailPrivateKey.name] ?? '';
+    return await send('$serviceId', '$templateId', {'to_email': email, 'passcode': otp}, Options(publicKey: publicKey, privateKey: privateKey));
+  }
+
   static num getDiscountedAmount(num amount, num discount) => (amount - (amount * ((discount / 100))).floor()).floor();
 
   static String timeoutError = LocaleKeys.timeout_error.tr();
@@ -74,20 +89,33 @@ class Helper {
 
   static Future<String> userRegion() async {
     try {
-      var code = (await LocalStorageManager.getUser(fromFirebase: true))?.country_code ?? '+1';
-      return (await regions())[code.isNotEmpty ? code : '+1'];
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return 'US';
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) return 'US';
+      }
+      if (permission == LocationPermission.deniedForever) return 'US';
+      Position position = await Geolocator.getCurrentPosition(locationSettings: const LocationSettings(accuracy: LocationAccuracy.best));
+      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      if (placemarks.isNotEmpty) {
+        final placemark = placemarks.first;
+        return placemark.isoCountryCode ?? 'US';
+      }
+      return 'US';
     } catch (e) {
-      appLog(e.toString(), '[User region]:: ');
+      appLog(e.toString(), '[Location service]:: ');
       return 'US';
     }
   }
 
-  static Future<List<String>> getByPassNumbers() async {
+  static Future<List<String>> getByPassEmails() async {
     try {
       final docSnapshot = await settingsCollection.doc(CommonDoc.constants.name).get();
       final data = docSnapshot.data();
-      if (data != null && data.containsKey(CommonField.bypassNumber.name)) {
-        return List<String>.from(data[CommonField.bypassNumber.name]);
+      if (data != null && data.containsKey(CommonField.bypassEmails.name)) {
+        return List<String>.from(data[CommonField.bypassEmails.name]).map((e) => e.toLowerCase().trim()).toList();
       }
       return [];
     } catch (e) {

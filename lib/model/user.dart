@@ -4,8 +4,6 @@ class UserModel {
   final String uid;
   final String name;
   final String email;
-  final String country_code;
-  final String phone;
   final String photo;
   final String gender;
   final String password;
@@ -19,8 +17,6 @@ class UserModel {
     required this.uid,
     required this.name,
     required this.email,
-    required this.country_code,
-    required this.phone,
     required this.photo,
     required this.gender,
     required this.password,
@@ -51,8 +47,6 @@ class UserModel {
       name: name ?? this.name,
       email: email ?? this.email,
       is_premium: is_premium ?? this.is_premium,
-      country_code: country_code ?? this.country_code,
-      phone: phone ?? this.phone,
       photo: photo ?? this.photo,
       gender: gender ?? this.gender,
       password: password ?? this.password,
@@ -69,8 +63,6 @@ class UserModel {
       'name': name,
       'email': email,
       'is_premium': is_premium,
-      'country_code': country_code,
-      'phone': phone,
       'photo': photo,
       'gender': gender,
       'password': password,
@@ -86,9 +78,7 @@ class UserModel {
       uid: map['uid']?.toString() ?? '',
       name: map['name']?.toString() ?? '',
       email: map['email']?.toString() ?? '',
-      phone: map['phone']?.toString() ?? '',
       is_premium: map['is_premium'] ?? false,
-      country_code: map['country_code']?.toString() ?? '',
       photo: map['photo']?.toString() ?? '',
       gender: map['gender']?.toString() ?? '',
       password: map['password']?.toString() ?? '',
@@ -105,7 +95,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, email: $email, is_premium: $is_premium, password: $password, phone: $phone, country_code: $country_code, photo: $photo, gender: $gender, total_umrah_done: $total_umrah_done, subscription_id: $subscription_id, created_at: $created_at, updated_at: $updated_at)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, is_premium: $is_premium, password: $password, photo: $photo, gender: $gender, total_umrah_done: $total_umrah_done, subscription_id: $subscription_id, created_at: $created_at, updated_at: $updated_at)';
   }
 
   @override
@@ -115,9 +105,7 @@ class UserModel {
     return other.uid == uid &&
         other.name == name &&
         other.email == email &&
-        other.phone == phone &&
         other.is_premium == is_premium &&
-        other.country_code == country_code &&
         other.photo == photo &&
         other.gender == gender &&
         other.password == password &&
@@ -132,9 +120,7 @@ class UserModel {
     return uid.hashCode ^
         name.hashCode ^
         email.hashCode ^
-        phone.hashCode ^
         is_premium.hashCode ^
-        country_code.hashCode ^
         photo.hashCode ^
         gender.hashCode ^
         password.hashCode ^

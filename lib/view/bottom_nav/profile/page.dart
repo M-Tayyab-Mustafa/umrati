@@ -109,7 +109,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         ],
                       ),
                     ),
-                    PhoneNumberTextField(controller: provider.numberController, readOnly: true),
+                    // PhoneNumberTextField(controller: provider.numberController, readOnly: true),
                     CTextField(margin: context.edgeInsets(vertical: 20), controller: provider.emailController, labelText: LocaleKeys.email.tr(), readOnly: true),
                     CTextField(onTap: provider.updateName, controller: provider.nameController, labelText: LocaleKeys.name.tr(), readOnly: true, suffixIcon: CustomImage(path: 'assets/svg/edit.svg', imageType: ImageType.svg, size: context.r(20))),
                     Padding(padding: context.edgeInsets(top: 20), child: Text(LocaleKeys.select_your_gender.tr(), style: CTextStyle.w500(fontSize: 17))),

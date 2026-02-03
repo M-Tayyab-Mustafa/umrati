@@ -18,8 +18,6 @@ class ProfileNotifier extends ChangeNotifier {
   final ImagePicker picker = ImagePicker();
   final ImageCropper cropper = ImageCropper();
   final storageRef = FirebaseStorage.instance.refFromURL('gs://umrati-ec453.firebasestorage.app');
-
-  final numberController = TextEditingController();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final editNameController = TextEditingController();
@@ -29,7 +27,6 @@ class ProfileNotifier extends ChangeNotifier {
   Future<void> initialization() async {
     user = await LocalStorageManager.getUser(fromFirebase: true);
     if (user != null) {
-      numberController.text = user!.phone;
       emailController.text = user!.email;
       nameController.text = user!.name.isEmpty ? user!.uid.substring(0, (user!.uid.length / 2).toInt()) : user!.name;
     }
@@ -123,7 +120,7 @@ class ProfileNotifier extends ChangeNotifier {
         await FirebaseAuth.instance.signOut();
         await LocalStorageManager.clearStorage();
         ref.read(loginProvider.notifier).resetPage();
-        ref.read(loginProvider.notifier).phoneNumberController.clear();
+        // ref.read(loginProvider.notifier).phoneNumberController.clear();
         ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
       } catch (e) {
         appLog(e.toString());
@@ -141,7 +138,7 @@ class ProfileNotifier extends ChangeNotifier {
         await userCollection.doc(user!.uid).delete();
         await LocalStorageManager.clearStorage();
         ref.read(loginProvider.notifier).resetPage();
-        ref.read(loginProvider.notifier).phoneNumberController.clear();
+        // ref.read(loginProvider.notifier).phoneNumberController.clear();
         ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
       } on FirebaseAuthException catch (e) {
         isLoading = false;
@@ -195,7 +192,6 @@ class ProfileNotifier extends ChangeNotifier {
 
   @override
   void dispose() {
-    numberController.dispose();
     emailController.dispose();
     nameController.dispose();
     super.dispose();

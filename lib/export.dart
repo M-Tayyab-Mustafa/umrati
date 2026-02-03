@@ -38,6 +38,7 @@ export 'model/history.dart';
 export 'model/ziaraat_history.dart';
 export 'model/message.dart';
 export 'model/payment_settings.dart';
+export 'model/otp.dart';
 
 //* Controller
 export 'controller/splash/provider.dart';
@@ -126,3 +127,5 @@ export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export 'package:flutter_screenutil_plus/flutter_screenutil_plus.dart';
 export 'package:in_app_purchase/in_app_purchase.dart';
 export 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
+export 'package:collection/collection.dart' hide binarySearch, mergeSort;
+export 'package:emailjs/emailjs.dart' hide init;

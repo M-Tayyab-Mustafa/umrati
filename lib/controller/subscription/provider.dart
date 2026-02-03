@@ -23,7 +23,7 @@ class SubscriptionProviderNotifier extends ChangeNotifier {
   Future<void> getSubscriptionPlans(BuildContext context) async {
     try {
       user = (await LocalStorageManager.getUser())!;
-      userRegion = await Helper.userRegion();
+      userRegion = await Helper.getCurrencySymbol();
       List<QueryDocumentSnapshot<Map<String, dynamic>>> docs;
       docs = (await plansCollection.where(Filter('regions', arrayContains: userRegion)).get()).docs;
       if (docs.isEmpty) {

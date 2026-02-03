@@ -24,13 +24,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            PhoneNumberTextField(
+            // PhoneNumberTextField(
+            //   margin: context.edgeInsets(top: 40),
+            //   controller: provider.phoneNumberController,
+            //   onChanged: (value) => Helper.fixPhoneFormate(value, provider.phoneNumberController),
+            //   initialCountryCode: provider.selectedCountry,
+            //   updateSelectedCountry: provider.updateSelectedCountry,
+            //   withCountryCodePicker: true,
+            // ),
+            CTextField(
               margin: context.edgeInsets(top: 40),
-              controller: provider.phoneNumberController,
-              onChanged: (value) => Helper.fixPhoneFormate(value, provider.phoneNumberController),
-              initialCountryCode: provider.selectedCountry,
-              updateSelectedCountry: provider.updateSelectedCountry,
-              withCountryCodePicker: true,
+              controller: provider.emailController,
+              labelText: LocaleKeys.email.tr(),
+              textDirection: TextDirection.ltr,
+              keyboardType: TextInputType.emailAddress,
+              hintText: LocaleKeys.your_email_here.tr(),
             ),
             CButton(isLoading: provider.isSendingOTP || provider.isSocialLogin, onTap: () => provider.sendTheOTP(context), margin: context.edgeInsets(top: 35), titleWithIcon: true, title: LocaleKeys.verify_now.tr()),
             Padding(padding: context.edgeInsets(vertical: 40), child: Divider()),
