@@ -214,23 +214,17 @@ class LoginNotifier extends ChangeNotifier {
     isVerifyingOTP = true;
     notifyListeners();
     try {
+      final email = emailController.text.trim();
       final bool validOTP = await _isValidOTP();
       if (validOTP) {
-        final querySnapshot = await userCollection.where(Filter('email', isEqualTo: emailController.text.trim())).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-        final password = Helper.generateRandomId();
-        AuthCredential credential;
+        final querySnapshot = await userCollection.where('email', isEqualTo: email).get().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
         if (querySnapshot.docs.isEmpty) {
-          credential = EmailAuthProvider.credential(email: emailController.text.trim(), password: password);
-        } else {
-          final user = UserModel.fromMap(querySnapshot.docs.first.data());
-          credential = EmailAuthProvider.credential(email: emailController.text.trim(), password: user.password);
-        }
-        var userCredential = await _auth.signInWithCredential(credential).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-        if (userCredential.additionalUserInfo!.isNewUser) {
+          final password = Helper.generateRandomId();
+          final userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
           UserModel user = UserModel(
             uid: userCredential.user!.uid,
             name: userCredential.user!.displayName ?? '',
-            email: userCredential.user!.email ?? emailController.text.trim(),
+            email: userCredential.user!.email ?? email,
             is_premium: false,
             photo: userCredential.user!.photoURL ?? '',
             password: password,
@@ -239,7 +233,10 @@ class LoginNotifier extends ChangeNotifier {
           await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
           ref.read(splashProvider.notifier).redirections(context);
         } else {
-          await LocalStorageManager.saveUser(UserModel.fromMap((await userCollection.doc(userCredential.user!.uid).get()).data()!), toFirebase: false);
+          final user = UserModel.fromMap(querySnapshot.docs.first.data());
+          final credential = EmailAuthProvider.credential(email: email, password: user.password);
+          await _auth.signInWithCredential(credential).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+          await LocalStorageManager.saveUser(user, toFirebase: false);
           ref.read(splashProvider.notifier).redirections(context);
         }
       } else {
