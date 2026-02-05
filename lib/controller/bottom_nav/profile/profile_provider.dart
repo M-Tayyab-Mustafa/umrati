@@ -17,7 +17,7 @@ class ProfileNotifier extends ChangeNotifier {
   bool isLoading = true;
   final ImagePicker picker = ImagePicker();
   final ImageCropper cropper = ImageCropper();
-  final storageRef = FirebaseStorage.instance.refFromURL('gs://umrati-ec453.firebasestorage.app');
+  final storageRef = FirebaseStorage.instance.ref();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final editNameController = TextEditingController();
@@ -90,24 +90,26 @@ class ProfileNotifier extends ChangeNotifier {
   }
 
   Future<void> onProfileImageTap() async {
-    final XFile? photo = await _pickImage(context);
-    if (photo != null) {
+    try {
+      final XFile? photo = await _pickImage(context);
+      if (photo == null) return;
       var croppedFile = await cropper.cropImage(
         sourcePath: photo.path,
         compressFormat: ImageCompressFormat.png,
         aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
         uiSettings: [AndroidUiSettings(hideBottomControls: true, toolbarTitle: 'Cropper', toolbarColor: CColors.primary, toolbarWidgetColor: Colors.white, lockAspectRatio: true)],
       );
-      if (croppedFile != null) {
-        infoToast(LocaleKeys.profile_image_uploading.tr());
-        var child = storageRef.child('/${StorageFolderNames.profileImages.name}/${user!.uid}');
-        await child.putFile(File(croppedFile.path));
-        var url = await child.getDownloadURL();
-        user = user!.copyWith(photo: url);
-        notifyListeners();
-        infoToast(LocaleKeys.profile_image_updated_successfully.tr());
-        await LocalStorageManager.saveUser(user!);
-      }
+      if (croppedFile == null) return;
+      infoToast(LocaleKeys.profile_image_uploading.tr());
+      var child = storageRef.child('/${StorageFolderNames.profileImages.name}/${user!.uid}');
+      await child.putFile(File(croppedFile.path));
+      var url = await child.getDownloadURL();
+      user = user!.copyWith(photo: url);
+      notifyListeners();
+      infoToast(LocaleKeys.profile_image_updated_successfully.tr());
+      await LocalStorageManager.saveUser(user!);
+    } catch (e) {
+      appLog(e.toString());
     }
   }
 
