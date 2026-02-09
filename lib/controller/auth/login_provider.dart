@@ -51,7 +51,7 @@ class LoginNotifier extends ChangeNotifier {
       notifyListeners();
       await otpCollection.doc(email).set(OTPModel(otpCode: _verificationCode!).toMap(expiredAt: FieldValue.serverTimestamp()));
       var otpService = OTPModel.fromMap((await otpCollection.doc(email).get()).data()!);
-      final newExpiredAt = otpService.expiredAt!.toDate().add(const Duration(minutes: 15));
+      final newExpiredAt = otpService.expiredAt!.toDate().add(const Duration(minutes: 10));
       otpService = otpService.copyWith(otpCode: _verificationCode, expiredAt: Timestamp.fromDate(newExpiredAt));
       await otpCollection.doc(email).update(otpService.toMap());
       var response = await Helper.sendEmail(email, _verificationCode!);
@@ -172,7 +172,7 @@ class LoginNotifier extends ChangeNotifier {
       _verificationCode = Helper.generateOTP();
       final email = emailController.text.trim();
       var otpService = OTPModel.fromMap((await otpCollection.doc(email).get()).data()!);
-      final newExpiredAt = otpService.expiredAt!.toDate().add(const Duration(minutes: 15));
+      final newExpiredAt = otpService.expiredAt!.toDate().add(const Duration(minutes: 10));
       otpService = otpService.copyWith(otpCode: _verificationCode, expiredAt: Timestamp.fromDate(newExpiredAt));
       await otpCollection.doc(email).update(otpService.toMap());
       var response = await Helper.sendEmail(email, _verificationCode!);
