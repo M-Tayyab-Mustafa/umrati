@@ -147,8 +147,13 @@ class ProfileNotifier extends ChangeNotifier {
         isLoading = false;
         notifyListeners();
         if (e.code == 'requires-recent-login') {
-          appLog(e.toString());
-          errorToast(LocaleKeys.requires_recent_login.tr());
+          await _auth.signOut();
+          await _auth.signInWithCredential(EmailAuthProvider.credential(email: user!.email, password: user!.password));
+          await _auth.currentUser?.delete();
+          await userCollection.doc(user!.uid).delete();
+          await LocalStorageManager.clearStorage();
+          ref.read(loginProvider.notifier).resetPage();
+          ref.read(splashProvider.notifier).redirections(context, showPermissionPage: false);
         } else {
           appLog(e.toString());
           errorToast(e.message ?? LocaleKeys.something_went_wrong_please_try_again_later.tr());
