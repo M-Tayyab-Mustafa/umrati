@@ -32,7 +32,7 @@ class TawafTrackerPage extends ConsumerWidget {
                         child: LayoutBuilder(
                           builder: (context, innerConstraints) {
                             return Container(
-                              height: innerConstraints.maxHeight * 0.85,
+                              height: innerConstraints.maxHeight * 0.9,
                               padding: context.edgeInsets(all: 8),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
