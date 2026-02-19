@@ -6,13 +6,12 @@ class SocialLoginService {
   static SocialLoginService get instance => _instance;
 
   final _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
   Future<void> signInWithGoogle(BuildContext context, WidgetRef ref) async {
     try {
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      if (googleUser == null) return;
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+      await _googleSignIn.initialize();
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+      final OAuthCredential credential = GoogleAuthProvider.credential(idToken: googleUser.authentication.idToken);
       await linkWithCredentials(context: context, ref: ref, credential: credential, email: googleUser.email);
     } catch (e) {
       rethrow;

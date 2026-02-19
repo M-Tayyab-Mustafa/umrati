@@ -1,10 +1,5 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:umrati/view/bottom_nav/page.dart';
-
-import '../../utils/services/local_storage.dart';
-import '../../utils/services/translations/locale_keys.g.dart';
+import '../../export.dart';
+import '../../view/bottom_nav/page.dart';
 
 final languageProvider = ChangeNotifierProvider.autoDispose<LanguageNotifier>((ref) => LanguageNotifier());
 
