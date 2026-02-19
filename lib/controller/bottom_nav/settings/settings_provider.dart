@@ -26,7 +26,7 @@ class SettingsNotifier extends ChangeNotifier {
   Future<void> onChangeTheLanguageTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const LanguagePage(isUpdatingLanguage: true)));
 
   Future<void> onGiveFeedbackTap() async {
-    final String phone = "03390706666";
+    final String phone = "+923390706666";
     final Uri url = Uri.parse("https://wa.me/$phone");
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
