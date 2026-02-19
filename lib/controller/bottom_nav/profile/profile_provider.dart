@@ -23,6 +23,7 @@ class ProfileNotifier extends ChangeNotifier {
   final editNameController = TextEditingController();
 
   int daysRemaining = -1;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> initialization() async {
     user = await LocalStorageManager.getUser(fromFirebase: true);
@@ -119,7 +120,7 @@ class ProfileNotifier extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
       try {
-        await FirebaseAuth.instance.signOut();
+        await _auth.signOut();
         await LocalStorageManager.clearStorage();
         ref.read(loginProvider.notifier).resetPage();
         // ref.read(loginProvider.notifier).phoneNumberController.clear();
@@ -136,7 +137,7 @@ class ProfileNotifier extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
       try {
-        await FirebaseAuth.instance.currentUser?.delete();
+        await _auth.currentUser?.delete();
         await userCollection.doc(user!.uid).delete();
         await LocalStorageManager.clearStorage();
         ref.read(loginProvider.notifier).resetPage();
@@ -145,8 +146,13 @@ class ProfileNotifier extends ChangeNotifier {
       } on FirebaseAuthException catch (e) {
         isLoading = false;
         notifyListeners();
-        appLog(e.toString());
-        errorToast(e.message ?? LocaleKeys.something_went_wrong_please_try_again_later.tr());
+        if (e.code == 'requires-recent-login') {
+          appLog(e.toString());
+          errorToast(LocaleKeys.requires_recent_login.tr());
+        } else {
+          appLog(e.toString());
+          errorToast(e.message ?? LocaleKeys.something_went_wrong_please_try_again_later.tr());
+        }
       } catch (e) {
         isLoading = false;
         notifyListeners();
