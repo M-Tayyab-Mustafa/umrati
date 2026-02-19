@@ -51,6 +51,7 @@ class _AskMuftiPageState extends ConsumerState<AskMuftiPage> {
             onTap: provider.onFieldTap,
             controller: provider.queryController,
             boxShadow: [],
+            keyboardType: TextInputType.text,
             borderColor: CColors.charcoalBlack,
             borderRadius: 20,
             hintText: LocaleKeys.type_your_problem_here.tr(),

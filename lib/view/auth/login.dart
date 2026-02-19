@@ -10,6 +10,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   void initState() {
     super.initState();
+    ref.read(loginProvider.notifier).emailController.clear();
+    ref.read(loginProvider.notifier).otpController.clear();
   }
 
   @override
