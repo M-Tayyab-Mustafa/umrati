@@ -32,21 +32,21 @@ class SocialLoginService {
     }
   }
 
-  Future<void> signInWithFacebook(BuildContext context, WidgetRef ref) async {
-    try {
-      final LoginResult result = await FacebookAuth.instance.login().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      if (result.status == LoginStatus.success) {
-        final userData = await FacebookAuth.instance.getUserData();
-        final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
-        await linkWithCredentials(context: context, ref: ref, credential: credential, email: userData['email']);
-      } else {
-        errorToast(result.message.toString());
-        log(result.message.toString());
-      }
-    } catch (e) {
-      rethrow;
-    }
-  }
+  // Future<void> signInWithFacebook(BuildContext context, WidgetRef ref) async {
+  //   try {
+  //     final LoginResult result = await FacebookAuth.instance.login().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
+  //     if (result.status == LoginStatus.success) {
+  //       final userData = await FacebookAuth.instance.getUserData();
+  //       final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
+  //       await linkWithCredentials(context: context, ref: ref, credential: credential, email: userData['email']);
+  //     } else {
+  //       errorToast(result.message.toString());
+  //       log(result.message.toString());
+  //     }
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
   Future<void> linkWithCredentials({required BuildContext context, required WidgetRef ref, required AuthCredential credential, required String email}) async {
     try {

@@ -105,7 +105,7 @@ export 'package:http4/http4.dart';
 export 'package:firebase_auth/firebase_auth.dart';
 export 'package:google_sign_in/google_sign_in.dart';
 export 'package:sign_in_with_apple/sign_in_with_apple.dart' hide IconAlignment;
-export 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// export 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 export 'package:vibration/vibration.dart';
 export 'package:flutter_sliding_up_panel/flutter_sliding_up_panel.dart';
 export 'package:flutter_tts/flutter_tts.dart';

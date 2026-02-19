@@ -117,21 +117,21 @@ class LoginNotifier extends ChangeNotifier {
     }
   }
 
-  void facebookLogin(BuildContext context, WidgetRef ref) async {
-    try {
-      isSocialLogin = true;
-      notifyListeners();
-      await SocialLoginService.instance.signInWithFacebook(context, ref);
-    } catch (e) {
-      appLog(e.toString());
-      errorToast(LocaleKeys.some_thing_went_wrong.tr());
-      isSocialLogin = false;
-      notifyListeners();
-    } finally {
-      isSocialLogin = false;
-      notifyListeners();
-    }
-  }
+  // void facebookLogin(BuildContext context, WidgetRef ref) async {
+  //   try {
+  //     isSocialLogin = true;
+  //     notifyListeners();
+  //     await SocialLoginService.instance.signInWithFacebook(context, ref);
+  //   } catch (e) {
+  //     appLog(e.toString());
+  //     errorToast(LocaleKeys.some_thing_went_wrong.tr());
+  //     isSocialLogin = false;
+  //     notifyListeners();
+  //   } finally {
+  //     isSocialLogin = false;
+  //     notifyListeners();
+  //   }
+  // }
 
   void appleLogin(BuildContext context, WidgetRef ref) async {
     try {

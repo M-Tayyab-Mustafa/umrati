@@ -60,6 +60,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '626725934618',
     projectId: 'umrati-app',
     storageBucket: 'umrati-app.firebasestorage.app',
+    androidClientId: '626725934618-72imitaqjng30ejvko6fmaoi8bi6ee6h.apps.googleusercontent.com',
     iosClientId: '626725934618-hl7i1o41jtjn3iuachid56gd4ubpeuli.apps.googleusercontent.com',
     iosBundleId: 'com.umrati.umrah.guide.app',
   );
