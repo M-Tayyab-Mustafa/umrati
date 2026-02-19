@@ -28,7 +28,10 @@ class Helper {
   static Future<String> getCurrencySymbol() async {
     try {
       final region = await userRegion();
-      currencySymbol = (await settingsCollection.doc(CommonDoc.constants.name).get()).data()?[CommonField.symbols.name][region] ?? '\$';
+      currencySymbol =
+          (await settingsCollection.doc(CommonDoc.constants.name).get())
+              .data()?[CommonField.symbols.name][region] ??
+          '\$';
       return region;
     } catch (e) {
       appLog(e.toString(), '[Currency symbol]:: ');
@@ -37,13 +40,23 @@ class Helper {
     }
   }
 
-  static Future<List<PlanModel>> loadProducts({required List<PlanModel> plans}) async {
-    final response = await iap.queryProductDetails(plans.map((plan) => plan.productId).toSet());
-    if (response.error != null) appLog(response.error?.message ?? '', '[In app products]:: ');
+  static Future<List<PlanModel>> loadProducts({
+    required List<PlanModel> plans,
+  }) async {
+    final response = await iap.queryProductDetails(
+      plans.map((plan) => plan.productId).toSet(),
+    );
+    if (response.error != null)
+      appLog(response.error?.message ?? '', '[In app products]:: ');
     final List<PlanModel> products = [];
     for (var product in response.productDetails) {
-      final plan = plans.firstWhereOrNull((plan) => plan.productId == product.id);
-      if (plan != null) products.add(plan.copyWith(amount: product.rawPrice, productDetails: product));
+      final plan = plans.firstWhereOrNull(
+        (plan) => plan.productId == product.id,
+      );
+      if (plan != null)
+        products.add(
+          plan.copyWith(amount: product.rawPrice, productDetails: product),
+        );
     }
     return products;
   }
@@ -52,7 +65,8 @@ class Helper {
     inAppPurchaseSubscription?.cancel();
     inAppPurchaseSubscription = iap.purchaseStream.listen((purchases) {
       for (final purchase in purchases) {
-        if (purchase.status == PurchaseStatus.purchased || purchase.status == PurchaseStatus.restored) {
+        if (purchase.status == PurchaseStatus.purchased ||
+            purchase.status == PurchaseStatus.restored) {
           verifyPurchase.call(purchase);
         } else if (purchase.status == PurchaseStatus.error) {
           appLog(purchase.error?.message ?? '', '[Purchase error]:: ');
@@ -61,22 +75,39 @@ class Helper {
     });
   }
 
-  static Future<EmailJSResponseStatus> sendEmail(String email, String otp) async {
-    final data = (await settingsCollection.doc(CommonDoc.constants.name).get()).data();
+  static Future<EmailJSResponseStatus> sendEmail(
+    String email,
+    String otp,
+  ) async {
+    final data =
+        (await settingsCollection.doc(CommonDoc.constants.name).get()).data();
     final serviceId = data?[CommonField.emailServiceId.name] ?? '';
     final templateId = data?[CommonField.emailTemplateId.name] ?? '';
     final publicKey = data?[CommonField.emailPublicKey.name] ?? '';
     final privateKey = data?[CommonField.emailPrivateKey.name] ?? '';
-    return await send('$serviceId', '$templateId', {'to_email': email, 'passcode': otp}, Options(publicKey: publicKey, privateKey: privateKey));
+    return await send(
+      '$serviceId',
+      '$templateId',
+      {'to_email': email, 'passcode': otp},
+      Options(publicKey: publicKey, privateKey: privateKey),
+    );
   }
 
-  static num getDiscountedAmount(num amount, num discount) => (amount - (amount * ((discount / 100))).floor()).floor();
+  static num getDiscountedAmount(num amount, num discount) =>
+      (amount - (amount * ((discount / 100))).floor()).floor();
 
   static String timeoutError = LocaleKeys.timeout_error.tr();
 
-  static get mapsApiKey async => (await settingsCollection.doc(CommonDoc.constants.name).get()).get(CommonField.googleMapKey.name);
+  static get mapsApiKey async =>
+      (await settingsCollection.doc(CommonDoc.constants.name).get()).get(
+        CommonField.googleMapKey.name,
+      );
 
-  static Future<Map<String, dynamic>> regions() async => (await settingsCollection.doc(CommonDoc.constants.name).get()).get(CommonField.regions.name) as Map<String, dynamic>;
+  static Future<Map<String, dynamic>> regions() async =>
+      (await settingsCollection.doc(CommonDoc.constants.name).get()).get(
+            CommonField.regions.name,
+          )
+          as Map<String, dynamic>;
 
   static const int timeOutTime = 30; // in seconds
 
@@ -84,7 +115,9 @@ class Helper {
 
   static bool isToday(DateTime date) {
     final now = DateTime.now();
-    return date.year == now.year && date.month == now.month && date.day == now.day;
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
   }
 
   static Future<String> userRegion() async {
@@ -97,8 +130,15 @@ class Helper {
         if (permission == LocationPermission.denied) return 'US';
       }
       if (permission == LocationPermission.deniedForever) return 'US';
-      Position position = await Geolocator.getCurrentPosition(locationSettings: const LocationSettings(accuracy: LocationAccuracy.best));
-      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.best,
+        ),
+      );
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
       if (placemarks.isNotEmpty) {
         final placemark = placemarks.first;
         return placemark.isoCountryCode ?? 'US';
@@ -112,10 +152,13 @@ class Helper {
 
   static Future<List<String>> getByPassEmails() async {
     try {
-      final docSnapshot = await settingsCollection.doc(CommonDoc.constants.name).get();
+      final docSnapshot =
+          await settingsCollection.doc(CommonDoc.constants.name).get();
       final data = docSnapshot.data();
       if (data != null && data.containsKey(CommonField.bypassEmails.name)) {
-        return List<String>.from(data[CommonField.bypassEmails.name]).map((e) => e.toLowerCase().trim()).toList();
+        return List<String>.from(
+          data[CommonField.bypassEmails.name],
+        ).map((e) => e.toLowerCase().trim()).toList();
       }
       return [];
     } catch (e) {
@@ -126,7 +169,8 @@ class Helper {
 
   static Future<PlanModel> getUltimatePlan() async {
     try {
-      final docSnapshot = await settingsCollection.doc(CommonDoc.ultimatePlan.name).get();
+      final docSnapshot =
+          await settingsCollection.doc(CommonDoc.ultimatePlan.name).get();
       return PlanModel.fromMap(docSnapshot.data()!);
     } catch (e) {
       appLog(e.toString(), '[Ultimate Plan]:: ');
@@ -134,9 +178,18 @@ class Helper {
     }
   }
 
-  static Future<Map<String, dynamic>?> getRouteLeg({required LatLng startPoint, required LatLng endPoint}) async {
+  static Future<Map<String, dynamic>?> getRouteLeg({
+    required LatLng startPoint,
+    required LatLng endPoint,
+  }) async {
     try {
-      final uri = Uri.https('maps.googleapis.com', '/maps/api/directions/json', {'origin': '${startPoint.latitude},${startPoint.longitude}', 'destination': '${endPoint.latitude},${endPoint.longitude}', 'mode': 'driving', 'key': await mapsApiKey});
+      final uri =
+          Uri.https('maps.googleapis.com', '/maps/api/directions/json', {
+            'origin': '${startPoint.latitude},${startPoint.longitude}',
+            'destination': '${endPoint.latitude},${endPoint.longitude}',
+            'mode': 'driving',
+            'key': await mapsApiKey,
+          });
       final response = await get(uri);
       var body = jsonDecode(response.body);
       if (response.statusCode == 200) {
@@ -160,7 +213,11 @@ class Helper {
   }
 
   // Find the intersection point where a perpendicular line from point C meets the vector from A in direction of B
-  static LatLng findIntersectionPoint(LatLng pointA, LatLng directionB, LatLng pointC) {
+  static LatLng findIntersectionPoint(
+    LatLng pointA,
+    LatLng directionB,
+    LatLng pointC,
+  ) {
     // Convert points to Cartesian coordinates on unit sphere
     List<double> aCart = _latLngToCartesian(pointA);
     List<double> bCart = _latLngToCartesian(directionB);
@@ -173,10 +230,15 @@ class Helper {
     List<double> acVector = _subtractVectors(cCart, aCart);
 
     // Project AC onto AB to find the scalar projection
-    double projectionScalar = _dotProduct(acVector, abVector) / _dotProduct(abVector, abVector);
+    double projectionScalar =
+        _dotProduct(acVector, abVector) / _dotProduct(abVector, abVector);
 
     // Calculate the projection point on the vector
-    List<double> projectionCart = [aCart[0] + projectionScalar * abVector[0], aCart[1] + projectionScalar * abVector[1], aCart[2] + projectionScalar * abVector[2]];
+    List<double> projectionCart = [
+      aCart[0] + projectionScalar * abVector[0],
+      aCart[1] + projectionScalar * abVector[1],
+      aCart[2] + projectionScalar * abVector[2],
+    ];
 
     // Normalize the projection point to lie on the unit sphere
     projectionCart = _normalizeVector(projectionCart);
@@ -186,7 +248,11 @@ class Helper {
   }
 
   // Calculate distance between point C and its projection on the vector
-  static double distanceToVector(LatLng pointA, LatLng directionB, LatLng pointC) {
+  static double distanceToVector(
+    LatLng pointA,
+    LatLng directionB,
+    LatLng pointC,
+  ) {
     LatLng intersection = findIntersectionPoint(pointA, directionB, pointC);
     return distance(pointC, intersection);
   }
@@ -228,7 +294,9 @@ class Helper {
 
   // Normalize a vector
   static List<double> _normalizeVector(List<double> vector) {
-    double length = sqrt(vector[0] * vector[0] + vector[1] * vector[1] + vector[2] * vector[2]);
+    double length = sqrt(
+      vector[0] * vector[0] + vector[1] * vector[1] + vector[2] * vector[2],
+    );
     return [vector[0] / length, vector[1] / length, vector[2] / length];
   }
 
@@ -242,22 +310,31 @@ class Helper {
     double dLat = lat2 - lat1;
     double dLon = lon2 - lon1;
 
-    double a = sin(dLat / 2) * sin(dLat / 2) + cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
+    double a =
+        sin(dLat / 2) * sin(dLat / 2) +
+        cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
     return earthRadiusInMeters * c;
   }
 
   static String generateRandomId([int length = 12]) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     final rand = Random.secure();
-    return List.generate(length, (index) => chars[rand.nextInt(chars.length)]).join();
+    return List.generate(
+      length,
+      (index) => chars[rand.nextInt(chars.length)],
+    ).join();
   }
 
   static String generateTitle(String text) {
     text = text.trim();
     if (text.isEmpty) return '';
     if (text.contains(' ')) {
-      return text.split(' ').map((word) => word[0].toUpperCase() + word.substring(1)).join(' ');
+      return text
+          .split(' ')
+          .map((word) => word[0].toUpperCase() + word.substring(1))
+          .join(' ');
     }
     return text.substring(0, 1).toUpperCase() + text.substring(1);
   }
@@ -271,8 +348,15 @@ class Helper {
 
   static Future<String> getLocation(BuildContext context) async {
     try {
-      var position = await Geolocator.getCurrentPosition().timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
-      Placemark placemarks = (await placemarkFromCoordinates(position.latitude, position.longitude)).first;
+      var position = await Geolocator.getCurrentPosition().timeout(
+        const Duration(seconds: Helper.timeOutTime),
+        onTimeout: () => throw Helper.timeoutError,
+      );
+      Placemark placemarks =
+          (await placemarkFromCoordinates(
+            position.latitude,
+            position.longitude,
+          )).first;
       return '${placemarks.subLocality}, ${placemarks.locality}, ${placemarks.administrativeArea}';
     } catch (e) {
       appLog(e.toString());
@@ -281,15 +365,29 @@ class Helper {
     }
   }
 
-  static CrossAxisAlignment getAlignment(BuildContext context, String title, TextStyle style, double maxWidth) {
-    final textPainter = TextPainter(text: TextSpan(text: title, style: style), textDirection: languageDirection(context))..layout(maxWidth: maxWidth);
+  static CrossAxisAlignment getAlignment(
+    BuildContext context,
+    String title,
+    TextStyle style,
+    double maxWidth,
+  ) {
+    final textPainter = TextPainter(
+      text: TextSpan(text: title, style: style),
+      textDirection: languageDirection(context),
+    )..layout(maxWidth: maxWidth);
     final lineHeight = textPainter.preferredLineHeight;
     final totalLines = (textPainter.size.height / lineHeight);
-    return totalLines > 1.0 ? CrossAxisAlignment.start : CrossAxisAlignment.center;
+    return totalLines > 1.0
+        ? CrossAxisAlignment.start
+        : CrossAxisAlignment.center;
   }
 
   static Size getTextSize(String text, TextStyle style) {
-    final TextPainter textPainter = TextPainter(text: TextSpan(text: text, style: style), maxLines: 1, textDirection: TextDirection.ltr)..layout(minWidth: 0, maxWidth: double.infinity);
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: 1,
+      textDirection: TextDirection.ltr,
+    )..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
   }
 
@@ -317,7 +415,10 @@ class Helper {
 
 class UsPhoneNumberFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     final digitsOnly = newValue.text.replaceAll(RegExp(r'\D'), '');
     final buffer = StringBuffer();
 
@@ -326,7 +427,10 @@ class UsPhoneNumberFormatter extends TextInputFormatter {
       buffer.write(digitsOnly[i]);
     }
 
-    return TextEditingValue(text: buffer.toString(), selection: TextSelection.collapsed(offset: buffer.length));
+    return TextEditingValue(
+      text: buffer.toString(),
+      selection: TextSelection.collapsed(offset: buffer.length),
+    );
   }
 }
 
@@ -356,7 +460,9 @@ class FormattedText extends StatelessWidget {
 
       // Add text before the match
       if (nextMatch.start > currentPosition) {
-        spans.add(TextSpan(text: text.substring(currentPosition, nextMatch.start)));
+        spans.add(
+          TextSpan(text: text.substring(currentPosition, nextMatch.start)),
+        );
       }
 
       // Handle the matched pattern
@@ -385,7 +491,8 @@ class FormattedText extends StatelessWidget {
       final match = pattern.firstMatch(text.substring(startPosition));
       if (match != null) {
         final adjustedMatch = _adjustMatch(match, startPosition);
-        if (earliestMatch == null || adjustedMatch.start < earliestMatch.start) {
+        if (earliestMatch == null ||
+            adjustedMatch.start < earliestMatch.start) {
           earliestMatch = adjustedMatch;
         }
       }
@@ -398,38 +505,60 @@ class FormattedText extends StatelessWidget {
     return _OffsetMatch(match, offset);
   }
 
-  static InlineSpan _handleMatch(Match match, String fullText, BuildContext context) {
+  static InlineSpan _handleMatch(
+    Match match,
+    String fullText,
+    BuildContext context,
+  ) {
     final String matchedText = match.group(0)!;
 
     // H1 Heading
     if (matchedText.startsWith('# ') && !matchedText.startsWith('##')) {
       final content = matchedText.substring(2);
-      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w800(fontSize: 20));
+      return TextSpan(
+        children: parseFormattedText(content, context).children,
+        style: CTextStyle.w800(fontSize: 20),
+      );
     }
     // H2 Heading
     else if (matchedText.startsWith('## ') && !matchedText.startsWith('###')) {
       final content = matchedText.substring(3);
-      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w800(fontSize: 18));
+      return TextSpan(
+        children: parseFormattedText(content, context).children,
+        style: CTextStyle.w800(fontSize: 18),
+      );
     }
     // H3 Heading
     else if (matchedText.startsWith('### ')) {
       final content = matchedText.substring(4);
-      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w800(fontSize: 14));
+      return TextSpan(
+        children: parseFormattedText(content, context).children,
+        style: CTextStyle.w800(fontSize: 14),
+      );
     }
     // Bold
     else if (matchedText.startsWith('**') && matchedText.endsWith('**')) {
       final content = matchedText.substring(2, matchedText.length - 2);
-      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w800(fontSize: 16));
+      return TextSpan(
+        children: parseFormattedText(content, context).children,
+        style: CTextStyle.w800(fontSize: 16),
+      );
     }
     // Bullet point
     else if (matchedText.startsWith('* ') || matchedText.startsWith('- ')) {
       final content = '\n•${matchedText.substring(1)}';
-      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w400(fontSize: 16));
+      return TextSpan(
+        children: parseFormattedText(content, context).children,
+        style: CTextStyle.w400(fontSize: 16),
+      );
     }
     // Numbered list
     else if (RegExp(r'^\d+\.').hasMatch(matchedText)) {
       final content = '${match.group(1)}\n';
-      return TextSpan(children: parseFormattedText(content, context).children, style: CTextStyle.w600(fontSize: 16));
+      return TextSpan(
+        children: parseFormattedText(content, context).children,
+        style: CTextStyle.w600(fontSize: 16),
+      );
     }
 
     // Fallback: return as plain text

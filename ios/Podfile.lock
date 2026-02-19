@@ -1210,14 +1210,6 @@ PODS:
     - Flutter
   - device_info_plus (0.0.1):
     - Flutter
-  - FBAEMKit (18.0.3):
-    - FBSDKCoreKit_Basics (= 18.0.3)
-  - FBSDKCoreKit (18.0.3):
-    - FBAEMKit (= 18.0.3)
-    - FBSDKCoreKit_Basics (= 18.0.3)
-  - FBSDKCoreKit_Basics (18.0.3)
-  - FBSDKLoginKit (18.0.3):
-    - FBSDKCoreKit (= 18.0.3)
   - Firebase/Auth (11.10.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 11.10.0)
@@ -1290,15 +1282,10 @@ PODS:
   - Flutter (1.0.0)
   - flutter_compass (0.0.1):
     - Flutter
-  - flutter_facebook_auth (7.1.2):
-    - FBSDKLoginKit (~> 18.0.0)
-    - Flutter
   - flutter_libphonenumber_darwin (1.0.0):
     - Flutter
     - FlutterMacOS
     - PhoneNumberKit/PhoneNumberKitCore (= 4.2.1)
-  - flutter_secure_storage (6.0.0):
-    - Flutter
   - flutter_tts (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
@@ -1558,9 +1545,7 @@ DEPENDENCIES:
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_compass (from `.symlinks/plugins/flutter_compass/ios`)
-  - flutter_facebook_auth (from `.symlinks/plugins/flutter_facebook_auth/ios`)
   - flutter_libphonenumber_darwin (from `.symlinks/plugins/flutter_libphonenumber_darwin/darwin`)
-  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geocoding_ios (from `.symlinks/plugins/geocoding_ios/ios`)
@@ -1588,10 +1573,6 @@ SPEC REPOS:
     - AppAuth
     - AppCheckCore
     - BoringSSL-GRPC
-    - FBAEMKit
-    - FBSDKCoreKit
-    - FBSDKCoreKit_Basics
-    - FBSDKLoginKit
     - Firebase
     - FirebaseAppCheckInterop
     - FirebaseAuth
@@ -1641,12 +1622,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_compass:
     :path: ".symlinks/plugins/flutter_compass/ios"
-  flutter_facebook_auth:
-    :path: ".symlinks/plugins/flutter_facebook_auth/ios"
   flutter_libphonenumber_darwin:
     :path: ".symlinks/plugins/flutter_libphonenumber_darwin/darwin"
-  flutter_secure_storage:
-    :path: ".symlinks/plugins/flutter_secure_storage/ios"
   flutter_tts:
     :path: ".symlinks/plugins/flutter_tts/ios"
   fluttertoast:
@@ -1695,10 +1672,6 @@ SPEC CHECKSUMS:
   BoringSSL-GRPC: dded2a44897e45f28f08ae87a55ee4bcd19bc508
   cloud_firestore: d959b9b44fb0619e8c88e1b7436d3b1d36b4984e
   device_info_plus: bf2e3232933866d73fe290f2942f2156cdd10342
-  FBAEMKit: 2a6b529993713c185b02bc36f8c91129bf78dfb0
-  FBSDKCoreKit: 65d7f7a7d6fcc3aa6eb6e093ec737a4184fc6049
-  FBSDKCoreKit_Basics: 7bc9d8fde8f70985fba2ed7c1d07e319f969a991
-  FBSDKLoginKit: 66d20fcb7afcafc0c420477662f96845cd1a5179
   Firebase: 1fe1c0a7d9aaea32efe01fbea5f0ebd8d70e53a2
   firebase_auth: 3f532201cbdc7cd6dfc3bfa89affc0c294111e20
   firebase_core: 432718558359a8c08762151b5f49bb0f093eb6e0
@@ -1715,9 +1688,7 @@ SPEC CHECKSUMS:
   FirebaseStorage: e83d1b9c8a5318d46ccfb2955f0d98095e0bf598
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_compass: cbbd285cea1584c7ac9c4e0c3e1f17cbea55e855
-  flutter_facebook_auth: fa503a7103e482577bf50694ceefe6b61a78ef1a
   flutter_libphonenumber_darwin: 2cf18d8bef8004f2bc1f3f051977bdc19d51df73
-  flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
   flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   fluttertoast: 21eecd6935e7064cc1fcb733a4c5a428f3f24f0f
   geocoding_ios: d7460f56e80e118d57678efe5c2cdc888739ff18
