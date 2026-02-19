@@ -47,7 +47,7 @@ class Helper {
       plans.map((plan) => plan.productId).toSet(),
     );
     if (response.error != null)
-      appLog(response.error?.message ?? '', '[In app products]:: ');
+      appLog(response.error?.toString() ?? '', '[In app products]:: ');
     final List<PlanModel> products = [];
     for (var product in response.productDetails) {
       final plan = plans.firstWhereOrNull(
