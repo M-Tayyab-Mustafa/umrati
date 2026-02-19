@@ -36,56 +36,53 @@ class _SafaMarwaHomePageState extends ConsumerState<SafaMarwaPage> {
           Expanded(
             child: LayoutBuilder(
               builder: (context, outerConstraints) {
-                return Container(
-                  color: Colors.amber,
-                  child: Center(
-                    child: SizedBox(
-                      height: outerConstraints.maxHeight * 0.85,
-                      child: LayoutBuilder(
-                        builder: (context, innerConstraints) {
-                          return Stack(
-                            children: [
-                              Container(
-                                height: innerConstraints.maxHeight * 0.9,
-                                padding: context.edgeInsets(all: 4),
+                return Center(
+                  child: SizedBox(
+                    height: outerConstraints.maxHeight * 0.85,
+                    child: LayoutBuilder(
+                      builder: (context, innerConstraints) {
+                        return Stack(
+                          children: [
+                            Container(
+                              height: innerConstraints.maxHeight * 0.9,
+                              padding: context.edgeInsets(all: 4),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(gradient: CColors.trackingGradient, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.3), blurRadius: 30, offset: Offset(0, 5))]),
+                              child: Container(
                                 alignment: Alignment.center,
-                                decoration: BoxDecoration(gradient: CColors.trackingGradient, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.3), blurRadius: 30, offset: Offset(0, 5))]),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(gradient: CColors.trackingSecondaryGradient, shape: BoxShape.circle),
-                                  child: Align(
-                                    alignment: Alignment(0, -0.3),
-                                    child: FittedBox(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Center(child: Text(provider.saiRoundCount.toString(), style: CTextStyle.w600(fontSize: 90, color: CColors.primary))),
-                                          Center(child: Text('${LocaleKeys.completed.tr()}${isLTR(context) ? ' ' : '                     '}${LocaleKeys.round.tr()}', style: CTextStyle.w900(fontSize: 20))),
-                                        ],
-                                      ),
+                                decoration: BoxDecoration(gradient: CColors.trackingSecondaryGradient, shape: BoxShape.circle),
+                                child: Align(
+                                  alignment: Alignment(0, -0.3),
+                                  child: FittedBox(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Center(child: Text(provider.saiRoundCount.toString(), style: CTextStyle.w600(fontSize: 90, color: CColors.primary))),
+                                        Center(child: Text('${LocaleKeys.completed.tr()}${isLTR(context) ? ' ' : '                     '}${LocaleKeys.round.tr()}', style: CTextStyle.w900(fontSize: 20))),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                child: GestureDetector(
-                                  onTap: provider.onCountTap,
-                                  onLongPress: provider.updateRoundCount,
-                                  child: Container(
-                                    height: context.r(80),
-                                    width: context.r(80),
-                                    decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.2), blurRadius: 5, offset: Offset(0, 5))]),
-                                    child: Center(child: FittedBox(child: Text(LocaleKeys.count.tr(), style: CTextStyle.w700(fontSize: 22, color: Colors.white)))),
-                                  ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: GestureDetector(
+                                onTap: provider.onCountTap,
+                                onLongPress: provider.updateRoundCount,
+                                child: Container(
+                                  height: context.r(80),
+                                  width: context.r(80),
+                                  decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle, boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.2), blurRadius: 5, offset: Offset(0, 5))]),
+                                  child: Center(child: FittedBox(child: Text(LocaleKeys.count.tr(), style: CTextStyle.w700(fontSize: 22, color: Colors.white)))),
                                 ),
                               ),
-                            ],
-                          );
-                        },
-                      ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 );
