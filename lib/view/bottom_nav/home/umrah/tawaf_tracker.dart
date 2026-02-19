@@ -26,27 +26,36 @@ class TawafTrackerPage extends ConsumerWidget {
               builder: (context, outerConstraints) {
                 return Center(
                   child: switch (provider.tawafCircleCount) {
-                    7 => Container(
+                    7 => SizedBox(
                       height: outerConstraints.maxHeight * 0.85,
-                      padding: context.edgeInsets(all: 8),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        gradient: CColors.trackingGradient,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: CColors.primary),
-                        boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
-                      ),
-                      child: Container(
-                        padding: context.edgeInsets(vertical: 16, horizontal: 28),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CustomImage(path: 'assets/svg/complete_check.svg', imageType: ImageType.svg, size: context.r(80), margin: context.edgeInsets(bottom: 8)),
-                            Text(LocaleKeys.seven_rounds_completed.tr(), style: CTextStyle.w800(fontSize: 20, color: Colors.white), textAlign: TextAlign.center),
-                          ],
+                      child: Center(
+                        child: LayoutBuilder(
+                          builder: (context, innerConstraints) {
+                            return Container(
+                              height: innerConstraints.maxHeight * 0.85,
+                              padding: context.edgeInsets(all: 8),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                gradient: CColors.trackingGradient,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: CColors.primary),
+                                boxShadow: [BoxShadow(color: Color(0xFF1A172D).withValues(alpha: 0.01), blurRadius: 5, offset: Offset(0, 5))],
+                              ),
+                              child: Container(
+                                padding: context.edgeInsets(vertical: 16, horizontal: 28),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(gradient: CColors.solidButtonGradient, shape: BoxShape.circle),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CustomImage(path: 'assets/svg/complete_check.svg', imageType: ImageType.svg, size: context.r(80), margin: context.edgeInsets(bottom: 8)),
+                                    Text(LocaleKeys.seven_rounds_completed.tr(), style: CTextStyle.w800(fontSize: 20, color: Colors.white), textAlign: TextAlign.center),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
