@@ -153,9 +153,7 @@ class ZiaraatNotifier extends ChangeNotifier {
     if (context.mounted) notifyListeners();
   }
 
-  void onLoadMoreTap() async {
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
-  }
+  void onLoadMoreTap() async => await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
 
   void createZiaraatRoute() async {
     isLoading = true;

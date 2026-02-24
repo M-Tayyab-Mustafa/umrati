@@ -37,7 +37,7 @@ class ManualSelection extends ConsumerWidget {
                               );
                             },
                           ),
-                          if (!(provider.user?.is_premium ?? false)) CButton(isLoading: provider.isLoading, onTap: provider.onLoadMoreTap, margin: context.edgeInsets(top: 32), title: LocaleKeys.load_more.tr()),
+                          if ((!(provider.user?.is_premium ?? false)) && !Platform.isIOS) CButton(isLoading: provider.isLoading, onTap: provider.onLoadMoreTap, margin: context.edgeInsets(top: 32), title: LocaleKeys.load_more.tr()),
                         ],
                       ),
                     ),

@@ -62,7 +62,7 @@ class SplashNotifier extends ChangeNotifier {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LocationPermissionPage()));
     } else if (user.gender.isEmpty) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SelectGenderPage()));
-    } else if (isExpired == true) {
+    } else if (isExpired == true && !Platform.isIOS) {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage()));
     } else {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavigationPage()));

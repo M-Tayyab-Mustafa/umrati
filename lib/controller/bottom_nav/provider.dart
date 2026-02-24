@@ -27,7 +27,7 @@ class BottomNavNotifier extends ChangeNotifier {
         break;
       case BottomNavTabs.askMufti:
         child = const SizedBox.shrink();
-        if (user!.is_premium) {
+        if (user!.is_premium || Platform.isIOS) {
           await Navigator.push(context, MaterialPageRoute(builder: (context) => const AskMuftiPage()));
         } else {
           errorToast(LocaleKeys.premium_feature_warning.tr());

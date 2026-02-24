@@ -9,7 +9,7 @@ final homeProvider = ChangeNotifierProvider.autoDispose<HomeNotifier>((ref) => H
 class HomeNotifier extends ChangeNotifier {
   void onUmrahTap(BuildContext context) async {
     var user = await LocalStorageManager.getUser();
-    if (user!.is_premium) {
+    if (user!.is_premium || Platform.isIOS) {
       await Navigator.push(context, MaterialPageRoute(builder: (context) => const UmrahPage()));
     } else {
       errorToast(LocaleKeys.premium_feature_warning.tr());
