@@ -90,7 +90,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                   TextSpan(
                                     children: [
                                       WidgetSpan(alignment: PlaceholderAlignment.middle, child: Text('${provider.daysRemaining} ${LocaleKeys.days_of_premium_remaining.tr()}  ', style: CTextStyle.w400(fontSize: 12))),
-                                      if (Platform.isIOS) WidgetSpan(alignment: PlaceholderAlignment.middle, child: GestureDetector(onTap: provider.renew, child: Text(LocaleKeys.renew.tr(), style: CTextStyle.w500()))),
+                                      if (!Platform.isIOS) WidgetSpan(alignment: PlaceholderAlignment.middle, child: GestureDetector(onTap: provider.renew, child: Text(LocaleKeys.renew.tr(), style: CTextStyle.w500()))),
                                     ],
                                   ),
                                   textAlign: TextAlign.center,
