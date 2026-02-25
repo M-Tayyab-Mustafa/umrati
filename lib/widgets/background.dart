@@ -49,16 +49,14 @@ class Background<T> extends StatelessWidget {
       onPopInvokedWithResult: onPopInvokedWithResult,
       child: Scaffold(
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+        backgroundColor: Colors.transparent,
+        extendBody: true,
         body: Stack(
+          fit: StackFit.expand,
           children: [
-            SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: CustomImage(
-                path: 'assets/svg/background_layer.svg',
-                imageType: ImageType.svg,
-                height: MediaQuery.sizeOf(context).height,
-                width: MediaQuery.sizeOf(context).width,
+            Positioned.fill(
+              child: SvgPicture.asset(
+                'assets/svg/background_layer.svg',
                 fit: BoxFit.cover,
               ),
             ),
@@ -76,9 +74,7 @@ class Background<T> extends StatelessWidget {
                   ),
                 ),
               ),
-            SizedBox(
-              height: MediaQuery.sizeOf(context).height,
-              width: MediaQuery.sizeOf(context).width,
+            Positioned.fill(
               child: SafeArea(
                 child: Padding(
                   padding:

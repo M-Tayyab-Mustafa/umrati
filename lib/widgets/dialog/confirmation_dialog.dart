@@ -34,7 +34,7 @@ class ConfirmationDialog extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             CButton(
-                              margin: dialogContext.edgeInsets(right: isLTR(dialogContext) ? 16 : 0, left: isLTR(dialogContext) ? 0 : 16),
+                              width: 120,
                               height: 45,
                               useTitleWidth: true,
                               padding: EdgeInsets.zero,
@@ -44,8 +44,9 @@ class ConfirmationDialog extends StatelessWidget {
                               title: LocaleKeys.no.tr(),
                               onTap: () => Navigator.pop(dialogContext, false),
                             ),
+                            SizedBox(width: dialogContext.w(16)),
                             CButton(
-                              margin: dialogContext.edgeInsets(right: isLTR(dialogContext) ? 0 : 16, left: isLTR(dialogContext) ? 16 : 0),
+                              width: 120,
                               height: 45,
                               useTitleWidth: true,
                               padding: EdgeInsets.zero,
