@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "626725934618",
+    "project_id": "umrati-app",
+    "storage_bucket": "umrati-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:626725934618:android:8cd57734cf04650a1ee3a3",
+        "android_client_info": {
+          "package_name": "com.umrati.umrah.guide.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "626725934618-72imitaqjng30ejvko6fmaoi8bi6ee6h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.umrati.umrah.guide.app",
+            "certificate_hash": "69c14c17c4b7d9b06f62dc87cad31f7af3b4edf1"
+          }
+        },
+        {
+          "client_id": "626725934618-jt0geh17gvhsjmvsnslodr5uqn8mofsa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.umrati.umrah.guide.app",
+            "certificate_hash": "b32ac18378e873d26bfc26b29ee375f808d7dba9"
+          }
+        },
+        {
+          "client_id": "626725934618-qvhodrp0q9rp5348r9lvik912hs8ipqm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.umrati.umrah.guide.app",
+            "certificate_hash": "a7665f04d9c4248baea1612459ae4b65d7371557"
+          }
+        },
+        {
+          "client_id": "626725934618-n915cp2rddm88u4j6r2uj2fff49a28f1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByVmQwpwmvQtkxf4XrUSOEC-bdVsRfRaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "626725934618-n915cp2rddm88u4j6r2uj2fff49a28f1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "626725934618-hl7i1o41jtjn3iuachid56gd4ubpeuli.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.umrati.umrah.guide.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

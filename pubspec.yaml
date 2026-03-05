@@ -1,0 +1,104 @@
+name: umrati
+description: "A new Flutter project."
+publish_to: "none"
+version: 0.1.11+11
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cached_network_image: ^3.4.1
+  flutter_libphonenumber: ^2.7.0
+  cloud_firestore: ^6.1.2
+  firebase_storage: ^13.0.6
+  country_code_picker: ^3.3.0
+  dlibphonenumber: ^1.1.38
+  easy_localization: ^3.0.7+1
+  firebase_auth: ^6.1.4
+  firebase_core: ^4.4.0
+  flutter_riverpod: ^3.2.1
+  flutter_svg: ^2.1.0
+  fluttertoast: ^9.0.0
+  geocoding: ^4.0.0
+  geolocator: ^14.0.0
+  google_maps_flutter: ^2.12.2
+  google_sign_in: ^7.2.0
+  http4: ^0.0.4
+  permission_handler: ^12.0.0+1
+  pinput: ^6.0.2
+  shared_preferences: ^2.5.3
+  sign_in_with_apple: ^7.0.1
+  # flutter_facebook_auth: ^7.1.2
+  vibration: ^3.1.3
+  flutter_sliding_up_panel: ^2.1.1
+  flutter_tts: ^4.2.3
+  image_picker: ^1.2.0
+  image_cropper: ^11.0.0
+  uuid_plus: ^0.1.0
+  webview_flutter: ^4.13.0
+  sensors_plus: ^7.0.0
+  flutter_compass: ^0.8.1
+  flutter_pay_buttons: ^0.0.5
+  font_awesome_flutter: ^10.12.0
+  flutter_screenutil_plus: ^1.4.0
+  vector_math: ^2.1.4
+  collection: ^1.19.1
+  flutter_stripe: ^12.0.2
+  url_launcher: ^6.3.2
+  in_app_purchase: ^3.2.3
+  emailjs: ^4.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner:
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/svg/
+    - assets/svg/settings/
+    - assets/svg/gender/
+    - assets/svg/ziaraat/
+    - assets/svg/bottom_nav/
+    - assets/svg/location_permission/
+    - assets/png/
+    - assets/png/history/
+    - assets/png/profile/
+    - assets/png/home/
+    - assets/png/flags/
+    - assets/png/map/
+    - assets/translations/
+
+  fonts:
+    - family: Jameel Noori Nastaleeq Regular
+      fonts:
+        - asset: assets/font/urdu/jameel_noori_nastaleeq_regular.ttf
+
+    - family: Traditional Arabic Regular
+      fonts:
+        - asset: assets/font/arabic/traditional_arabic_regular.ttf
+
+    - family: Roboto
+      fonts:
+        - asset: assets/font/english/black.ttf
+          weight: 900
+        - asset: assets/font/english/extra_bold.ttf
+          weight: 800
+        - asset: assets/font/english/bold.ttf
+          weight: 700
+        - asset: assets/font/english/extra_light.ttf
+          weight: 600
+        - asset: assets/font/english/light.ttf
+          weight: 500
+        - asset: assets/font/english/medium.ttf
+          weight: 400
+        - asset: assets/font/english/regular.ttf
+          weight: 300
+        - asset: assets/font/english/semi_bold.ttf
+          weight: 200
+        - asset: assets/font/english/thin.ttf
+          weight: 100

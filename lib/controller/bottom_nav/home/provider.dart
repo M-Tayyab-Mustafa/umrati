@@ -1,0 +1,25 @@
+import 'package:umrati/view/subscription/page.dart';
+
+import '../../../export.dart';
+import '../../../view/bottom_nav/home/umrah/page.dart';
+import '../../../view/bottom_nav/home/ziaraat/page.dart';
+
+final homeProvider = ChangeNotifierProvider.autoDispose<HomeNotifier>((ref) => HomeNotifier());
+
+class HomeNotifier extends ChangeNotifier {
+  void onUmrahTap(BuildContext context) async {
+    var user = await LocalStorageManager.getUser();
+    if (user!.is_premium || Platform.isIOS) {
+      await Navigator.push(context, MaterialPageRoute(builder: (context) => const UmrahPage()));
+    } else {
+      errorToast(LocaleKeys.premium_feature_warning.tr());
+      await Navigator.push(context, MaterialPageRoute(builder: (context) => const SubscriptionPlansPage(isRenewingPlan: true)));
+    }
+  }
+
+  void onTawafTap(BuildContext context) async => Navigator.push(context, MaterialPageRoute(builder: (context) => const UmrahPage(userActivityType: UserActivityType.tawaf)));
+
+  void onZiaraatTap(BuildContext context) async {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const ZiaraatPage()));
+  }
+}

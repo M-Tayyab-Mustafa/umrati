@@ -1,0 +1,132 @@
+import '../export.dart';
+
+class UserModel {
+  final String uid;
+  final String name;
+  final String email;
+  final String photo;
+  final String gender;
+  final String password;
+  final num total_umrah_done;
+  final bool is_premium;
+  final String? subscription_id;
+  final Timestamp? created_at;
+  final Timestamp? updated_at;
+
+  UserModel({
+    required this.uid,
+    required this.name,
+    required this.email,
+    required this.photo,
+    required this.gender,
+    required this.password,
+    this.is_premium = false,
+    this.total_umrah_done = 0,
+    this.subscription_id,
+    this.created_at,
+    this.updated_at,
+  });
+
+  UserModel copyWith({
+    String? uid,
+    String? name,
+    String? email,
+    String? country_code,
+    String? phone,
+    String? photo,
+    String? gender,
+    String? password,
+    bool? is_premium,
+    num? total_umrah_done,
+    String? subscription_id,
+    Timestamp? created_at,
+    Timestamp? updated_at,
+  }) {
+    return UserModel(
+      uid: uid ?? this.uid,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      is_premium: is_premium ?? this.is_premium,
+      photo: photo ?? this.photo,
+      gender: gender ?? this.gender,
+      password: password ?? this.password,
+      total_umrah_done: total_umrah_done ?? this.total_umrah_done,
+      subscription_id: subscription_id ?? this.subscription_id,
+      created_at: created_at ?? this.created_at,
+      updated_at: updated_at ?? this.updated_at,
+    );
+  }
+
+  Map<String, dynamic> toMap({FieldValue? created_at, FieldValue? updated_at}) {
+    return <String, dynamic>{
+      'uid': uid,
+      'name': name,
+      'email': email,
+      'is_premium': is_premium,
+      'photo': photo,
+      'gender': gender,
+      'password': password,
+      'total_umrah_done': total_umrah_done,
+      'subscription_id': subscription_id,
+      'created_at': created_at ?? this.created_at?.millisecondsSinceEpoch,
+      'updated_at': updated_at ?? this.updated_at?.millisecondsSinceEpoch,
+    };
+  }
+
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      uid: map['uid']?.toString() ?? '',
+      name: map['name']?.toString() ?? '',
+      email: map['email']?.toString() ?? '',
+      is_premium: map['is_premium'] ?? false,
+      photo: map['photo']?.toString() ?? '',
+      gender: map['gender']?.toString() ?? '',
+      password: map['password']?.toString() ?? '',
+      total_umrah_done: map['total_umrah_done'] ?? 0,
+      subscription_id: map['subscription_id']?.toString() ?? '',
+      created_at: map['created_at'].runtimeType == int ? Timestamp.fromMillisecondsSinceEpoch(map['created_at']) : map['created_at'],
+      updated_at: map['updated_at'].runtimeType == int ? Timestamp.fromMillisecondsSinceEpoch(map['updated_at']) : map['updated_at'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'UserModel(uid: $uid, name: $name, email: $email, is_premium: $is_premium, password: $password, photo: $photo, gender: $gender, total_umrah_done: $total_umrah_done, subscription_id: $subscription_id, created_at: $created_at, updated_at: $updated_at)';
+  }
+
+  @override
+  bool operator ==(covariant UserModel other) {
+    if (identical(this, other)) return true;
+
+    return other.uid == uid &&
+        other.name == name &&
+        other.email == email &&
+        other.is_premium == is_premium &&
+        other.photo == photo &&
+        other.gender == gender &&
+        other.password == password &&
+        other.total_umrah_done == total_umrah_done &&
+        other.subscription_id == subscription_id &&
+        other.created_at == created_at &&
+        other.updated_at == updated_at;
+  }
+
+  @override
+  int get hashCode {
+    return uid.hashCode ^
+        name.hashCode ^
+        email.hashCode ^
+        is_premium.hashCode ^
+        photo.hashCode ^
+        gender.hashCode ^
+        password.hashCode ^
+        total_umrah_done.hashCode ^
+        subscription_id.hashCode ^
+        created_at.hashCode ^
+        updated_at.hashCode;
+  }
+}
