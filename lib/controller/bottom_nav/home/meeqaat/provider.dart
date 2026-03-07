@@ -17,7 +17,7 @@ class MeeqaatLocationFetchProviderNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
 
-  getLocation() async {
+  Future<void> getLocation() async {
     try {
       isLoading = true;
       if (context.mounted) notifyListeners();

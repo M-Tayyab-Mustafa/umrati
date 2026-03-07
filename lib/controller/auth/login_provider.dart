@@ -5,13 +5,10 @@ final loginProvider = ChangeNotifierProvider<LoginNotifier>((ref) => LoginNotifi
 
 class LoginNotifier extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  // void _codeAutoRetrievalTimeout(verificationId) => _verificationId = verificationId;
 
   bool isSendingOTP = false;
   bool isSocialLogin = false;
   var emailController = TextEditingController();
-  // var phoneNumberController = TextEditingController();
-  // CountryCode selectedCountry = CountryCode.fromDialCode('+92');
 
   static const int _otpTimeOutDuration = 90;
   int _countDown = _otpTimeOutDuration;
@@ -21,14 +18,12 @@ class LoginNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  // int? _forceResendingToken;
-  // String? _verificationId;
   String? _verificationCode;
   bool isVerifyingOTP = false;
   Timer? bounceTimer;
   var otpController = TextEditingController();
 
-  resetPage() {
+  void resetPage() {
     countDown = _otpTimeOutDuration;
     bounceTimer?.cancel();
     isSendingOTP = false;
@@ -63,33 +58,6 @@ class LoginNotifier extends ChangeNotifier {
         var isAutoPop = await Navigator.push(context, MaterialPageRoute(builder: (_) => OTPPage()));
         if (isAutoPop != true) resetPage();
       }
-      // final phoneNumberFormateError = validatePhoneNumber(Helper.formatePhoneNumber(phoneNumberController.text, selectedCountry.dialCode!), selectedCountry.code!);
-      // if (phoneNumberFormateError != null) {
-      //   errorToast(phoneNumberFormateError);
-      //   return;
-      // }
-      // isSendingOTP = true;
-      // notifyListeners();
-      // await _auth
-      //     .verifyPhoneNumber(
-      //       phoneNumber: Helper.formatePhoneNumber(phoneNumberController.text, selectedCountry.dialCode!),
-      //       timeout: const Duration(seconds: _otpTimeOutDuration),
-      //       forceResendingToken: _forceResendingToken,
-      //       verificationCompleted: _verificationCompleted,
-      //       verificationFailed: (e) {
-      //         isSendingOTP = false;
-      //         notifyListeners();
-      //         if (bounceTimer != null) {
-      //           bounceTimer?.cancel();
-      //           bounceTimer = null;
-      //           notifyListeners();
-      //         }
-      //         _firebaseAuthExceptionHandler(e);
-      //       },
-      //       codeSent: (verificationId, forceResendingToken) => _onCodeSent(context, verificationId, forceResendingToken),
-      //       codeAutoRetrievalTimeout: _codeAutoRetrievalTimeout,
-      //     )
-      //     .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
     } catch (e) {
       appLog(e.toString());
       errorToast(LocaleKeys.some_thing_went_wrong.tr());
@@ -97,11 +65,6 @@ class LoginNotifier extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // void updateSelectedCountry(CountryCode selectedCountry) async {
-  //   this.selectedCountry = selectedCountry;
-  //   notifyListeners();
-  // }
 
   void googleLogin(BuildContext context, WidgetRef ref) async {
     try {
@@ -116,22 +79,6 @@ class LoginNotifier extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // void facebookLogin(BuildContext context, WidgetRef ref) async {
-  //   try {
-  //     isSocialLogin = true;
-  //     notifyListeners();
-  //     await SocialLoginService.instance.signInWithFacebook(context, ref);
-  //   } catch (e) {
-  //     appLog(e.toString());
-  //     errorToast(LocaleKeys.some_thing_went_wrong.tr());
-  //     isSocialLogin = false;
-  //     notifyListeners();
-  //   } finally {
-  //     isSocialLogin = false;
-  //     notifyListeners();
-  //   }
-  // }
 
   void appleLogin(BuildContext context, WidgetRef ref) async {
     try {
@@ -179,26 +126,6 @@ class LoginNotifier extends ChangeNotifier {
       appLog(response.toString());
       isSendingOTP = false;
       notifyListeners();
-      // await _auth
-      //     .verifyPhoneNumber(
-      //       phoneNumber: Helper.formatePhoneNumber(phoneNumberController.text, selectedCountry.dialCode!),
-      //       timeout: const Duration(seconds: _otpTimeOutDuration),
-      //       forceResendingToken: _forceResendingToken,
-      //       verificationCompleted: _verificationCompleted,
-      //       verificationFailed: (e) {
-      //         isSendingOTP = false;
-      //         notifyListeners();
-      //         if (bounceTimer != null) {
-      //           bounceTimer?.cancel();
-      //           bounceTimer = null;
-      //           notifyListeners();
-      //         }
-      //         _firebaseAuthExceptionHandler(e);
-      //       },
-      //       codeSent: (verificationId, forceResendingToken) => _onCodeSent(context, verificationId, forceResendingToken),
-      //       codeAutoRetrievalTimeout: _codeAutoRetrievalTimeout,
-      //     )
-      //     .timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
     } catch (e) {
       appLog(e.toString());
       errorToast(LocaleKeys.some_thing_went_wrong.tr());
@@ -231,16 +158,18 @@ class LoginNotifier extends ChangeNotifier {
             gender: '',
           );
           await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
-          ref.read(splashProvider.notifier).redirections(context);
+          await ref.read(splashProvider.notifier).redirections(context);
         } else {
           final user = UserModel.fromMap(querySnapshot.docs.first.data());
           final credential = EmailAuthProvider.credential(email: email, password: user.password);
           await _auth.signInWithCredential(credential).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
           await LocalStorageManager.saveUser(user, toFirebase: false);
-          ref.read(splashProvider.notifier).redirections(context);
+          await ref.read(splashProvider.notifier).redirections(context);
         }
       } else {
         errorToast(LocaleKeys.invalid_verification_code.tr());
+        isVerifyingOTP = false;
+        notifyListeners();
       }
     } on FirebaseAuthException catch (e) {
       isVerifyingOTP = false;
@@ -364,24 +293,8 @@ class LoginNotifier extends ChangeNotifier {
     }
   }
 
-  // void _onCodeSent(BuildContext context, verificationId, forceResendingToken) async {
-  //   isSendingOTP = false;
-  //   notifyListeners();
-  //   _verificationId = verificationId;
-  //   _forceResendingToken = forceResendingToken;
-  //   _startBounceTimer();
-  //   var isAutoPop = await Navigator.push(context, MaterialPageRoute(builder: (_) => OTPPage()));
-  //   if (isAutoPop != true) resetPage();
-  // }
-
-  // void _verificationCompleted(phoneAuthCredential) {
-  //   isSendingOTP = false;
-  //   notifyListeners();
-  // }
-
   @override
   void dispose() {
-    // phoneNumberController.dispose();
     otpController.dispose();
     bounceTimer?.cancel();
     super.dispose();

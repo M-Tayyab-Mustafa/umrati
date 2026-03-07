@@ -9,7 +9,7 @@ class Helper {
     return (100000 + random.nextInt(900000)).toString();
   }
 
-  static disposeInAppPurchaseSubscription() {
+  static void disposeInAppPurchaseSubscription() {
     inAppPurchaseSubscription?.cancel();
     inAppPurchaseSubscription = null;
   }
@@ -46,17 +46,19 @@ class Helper {
     final response = await iap.queryProductDetails(
       plans.map((plan) => plan.productId).toSet(),
     );
-    if (response.error != null)
+    if (response.error != null) {
       appLog(response.error?.toString() ?? '', '[In app products]:: ');
+    }
     final List<PlanModel> products = [];
     for (var product in response.productDetails) {
       final plan = plans.firstWhereOrNull(
         (plan) => plan.productId == product.id,
       );
-      if (plan != null)
+      if (plan != null) {
         products.add(
           plan.copyWith(amount: product.rawPrice, productDetails: product),
         );
+      }
     }
     return products;
   }
@@ -98,7 +100,7 @@ class Helper {
 
   static String timeoutError = LocaleKeys.timeout_error.tr();
 
-  static get mapsApiKey async =>
+  static Future<dynamic> get mapsApiKey async =>
       (await settingsCollection.doc(CommonDoc.constants.name).get()).get(
         CommonField.googleMapKey.name,
       );

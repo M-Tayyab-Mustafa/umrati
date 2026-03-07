@@ -36,14 +36,16 @@ class _GiveFeedbackPageState extends ConsumerState<GiveFeedbackPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CTextField(
-                        margin: context.edgeInsets(horizontal: 16),
-                        controller: provider.emailController,
-                        labelText: LocaleKeys.email.tr(),
-                        textDirection: TextDirection.ltr,
+                      RepaintBoundary(
+                        child: CTextField(
+                          margin: context.edgeInsets(horizontal: 16),
+                          controller: provider.emailController,
+                          labelText: LocaleKeys.email.tr(),
+                          textDirection: TextDirection.ltr,
 
-                        keyboardType: TextInputType.emailAddress,
-                        hintText: LocaleKeys.your_email_here.tr(),
+                          keyboardType: TextInputType.emailAddress,
+                          hintText: LocaleKeys.your_email_here.tr(),
+                        ),
                       ),
                       // PhoneNumberTextField(
                       //   margin: context.edgeInsets(horizontal: 16, vertical: 25),
@@ -53,9 +55,9 @@ class _GiveFeedbackPageState extends ConsumerState<GiveFeedbackPage> {
                       //   updateSelectedCountry: provider.updateSelectedCountry,
                       //   controller: provider.numberController,
                       // ),
-                      CTextField(margin: context.edgeInsets(horizontal: 16), controller: provider.nameController, labelText: LocaleKeys.name.tr(), hintText: LocaleKeys.your_name_here.tr()),
-                      CTextField(margin: context.edgeInsets(horizontal: 16, vertical: 25), controller: provider.subjectController, labelText: LocaleKeys.subject.tr(), hintText: LocaleKeys.what_your_feedback_is_about.tr()),
-                      CTextField(margin: context.edgeInsets(horizontal: 16), controller: provider.feedbackController, maxLines: 10, hintText: LocaleKeys.type_your_feedback_here.tr()),
+                      RepaintBoundary(child: CTextField(margin: context.edgeInsets(horizontal: 16), controller: provider.nameController, labelText: LocaleKeys.name.tr(), hintText: LocaleKeys.your_name_here.tr())),
+                      RepaintBoundary(child: CTextField(margin: context.edgeInsets(horizontal: 16, vertical: 25), controller: provider.subjectController, labelText: LocaleKeys.subject.tr(), hintText: LocaleKeys.what_your_feedback_is_about.tr())),
+                      RepaintBoundary(child: CTextField(margin: context.edgeInsets(horizontal: 16), controller: provider.feedbackController, maxLines: 10, hintText: LocaleKeys.type_your_feedback_here.tr())),
                       CButton(isLoading: provider.isLoading, margin: context.edgeInsets(vertical: 40), onTap: provider.submit, title: LocaleKeys.submit.tr(), titleWithIcon: true),
                     ],
                   ),

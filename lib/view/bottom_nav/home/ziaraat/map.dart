@@ -34,28 +34,28 @@ class _ZiaraatMapPageState extends ConsumerState<ZiaraatMapPage> {
               markers: provider.markers,
               zoomControlsEnabled: false,
               polylines: provider.polylines,
-              onTap: (argument) => provider.hideMoreOptions(),
+              onTap: (_) => provider.hideMoreOptions(),
             ),
             Align(
-              alignment: Alignment(-0.9, -0.9),
+              alignment: const Alignment(-0.9, -0.9),
               child: GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: Container(
-                  decoration: BoxDecoration(color: CColors.charcoalBlack, shape: BoxShape.circle),
+                  decoration: const BoxDecoration(color: CColors.charcoalBlack, shape: BoxShape.circle),
                   child: CustomImage(margin: context.edgeInsets(all: 10), path: 'assets/svg/go_backward.svg', color: Colors.white, imageType: ImageType.svg, size: context.r(20)),
                 ),
               ),
             ),
             if (provider.activeZiaraat != null)
               Align(
-                alignment: Alignment(0.9, -0.9),
+                alignment: const Alignment(0.9, -0.9),
                 child: GestureDetector(
                   onTap: () => provider.showMoreOptions(context: context),
                   child: Directionality(textDirection: TextDirection.ltr, child: CustomImage(path: isLTR(context) ? 'assets/svg/ziaraat/more_options.svg' : 'assets/svg/ziaraat/more_options_ur.svg', imageType: ImageType.svg, size: context.r(40))),
                 ),
               ),
-            Align(alignment: Alignment(0.42, -0.92), child: CompositedTransformTarget(link: provider.layerLink, child: SizedBox(height: context.r(20), width: context.r(20)))),
-            _BottomSheet(),
+            Align(alignment: const Alignment(0.42, -0.92), child: CompositedTransformTarget(link: provider.layerLink, child: SizedBox(height: context.r(20), width: context.r(20)))),
+            const _MapBottomSheet(),
           ],
         ),
       ),
@@ -63,7 +63,9 @@ class _ZiaraatMapPageState extends ConsumerState<ZiaraatMapPage> {
   }
 }
 
-class _BottomSheet extends ConsumerWidget {
+class _MapBottomSheet extends ConsumerWidget {
+  const _MapBottomSheet();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(mapPageProvider);
@@ -93,7 +95,7 @@ class _BottomSheet extends ConsumerWidget {
                       padding: EdgeInsets.zero,
                       itemCount: provider.destinations.sublist(1).length,
                       itemBuilder: (context, index) {
-                        var ziaraat = provider.destinations.sublist(1)[index];
+                        final ziaraat = provider.destinations.sublist(1)[index];
                         return _ZiaraatDetailCard(title: isLTR(context) ? ziaraat.title_en : ziaraat.title_ur, time: '', distance: ziaraat.distance.split(' ').first, index: index + 1);
                       },
                     ),
@@ -107,14 +109,16 @@ class _BottomSheet extends ConsumerWidget {
   }
 }
 
-class _ZiaraatDetailCard extends ConsumerWidget {
+class _ZiaraatDetailCard extends StatelessWidget {
   const _ZiaraatDetailCard({required this.title, required this.time, required this.distance, this.index = 0});
+
   final String title;
   final String time;
   final String distance;
   final int index;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Directionality(
       textDirection: getTextDirection(title),
       child: Padding(
@@ -132,14 +136,10 @@ class _ZiaraatDetailCard extends ConsumerWidget {
                 children: [
                   CustomImage(margin: context.edgeInsets(right: 5), path: 'assets/png/map/destination.png', imageType: ImageType.png, width: context.w(11), fit: BoxFit.fitWidth),
                   Text('$distance Km', style: CTextStyle.w400(fontSize: 12, color: CColors.primary), maxLines: 1, overflow: TextOverflow.ellipsis),
-                  if (time.isNotEmpty)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CustomImage(margin: context.edgeInsets(left: 80, right: 5), path: 'assets/svg/clock.svg', imageType: ImageType.svg, width: context.w(18), fit: BoxFit.fitWidth),
-                        Text(time, style: CTextStyle.w400(fontSize: 12, color: CColors.primary), maxLines: 1, overflow: TextOverflow.ellipsis),
-                      ],
-                    ),
+                  if (time.isNotEmpty) ...[
+                    CustomImage(margin: context.edgeInsets(left: 80, right: 5), path: 'assets/svg/clock.svg', imageType: ImageType.svg, width: context.w(18), fit: BoxFit.fitWidth),
+                    Text(time, style: CTextStyle.w400(fontSize: 12, color: CColors.primary), maxLines: 1, overflow: TextOverflow.ellipsis),
+                  ],
                 ],
               ),
             ),

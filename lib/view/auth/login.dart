@@ -34,13 +34,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             //   updateSelectedCountry: provider.updateSelectedCountry,
             //   withCountryCodePicker: true,
             // ),
-            CTextField(
-              margin: context.edgeInsets(top: 40),
-              controller: provider.emailController,
-              labelText: LocaleKeys.email.tr(),
-              textDirection: TextDirection.ltr,
-              keyboardType: TextInputType.emailAddress,
-              hintText: LocaleKeys.your_email_here.tr(),
+            RepaintBoundary(
+              child: CTextField(
+                margin: context.edgeInsets(top: 40),
+                controller: provider.emailController,
+                labelText: LocaleKeys.email.tr(),
+                textDirection: TextDirection.ltr,
+                keyboardType: TextInputType.emailAddress,
+                hintText: LocaleKeys.your_email_here.tr(),
+              ),
             ),
             CButton(isLoading: provider.isSendingOTP || provider.isSocialLogin, onTap: () => provider.sendTheOTP(context), margin: context.edgeInsets(top: 35), titleWithIcon: true, title: LocaleKeys.verify_now.tr()),
             Padding(padding: context.edgeInsets(vertical: 40), child: Divider()),

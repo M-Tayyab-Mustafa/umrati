@@ -25,7 +25,7 @@ class ZiaraatNotifier extends ChangeNotifier {
   ZiaraatDestinationsCreationOptions? selectedDestinationsCreationOption;
   UserModel? user;
 
-  initialization() async {
+  Future<void> initialization() async {
     try {
       user = await LocalStorageManager.getUser();
       myCurrentLocation = await Helper.getLocation(context);
@@ -58,7 +58,7 @@ class ZiaraatNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  reset() {
+  void reset() {
     selectedCity = null;
     selectedDestinationsCreationOption = null;
     positionStream?.cancel();
@@ -87,7 +87,7 @@ class ZiaraatNotifier extends ChangeNotifier {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ChooseDestinations()));
   }
 
-  updateSelectedZiaraat(ZiaraatModel ziaraat) {
+  void updateSelectedZiaraat(ZiaraatModel ziaraat) {
     if (selectedZiaraat.contains(ziaraat)) {
       selectedZiaraat.remove(ziaraat);
     } else {

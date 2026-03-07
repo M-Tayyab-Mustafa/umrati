@@ -12,6 +12,8 @@ enum ZiaraatCities { mecca, medina, taif, other }
 
 enum ZiaraatDestinationsCreationOptions { auto, manual }
 
+enum ImageType { file, png, svg, network }
+
 enum CollectionNames {
   users('users'),
   settings('settings'),

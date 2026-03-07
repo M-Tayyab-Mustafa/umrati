@@ -53,8 +53,4 @@ class SafaMarwaNotifier extends ChangeNotifier {
 
   void onCountTap() => Fluttertoast.showToast(msg: LocaleKeys.count_increase_tip.tr(), gravity: ToastGravity.BOTTOM, toastLength: Toast.LENGTH_SHORT);
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }
