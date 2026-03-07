@@ -48,7 +48,7 @@ class TawafTrackerPage extends ConsumerWidget {
                           final countFontSize = (circleSize * 0.24).clamp(56.0, 150.0);
                           final countLabelFontSize = (circleSize * 0.055).clamp(14.0, 30.0);
                           final buttonTextSize = (buttonSize * 0.26).clamp(14.0, 28.0);
-                          final actionButtonPositionFromTop = baseCircleSize + (buttonSize * 0.3);
+                          final actionButtonPositionFromBottom = (provider.isRoundCompleted ? 5.h : 0).clamp(0, 5.h).toDouble();
 
                           return Stack(
                             alignment: Alignment.center,
@@ -67,7 +67,7 @@ class TawafTrackerPage extends ConsumerWidget {
                                 ),
                               ),
                               Positioned(
-                                top: actionButtonPositionFromTop,
+                                bottom: actionButtonPositionFromBottom,
                                 left: 0,
                                 right: 0,
                                 child:

@@ -158,16 +158,18 @@ class LoginNotifier extends ChangeNotifier {
             gender: '',
           );
           await LocalStorageManager.saveUser(user, created_at: FieldValue.serverTimestamp());
-          ref.read(splashProvider.notifier).redirections(context);
+          await ref.read(splashProvider.notifier).redirections(context);
         } else {
           final user = UserModel.fromMap(querySnapshot.docs.first.data());
           final credential = EmailAuthProvider.credential(email: email, password: user.password);
           await _auth.signInWithCredential(credential).timeout(const Duration(seconds: Helper.timeOutTime), onTimeout: () => throw Helper.timeoutError);
           await LocalStorageManager.saveUser(user, toFirebase: false);
-          ref.read(splashProvider.notifier).redirections(context);
+          await ref.read(splashProvider.notifier).redirections(context);
         }
       } else {
         errorToast(LocaleKeys.invalid_verification_code.tr());
+        isVerifyingOTP = false;
+        notifyListeners();
       }
     } on FirebaseAuthException catch (e) {
       isVerifyingOTP = false;
