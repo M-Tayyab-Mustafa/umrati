@@ -40,7 +40,7 @@ class _LocationPermissionPageState extends ConsumerState<LocationPermissionPage>
     );
   }
 
-  _basicCard({required String icon, required String title}) {
+  Padding _basicCard({required String icon, required String title}) {
     return Padding(
       padding: context.edgeInsets(vertical: 16),
       child: Row(

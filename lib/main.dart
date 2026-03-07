@@ -6,9 +6,23 @@ Future<void> main() async {
   await LocalStorageManager.initialization();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   await Payment.instance.initializePayments();
-  runApp(ProviderScope(child: EasyLocalization(supportedLocales: const [Locale('en', 'US'), Locale('ur', 'PK')], path: 'assets/translations', fallbackLocale: Locale('en', 'US'), saveLocale: true, assetLoader: CodegenLoader(), child: MainApp())));
+  runApp(
+    ProviderScope(
+      child: EasyLocalization(
+        supportedLocales: const [Locale('en', 'US'), Locale('ur', 'PK')],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('en', 'US'),
+        saveLocale: true,
+        assetLoader: CodegenLoader(),
+        child: const MainApp(),
+      ),
+    ),
+  );
 }
 
 class MainApp extends StatefulWidget {
@@ -34,7 +48,6 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    CTextStyle.context = context;
     return ScreenUtilPlusInit(
       designSize: const Size(360, 690),
       child: MaterialApp(
@@ -43,11 +56,29 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
         localizationsDelegates: context.localizationDelegates,
         debugShowCheckedModeBanner: false,
         builder: (context, child) {
-          return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling), child: child!);
+          // Assign context once at root; _AppBuilder isolates the MediaQuery wrap.
+          CTextStyle.context = context;
+          return _AppBuilder(child: child!);
         },
-        home: SplashPage(),
+        home: const SplashPage(),
         color: CColors.primary,
       ),
+    );
+  }
+}
+
+// ─── Isolated builder widget ──────────────────────────────────────────────────
+// Prevents CTextStyle.context assignment from causing unnecessary ancestor rebuilds.
+
+class _AppBuilder extends StatelessWidget {
+  const _AppBuilder({required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+      child: child,
     );
   }
 }

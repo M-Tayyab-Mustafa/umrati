@@ -35,11 +35,7 @@ class _ZiaraatReadingDetailDialogState extends State<ZiaraatReadingDetailDialog>
             ),
             Expanded(
               child: ScrollbarTheme(
-                data: ScrollbarThemeData(
-                  thumbColor: WidgetStateProperty.all(CColors.primary), // your color
-                  trackColor: WidgetStateProperty.all(Colors.transparent), // optional
-                  trackBorderColor: WidgetStateProperty.all(Colors.transparent), // optional
-                ),
+                data: ScrollbarThemeData(thumbColor: WidgetStateProperty.all(CColors.primary), trackColor: WidgetStateProperty.all(Colors.transparent), trackBorderColor: WidgetStateProperty.all(Colors.transparent)),
                 child: Scrollbar(
                   interactive: true,
                   trackVisibility: true,
@@ -87,7 +83,7 @@ class _ZiaraatReadingDetailDialogState extends State<ZiaraatReadingDetailDialog>
     );
   }
 
-  increaseSize(double size) {
+  void increaseSize(double size) {
     fontSize = size;
     setState(() {});
   }

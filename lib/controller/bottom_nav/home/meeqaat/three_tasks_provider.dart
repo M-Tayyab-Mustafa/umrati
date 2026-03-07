@@ -17,17 +17,17 @@ class MeeqaatThreeTasksNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
 
-  updateTwoNafiPrayersChecked() {
+  void updateTwoNafiPrayersChecked() {
     isTwoNafiPrayersChecked = !isTwoNafiPrayersChecked;
     notifyListeners();
   }
 
-  updateIntentionChecked() {
+  void updateIntentionChecked() {
     isIntentionChecked = !isIntentionChecked;
     notifyListeners();
   }
 
-  updateTalbiyahChecked() {
+  void updateTalbiyahChecked() {
     isTalbiyahChecked = !isTalbiyahChecked;
     notifyListeners();
   }

@@ -24,7 +24,7 @@ class MapPageNotifier extends ChangeNotifier {
   ZiaraatModel? activeZiaraat;
   List<ZiaraatModel> destinations = [];
   ZiaraatHistoryModel? history;
-  get panelController => SlidingUpPanelController();
+  SlidingUpPanelController get panelController => SlidingUpPanelController();
 
   set mapController(GoogleMapController? controller) {
     _controller = controller;
@@ -220,12 +220,7 @@ class MapPageNotifier extends ChangeNotifier {
     overlayEntry = null;
   }
 
-  void startListing(String detail) async {
-    //Todo:: In Next Version
-    // await flutterTts.speak(detail);
-    // isListening = true;
-    // notifyListeners();
-  }
+  void startListing(String detail) async {}
 
   void stopListing() async {
     await flutterTts.stop();

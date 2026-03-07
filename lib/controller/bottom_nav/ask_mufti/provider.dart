@@ -78,8 +78,7 @@ class AskMuftiNotifier extends ChangeNotifier {
 
   Future<void> onSpeakTap({required MessageModel message}) async {}
 
-  //Bot Api
-  _createBotApiCall(MessageModel message) async {
+  Future<void> _createBotApiCall(MessageModel message) async {
     try {
       Uri uri = Uri.parse('https://automate.robustcraft.io/webhook/pdf-rag');
       final body = {'gender': user!.gender, 'question': message.question, 'user_id': user!.uid, 'asked_at': DateTime.now().toIso8601String()};

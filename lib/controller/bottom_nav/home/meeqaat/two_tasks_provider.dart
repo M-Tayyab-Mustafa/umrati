@@ -17,7 +17,7 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
   WidgetRef get ref => _ref!;
   set ref(WidgetRef value) => _ref = value;
 
-  initialization() async {
+  Future<void> initialization() async {
     user = await LocalStorageManager.getUser(fromFirebase: true);
     isLoading = false;
     if (context.mounted) notifyListeners();
@@ -56,12 +56,12 @@ class MeeqaatTwoTasksNotifier extends ChangeNotifier {
     }
   }
 
-  updateCleanlinessChecked() {
+  void updateCleanlinessChecked() {
     isCleanlinessChecked = !isCleanlinessChecked;
     notifyListeners();
   }
 
-  updateIhramChecked() {
+  void updateIhramChecked() {
     isIhramChecked = !isIhramChecked;
     notifyListeners();
   }

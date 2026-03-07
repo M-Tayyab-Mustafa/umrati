@@ -30,7 +30,7 @@ TextDirection languageDirection(BuildContext context) {
   return isRtl ? TextDirection.rtl : TextDirection.ltr;
 }
 
-appLog(String message, [String? name]) {
+void appLog(String message, [String? name]) {
   if (kDebugMode) log(message, name: name ?? '');
 }
 

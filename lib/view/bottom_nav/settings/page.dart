@@ -35,66 +35,64 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               CListTile(onTap: provider.onChangeTheThemeTap, title: LocaleKeys.dark_mode.tr(), icon: 'assets/svg/settings/theme.svg', trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.secondary, fontSize: 16))),
               CListTile(onTap: provider.onGiveFeedbackTap, title: LocaleKeys.give_feedback.tr(), icon: 'assets/svg/settings/feed_back.svg'),
               CListTile(onTap: provider.onTermsAndConditionsTap, title: LocaleKeys.privacy_policy.tr(), icon: 'assets/svg/settings/policy.svg'),
-              if ((provider.user != null && (provider.user!.subscription_id == null || provider.user!.subscription_id!.isEmpty)) && !Platform.isIOS)
-                CListTile(
-                  margin: context.edgeInsets(top: 32, horizontal: 16, bottom: 16),
-                  onTap: ref.read(settingsProvider.notifier).onBuyPremiumTap,
-                  borderRadius: 25,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(LocaleKeys.buy_premium.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.primary)),
-                      Padding(
-                        padding: context.edgeInsets(top: 15),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CustomImage(margin: context.edgeInsets(bottom: 10), path: 'assets/svg/settings/kaba_no_ads.png', height: context.h(50), imageType: ImageType.png, fit: BoxFit.fill),
-                                  Text(LocaleKeys.ads_free_journey.tr(), style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal), textAlign: TextAlign.center),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: context.w(8)),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CustomImage(margin: context.edgeInsets(bottom: 10), path: 'assets/svg/settings/more_ziaraats.png', height: context.h(50), imageType: ImageType.png, fit: BoxFit.fill),
-                                  Text(LocaleKeys.more_ziaraat_destinations.tr(), style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal), textAlign: TextAlign.center),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: context.w(8)),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CustomImage(margin: context.edgeInsets(bottom: 10), path: 'assets/svg/settings/unlimited_history.png', height: context.h(50), imageType: ImageType.png, fit: BoxFit.fill),
-                                  Text(LocaleKeys.unlimited_history.tr(), style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal), textAlign: TextAlign.center),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              if ((provider.user != null && (provider.user!.subscription_id == null || provider.user!.subscription_id!.isEmpty)) && !Platform.isIOS) _BuyPremiumCard(onTap: ref.read(settingsProvider.notifier).onBuyPremiumTap),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BuyPremiumCard extends StatelessWidget {
+  const _BuyPremiumCard({required this.onTap});
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return CListTile(
+      margin: context.edgeInsets(top: 32, horizontal: 16, bottom: 16),
+      onTap: onTap,
+      borderRadius: 25,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(LocaleKeys.buy_premium.tr(), style: CTextStyle.w600(fontSize: 20, color: CColors.primary)),
+          Padding(
+            padding: context.edgeInsets(top: 15),
+            child: Row(
+              children: [
+                Expanded(child: _PremiumFeatureItem(image: 'assets/svg/settings/kaba_no_ads.png', label: LocaleKeys.ads_free_journey.tr())),
+                SizedBox(width: context.w(8)),
+                Expanded(child: _PremiumFeatureItem(image: 'assets/svg/settings/more_ziaraats.png', label: LocaleKeys.more_ziaraat_destinations.tr())),
+                SizedBox(width: context.w(8)),
+                Expanded(child: _PremiumFeatureItem(image: 'assets/svg/settings/unlimited_history.png', label: LocaleKeys.unlimited_history.tr())),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PremiumFeatureItem extends StatelessWidget {
+  const _PremiumFeatureItem({required this.image, required this.label});
+  final String image;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CustomImage(margin: context.edgeInsets(bottom: 10), path: image, height: context.h(50), imageType: ImageType.png, fit: BoxFit.fill),
+        Text(label, style: CTextStyle.w500(fontSize: 14, color: CColors.deepTeal), textAlign: TextAlign.center),
+      ],
     );
   }
 }

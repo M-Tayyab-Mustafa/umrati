@@ -33,7 +33,9 @@ class _EmailLinkingPage extends ConsumerWidget {
     final provider = ref.watch(emailOrPhoneLinkingProvider);
     return Column(
       children: [
-        CTextField(margin: context.edgeInsets(top: screenSize.height * 0.08), controller: ref.read(emailOrPhoneLinkingProvider.notifier).emailController, keyboardType: TextInputType.emailAddress, labelText: LocaleKeys.email.tr()),
+        RepaintBoundary(
+          child: CTextField(margin: context.edgeInsets(top: screenSize.height * 0.08), controller: ref.read(emailOrPhoneLinkingProvider.notifier).emailController, keyboardType: TextInputType.emailAddress, labelText: LocaleKeys.email.tr()),
+        ),
         CButton(isLoading: provider.isLinkingAccount, margin: context.edgeInsets(top: screenSize.height * 0.08), onTap: () => provider.linkAccount(context, ref), title: LocaleKeys.link_account.tr(), titleWithIcon: true),
       ],
     );

@@ -168,7 +168,7 @@ class UmrahNotifier extends ChangeNotifier {
 
   Future<void> _initializeTawafLocationTracking() async {}
 
-  startNextRound() async {
+  Future<void> startNextRound() async {
     isRoundCompleted = false;
     notifyListeners();
   }
@@ -250,7 +250,7 @@ class UmrahNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  _cancelPositionStreamSubscription() {
+  void _cancelPositionStreamSubscription() {
     positionStreamSubscription?.cancel();
     positionStreamSubscription = null;
   }

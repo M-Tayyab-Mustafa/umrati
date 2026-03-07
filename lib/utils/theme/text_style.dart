@@ -10,7 +10,7 @@ class CTextStyle {
           ? 3.sp
           : 8.sp;
 
-  static get getFontFamily => isLTR(context) ? Helper.englishTextFontFamily : Helper.urduTextFontFamily;
+  static String get getFontFamily => isLTR(context) ? Helper.englishTextFontFamily : Helper.urduTextFontFamily;
 
   static TextStyle w100({double? fontSize, Color? color, TextDecoration? decoration, double? height, String? fontFamily, double? letterSpacing}) => TextStyle(
     fontWeight: FontWeight.w100,
