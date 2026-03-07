@@ -24,7 +24,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       showEmblem: false,
       backgroundType: BackgroundType.logo,
       logoAlign: Alignment.center,
-      margin: context.edgeInsets(top: kToolbarHeight * 0.5),
+      margin: context.edgeInsets(top: kToolbarHeight * 0.3),
       child: SingleChildScrollView(
         child: Padding(
           padding: context.edgeInsets(top: 16, bottom: 50),
@@ -35,7 +35,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               CListTile(onTap: provider.onChangeTheThemeTap, title: LocaleKeys.dark_mode.tr(), icon: 'assets/svg/settings/theme.svg', trailing: Text('(${LocaleKeys.coming_soon.tr()})', style: CTextStyle.w700(color: CColors.secondary, fontSize: 16))),
               CListTile(onTap: provider.onGiveFeedbackTap, title: LocaleKeys.give_feedback.tr(), icon: 'assets/svg/settings/feed_back.svg'),
               CListTile(onTap: provider.onTermsAndConditionsTap, title: LocaleKeys.privacy_policy.tr(), icon: 'assets/svg/settings/policy.svg'),
-              if ((provider.user != null && (provider.user!.subscription_id == null || provider.user!.subscription_id!.isEmpty)) && !Platform.isIOS) _BuyPremiumCard(onTap: ref.read(settingsProvider.notifier).onBuyPremiumTap),
+              // if ((provider.user != null && (provider.user!.subscription_id == null || provider.user!.subscription_id!.isEmpty)) && !Platform.isIOS)
+              _BuyPremiumCard(onTap: ref.read(settingsProvider.notifier).onBuyPremiumTap),
             ],
           ),
         ),
@@ -51,7 +52,7 @@ class _BuyPremiumCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CListTile(
-      margin: context.edgeInsets(top: 32, horizontal: 16, bottom: 16),
+      margin: context.edgeInsets(top: 24, horizontal: 16, bottom: 16),
       onTap: onTap,
       borderRadius: 25,
       child: Column(
