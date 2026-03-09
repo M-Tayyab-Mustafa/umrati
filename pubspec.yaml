@@ -49,6 +49,7 @@ dependencies:
   url_launcher: ^6.3.2
   in_app_purchase: ^3.2.3
   emailjs: ^4.0.0
+  app_tracking_transparency: ^2.0.6+1
 
 dev_dependencies:
   flutter_test:

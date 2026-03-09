@@ -6,21 +6,11 @@ Future<void> main() async {
   await LocalStorageManager.initialization();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await Payment.instance.initializePayments();
   runApp(
     ProviderScope(
-      child: EasyLocalization(
-        supportedLocales: const [Locale('en', 'US'), Locale('ur', 'PK')],
-        path: 'assets/translations',
-        fallbackLocale: const Locale('en', 'US'),
-        saveLocale: true,
-        assetLoader: CodegenLoader(),
-        child: const MainApp(),
-      ),
+      child: EasyLocalization(supportedLocales: const [Locale('en', 'US'), Locale('ur', 'PK')], path: 'assets/translations', fallbackLocale: const Locale('en', 'US'), saveLocale: true, assetLoader: CodegenLoader(), child: const MainApp()),
     ),
   );
 }
@@ -37,6 +27,9 @@ class _MainAppState extends State<MainApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await AppTrackingTransparency.requestTrackingAuthorization();
+    });
   }
 
   @override
@@ -76,9 +69,6 @@ class _AppBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
-      child: child,
-    );
+    return MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling), child: child);
   }
 }

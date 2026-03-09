@@ -130,3 +130,4 @@ export 'package:in_app_purchase/in_app_purchase.dart';
 export 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 export 'package:collection/collection.dart' hide binarySearch, mergeSort;
 export 'package:emailjs/emailjs.dart' hide init;
+export 'package:app_tracking_transparency/app_tracking_transparency.dart';

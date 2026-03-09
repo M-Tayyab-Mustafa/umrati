@@ -18,6 +18,8 @@
 	<string>umrati</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This permission allows Umrati to provide personalized ads, improve user experience, and analyze app performance to make our services better for you.</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
